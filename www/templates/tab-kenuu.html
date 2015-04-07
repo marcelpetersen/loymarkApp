@@ -1,31 +1,53 @@
+<style type="text/css">
+	
+	/* ******** Pasar al SASS ******** */
+
+	.profile_content {
+		background-color: #F2F2F2;
+	}
+
+	.profile_div {
+		height:100vh;
+		background-color: #F2F2F2;
+	}
+	.profile_btn_div {
+		position:absolute; 
+		bottom:0; 
+		width: 100vw;
+	}
+	.profile_item {
+		background-color: #F2F2F2;
+	}
+
+	/* ******** Pasar al SASS ******** */
+
+</style>
+
 <ion-view>
-  	<ion-content>
-		<div class="list">
-
-			<a class="item item-avatar" href="#">
-		      	<img ng-src="{{getUserImage()}}">
-		      	<h2>{{viewdata.user.FirstName}} {{viewdata.user.LastName}}</h2>
-		      	<p>{{viewdata.user.Email}}</p>
-		    </a>
-
-			<a class="item item-icon-left item-icon-right" href="#/tab/kenuu/prices">
+  	<ion-content scroll=false>
+  		
+		<div class="item item-avatar profile_div">
+	      	<img ng-src="{{getUserImage()}}">
+	      	<h2>{{viewdata.user.FirstName}} {{viewdata.user.LastName}}</h2>
+	      	<p>{{viewdata.user.Email}}</p>
+	    </div>
+  		
+		<div class="list profile_btn_div">
+			<a class="item item-icon-left item-icon-right profile_item" href="#/tab/kenuu/prices">
 				<i class="icon ion-ios-pricetags-outline"></i>
 				premios disponibles
 				<i class="icon ion-chevron-right"></i>
 			</a>
-
-			<a class="item item-icon-left item-icon-right" href="#">
+			<a class="item item-icon-left item-icon-right profile_item" href="#">
 				<i class="icon ion-ios-clock-outline"></i>
 				mi actividad
 				<i class="icon ion-chevron-right"></i>
 			</a>
-
-			<a class="item item-icon-left item-icon-right" href="#/tab/kenuu/favCommerces">
+			<a class="item item-icon-left item-icon-right profile_item" href="#/tab/kenuu/favCommerces">
 				<i class="icon ion-android-favorite"></i>
 				comercios favoritos
 				<i class="icon ion-chevron-right"></i>
 			</a>
-
 		</div>
   	</ion-content>
 </ion-view>
