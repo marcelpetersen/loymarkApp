@@ -1,0 +1,31 @@
+<ion-view>
+  	<ion-content>
+		<div class="list">
+
+			<a class="item item-avatar" href="#">
+		      	<img ng-src="{{getUserImage()}}">
+		      	<h2>{{viewdata.user.FirstName}} {{viewdata.user.LastName}}</h2>
+		      	<p>{{viewdata.user.Email}}</p>
+		    </a>
+
+			<a class="item item-icon-left item-icon-right" href="#/tab/kenuu/prices">
+				<i class="icon ion-ios-pricetags-outline"></i>
+				premios disponibles
+				<i class="icon ion-chevron-right"></i>
+			</a>
+
+			<a class="item item-icon-left item-icon-right" href="#">
+				<i class="icon ion-ios-clock-outline"></i>
+				mi actividad
+				<i class="icon ion-chevron-right"></i>
+			</a>
+
+			<a class="item item-icon-left item-icon-right" href="#/tab/kenuu/favCommerces">
+				<i class="icon ion-android-favorite"></i>
+				comercios favoritos
+				<i class="icon ion-chevron-right"></i>
+			</a>
+
+		</div>
+  	</ion-content>
+</ion-view>

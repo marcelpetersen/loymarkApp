@@ -1,0 +1,23 @@
+<ion-view view-title="premios disponibles">
+    <ion-content class="">
+        <div class="list">
+            <a ng-repeat="commerce in viewdata.commerces" class="item item-thumbnail-left" href="#">
+                <img ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{commerce.Image}}" alt="Brand Logo">
+                <h2>{{commerce.Description}}</h2>
+                <h3 class="purple1-text"><small class="textgrey-text">última visita:</small> {{commerce.LastVisit}}</h3>
+                <div class="row activity-item-points-numbers text-center">
+                    <h2 class="textgrey-text">{{commerce.TotalVisits}}</h2>
+                </div>
+                <div class="row activity-item-points-text text-center">
+                    <h4 class="textgrey-text">visitas</h4>
+                </div>
+                <div class="row activity-item-points-numbers text-center">
+                    <h2 class="purple1-text">{{commerce.PointsAccumulated}}</h2>
+                </div>
+                <div class="row activity-item-points-text text-center">
+                    <h4 class="purple1-text">pops</h4>
+                </div>
+            </a>
+        </div>
+    </ion-content>
+</ion-view>

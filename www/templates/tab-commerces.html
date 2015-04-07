@@ -1,0 +1,11 @@
+<ion-view>
+    <ion-content class="">
+        <div class="list">
+            <a ng-repeat="brand in viewdata.brands" class="item item-thumbnail-left item-icon-right" href="#/tab/commerces/{{brand.EntityID}}">
+                <img ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{brand.Image}}">
+                <h2>{{brand.Description}}</h2>
+                <i class="icon ion-chevron-right gray-text"></i>
+            </a>
+        </div>
+    </ion-content>
+</ion-view>
