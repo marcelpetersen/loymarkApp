@@ -1,52 +1,33 @@
-<style type="text/css">
-	
-	/* ******** Pasar al SASS ******** */
-
-	.profile_content {
-		background-color: #F2F2F2;
-	}
-
-	.profile_div {
-		height:100vh;
-		background-color: #F2F2F2;
-	}
-	.profile_btn_div {
-		position:absolute; 
-		bottom:0; 
-		width: 100vw;
-	}
-	.profile_item {
-		background-color: #F2F2F2;
-	}
-
-	/* ******** Pasar al SASS ******** */
-
-</style>
-
 <ion-view>
-  	<ion-content scroll=false>
-  		
-		<div class="item item-avatar profile_div">
-	      	<img ng-src="{{getUserImage()}}">
-	      	<h2>{{viewdata.user.FirstName}} {{viewdata.user.LastName}}</h2>
-	      	<p>{{viewdata.user.Email}}</p>
-	    </div>
+
+  	<ion-content scroll=false>  		
+  		<div class="row profile-avatar-container">
+  			<div class="col-20 text-center profile-avatar-div">
+  				<img ng-src="{{getUserImage()}}" class="profile-avatar">
+  			</div>
+  			<div class="col-70">
+  				<!-- <h4>{{viewdata.user.FirstName}} {{viewdata.user.LastName}}</h4> -->
+  				<h4>Alex Ramirez</h4>
+	      		<p>{{viewdata.user.Email}}</p>
+	      		<button class="button button-small button-calm profile-btn">Ver Perfil</button>	
+  			</div>
+  		</div>
   		
 		<div class="list profile_btn_div">
-			<a class="item item-icon-left item-icon-right profile_item" href="#/tab/kenuu/prices">
-				<i class="icon ion-ios-pricetags-outline"></i>
-				premios disponibles
-				<i class="icon ion-chevron-right"></i>
+			<a class="item item-icon-left profile_item" href="#/tab/kenuu/prices">
+				<i class="icon ion-ribbon-a profile-item-icon"></i>
+				<div class="profile-item-title">premios disponibles</div>
+				<div>consulte que premios tiene disponibles</div>
 			</a>
-			<a class="item item-icon-left item-icon-right profile_item" href="#">
-				<i class="icon ion-ios-clock-outline"></i>
-				mi actividad
-				<i class="icon ion-chevron-right"></i>
+			<a class="item item-icon-left profile_item" href="#">
+				<i class="icon ion-stats-bars profile-item-icon"></i>
+				<div class="profile-item-title">mi actividad</div>
+				<div>consulte sus últimos movimientos</div>
 			</a>
-			<a class="item item-icon-left item-icon-right profile_item" href="#/tab/kenuu/favCommerces">
-				<i class="icon ion-android-favorite"></i>
-				comercios favoritos
-				<i class="icon ion-chevron-right"></i>
+			<a class="item item-icon-left profile_item" href="#/tab/kenuu/favCommerces">
+				<i class="icon ion-heart profile-item-icon"></i>
+				<div class="profile-item-title">comercios favoritos</div>
+				<div>consulte sus comercios favoritos</div>
 			</a>
 		</div>
   	</ion-content>

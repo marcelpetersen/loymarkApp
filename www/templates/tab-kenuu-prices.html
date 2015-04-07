@@ -1,12 +1,15 @@
-<ion-view view-title="premios disponibles">
+<ion-view view-title="">
     <ion-content class="">
         <div class="list">
-            <a ng-repeat="reward in viewdata.rewards" class="item item-thumbnail-left item-icon-right" href="#">
-                <img ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{reward.EntityImage}}">
+            <div class="item item-divider">
+                <i class="icon ion-ribbon-a profile-item-icon"></i> Premios Disponibles
+            </div>
+            <a ng-repeat="reward in viewdata.rewards" class="item item-thumbnail-left item-icon-right item-reward item-text-wrap" href="#">
+                <img class="rewards-img" ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{reward.EntityImage}}">
                 <h2>{{reward.Name}}</h2>
-                <p>{{reward.Description}}</p>
-                <h2>({{reward.Points}}/{{viewdata.user.PointsAvailable}})</h2>
-                <i class="icon ion-chevron-right gray-text"></i>
+                <div>{{reward.Description}}</div>
+                <div class="reward-points-label">({{reward.Points}}/{{viewdata.user.PointsAvailable}})</div>
+                <i class="icon ion-android-arrow-dropright reward-detail-icon"></i>
             </a>
         </div>
     </ion-content>

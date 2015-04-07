@@ -7608,3 +7608,68 @@ a.button {
 
 .tabs-top.tabs-striped .tab-item.tab-item-active {
   border: none; }
+
+.main-top-bar {
+  border-bottom: 2px solid #91B431 !important; }
+
+.tab-nav.tabs {
+  padding-top: 5px;
+  height: 55px;
+  border-top: none !important; }
+
+ion-nav-view[nav-view-transition="android"] .scroll-content {
+  padding-top: 6px; }
+
+/* ******** Profile ******** */
+.profile_content {
+  background-color: white; }
+
+.profile-avatar-container {
+  padding: 40px 0 40px 0;
+  border-bottom: 1px solid #eeeeee; }
+
+.profile-avatar-div {
+  min-width: 135px; }
+
+.profile-btn {
+  width: 110px;
+  border: 0px; }
+
+.profile_btn_div {
+  width: 100vw; }
+
+.profile_item {
+  background-color: white;
+  border: 0; }
+
+.profile-item-icon {
+  color: #757575 !important; }
+
+.profile-item-title {
+  font-size: 14px;
+  font-weight: bold; }
+
+.profile-avatar {
+  height: 100px !important;
+  border-radius: 50%;
+  border: 1px solid #eeeeee; }
+
+/* ******** End of Profile ******** */
+/* ******** Rewards ********* */
+.rewards-img {
+  border: 1px solid #eeeeee !important;
+  border-radius: 5px; }
+
+.reward-detail-icon {
+  color: #A4A4A4; }
+
+.item-reward h2 {
+  font-size: 14px;
+  font-weight: bold; }
+
+.reward-points-label {
+  font-size: 12px;
+  font-weight: bold;
+  color: #97457D; }
+
+/* ******** End of Rewards ********* */
