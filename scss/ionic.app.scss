@@ -22,7 +22,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 @import "www/lib/ionic/scss/ionic";
 
 .bottom-border-blue {
-	border-bottom: 2px solid $borde-azul;
+	// border-bottom: 2px solid $borde-azul; 
 }
 
 .tabs {
@@ -45,6 +45,9 @@ $kenuu-green: 					 #A5CD38;
 $kenuu-purple:					 #8f04a9;
 $kenuu-dark-purple: 			 #6E1780;
 $kenuu-darker-purple: 		     #4E0F5B;
+
+$social-facebook-color:			 #2D5C98;
+$social-twitter-color: 		     #2FAEEE;
 
 $img-border: 				  	 #eeeeee;
 $top-border-bottom-color:     	 #eeeeee; // #91B431;
@@ -72,6 +75,8 @@ $qrcode-label:					 white;
 
 $welcome-btn: 					 $kenuu-darker-purple;
 $welcome-text:					 white;
+
+$rewarddet-mybalance-color: 	 $kenuu-purple;
 
 .back-btn {
 	color: $action-back-color;
@@ -295,7 +300,36 @@ ion-nav-view[nav-view-transition="ios"] {
 		color: $reward-av-points-icon;
 	}
 
-	/* ******** End of Rewards ********* */
+	.reward-sidemenu {
+		height: 100vh;
+		background-color: #eeeeee;
+		border-left: 1px solid #dddddd;
+		width: 80px;
+		position: absolute;
+		top: 0;
+		right: 0;
+		z-index: 99999;
+		-webkit-transition: all 0.1s ease-in-out;
+		-moz-transition: all 0.1s ease-in-out;
+		-o-transition: all 0.1s ease-in-out;
+		transition: all 0.1s ease-in-out; }
+
+	ion-nav-view[nav-view-transition="android"] .reward-sidemenu {
+		top: 54px; }
+
+	.reward-sidemenu-button {
+		min-height: 0px !important;
+		height: 38px !important; }
+
+	.reward-sidemenu-hidden {
+		right: -80px; }
+
+	.reward-sidemenu-item {
+		height: 62px; }
+
+	.reward-sidemenu-icon {
+		font-size: 30px;
+		color: #8f04a9; }
 
 /* ******** QR Code ********* */
 	.qrcode-view {
@@ -375,4 +409,51 @@ ion-nav-view[nav-view-transition="ios"] {
 	.welcome-input {
 		padding-left:30px; 
 		padding-right:30px;
+	}
+
+
+/* ******** Reward Detail ******** */
+	.rewarddet-image {
+		max-width: 80px;
+		max-height: 80px;
+		width: 100% !important;
+		height: 100% !important; 
+	}
+
+	.rewarddet-arlequin {
+		height: 60px !important;
+		width: 60px !important; 
+	}
+
+	.rewarddet-mybalance-label {
+		position: relative;
+		font-size: 20px;
+		width: 50px;
+		right: -55px;
+		color: $rewarddet-mybalance-color; 
+	}
+
+	.rewarddet-qrcode {
+		height: 90px;
+		width: 90px;
+		filter: brightness(0.5); 
+	}
+
+	.rewarddet-label-rewardId {
+		font-size: 22px !important;
+		font-weight: bold !important; 
+	}
+
+	.rewarddet-label-rewardId-title {
+		font-size: 12px !important; 
+	}
+
+	.rewarddet-facebook{
+		background-color: $social-facebook-color !important;
+		color: white !important;
+	}
+
+	.rewarddet-twitter {
+		background-color: $social-twitter-color !important;
+		color: white !important;
 	}

@@ -4,10 +4,12 @@
     </ion-nav-title>
     <ion-content>
         <div class="list">
-            <div class="item item-divider item-divider">
-                <i class="icon ion-ribbon-a profile-item-icon"></i> Premios Disponibles
+            <div class="item item-divider item-divider item-icon-left item-icon-right">
+                <i class="icon ion-ribbon-a profile-item-icon"></i> 
+                Premios Disponibles
+                <i class="icon ion-android-more-horizontal profile-item-icon" ng-click="ShowSideMenu()"></i> 
             </div>
-            <a ng-repeat="reward in viewdata.rewards" class="item item-thumbnail-left item-reward item-text-wrap" href="#">
+            <a ng-repeat="reward in viewdata.rewards" class="item item-thumbnail-left item-reward item-text-wrap" ng-click="OpenRewardDetail(reward)">
                 <img 
                     class="rewards-img" 
                     ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{reward.EntityImage}}"
@@ -19,7 +21,9 @@
                         <div class="reward-points-req text-center"><strong>requeridos: </strong>{{reward.Points}}</div>
                     </div>
                     <div class="col-30">
-                        <div class="reward-points-av text-center"><strong><i class="icon-Sticker-Morado reward-av-points-icon">{{viewdata.user.PointsAvailable}}</i></div>
+                        <div class="reward-points-av text-center">
+                            <strong>disponibles: </strong>{{viewdata.user.PointsAvailable}}
+                        </div>
                     </div>
                     <div class="col-20">
                         <div class="reward-reached text-left" ng-show="reward.Points <= viewdata.user.PointsAvailable">
@@ -30,7 +34,22 @@
             </a>
         </div>
         <div style="height:36px;"></div>
-    </ion-content>    
+    </ion-content>
+    
+    <!-- Side Menu -->
+    <div class="reward-sidemenu reward-sidemenu-hidden text-center">
+        <div class="button button-clear reward-sidemenu-button" style="margin-top:43px; height:38px !important;" ng-click="HideSideMenu()"><i class="icon ion-android-close"></i></div>
+        <div class="list">
+            <div class="item item-clear reward-sidemenu-item">
+                <p style="position:relative; top:4px;">Todos</p>
+            </div>
+            <div class="item item-clear reward-sidemenu-item">
+                <i class="icon ion-ribbon-a reward-sidemenu-icon"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Iconography Section -->
     <div class="reward-iconography">
         <div class="item">
             <span><i class="icon ion-ribbon-a reward-reached"></i></span> 

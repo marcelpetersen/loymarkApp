@@ -398,7 +398,16 @@ fact.factory('commerceFactory', ['restFactory', function(restFactory){
 
 fact.factory('rewardFactory', ['restFactory', function(restFactory){
     var _rewards = null;
+    var _selectedReward = {};
     return {
+        selectedReward: {
+            set: function(reward) {
+                _selectedReward = reward;
+            },
+            get: function() {
+                return _selectedReward;
+            }
+        },
         active: {
             general: function(newData,_data){
                 return new Promise(function(resolve,reject){
