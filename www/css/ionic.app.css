@@ -7648,6 +7648,19 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
   -webkit-animation-delay: 0;
   -webkit-animation-iteration-count: 1; }
 
+/* ******* General ******* */
+.item-divider {
+  background-color: white; }
+
+.input-label {
+  font-size: 12px;
+  color: white; }
+
+.kenuu-input {
+  background-color: transparent !important;
+  border-bottom: 1px solid white !important;
+  color: white !important; }
+
 /* ******* Fonts ****** */
 @font-face {
   font-family: 'icomoon';
@@ -7677,7 +7690,8 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
 
 .profile-avatar-container {
   padding: 40px 0 40px 0;
-  border-bottom: 1px solid #eeeeee; }
+  border-bottom: 1px solid #eeeeee;
+  background-image: url('../img/bgblur.png'); }
 
 .profile-avatar-div {
   min-width: 135px; }
@@ -7809,8 +7823,30 @@ ion-nav-view[nav-view-transition="android"] .reward-iconography {
   border: none !important;
   height: 100vh; }
 
-.welcome-main-title {
-  top: 90px;
-  font-size: 30px;
+.welcome-kenuulogo {
+  height: 40px;
+  width: auto; }
+
+.welcome-btn {
+  background-color: #4E0F5B !important;
+  border: 0;
+  color: white !important; }
+
+.welcome-text {
   color: white;
-  height: 300px; }
+  text-align: justify;
+  text-justify: inter-word; }
+
+.welcome-regular-text {
+  color: white !important; }
+
+.welcome-main-title {
+  font-size: 30px;
+  color: white; }
+
+.welcome-slide {
+  height: 100vh; }
+
+.welcome-input {
+  padding-left: 30px;
+  padding-right: 30px; }

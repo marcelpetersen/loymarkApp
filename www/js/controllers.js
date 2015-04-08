@@ -4,6 +4,7 @@ ctrl.controller('WelcomeCtrl', [ '$scope', '$timeout', '$state', function($scope
     localStorage.setItem('animationShown', false);
 
     $scope.Enter = function() {
+        localStorage.setItem('animationShown', false);
         $("#viewWelcome").addClass("animated slideOutDown");
         setTimeout(function(){
             $state.go('tab.kenuu');
@@ -18,8 +19,9 @@ ctrl.controller('QRCodeCtrl', [ '$scope', '$timeout', function($scope, $timeout)
 }]);
 
 ctrl.controller('KenuuCtrl', [ '$scope', '$timeout', 'userFactory', '$state', function($scope, $timeout, userFactory, $state){
+    // Code that runs when the View is finished rendering
     $timeout(function(){
-
+        
         var animationShown = localStorage.getItem('animationShown');
         if (animationShown != undefined) animationShown = JSON.parse(animationShown);
         
@@ -36,6 +38,8 @@ ctrl.controller('KenuuCtrl', [ '$scope', '$timeout', 'userFactory', '$state', fu
                 $("#viewKenuu").removeClass("animated slideInUp");
             }, 800);
         }
+        
+        // $("#viewKenuu").show();
     });
 
 	$scope.viewdata = {
@@ -62,6 +66,10 @@ ctrl.controller('KenuuCtrl', [ '$scope', '$timeout', 'userFactory', '$state', fu
     		return 'img/ionitron.png';
     	}
     };
+
+    $scope.GoToProfile = function() {
+        $state.go("tab.kenuu-profile");
+    };
 }]);
 
 ctrl.controller('KenuuPricesCtrl', [ '$scope', 'rewardFactory', 'userFactory', function($scope,rewardFactory,userFactory){
@@ -83,7 +91,6 @@ ctrl.controller('KenuuPricesCtrl', [ '$scope', 'rewardFactory', 'userFactory', f
             console.log(userData);
         })
         .catch(function(err){});
-
 }]);
 
 ctrl.controller('KenuuFavCommercesCtrl', [ '$scope', 'userFactory', function($scope,userFactory){
@@ -98,6 +105,9 @@ ctrl.controller('KenuuFavCommercesCtrl', [ '$scope', 'userFactory', function($sc
             $scope.$apply();
             console.log($scope.viewdata.commerces);
         });
+}]);
+
+ctrl.controller('KenuuProfileCtrl', ['$scope', '$timeout', 'userFactory', '$state', function($scope, $timeout, userFactory, $state){
 
 }]);
 
@@ -113,7 +123,6 @@ ctrl.controller('CommercesCtrl', [ '$scope', 'commerceFactory', function($scope,
             $scope.viewdata.brands = data;
             $scope.$apply();
         });
-
 }]);
 
 ctrl.controller('CommercesDetailCtrl', [ '$scope', '$stateParams', 'commerceFactory', function($scope, $stateParams, commerceFactory){
