@@ -1,16 +1,40 @@
-<ion-view view-title="">
-    <ion-content class="">
+<ion-view>
+    <ion-nav-title>
+        <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
+    </ion-nav-title>
+    <ion-content>
         <div class="list">
             <div class="item item-divider">
                 <i class="icon ion-ribbon-a profile-item-icon"></i> Premios Disponibles
             </div>
-            <a ng-repeat="reward in viewdata.rewards" class="item item-thumbnail-left item-icon-right item-reward item-text-wrap" href="#">
-                <img class="rewards-img" ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{reward.EntityImage}}">
+            <a ng-repeat="reward in viewdata.rewards" class="item item-thumbnail-left item-reward item-text-wrap" href="#">
+                <img 
+                    class="rewards-img" 
+                    ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{reward.EntityImage}}"
+                    alt="">
                 <h2>{{reward.Name}}</h2>
                 <div>{{reward.Description}}</div>
-                <div class="reward-points-label">({{reward.Points}}/{{viewdata.user.PointsAvailable}})</div>
-                <i class="icon ion-android-arrow-dropright reward-detail-icon"></i>
+                <div class="row">
+                    <div class="col-30">
+                        <div class="reward-points-req text-center"><strong>requeridos: </strong>{{reward.Points}}</div>
+                    </div>
+                    <div class="col-30">
+                        <div class="reward-points-av text-center"><strong><i class="icon-Sticker-Morado reward-av-points-icon">{{viewdata.user.PointsAvailable}}</i></div>
+                    </div>
+                    <div class="col-20">
+                        <div class="reward-reached text-left" ng-show="reward.Points <= viewdata.user.PointsAvailable">
+                            <i class="icon ion-ribbon-a"></i>
+                        </div>
+                    </div>
+                </div>
             </a>
         </div>
-    </ion-content>
+        <div style="height:36px;"></div>
+    </ion-content>    
+    <div class="reward-iconography">
+        <div class="item">
+            <span><i class="icon ion-ribbon-a reward-reached"></i></span> 
+            <span class="reward-iconography-label">Premio canjeable!</span>
+        </div>
+    </div>
 </ion-view>

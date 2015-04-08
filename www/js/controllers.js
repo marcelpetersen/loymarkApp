@@ -1,9 +1,42 @@
 var ctrl = angular.module('kenuu.controllers', []);
 
-ctrl.controller('QRCodeCtrl', [ '$scope', function($scope){
+ctrl.controller('WelcomeCtrl', [ '$scope', '$timeout', '$state', function($scope, $timeout, $state){
+    localStorage.setItem('animationShown', false);
+
+    $scope.Enter = function() {
+        $("#viewWelcome").addClass("animated slideOutDown");
+        setTimeout(function(){
+            $state.go('tab.kenuu');
+        },800);
+    };
 }]);
 
-ctrl.controller('KenuuCtrl', [ '$scope', 'userFactory', '$state', function($scope,userFactory,$state){
+ctrl.controller('QRCodeCtrl', [ '$scope', '$timeout', function($scope, $timeout){
+    $timeout(function(){
+        $("#viewcontent-QR").addClass("animated slideInUp");
+    });
+}]);
+
+ctrl.controller('KenuuCtrl', [ '$scope', '$timeout', 'userFactory', '$state', function($scope, $timeout, userFactory, $state){
+    $timeout(function(){
+
+        var animationShown = localStorage.getItem('animationShown');
+        if (animationShown != undefined) animationShown = JSON.parse(animationShown);
+        
+        if (animationShown) 
+        {
+            $("#viewKenuu").removeClass("animated slideInUp");
+        }
+        else 
+        { 
+            localStorage.setItem('animationShown', true); 
+            $("#viewKenuu").show();
+            $("#viewKenuu").addClass("animated slideInUp");
+            setTimeout(function(){
+                $("#viewKenuu").removeClass("animated slideInUp");
+            }, 800);
+        }
+    });
 
 	$scope.viewdata = {
         qrcode: "Kenuu",
@@ -19,7 +52,6 @@ ctrl.controller('KenuuCtrl', [ '$scope', 'userFactory', '$state', function($scop
             $scope.viewdata.user = data;
             $scope.$apply();
             var userData = data;
-            console.log(userData);
         })
         .catch(function(err){});
 
@@ -30,9 +62,6 @@ ctrl.controller('KenuuCtrl', [ '$scope', 'userFactory', '$state', function($scop
     		return 'img/ionitron.png';
     	}
     };
-
-    // console.log('STATE:',$state.current.name);
-
 }]);
 
 ctrl.controller('KenuuPricesCtrl', [ '$scope', 'rewardFactory', 'userFactory', function($scope,rewardFactory,userFactory){
