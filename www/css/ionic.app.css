@@ -7609,67 +7609,16 @@ a.button {
 .tabs-top.tabs-striped .tab-item.tab-item-active {
   border: none; }
 
-.back-btn {
-  color: #757575; }
-
 .main-top-bar {
-  border-bottom: 1px solid #eeeeee !important;
-  background-color: white !important; }
-
-.top-bar-logo {
-  margin-top: 5px;
-  max-height: 6vh;
-  height: 27px; }
+  border-bottom: 2px solid #91B431 !important; }
 
 .tab-nav.tabs {
   padding-top: 5px;
   height: 55px;
   border-top: none !important; }
 
-.clear-item {
-  background-color: transparent !important;
-  border: none !important; }
-
 ion-nav-view[nav-view-transition="android"] .scroll-content {
   padding-top: 6px; }
-
-#viewcontent-QR {
-  -webkit-animation-duration: 0.5s;
-  -webkit-animation-delay: 0;
-  -webkit-animation-iteration-count: 1; }
-
-#viewKenuu {
-  -webkit-animation-duration: 0.5s;
-  -webkit-animation-delay: 0;
-  -webkit-animation-iteration-count: 1; }
-
-#viewWelcome {
-  -webkit-animation-duration: 0.5s;
-  -webkit-animation-delay: 0;
-  -webkit-animation-iteration-count: 1; }
-
-/* ******* Fonts ****** */
-@font-face {
-  font-family: 'icomoon';
-  src: url('../fonts/icomoon.eot?-5isgo6');
-  src: url('../fonts/icomoon.eot?#iefix-5isgo6') format('embedded-opentype'), url('../fonts/icomoon.woff?-5isgo6') format('woff'), url('../fonts/icomoon.ttf?-5isgo6') format('truetype'), url('../fonts/icomoon.svg?-5isgo6#icomoon') format('svg');
-  font-weight: normal;
-  font-style: normal; }
-
-[class^="icon-"], [class*=" icon-"] {
-  font-family: 'icomoon';
-  speak: none;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  line-height: 1;
-  /* Better Font Rendering =========== */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale; }
-
-.icon-Sticker-Morado:before {
-  content: "\e600"; }
 
 /* ******** Profile ******** */
 .profile_content {
@@ -7684,8 +7633,7 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
 
 .profile-btn {
   width: 110px;
-  border: 0px;
-  background-color: #8f04a9 !important; }
+  border: 0px; }
 
 .profile_btn_div {
   width: 100vw; }
@@ -7695,7 +7643,7 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
   border: 0; }
 
 .profile-item-icon {
-  color: #8f04a9 !important; }
+  color: #757575 !important; }
 
 .profile-item-title {
   font-size: 14px;
@@ -7710,11 +7658,13 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
 /* ******** Rewards ********* */
 .rewards-img {
   border: 1px solid #eeeeee !important;
-  border-radius: 5px;
-  padding: 4px; }
+  border-radius: 5px; }
+
+.reward-detail-icon {
+  color: #A4A4A4; }
 
 .item-reward h2 {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold; }
 
 .reward-points-label {
@@ -7722,95 +7672,4 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
   font-weight: bold;
   color: #97457D; }
 
-.reward-points-req {
-  background-color: #eeeeee;
-  color: #333333;
-  padding: 5px;
-  border-radius: 8px;
-  font-size: 12px; }
-
-.reward-points-av {
-  padding: 5px;
-  border-radius: 8px;
-  font-size: 12px; }
-
-.reward-reached {
-  padding: 5px;
-  border-radius: 8px;
-  font-size: 20px;
-  color: #8f04a9; }
-
-.reward-iconography {
-  position: absolute;
-  bottom: 55px;
-  width: 100vw;
-  height: 50px; }
-
-.reward-iconography .item {
-  background-color: #eeeeee !important; }
-
-.reward-iconography-label {
-  position: relative;
-  top: -3px;
-  font-size: 12px; }
-
-ion-nav-view[nav-view-transition="android"] .reward-iconography {
-  position: absolute;
-  bottom: 0px;
-  width: 100vw;
-  height: 50px; }
-
-.reward-av-points-icon {
-  color: #8f04a9; }
-
 /* ******** End of Rewards ********* */
-/* ******** QR Code ********* */
-.qrcode-content {
-  background-color: #8f04a9; }
-
-.qrcode-item {
-  background-color: #8f04a9;
-  border: none !important;
-  height: 100vh;
-  background-image: url('../img/buildingbg.png') !important;
-  background-repeat: no-repeat;
-  background-position: bottom 68px right 0px; }
-
-.qrcode-qrcontainer {
-  position: relative;
-  top: 60px;
-  width: 70vw;
-  margin: auto; }
-
-.qrcode-qr {
-  border: 1px solid #dddddd !important;
-  border-radius: 12px; }
-
-.qrcode-qrtitle {
-  color: white !important; }
-
-.qrcode-qrlabel {
-  color: white !important; }
-
-/* ******** Welcome ********* */
-.welcome-view {
-  background-color: #8f04a9;
-  border: none !important;
-  height: 100vh;
-  background-image: url('../img/buildingbg.png') !important;
-  background-repeat: no-repeat;
-  background-position: bottom 0px right 0px; }
-
-.welcome-content {
-  height: 100vh; }
-
-.welcome-item {
-  background-color: transparent !important;
-  border: none !important;
-  height: 100vh; }
-
-.welcome-main-title {
-  top: 90px;
-  font-size: 30px;
-  color: white;
-  height: 300px; }
