@@ -7658,6 +7658,16 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
   border-bottom: 1px solid white !important;
   color: white !important; }
 
+.card, .list-inset {
+  margin: 7px !important; }
+
+.item-clear {
+  border: none !important; }
+
+/* ******* Modal ******* */
+.modal-bg {
+  background-color: #4E0F5B !important; }
+
 /* ******* Fonts ****** */
 @font-face {
   font-family: 'icomoon';
@@ -7720,10 +7730,13 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
 /* ******** End of Profile ******** */
 /* ******** Rewards ********* */
 .rewards-content {
-  background-color: #eeeeee !important; }
+  background-color: #D6C8FF !important; }
 
 .rewards-card {
-  border-radius: 10px !important; }
+  border-radius: 10px !important;
+  min-height: 308px !important;
+  width: 45vw;
+  margin-left: 7px; }
 
 .rewards-img {
   border: 1px solid #eeeeee !important;
@@ -7739,6 +7752,19 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
   font-weight: bold;
   color: #97457D; }
 
+.reward-entitycontainer {
+  min-height: 50px;
+  padding-top: 0;
+  padding-bottom: 0px;
+  padding-left: 5px;
+  padding-right: 5px; }
+
+.reward-rewarinfocontainer {
+  min-height: 140px; }
+
+.reward-rewardname {
+  font-size: 10px; }
+
 .reward-points-req {
   background-color: #eeeeee;
   color: #333333;
@@ -7746,9 +7772,16 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
   border-radius: 8px;
   font-size: 12px; }
 
+.reward-entityname {
+  font-size: 11px !important; }
+
+.reward-subentityname {
+  font-size: 12px !important; }
+
 .reward-reqpoints-label {
   position: relative;
-  top: 20px; }
+  top: 10px;
+  font-size: 12px; }
 
 .reward-reqpoints-title {
   position: relative;
@@ -7758,14 +7791,14 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
 
 .reward-arlequinsimple {
   margin-top: -20px;
-  height: 60px !important;
-  width: 60px !important; }
+  height: 40px !important;
+  width: 40px !important; }
 
 .reward-label-rewardId-title {
-  font-size: 12px !important; }
+  font-size: 10px !important; }
 
 .reward-label-rewardId {
-  font-size: 14px !important; }
+  font-size: 12px !important; }
 
 .reward-points-av {
   padding: 5px;
@@ -7791,8 +7824,8 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
   margin-left: 30px; }
 
 .reward-commerceimg {
-  height: 60px !important;
-  width: 60px !important; }
+  height: 30px !important;
+  width: 30px !important; }
 
 .reward-iconography .item {
   background-color: #eeeeee !important; }
@@ -7846,6 +7879,22 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
   font-size: 30px;
   color: #8f04a9; }
 
+.reward-searchpanel {
+  position: absolute;
+  top: 44px;
+  height: 100vh;
+  width: 100vw;
+  background-color: white;
+  border-bottom: 1px solid #ddd !important;
+  z-index: 3;
+  -webkit-transition: all 0.1s ease-in-out;
+  -moz-transition: all 0.1s ease-in-out;
+  -o-transition: all 0.1s ease-in-out;
+  transition: all 0.1s ease-in-out; }
+
+.reward-searchpanel-hidden {
+  top: -100vh; }
+
 /* ******** QR Code ********* */
 .qrcode-content {
   background-color: #8f04a9; }
@@ -7881,15 +7930,18 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
   height: 100vh;
   background-image: url('../img/buildingbg.png') !important;
   background-repeat: no-repeat;
-  background-position: bottom 0px right 0px; }
+  background-position: bottom 0px right 0px;
+  -webkit-transition: all 0.1s ease-in-out;
+  -moz-transition: all 0.1s ease-in-out;
+  -o-transition: all 0.1s ease-in-out;
+  transition: all 0.1s ease-in-out; }
 
 .welcome-content {
   height: 100vh; }
 
 .welcome-item {
   background-color: transparent !important;
-  border: none !important;
-  height: 100vh; }
+  border: none !important; }
 
 .welcome-kenuulogo {
   height: 40px;
@@ -8003,3 +8055,16 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
 .rewarddet-twitter {
   background-color: #2FAEEE !important;
   color: white !important; }
+
+/* ******** Commerce ******** */
+.commerce-commerceheader {
+  background-image: url('../img/bgblur.png');
+  min-height: 102px !important;
+  margin-top: 0px;
+  background-color: #eeeeee;
+  padding: 20px;
+  border: none !important; }
+
+.commerce-commerceheader h2, .commerce-commerceheader h4, .commerce-commerceheader p {
+  color: white;
+  margin-left: 75px; }

@@ -37,51 +37,54 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 	border: none;
 }
 
-
-
 // Used Colors
 
-$kenuu-green: 					 #A5CD38;
-$kenuu-purple:					 #8f04a9;
-$kenuu-dark-purple: 			 #6E1780;
-$kenuu-darker-purple: 		     #4E0F5B;
+	$kenuu-green: 					 #A5CD38;
+	$kenuu-purple:					 #8f04a9;
+	$kenuu-dark-purple: 			 #6E1780;
+	$kenuu-darker-purple: 		     #4E0F5B;
+	$kenuu-light-purple:			 #D6C8FF;
 
-$social-facebook-color:			 #2D5C98;
-$social-twitter-color: 		     #2FAEEE;
+	$modal-bg: 					     $kenuu-darker-purple;
 
-$img-border: 				  	 #eeeeee;
-$top-border-bottom-color:     	 #eeeeee; // #91B431;
-$item-divider-color:			 white;
-$input-label-color:			     white;
-$input-font-color:				 white; 
+	$social-facebook-color:			 #2D5C98;
+	$social-twitter-color: 		     #2FAEEE;
 
-$action-btn-color:				 $kenuu-purple;
-$action-back-color:			     #757575;
+	$img-border: 				  	 #eeeeee;
+	$top-border-bottom-color:     	 #eeeeee; // #91B431;
+	$item-divider-color:			 white;
+	$input-label-color:			     white;
+	$input-font-color:				 white; 
 
-$profile-bg-color: 			   	 white;
-$profile-border-color: 		  	 #eeeeee;
-$profile-icon-color: 		  	 $kenuu-purple; // #757575;
-$profile-avatar-border-color: 	 $img-border;
+	$action-btn-color:				 $kenuu-purple;
+	$action-back-color:			     #757575;
 
-$reward-content-bgcolor:	     #eeeeee;
-$reward-title-color: 		  	 #757575;
-$reward-points-label-color:   	 #97457D;
-$reward-points-req-bubble-color: #eeeeee;
-$reward-points-req-bubble-font:  #333333;
-$reward-reached-color: 			 $kenuu-purple;
-$reward-av-points-icon: 		 $kenuu-purple;
-$reward-sidemenu-closbtn:	     $kenuu-purple;
+	$profile-bg-color: 			   	 white;
+	$profile-border-color: 		  	 #eeeeee;
+	$profile-icon-color: 		  	 $kenuu-purple; // #757575;
+	$profile-avatar-border-color: 	 $img-border;
 
-$qrcode-bg-color:				 $kenuu-purple;
-$qrcode-label:					 white;
+	$reward-content-bgcolor:	     $kenuu-light-purple; // #eeeeee;
+	$reward-title-color: 		  	 #757575;
+	$reward-points-label-color:   	 #97457D;
+	$reward-points-req-bubble-color: #eeeeee;
+	$reward-points-req-bubble-font:  #333333;
+	$reward-reached-color: 			 $kenuu-purple;
+	$reward-av-points-icon: 		 $kenuu-purple;
+	$reward-sidemenu-closbtn:	     $kenuu-purple;
+	$reward-searchpanel-bg:			 white;
+	$reward-searchpanel-border: 	 #ddd;
 
-$welcome-btn: 					 $kenuu-darker-purple;
-$welcome-text:					 white;
+	$qrcode-bg-color:				 $kenuu-purple;
+	$qrcode-label:					 white;
 
-$rewarddet-mybalance-color: 	 $kenuu-purple;
-$rewarddet-titles-color:		 white;
-$rewarddet-item-border: 		 #eeeeee;
-$rewarddet-infocell-bgcolor:	 #eeeeee;
+	$welcome-btn: 					 $kenuu-darker-purple;
+	$welcome-text:					 white;
+
+	$rewarddet-mybalance-color: 	 $kenuu-purple;
+	$rewarddet-titles-color:		 white;
+	$rewarddet-item-border: 		 #eeeeee;
+	$rewarddet-infocell-bgcolor:	 #eeeeee;
 
 .back-btn {
 	color: $action-back-color;
@@ -153,6 +156,20 @@ ion-nav-view[nav-view-transition="ios"] {
 		background-color: transparent !important;
 		border-bottom: 1px solid white !important;
 		color: $input-font-color !important;
+	}
+
+	.card, .list-inset {
+		margin: 7px !important;	
+	}
+
+	.item-clear {
+		border: none !important;
+	}
+
+/* ******* Modal ******* */
+
+	.modal-bg {
+		background-color: $modal-bg !important;
 	}
 
 /* ******* Fonts ****** */
@@ -241,6 +258,8 @@ ion-nav-view[nav-view-transition="ios"] {
 
 	.rewards-card {
 		border-radius: 10px !important;
+		min-height: 308px !important;
+		width:45vw; margin-left:7px;
 	}
 
 	.rewards-img {
@@ -260,6 +279,16 @@ ion-nav-view[nav-view-transition="ios"] {
 		color: $reward-points-label-color;	
 	}
 
+	.reward-entitycontainer {
+		min-height:50px; padding-top:0; padding-bottom:0px; padding-left:5px; padding-right:5px;
+	}
+	.reward-rewarinfocontainer {
+		min-height:140px;
+	}
+	.reward-rewardname {
+		font-size:10px;
+	}
+
 	.reward-points-req {
 		background-color: $reward-points-req-bubble-color;
 		color: $reward-points-req-bubble-font;
@@ -267,11 +296,20 @@ ion-nav-view[nav-view-transition="ios"] {
 		border-radius: 8px;
 		font-size: 12px;
 	}
+	.reward-entityicon {
+	}
+	.reward-entityname {
+		font-size: 11px !important;
+	}
+	.reward-subentityname {
+		font-size: 12px !important;
+	}
 	.reward-pointsinfo-container {		
 	}
 	.reward-reqpoints-label {
 		position: relative;
-		top: 20px;
+		top: 10px;
+		font-size: 12px;
 	}
 	.reward-reqpoints-title {
 		position: relative;
@@ -281,14 +319,14 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 	.reward-arlequinsimple {		
 		margin-top:-20px;
-		height: 60px !important;
-		width: 60px !important;
+		height: 40px !important;
+		width: 40px !important;
 	}
 	.reward-label-rewardId-title {
-		font-size: 12px !important;
+		font-size: 10px !important;
 	}
 	.reward-label-rewardId {
-		font-size: 14px !important;	
+		font-size: 12px !important;	
 	}
 
 	.reward-points-av {
@@ -298,7 +336,7 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 
 	.reward-av-points-icon {
-		color: 
+		
 	}
 
 	.reward-reached {
@@ -322,10 +360,8 @@ ion-nav-view[nav-view-transition="ios"] {
 		margin-left: 30px;
 	}
 	.reward-commerceimg {
-		height: 60px !important;
-		width: 60px !important;
-		// max-width: 40px !important;
-		// max-height: 40px !important;
+		height: 30px !important;
+		width: 30px !important;
 	}
 
 	.reward-iconography .item {
@@ -389,7 +425,24 @@ ion-nav-view[nav-view-transition="ios"] {
 
 	.reward-sidemenu-icon {
 		font-size: 30px;
-		color: #8f04a9; }
+		color: #8f04a9; 
+	}
+	.reward-searchpanel {
+		position: absolute;
+		top:44px;
+		height: 100vh;
+		width: 100vw;
+		background-color: $reward-searchpanel-bg;
+		border-bottom: 1px solid $reward-searchpanel-border !important;
+		z-index: 3;
+		-webkit-transition: all 0.1s ease-in-out;
+		-moz-transition: all 0.1s ease-in-out;
+		-o-transition: all 0.1s ease-in-out;
+		transition: all 0.1s ease-in-out;
+	}
+	.reward-searchpanel-hidden {
+		top:-100vh;
+	}
 
 /* ******** QR Code ********* */
 	.qrcode-view {
@@ -433,14 +486,19 @@ ion-nav-view[nav-view-transition="ios"] {
 		background-image: url('../img/buildingbg.png') !important;
 		background-repeat: no-repeat;
 		background-position: bottom 0px right 0px; 
+		-webkit-transition: all 0.1s ease-in-out;
+		-moz-transition: all 0.1s ease-in-out;
+		-o-transition: all 0.1s ease-in-out;
+		transition: all 0.1s ease-in-out;
 	}
+
 	.welcome-content {
 		height: 100vh;
 	}
 	.welcome-item {
 		background-color: transparent !important;
 		border: none !important;
-		height: 100vh;
+		// height: 100vh;
 	}
 	.welcome-kenuulogo {
 		height: 40px;
@@ -470,7 +528,6 @@ ion-nav-view[nav-view-transition="ios"] {
 		padding-left:30px; 
 		padding-right:30px;
 	}
-
 
 /* ******** Reward Detail ******** */
 	.rewarddet-commerce {
@@ -564,3 +621,30 @@ ion-nav-view[nav-view-transition="ios"] {
 		background-color: $social-twitter-color !important;
 		color: white !important;
 	}
+
+/* ******** Commerce ******** */
+
+	.commerce-view {
+
+	}
+	.commerce-content {
+
+	}
+	.commerce-commerceheader {
+		background-image: url('../img/bgblur.png');
+		min-height: 102px !important;
+		margin-top: 0px;
+		background-color: #eeeeee;
+		padding: 20px;
+		border: none !important;
+	}
+	.commerce-commerceheader h2,
+	.commerce-commerceheader h4,
+	.commerce-commerceheader p {
+		color: $rewarddet-titles-color;
+		margin-left: 75px;
+	}
+
+
+
+

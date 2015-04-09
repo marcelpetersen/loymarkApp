@@ -3,76 +3,66 @@
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
     </ion-nav-title>
     <ion-content class="rewards-content">
-        <div class="item item-divider item-divider item-icon-right">
+       <!--  <div class="item item-divider item-divider item-icon-right">
             Premios Disponibles
             <i class="icon ion-android-more-horizontal profile-item-icon" ng-click="ShowSideMenu()"></i> 
+        </div> -->
+        <div class="bar bar-header item-input-inset">
+            <label class="item-input-wrapper">
+                <i class="icon ion-ios7-search placeholder-icon"></i>
+                <input type="search" ng-model="viewdata.searchText" placeholder="Buscar">
+            </label>
+            <button class="button button-clear" ng-click="ShowSideMenu()">
+                <i class="icon ion-android-more-horizontal profile-item-icon"></i> 
+            </button>
+        </div>
+
+        <div class="reward-searchpanel reward-searchpanel-hidden">
+            <div class="item item-clear item-icon-right">
+                <p><strong>Resultados:</strong></p>                
+                <i class="icon ion-android-close" ng-click="CancelSearch()"></i>                
+            </div>
+            <div class="item item-clear" ng-show="viewdata.searchResults.length == 0">
+                <ion-spinner icon="crescent" class="spinner-dark"></ion-spinner>
+            </div>
         </div>
 
         <div class="list">
-            <div class="card rewards-card" ng-repeat="reward in viewdata.rewards" ng-click="OpenRewardDetail(reward)">
-                <div class="item item-text-wrap text-center">
-                    <img class="rewarddet-image" ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{reward.Image}}">
-                    <h2>{{reward.Name}}</h2>
-                    <p>{{reward.Description}}</p>
-                    <div class="reward-reached text-center" ng-show="reward.Points <= viewdata.user.PointsAvailable">
-                        <i class="icon ion-ribbon-a"></i>
-                    </div>
-                </div>
-                <div class="item item-icon-left item-text-wrap text-left reward-commerce-info">
-                    <div class="icon">
-                        <img class="reward-commerceimg" ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{reward.EntityImage}}">
-                    </div>
-                    <h2>{{reward.EntityName}}</h2>
-                    <p>{{reward.SubEntityName}}</p>
-                </div>
-                <div class="item">
-                    <div class="row reward-pointsinfo-container">
-                        <div class="col-50 text-center rewarddet-infocell">
-                            <div class="reward-reqpoints-title">Puntos Requeridos</div>
-                            <div class="reward-reqpoints-label">{{reward.Points}}</div>
-                            <img src="./img/arlequinsimple.png" class="reward-arlequinsimple">
-                        </div>
-                        <div class="col-50 text-center">
-                            <p class="reward-label-rewardId-title">Id del Premio:</p>
-                            <p class="reward-label-rewardId">{{reward.SRewardID}}</p>
-                            <p class="reward-label-rewardId-title">Válido Hasta:</p>
-                            <p class="reward-label-rewardId">{{gDate(reward.ValidUntil)}}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+            <span ng-repeat="reward in viewdata.rewards">
+                <div class="row" ng-if="$index<viewdata.rewards.length/2+1">
+                    <span ng-repeat="reward in viewdata.rewards">
+                        <div class="col card rewards-card" ng-if="$index>=2*$parent.$index && $index <= 2*($parent.$index+1)-1" ng-click="OpenRewardDetail(reward)">
+                            
+                        <div class="item item-text-wrap text-left reward-entitycontainer">
+                                <div class="row">
+                                    <div class="col-40">
+                                        <div class="reward-entityicon">
+                                            <img class="reward-commerceimg" ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{reward.EntityImage}}">
+                                        </div>        
+                                    </div>
+                                    <div class="col-60" style="margin-left:2px;">
+                                        <p class="reward-entityname">{{reward.EntityName}}</p>
+                                    </div>
+                                </div>
+                            </div>
 
-
-        <div class="list" style="display:none">
-            <div class="item item-divider item-divider item-icon-left item-icon-right">
-                <i class="icon ion-ribbon-a profile-item-icon"></i> 
-                Premios Disponibles
-                <i class="icon ion-android-more-horizontal profile-item-icon" ng-click="ShowSideMenu()"></i> 
-            </div>
-            <a ng-repeat="reward in viewdata.rewards" class="item item-thumbnail-left item-reward item-text-wrap" ng-click="OpenRewardDetail(reward)">
-                <img 
-                    class="rewards-img" 
-                    ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{reward.EntityImage}}"
-                    alt="">
-                <h2>{{reward.Name}}</h2>
-                <div>{{reward.Description}}</div>
-                <div class="row">
-                    <div class="col-30">
-                        <div class="reward-points-req text-center"><strong>requeridos: </strong>{{reward.Points}}</div>
-                    </div>
-                    <div class="col-30">
-                        <div class="reward-points-av text-center">
-                            <strong>disponibles: </strong>{{viewdata.user.PointsAvailable}}
+                            <div class="item item-text-wrap text-center reward-rewarinfocontainer">
+                                <img class="rewarddet-image" ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{reward.Image}}">
+                                <p class="reward-rewardname">{{reward.Name}}</p>                                
+                                <div class="reward-reached text-center" ng-show="reward.Points <= viewdata.user.PointsAvailable">
+                                    <i class="icon ion-ribbon-a"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="item text-center">
+                                <div class="reward-reqpoints-title">Requeridos</div>
+                                <div class="reward-reqpoints-label">{{reward.Points}}</div>
+                                <img src="./img/arlequinsimple.png" class="reward-arlequinsimple">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-20">
-                        <div class="reward-reached text-left" ng-show="reward.Points <= viewdata.user.PointsAvailable">
-                            <i class="icon ion-ribbon-a"></i>
-                        </div>
-                    </div>
+                    </span>
                 </div>
-            </a>
+            </span>
         </div>
         <div style="height:36px;"></div>
     </ion-content>

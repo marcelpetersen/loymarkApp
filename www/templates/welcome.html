@@ -3,7 +3,7 @@
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
     </ion-nav-title>
 	<ion-content scroll="false" class="welcome-content">
-		<ion-slide-box show-pager="true">
+		<ion-slide-box show-pager="true" on-slide-changed="slideHasChanged($index)">
 			<ion-slide class="welcome-slide">
 				<div class="item clear-item text-center welcome-main-title" style="margin-top:50px;">
 					Bienvenido a
@@ -34,7 +34,33 @@
 					</label>
 				</div>
 				<div class="item welcome-item" style="top:20px;">
-					<button ng-click="Enter()" class="button button-block button-light welcome-btn">Enviar!</button>
+					<button ng-click="SignUp()" class="button button-block button-light welcome-btn">Enviar!</button>
+				</div>
+				<div class="item clear-item text-center welcome-text" style="margin-top:20px; padding-left:30px; padding-right:30px;">
+					<strong>Ya estoy inscrito...</strong>
+					<p class="welcome-regular-text">Si ya está inscrito, haga tap en este botón:</p>
+				</div>
+				<div class="item welcome-item" style="top:0px;">
+					<button ng-click="nextSlide()" class="button button-block button-light welcome-btn">Ir a Ingreso!</button>
+				</div>
+			</ion-slide>
+			<ion-slide class="welcome-slide">
+				<div class="item clear-item text-center welcome-text" style="margin-top:20px; padding-left:30px; padding-right:30px;">
+					<strong>Ingrese</strong>
+					<p class="welcome-regular-text">Ingrese con su correo y contraseña:</p>
+				</div>
+				<div class="text-left" style="padding-left:30px; padding-right:30px;">					
+					<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
+						<span class="input-label">Email</span>
+						<input class="kenuu-input" type="text" placeholder="john@suhr.com">
+					</label>
+					<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
+						<span class="input-label">Password</span>
+						<input class="kenuu-input" type="password" placeholder="">
+					</label>
+				</div>
+				<div class="item welcome-item" style="top:20px;">
+					<button ng-click="Enter()" class="button button-block button-light welcome-btn">Ingresar!</button>
 				</div>				
 			</ion-slide>
 		</ion-slide-box>

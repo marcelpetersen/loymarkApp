@@ -1,0 +1,48 @@
+<ion-view class="commerce-view">
+    <ion-nav-title>
+        <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
+    </ion-nav-title>    
+    <ion-content scroll=true class="commerce-content">
+        <div class="item item-avatar item-icon-right commerce-commerceheader">
+            <img class="rewarddet-image" ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{viewdata.selectedReward.EntityImage}}">
+            <h4>{{viewdata.selectedReward.EntityName}}</h4>
+            <h2><strong>{{viewdata.selectedReward.SubEntityName}}</strong></h2>
+            <div class="icon">
+                <div class="rewarddet-mybalance-title">Mi Balance</div>
+                <div class="rewarddet-mybalance-label text-center">24</div>
+                <img src="./img/arlequin.png" class="rewarddet-arlequin">
+            </div>
+        </div>        
+        <div>
+            <img src="https://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=13&size=375x140&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284">
+        </div>
+        <div class="item item-clear">
+            <div class="row">
+                <div class="col-50">
+                    <strong><i class="ion-android-time"></i> Horario</strong>
+                    <p>10:00am - 12:00pm</p>        
+                </div>
+                <div class="col-50">
+                    <strong><i class="ion-android-call"></i> Teléfono</strong>
+                    <p>2525-0000 / 2266-5522</p>        
+                </div>
+            </div>
+            <div class="row" style="margin-top:10px;">
+                <div class="col">
+                    <strong><i class="ion-at"></i> Email</strong>
+                    <p>servicioalcliente@empresa.com</p>
+                </div>
+            </div>            
+        </div>
+        <div class="item item-icon-left">
+            <i class="icon ion-android-home profile-item-icon"></i>
+            <div class="profile-item-title">sucursales</div>
+            <div>listado de nuestras sucursales</div>
+        </div>
+        <div class="item item-icon-left">
+            <i class="icon ion-ribbon-a profile-item-icon"></i>
+            <div class="profile-item-title">premios disponibles</div>
+            <div>nuestros premios disponibles</div>
+        </div>        
+    </ion-content>
+</ion-view>

@@ -1,7 +1,22 @@
 var ctrl = angular.module('kenuu.controllers', ['ja.qr']);
 
-ctrl.controller('WelcomeCtrl', [ '$scope', '$timeout', '$state', function($scope, $timeout, $state){
+ctrl.controller('WelcomeCtrl', [ '$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', function($scope, $timeout, $state, $ionicSlideBoxDelegate){
     localStorage.setItem('animationShown', false);
+
+    var _currentSlideIndex = 0;
+
+    $scope.SignUp = function() {
+        swal(
+            {   
+                title: "Error!",   
+                text: "Here's my error message!",   
+                type: "error",   
+                confirmButtonText: "Cool",
+                customClass: "modal-bg",
+                confirmButtonColor: "#8f04a9"
+            }
+        );
+    };
 
     $scope.Enter = function() {
         localStorage.setItem('animationShown', false);
@@ -9,6 +24,14 @@ ctrl.controller('WelcomeCtrl', [ '$scope', '$timeout', '$state', function($scope
         setTimeout(function(){
             $state.go('tab.kenuu');
         },800);
+    };
+
+    $scope.nextSlide = function() {
+        $ionicSlideBoxDelegate.next();
+    };
+
+    $scope.slideHasChanged = function(index) {
+        _currentSlideIndex = index;
     };
 }]);
 
@@ -75,7 +98,8 @@ ctrl.controller('KenuuCtrl', [ '$scope', '$timeout', 'userFactory', '$state', fu
 ctrl.controller('KenuuPricesCtrl', [ '$scope', '$state', 'rewardFactory', 'userFactory', function($scope,$state,rewardFactory,userFactory){
 
 	$scope.viewdata = {
-        searchText: ''
+        searchText: '',
+        searchResults: []
     };
 
 	rewardFactory.active.general(true)
@@ -109,6 +133,29 @@ ctrl.controller('KenuuPricesCtrl', [ '$scope', '$state', 'rewardFactory', 'userF
         var _date = new Date(parseInt(date.substr(6)));
         return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
     };
+
+    $scope.$watch('viewdata.searchText', function() {
+        if ($scope.viewdata.searchText != "")
+        {
+            $(".reward-searchpanel").removeClass("reward-searchpanel-hidden");
+        }
+        else
+        {
+            $(".reward-searchpanel").addClass("reward-searchpanel-hidden");   
+        }
+    });
+
+    $scope.CancelSearch = function() {
+        $scope.viewdata.searchText = "";
+        $(".reward-searchpanel").removeClass("reward-searchpanel-hidden");
+    }; 
+}]);
+
+ctrl.controller('KenuuCommerceCtrl', ['$scope', 'rewardFactory', function($scope, rewardFactory){
+    $scope.viewdata = {
+        selectedReward: rewardFactory.selectedReward.get()
+    };
+    
 }]);
 
 ctrl.controller('KenuuFavCommercesCtrl', [ '$scope', 'userFactory', function($scope,userFactory){
@@ -128,20 +175,37 @@ ctrl.controller('KenuuFavCommercesCtrl', [ '$scope', 'userFactory', function($sc
 ctrl.controller('KenuuProfileCtrl', ['$scope', '$timeout', 'userFactory', '$state', function($scope, $timeout, userFactory, $state){
 }]);
 
-ctrl.controller('KenuuRewardDetailCtrl', ['$scope', '$timeout', 'rewardFactory', '$state', function($scope, $timeout, rewardFactory, $state){
+ctrl.controller('KenuuRewardDetailCtrl', ['$scope', '$timeout', 'userFactory', 'rewardFactory', '$state', function($scope, $timeout, userFactory, rewardFactory, $state){
 
     $scope.viewdata = {
         selectedReward: rewardFactory.selectedReward.get(),
-        rewardId: ''
+        rewardId: '',
+        user: {
+            activity: ''
+        }
     };
 
-    console.log($scope.viewdata.selectedReward);
+    userFactory.info.get(true, 2)
+        .then(function(data){
+            $scope.viewdata.user = data;
+
+            console.log("User Data:");
+            console.log($scope.viewdata.user);
+
+            $scope.$apply();
+            var userData = data;
+        })
+        .catch(function(err){});
 
     $scope.viewdata.rewardId = $scope.viewdata.selectedReward.SRewardID.toString();
 
     $scope.gDate = function(date) {
         var _date = new Date(parseInt(date.substr(6)));
         return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
+    };
+
+    $scope.GoToCommerce = function() {
+        $state.go('tab.kenuu-commerce');
     };
 }]);
 
