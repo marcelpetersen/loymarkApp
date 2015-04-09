@@ -2,8 +2,49 @@
     <ion-nav-title>
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
     </ion-nav-title>
-    <ion-content>
+    <ion-content class="rewards-content">
+        <div class="item item-divider item-divider item-icon-right">
+            Premios Disponibles
+            <i class="icon ion-android-more-horizontal profile-item-icon" ng-click="ShowSideMenu()"></i> 
+        </div>
+
         <div class="list">
+            <div class="card rewards-card" ng-repeat="reward in viewdata.rewards" ng-click="OpenRewardDetail(reward)">
+                <div class="item item-text-wrap text-center">
+                    <img class="rewarddet-image" ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{reward.Image}}">
+                    <h2>{{reward.Name}}</h2>
+                    <p>{{reward.Description}}</p>
+                    <div class="reward-reached text-center" ng-show="reward.Points <= viewdata.user.PointsAvailable">
+                        <i class="icon ion-ribbon-a"></i>
+                    </div>
+                </div>
+                <div class="item item-icon-left item-text-wrap text-left reward-commerce-info">
+                    <div class="icon">
+                        <img class="reward-commerceimg" ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{reward.EntityImage}}">
+                    </div>
+                    <h2>{{reward.EntityName}}</h2>
+                    <p>{{reward.SubEntityName}}</p>
+                </div>
+                <div class="item">
+                    <div class="row reward-pointsinfo-container">
+                        <div class="col-50 text-center rewarddet-infocell">
+                            <div class="reward-reqpoints-title">Puntos Requeridos</div>
+                            <div class="reward-reqpoints-label">{{reward.Points}}</div>
+                            <img src="./img/arlequinsimple.png" class="reward-arlequinsimple">
+                        </div>
+                        <div class="col-50 text-center">
+                            <p class="reward-label-rewardId-title">Id del Premio:</p>
+                            <p class="reward-label-rewardId">{{reward.SRewardID}}</p>
+                            <p class="reward-label-rewardId-title">Válido Hasta:</p>
+                            <p class="reward-label-rewardId">{{gDate(reward.ValidUntil)}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="list" style="display:none">
             <div class="item item-divider item-divider item-icon-left item-icon-right">
                 <i class="icon ion-ribbon-a profile-item-icon"></i> 
                 Premios Disponibles

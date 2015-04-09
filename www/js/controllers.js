@@ -21,7 +21,7 @@ ctrl.controller('QRCodeCtrl', [ '$scope', '$timeout', function($scope, $timeout)
 ctrl.controller('KenuuCtrl', [ '$scope', '$timeout', 'userFactory', '$state', function($scope, $timeout, userFactory, $state){
     // Code that runs when the View is finished rendering
     $timeout(function(){
-        /*
+        
         var animationShown = localStorage.getItem('animationShown');
         if (animationShown != undefined) animationShown = JSON.parse(animationShown);
         
@@ -38,8 +38,8 @@ ctrl.controller('KenuuCtrl', [ '$scope', '$timeout', 'userFactory', '$state', fu
                 $("#viewKenuu").removeClass("animated slideInUp");
             }, 800);
         }
-        */
-        $("#viewKenuu").show();
+        
+        // $("#viewKenuu").show();
     });
 
 	$scope.viewdata = {
@@ -103,6 +103,11 @@ ctrl.controller('KenuuPricesCtrl', [ '$scope', '$state', 'rewardFactory', 'userF
 
     $scope.HideSideMenu = function() {        
         $(".reward-sidemenu").addClass('reward-sidemenu-hidden');  
+    };
+
+    $scope.gDate = function(date) {
+        var _date = new Date(parseInt(date.substr(6)));
+        return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
     };
 }]);
 

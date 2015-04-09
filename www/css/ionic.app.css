@@ -7719,6 +7719,12 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
 
 /* ******** End of Profile ******** */
 /* ******** Rewards ********* */
+.rewards-content {
+  background-color: #eeeeee !important; }
+
+.rewards-card {
+  border-radius: 10px !important; }
+
 .rewards-img {
   border: 1px solid #eeeeee !important;
   border-radius: 5px;
@@ -7740,6 +7746,27 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
   border-radius: 8px;
   font-size: 12px; }
 
+.reward-reqpoints-label {
+  position: relative;
+  top: 20px; }
+
+.reward-reqpoints-title {
+  position: relative;
+  top: 0px;
+  right: 0px;
+  font-size: 12px; }
+
+.reward-arlequinsimple {
+  margin-top: -20px;
+  height: 60px !important;
+  width: 60px !important; }
+
+.reward-label-rewardId-title {
+  font-size: 12px !important; }
+
+.reward-label-rewardId {
+  font-size: 14px !important; }
+
 .reward-points-av {
   padding: 5px;
   border-radius: 8px;
@@ -7756,6 +7783,16 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
   bottom: 55px;
   width: 100vw;
   height: 50px; }
+
+.reward-commerce-info {
+  min-height: 75px; }
+
+.reward-commerce-info h2, .reward-commerce-info p {
+  margin-left: 30px; }
+
+.reward-commerceimg {
+  height: 60px !important;
+  width: 60px !important; }
 
 .reward-iconography .item {
   background-color: #eeeeee !important; }
@@ -7791,9 +7828,13 @@ ion-nav-view[nav-view-transition="android"] .reward-iconography {
 ion-nav-view[nav-view-transition="android"] .reward-sidemenu {
   top: 54px; }
 
+ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
+  top: 19px; }
+
 .reward-sidemenu-button {
   min-height: 0px !important;
-  height: 38px !important; }
+  height: 35px !important;
+  color: #8f04a9 !important; }
 
 .reward-sidemenu-hidden {
   right: -80px; }
@@ -7879,34 +7920,81 @@ ion-nav-view[nav-view-transition="android"] .reward-sidemenu {
   padding-right: 30px; }
 
 /* ******** Reward Detail ******** */
+.rewarddet-commerce {
+  background-image: url('../img/bgblur.png');
+  min-height: 102px !important; }
+
+.rewarddet-content .item h2, .rewarddet-content .item h4, .rewarddet-content .button {
+  color: white !important;
+  margin-left: 30px; }
+
+.rewarddet-commerce-btn {
+  width: 110px;
+  border: 0px;
+  background-color: #8f04a9 !important; }
+
 .rewarddet-image {
-  max-width: 80px;
-  max-height: 80px;
+  max-width: 70px !important;
+  max-height: 70px !important;
   width: 100% !important;
   height: 100% !important; }
 
 .rewarddet-arlequin {
+  margin-top: 10px;
   height: 60px !important;
   width: 60px !important; }
 
 .rewarddet-mybalance-label {
   position: relative;
   font-size: 20px;
+  margin-top: 8px;
   width: 50px;
   right: -55px;
   color: #8f04a9; }
 
-.rewarddet-qrcode {
-  height: 90px;
-  width: 90px;
-  filter: brightness(0.5); }
+.rewarddet-mybalance-title {
+  position: absolute;
+  top: 8px;
+  right: 0px;
+  font-size: 12px;
+  color: white; }
 
-.rewarddet-label-rewardId {
-  font-size: 22px !important;
-  font-weight: bold !important; }
+.rewarddet-rewardheader {
+  margin-top: 0px;
+  background-color: #eeeeee;
+  padding: 20px; }
 
-.rewarddet-label-rewardId-title {
-  font-size: 12px !important; }
+.rewarddet-arlequinsimple {
+  height: 60px !important;
+  width: 60px !important; }
+
+.rewarddet-pointsinfo-container {
+  border-top: 1px solid #eeeeee !important;
+  border-bottom: 1px solid #eeeeee !important; }
+
+.rewarddet-reqpoints-label {
+  position: relative;
+  top: 40px; }
+
+.rewarddet-reqpoints-title {
+  position: relative;
+  top: 15px;
+  right: 0px;
+  font-size: 12px; }
+
+.rewarddet-infocell {
+  border-right: 1px solid #eeeeee !important; }
+
+.rewarddet-redeem-btn {
+  margin-left: 0px !important; }
+
+.rewarddet-tnc-container {
+  padding: 25px; }
+
+.rewarddet-tnc-text {
+  text-align: justify;
+  text-justify: inter-word;
+  font-size: 12px; }
 
 .rewarddet-facebook {
   background-color: #2D5C98 !important;

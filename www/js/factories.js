@@ -399,13 +399,32 @@ fact.factory('commerceFactory', ['restFactory', function(restFactory){
 fact.factory('rewardFactory', ['restFactory', function(restFactory){
     var _rewards = null;
     var _selectedReward = {};
+
+    function storeInLocalStorage(varName, value) {
+        localStorage.setItem(varName, JSON.stringify(value));
+    };
+
+    function getFromLocalStorage(varName, defaultVal) {
+        var _value = localStorage.getItem(varName);
+        if (_value === undefined)
+        {
+            return defaultVal;
+        }
+        else
+        {
+            return JSON.parse(_value);
+        }
+    };
+
     return {
         selectedReward: {
             set: function(reward) {
+                storeInLocalStorage('selectedReward', reward);
                 _selectedReward = reward;
             },
             get: function() {
-                return _selectedReward;
+                var retVal = getFromLocalStorage('selectedReward', _selectedReward);
+                return retVal;
             }
         },
         active: {
