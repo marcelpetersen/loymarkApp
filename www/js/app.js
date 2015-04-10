@@ -162,10 +162,9 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	// $urlRouterProvider.otherwise('/tab/kenuu/stores');
 	// $urlRouterProvider.otherwise('/tab/kenuu/commerce');
 	// $urlRouterProvider.otherwise('/tab/kenuu/rewardDetail');
-	// $urlRouterProvider.otherwise('/tab/kenuu/prices');
+	$urlRouterProvider.otherwise('/tab/kenuu/prices');
 	// $urlRouterProvider.otherwise('/tab/kenuu');
-	$urlRouterProvider.otherwise('/welcome');
-
+	// $urlRouterProvider.otherwise('/welcome');
 })
 
 .directive('map', function() {
@@ -199,4 +198,22 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
             }
         }
     };
-});
+})
+
+.directive('onFinishRender', function () {
+		return {
+			restrict: "A",
+			link: function(scope, element, attr) {
+				if (scope.$last === true) 
+	            {
+	            	element.ready(
+	                	function () 
+	                	{
+	                    	scope.$emit(attr.onFinishRender);
+	                	}
+	                );
+	            }
+			}
+		}
+	}
+);;

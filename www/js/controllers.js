@@ -99,20 +99,28 @@ ctrl.controller('KenuuPricesCtrl', [ '$scope', '$state', 'rewardFactory', 'userF
 
 	$scope.viewdata = {
         searchText: '',
-        searchResults: []
+        searchResults: [],
+        rewards: []
     };
 
 	rewardFactory.active.general(true)
         .then(function(data){
-            $scope.viewdata.rewards = data.Elements;
-            $scope.$apply();
+            $("#pleaseWaitSpinner").addClass("animated slideOutUp");
+            
+            setTimeout(function() {                
+                $scope.viewdata.rewards = data.Elements;
+
+                $("#rewardsListContainer").show();
+                $("#rewardsListContainer").addClass("animated fadeIn");
+
+                $scope.$apply();                
+            }, 50);
         });
 
     userFactory.info.get(true,2)
         .then(function(data){
             $scope.viewdata.user = data;
-            var userData = data;
-            console.log(userData);
+            var userData = data;            
         })
         .catch(function(err){});
 
@@ -143,12 +151,12 @@ ctrl.controller('KenuuPricesCtrl', [ '$scope', '$state', 'rewardFactory', 'userF
         {
             $(".reward-searchpanel").addClass("reward-searchpanel-hidden");   
         }
-    });
+    });    
 
     $scope.CancelSearch = function() {
         $scope.viewdata.searchText = "";
         $(".reward-searchpanel").removeClass("reward-searchpanel-hidden");
-    }; 
+    };
 }]);
 
 ctrl.controller('KenuuCommerceCtrl', ['$scope', '$state', 'rewardFactory', function($scope, $state, rewardFactory){
@@ -200,9 +208,10 @@ ctrl.controller('KenuuRewardDetailCtrl', ['$scope', '$timeout', 'userFactory', '
         .then(function(data){
             $scope.viewdata.user = data;
 
-            console.log("User Data:");
-            console.log($scope.viewdata.user);
-
+            if ($scope.viewdata.selectedReward.Points <= $scope.viewdata.user.PointsAvailable) {
+                $("#btnRedeem").show();
+            }
+            
             $scope.$apply();
             var userData = data;
         })

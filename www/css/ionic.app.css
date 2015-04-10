@@ -7645,6 +7645,11 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
   -webkit-animation-delay: 0;
   -webkit-animation-iteration-count: 1; }
 
+#pleaseWaitSpinner {
+  -webkit-animation-duration: 0.5s;
+  -webkit-animation-delay: 0;
+  -webkit-animation-iteration-count: 1; }
+
 .kenuu-code-tab {
   color: #8f04a9; }
 
@@ -7666,6 +7671,10 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
 
 .item-clear {
   border: none !important; }
+
+.pleaseWaitSpinner {
+  position: absolute;
+  width: 100vw; }
 
 /* ******* Modal ******* */
 .modal-bg {
@@ -7768,6 +7777,12 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
 .reward-rewardname {
   font-size: 10px; }
 
+.rewards-list-container {
+  -webkit-transition: all 0.1s ease-in-out;
+  -moz-transition: all 0.1s ease-in-out;
+  -o-transition: all 0.1s ease-in-out;
+  transition: all 0.1s ease-in-out; }
+
 .reward-points-req {
   background-color: #eeeeee;
   color: #333333;
@@ -7828,7 +7843,8 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
 
 .reward-commerceimg {
   height: 30px !important;
-  width: 30px !important; }
+  width: 30px !important;
+  border-radius: 50%; }
 
 .reward-iconography .item {
   background-color: #eeeeee !important; }
@@ -7991,8 +8007,8 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
 .rewarddet-image {
   max-width: 70px !important;
   max-height: 70px !important;
-  width: 100% !important;
-  height: 100% !important; }
+  min-height: 70px;
+  border-radius: 50%; }
 
 .rewarddet-arlequin {
   margin-top: 10px;

@@ -141,6 +141,12 @@ ion-nav-view[nav-view-transition="ios"] {
 	-webkit-animation-iteration-count: 1;		
 }
 
+#pleaseWaitSpinner {
+	-webkit-animation-duration: 0.5s;
+	-webkit-animation-delay: 0;
+	-webkit-animation-iteration-count: 1;
+}
+
 .kenuu-code-tab {
 	// background: $kenuu-green;
 	// /* padding-top: 0px !important; */
@@ -178,6 +184,11 @@ ion-nav-view[nav-view-transition="ios"] {
 
 	.item-clear {
 		border: none !important;
+	}
+
+	.pleaseWaitSpinner {
+		position: absolute;
+		width: 100vw;
 	}
 
 /* ******* Modal ******* */
@@ -302,7 +313,12 @@ ion-nav-view[nav-view-transition="ios"] {
 	.reward-rewardname {
 		font-size:10px;
 	}
-
+	.rewards-list-container {
+		-webkit-transition: all 0.1s ease-in-out;
+		-moz-transition: all 0.1s ease-in-out;
+		-o-transition: all 0.1s ease-in-out;
+		transition: all 0.1s ease-in-out;
+	}
 	.reward-points-req {
 		background-color: $reward-points-req-bubble-color;
 		color: $reward-points-req-bubble-font;
@@ -376,6 +392,7 @@ ion-nav-view[nav-view-transition="ios"] {
 	.reward-commerceimg {
 		height: 30px !important;
 		width: 30px !important;
+		border-radius: 50%;
 	}
 
 	.reward-iconography .item {
@@ -563,8 +580,10 @@ ion-nav-view[nav-view-transition="ios"] {
 	.rewarddet-image {
 		max-width: 70px !important;
 		max-height: 70px !important;
-		width: 100% !important;
-		height: 100% !important; 
+		min-height: 70px;
+		// width: 100% !important;
+		// height: 100% !important; 
+		border-radius: 50%;
 	}
 
 	.rewarddet-arlequin {
