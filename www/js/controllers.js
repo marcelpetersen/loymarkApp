@@ -151,11 +151,22 @@ ctrl.controller('KenuuPricesCtrl', [ '$scope', '$state', 'rewardFactory', 'userF
     }; 
 }]);
 
-ctrl.controller('KenuuCommerceCtrl', ['$scope', 'rewardFactory', function($scope, rewardFactory){
+ctrl.controller('KenuuCommerceCtrl', ['$scope', '$state', 'rewardFactory', function($scope, $state, rewardFactory){
     $scope.viewdata = {
         selectedReward: rewardFactory.selectedReward.get()
     };
-    
+    $scope.GoToStores = function() {
+        $state.go('tab.kenuu-stores')
+    };
+    $scope.GoToRewards = function() {
+        $state.go('tab.kenuu-prices');
+    };
+}]);
+
+ctrl.controller('KenuuStoresCtrl', ['$scope','rewardFactory', function($scope, rewardFactory) {
+    $scope.viewdata = {
+        selectedReward: rewardFactory.selectedReward.get()
+    };
 }]);
 
 ctrl.controller('KenuuFavCommercesCtrl', [ '$scope', 'userFactory', function($scope,userFactory){

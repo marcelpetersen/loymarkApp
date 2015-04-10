@@ -7645,6 +7645,9 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
   -webkit-animation-delay: 0;
   -webkit-animation-iteration-count: 1; }
 
+.kenuu-code-tab {
+  color: #8f04a9; }
+
 /* ******* General ******* */
 .item-divider {
   background-color: white; }
@@ -8068,3 +8071,21 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
 .commerce-commerceheader h2, .commerce-commerceheader h4, .commerce-commerceheader p {
   color: white;
   margin-left: 75px; }
+
+/* ******** Stores ******** */
+.stores-content {
+  height: 100vh; }
+
+.stores-list-container {
+  background-color: #D6C8FF !important; }
+
+.stores-card {
+  border-radius: 10px !important; }
+
+.stores-storename {
+  font-size: 12px;
+  font-weight: bold; }
+
+.stores-map {
+  width: 100px;
+  height: 50px; }

@@ -107,6 +107,16 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	  	}
 	})
 
+	.state('tab.kenuu-stores', {
+	  	url: '/kenuu/stores',
+	  	views: {
+	    	'tab-kenuu': {
+	      		templateUrl: 'templates/tab-kenuu-stores.html',
+	      		controller: 'KenuuStoresCtrl'
+	    	}
+	  	}
+	})
+
 	.state('tab.kenuu-commerce', {
 	  	url: '/kenuu/commerce',
 	  	views: {
@@ -116,6 +126,8 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	    	}
 	  	}
 	})
+
+	// Pending to Develop
 
 	.state('tab.commerces', {
 		url: '/commerces',
@@ -147,6 +159,7 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	});
 
 	// if none of the above states are matched, use this as the fallback
+	// $urlRouterProvider.otherwise('/tab/kenuu/stores');
 	// $urlRouterProvider.otherwise('/tab/kenuu/commerce');
 	// $urlRouterProvider.otherwise('/tab/kenuu/rewardDetail');
 	// $urlRouterProvider.otherwise('/tab/kenuu/prices');

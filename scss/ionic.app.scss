@@ -141,6 +141,20 @@ ion-nav-view[nav-view-transition="ios"] {
 	-webkit-animation-iteration-count: 1;		
 }
 
+.kenuu-code-tab {
+	// background: $kenuu-green;
+	// /* padding-top: 0px !important; */
+	// /* border: none !important; */
+	// margin-top: -13px;
+	// color: white;
+	// height: 63px;
+	// border-top-right-radius: 10px;
+	// border-top-left-radius: 10px;
+	// opacity: 1;
+	color: $kenuu-purple;
+}
+
+
 /* ******* General ******* */
 
 	.item-divider {
@@ -645,6 +659,26 @@ ion-nav-view[nav-view-transition="ios"] {
 		margin-left: 75px;
 	}
 
+/* ******** Stores ******** */
 
+	.stores-header {
+	}
+	.stores-content {		
+		height: 100vh;
+	}
+	.stores-list-container {
+		background-color: $reward-content-bgcolor !important;		
+	}
+	.stores-card {
+		border-radius: 10px !important;
+	}
+	.stores-storename {
+		font-size: 12px;
+		font-weight: bold;
+	}
+	.stores-map {
+		width: 100px;
+		height: 50px;
+	}
 
 
