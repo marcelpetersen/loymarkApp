@@ -159,6 +159,7 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	});
 
 	// if none of the above states are matched, use this as the fallback	
+	// $urlRouterProvider.otherwise('/tab/kenuu/profile');
 	// $urlRouterProvider.otherwise('/tab/kenuu/favCommerces');
 	// $urlRouterProvider.otherwise('/tab/kenuu/stores');
 	// $urlRouterProvider.otherwise('/tab/kenuu/commerce');

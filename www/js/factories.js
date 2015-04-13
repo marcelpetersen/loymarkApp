@@ -369,14 +369,22 @@ fact.factory('userFactory',[ 'restFactory', function(restFactory){
 
 fact.factory('commerceFactory', ['restFactory', function(restFactory){
     var _selectedCommerce = {};
-
+    var _thereIsACommerceSelected = false;
     return {
         selectedCommerce: {
             set: function(commerce) {
+                _thereIsACommerceSelected = true;
                 _selectedCommerce = commerce;
+            },
+            clearSelection: function() {
+                _selectedCommerce = {};
+                _thereIsACommerceSelected = false;
             },
             get: function() {
                 return _selectedCommerce;
+            },
+            isSelected: function() {
+                return _thereIsACommerceSelected;
             }
         },
         general: function(userID){

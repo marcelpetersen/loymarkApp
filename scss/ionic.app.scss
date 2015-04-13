@@ -55,6 +55,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 	$item-divider-color:			 white;
 	$input-label-color:			     white;
 	$input-font-color:				 white; 
+	$input-profile-font-color: 		 #757575;
 
 	$action-btn-color:				 $kenuu-purple;
 	$action-back-color:			     #757575;
@@ -195,10 +196,32 @@ ion-nav-view[nav-view-transition="ios"] {
 		width: 100vw;
 	}
 	.spinner svg {
-		width: 28px;
-		height: 28px;
+		width: 38px;
+		height: 38px;
 		stroke: $kenuu-purple;
 		fill: $kenuu-purple;
+	}
+	.gradient-pattern {
+		-webkit-box-sizing: content-box;
+		-moz-box-sizing: content-box;
+		box-sizing: content-box;
+		width: 100vw;
+		height: 100vh;
+		border: none;
+		font: normal 100%/normal Arial, Helvetica, sans-serif;
+		color: rgba(255,255,255,1);
+		-o-text-overflow: clip;
+		text-overflow: clip;
+		background: -webkit-linear-gradient(45deg, rgba(255,255,255,0.2) 25%, rgba(0,0,0,0) 25%, rgba(0,0,0,0) 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, rgba(0,0,0,0) 75%, rgba(0,0,0,0) 0), rgba(166,0,204,1);
+		background: -moz-linear-gradient(45deg, rgba(255,255,255,0.2) 25%, rgba(0,0,0,0) 25%, rgba(0,0,0,0) 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, rgba(0,0,0,0) 75%, rgba(0,0,0,0) 0), rgba(166,0,204,1);
+		background: linear-gradient(45deg, rgba(255,255,255,0.2) 25%, rgba(0,0,0,0) 25%, rgba(0,0,0,0) 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, rgba(0,0,0,0) 75%, rgba(0,0,0,0) 0), rgba(166,0,204,1);
+		background-position: auto auto;
+		-webkit-background-origin: padding-box;
+		background-origin: padding-box;
+		-webkit-background-clip: border-box;
+		background-clip: border-box;
+		-webkit-background-size: 50px 50px;
+		background-size: 50px 50px;
 	}
 
 /* ******* Modal ******* */
@@ -714,6 +737,16 @@ ion-nav-view[nav-view-transition="ios"] {
 	.stores-map {
 		width: 100px;
 		height: 50px;
+	}	
+	ion-nav-view[nav-view-transition="android"] {
+		.stores-bottomseparator {
+			
+		}
+	}
+	ion-nav-view[nav-view-transition="ios"] {		
+		.stores-bottomseparator {
+			height:93px;
+		}
 	}
 
 /* ******** Favorite Commerces ******** */
@@ -752,3 +785,15 @@ ion-nav-view[nav-view-transition="ios"] {
 		color: $favcommerce-lastvisit-color;
 	}
 
+/* ******** Profile Edit ********* */
+
+	.profileedit-input {
+		color: $input-profile-font-color;
+		border-bottom: 1px solid #eeeeee !important;
+	}
+	.profileedit-label {
+		color: $input-profile-font-color;
+	}
+	.profileedit-button {
+		background-color: $action-btn-color !important;
+	}

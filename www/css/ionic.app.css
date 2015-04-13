@@ -7678,10 +7678,32 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
   width: 100vw; }
 
 .spinner svg {
-  width: 28px;
-  height: 28px;
+  width: 38px;
+  height: 38px;
   stroke: #8f04a9;
   fill: #8f04a9; }
+
+.gradient-pattern {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  width: 100vw;
+  height: 100vh;
+  border: none;
+  font: normal 100%/normal Arial, Helvetica, sans-serif;
+  color: white;
+  -o-text-overflow: clip;
+  text-overflow: clip;
+  background: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent 0), #a600cc;
+  background: -moz-linear-gradient(45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent 0), #a600cc;
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent 0), #a600cc;
+  background-position: auto auto;
+  -webkit-background-origin: padding-box;
+  background-origin: padding-box;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-background-size: 50px 50px;
+  background-size: 50px 50px; }
 
 /* ******* Modal ******* */
 .modal-bg {
@@ -8119,6 +8141,9 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
   width: 100px;
   height: 50px; }
 
+ion-nav-view[nav-view-transition="ios"] .stores-bottomseparator {
+  height: 93px; }
+
 /* ******** Favorite Commerces ******** */
 .favcommerces-content {
   background-color: #D6C8FF !important; }
@@ -8152,3 +8177,14 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
   position: relative;
   left: 10px;
   color: #757575; }
+
+/* ******** Profile Edit ********* */
+.profileedit-input {
+  color: #757575;
+  border-bottom: 1px solid #eeeeee !important; }
+
+.profileedit-label {
+  color: #757575; }
+
+.profileedit-button {
+  background-color: #8f04a9 !important; }

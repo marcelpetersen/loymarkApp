@@ -3,5 +3,24 @@
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
     </ion-nav-title>	
   	<ion-content scroll=false class="profile-content" id="viewcontent-QR">
+  		<div class="text-left" style="padding-left:30px; padding-right:30px;">					
+			<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
+				<span class="input-label profileedit-label">Nombre</span>
+				<input class="profileedit-input" type="text" placeholder="Nombre">
+			</label>
+			<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
+				<span class="input-label profileedit-label">Apellido</span>
+				<input class="profileedit-input" type="text" placeholder="Apellido">
+			</label>
+		</div>
+		<div class="text-left" style="padding-left:30px; padding-right:30px;">					
+			<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
+				<span class="input-label profileedit-label">Email</span>
+				<input class="profileedit-input" ng-model="viewdata.user.Email" type="text" placeholder="john@suhr.com">
+			</label>
+		</div>
+		<div class="item welcome-item" style="top:20px;">
+			<button ng-click="SaveProfile()" class="button button-block button-light welcome-btn profileedit-button">Guardar!</button>
+		</div>
   	</ion-content>
 </ion-view>

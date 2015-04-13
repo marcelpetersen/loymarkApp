@@ -95,13 +95,22 @@ ctrl.controller('KenuuCtrl', [ '$scope', '$timeout', 'userFactory', '$state', fu
     };
 }]);
 
-ctrl.controller('KenuuPricesCtrl', [ '$scope', '$state', 'rewardFactory', 'userFactory', function($scope,$state,rewardFactory,userFactory){
+ctrl.controller('KenuuPricesCtrl', [ '$scope', '$state', 'rewardFactory', 'userFactory', 'commerceFactory', function($scope,$state,rewardFactory,userFactory,commerceFactory){
 
 	$scope.viewdata = {
         searchText: '',
         searchResults: [],
-        rewards: []
+        rewards: [],
+        commerceSelected: commerceFactory.selectedCommerce.isSelected(),
+        selectedCommerce: commerceFactory.selectedCommerce.get()
     };
+
+    var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
+
+    if ($scope.viewdata.commerceSelected)
+    {
+        alert("Comercio Seleccionado!");
+    }
 
 	rewardFactory.active.general(true)
         .then(function(data){
@@ -110,9 +119,6 @@ ctrl.controller('KenuuPricesCtrl', [ '$scope', '$state', 'rewardFactory', 'userF
             setTimeout(function() {                
                 $scope.viewdata.rewards = data.Elements;
                 console.log($scope.viewdata.rewards);
-
-                // $("#rewardsListContainer").show();
-                // $(".rewards-card").addClass("animated fadeIn");
 
                 $scope.$apply();                
             }, 150);
@@ -165,6 +171,9 @@ ctrl.controller('KenuuCommerceCtrl', ['$scope', '$state', 'rewardFactory', 'comm
         selectedReward: rewardFactory.selectedReward.get(),
         selectedCommerce: commerceFactory.selectedCommerce.get()
     };
+    
+    var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
+
     $scope.GoToStores = function() {
         $state.go('tab.kenuu-stores')
     };
@@ -223,6 +232,26 @@ ctrl.controller('KenuuFavCommercesCtrl', [ '$scope', '$state', 'userFactory', 'c
 }]);
 
 ctrl.controller('KenuuProfileCtrl', ['$scope', '$timeout', 'userFactory', '$state', function($scope, $timeout, userFactory, $state){
+    $scope.viewdata = {
+        qrcode: "Kenuu",
+        counter: 1,
+        positions: [],
+        user: {
+            activity: ''
+        }
+    };
+
+    userFactory.info.get(true,2)
+        .then(function(data){
+            $scope.viewdata.user = data;
+            $scope.$apply();
+            var userData = data;
+        })
+        .catch(function(err){});
+
+    $scope.SaveProfile = function() {
+
+    };
 }]);
 
 ctrl.controller('KenuuRewardDetailCtrl', ['$scope', '$timeout', 'userFactory', 'rewardFactory', 'commerceFactory', '$state', function($scope, $timeout, userFactory, rewardFactory, commerceFactory, $state){
@@ -276,7 +305,9 @@ ctrl.controller('KenuuRewardDetailCtrl', ['$scope', '$timeout', 'userFactory', '
     };
 
     $scope.RedeemReward = function() {
-        swal({   title: "Está seguro?",   text: "Desea canjear este premio?",   type: "warning",   showCancelButton: true,   confirmButtonColor: "#4E0F5B", cancelButtonText:"Cancelar",  confirmButtonText: "Si, Canjear!",   closeOnConfirm: false }, function(){   swal("Deleted!", "Your imaginary file has been deleted.", "success"); });
+        swal({   title: "Está seguro?",   text: "Desea canjear este premio?",   type: "warning",   showCancelButton: true,   confirmButtonColor: "#4E0F5B", cancelButtonText:"No",  confirmButtonText: "Si, Canjear!",   closeOnConfirm: false }, 
+            function(){   swal("Deleted!", "Your imaginary file has been deleted.", "success"); 
+        });
     };
 }]);
 
