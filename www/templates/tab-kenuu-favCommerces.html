@@ -2,25 +2,33 @@
     <ion-nav-title>
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
     </ion-nav-title>
-    <ion-content class="">
-        <div class="list">
-            <a ng-repeat="commerce in viewdata.commerces" class="item item-thumbnail-left" href="#">
-                <img ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{commerce.Image}}" alt="Brand Logo">
-                <h2>{{commerce.Description}}</h2>
-                <h3 class="purple1-text"><small class="textgrey-text">última visita:</small> {{commerce.LastVisit}}</h3>
-                <div class="row activity-item-points-numbers text-center">
-                    <h2 class="textgrey-text">{{commerce.TotalVisits}}</h2>
-                </div>
-                <div class="row activity-item-points-text text-center">
-                    <h4 class="textgrey-text">visitas</h4>
-                </div>
-                <div class="row activity-item-points-numbers text-center">
-                    <h2 class="purple1-text">{{commerce.PointsAccumulated}}</h2>
-                </div>
-                <div class="row activity-item-points-text text-center">
-                    <h4 class="purple1-text">pops</h4>
-                </div>
-            </a>
+    <ion-content class="favcommerces-content">
+        <div id="favCommercePleaseWaitSpinner" class="item item-clear text-center pleaseWaitSpinner" ng-show="viewdata.commerces.length == 0">
+            <ion-spinner icon="dots" class="spinner"></ion-spinner>
+        </div>
+        <div id="favcommerces-list" class="list">
+            <div ng-repeat="commerce in viewdata.commerces" class="card favcommerces-card" ng-click="GoToCommerce(commerce)">
+                <div class="item item-text-wrap item-icon-right text-left favcommerce-entitycontainer">
+                    <div class="row">
+                        <div class="col-40">
+                            <div class="reward-entityicon">
+                                <img ng-show='commerce.Image != "" && commerce.Image' class="favcommerce-commerceimg" ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{commerce.Image}}" err-src="./img/empty.png">
+                                <img ng-show='!commerce.Image' class="favcommerce-commerceimg" src="./img/empty.png">
+                            </div>        
+                        </div>
+                        <div class="col" style="margin-left:2px;">
+                            <h2 class="favcommerce-entityname">{{commerce.Description}}</h2>
+                            <p><h3 class="favcommerce-lastvisit-label"><small class="textgrey-text">última visita:</small> {{gDate(commerce.LastVisit)}}</h3></p>
+                            <p><h3 class="favcommerce-lastvisit-label"><small class="textgrey-text">visitas:</small> {{commerce.TotalVisits}}</h3></p>
+                        </div>                        
+                    </div>
+                    <div class="icon">
+                        <div class="favcommerce-mybalance-title">Mi Balance</div>
+                        <div class="rewarddet-mybalance-label favcommerce-mybalance-label text-center">{{commerce.PointsAccumulated}}</div>
+                        <img src="./img/arlequin.png" class="rewarddet-arlequin favcommerce-arlequin">
+                    </div>
+                </div>                
+            </div>
         </div>
     </ion-content>
 </ion-view>

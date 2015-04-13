@@ -4,13 +4,8 @@
     </ion-nav-title>    
     <ion-content scroll=true class="rewarddet-content">         
         <div class="item item-avatar item-icon-right rewarddet-commerce">
-            <!-- <img 
-                class="rewarddet-image" 
-                ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{viewdata.selectedReward.EntityImage}}"
-                err-src
-            > -->
-            <img ng-show='viewdata.selectedReward.EntityImage != "" && viewdata.selectedReward.EntityImage' class="rewarddet-image" ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{viewdata.selectedReward.EntityImage}}" err-src="./img/empty.png">
-            <img ng-show='!viewdata.selectedReward.EntityImage' class="rewarddet-image" src="./img/empty.png">
+            <img class="rewarddet-image" ng-src="{{GetCommerceImage(viewdata.selectedReward.EntityImage)}}">
+
             <h4>{{viewdata.selectedReward.EntityName}}</h4>
             <h2><strong>{{viewdata.selectedReward.SubEntityName}}</strong></h2>
             <div class="icon">
@@ -25,7 +20,7 @@
             <img class="rewarddet-image" ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{viewdata.selectedReward.Image}}">
             <h2>{{viewdata.selectedReward.Name}}</h2>
             <p>{{viewdata.selectedReward.Description}}</p>
-            <div id="btnRedeem" style="display:none" class="button button-small button-calm rewarddet-commerce-btn rewarddet-redeem-btn">Canjear!</div>
+            <div id="btnRedeem" style="display:none" ng-click="RedeemReward()" class="button button-small button-calm rewarddet-commerce-btn rewarddet-redeem-btn">Canjear!</div>
         </div>
 
         <div class="row rewarddet-pointsinfo-container">

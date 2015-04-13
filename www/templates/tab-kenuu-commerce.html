@@ -4,7 +4,9 @@
     </ion-nav-title>    
     <ion-content scroll=true class="commerce-content">
         <div class="item item-avatar item-icon-right commerce-commerceheader">
-            <img class="rewarddet-image" ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{viewdata.selectedReward.EntityImage}}">
+            
+            <img class="rewarddet-image" ng-src="{{GetCommerceImage(viewdata.selectedReward.EntityImage)}}">            
+
             <h4>{{viewdata.selectedReward.EntityName}}</h4>
             <h2><strong>{{viewdata.selectedReward.SubEntityName}}</strong></h2>
             <div class="icon">

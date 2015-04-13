@@ -368,7 +368,17 @@ fact.factory('userFactory',[ 'restFactory', function(restFactory){
 }]);
 
 fact.factory('commerceFactory', ['restFactory', function(restFactory){
+    var _selectedCommerce = {};
+
     return {
+        selectedCommerce: {
+            set: function(commerce) {
+                _selectedCommerce = commerce;
+            },
+            get: function() {
+                return _selectedCommerce;
+            }
+        },
         general: function(userID){
             return new Promise(function(resolve,reject){
                 restFactory.commerce.get(userID)

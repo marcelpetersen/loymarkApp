@@ -86,6 +86,9 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 	$rewarddet-item-border: 		 #eeeeee;
 	$rewarddet-infocell-bgcolor:	 #eeeeee;
 
+	$favcommerce-titles-color:		 #757575;
+	$favcommerce-lastvisit-color:    #757575;
+
 .back-btn {
 	color: $action-back-color;
 }
@@ -145,6 +148,7 @@ ion-nav-view[nav-view-transition="ios"] {
 	-webkit-animation-duration: 0.5s;
 	-webkit-animation-delay: 0;
 	-webkit-animation-iteration-count: 1;
+	opacity: 0.9;
 }
 
 .kenuu-code-tab {
@@ -189,6 +193,12 @@ ion-nav-view[nav-view-transition="ios"] {
 	.pleaseWaitSpinner {
 		position: absolute;
 		width: 100vw;
+	}
+	.spinner svg {
+		width: 28px;
+		height: 28px;
+		stroke: $kenuu-purple;
+		fill: $kenuu-purple;
 	}
 
 /* ******* Modal ******* */
@@ -565,6 +575,12 @@ ion-nav-view[nav-view-transition="ios"] {
 		background-image: url('../img/bgblur.png');
 		min-height: 102px !important;
 	}
+	#btnRedeem {
+		-webkit-transition: all 0.1s ease-in-out;
+		-moz-transition: all 0.1s ease-in-out;
+		-o-transition: all 0.1s ease-in-out;
+		transition: all 0.1s ease-in-out;
+	}
 	.rewarddet-content .item h2, 
 	.rewarddet-content .item h4,
 	.rewarddet-content .button {
@@ -700,4 +716,39 @@ ion-nav-view[nav-view-transition="ios"] {
 		height: 50px;
 	}
 
+/* ******** Favorite Commerces ******** */
+
+	.favcommerces-content {
+		background-color: $reward-content-bgcolor !important;
+	}
+	.favcommerces-card {
+		border-radius: 10px !important;
+	}
+	.favcommerce-commerceimg {
+		height: 50px !important;
+		width: 50px !important;
+		border-radius: 50%;
+	}
+	.favcommerce-entityname {
+		position: relative;
+		left: 10px; 
+	}
+	.favcommerce-mybalance-title {
+		position: absolute;
+		top: 8px;
+		right: 0px;
+		font-size: 12px;
+		color: $favcommerce-titles-color;
+	}
+	.favcommerce-mybalance-label {
+		margin-top: 20px;
+	}
+	.favcommerce-arlequin {
+		margin-top: 20px !important;
+	}
+	.favcommerce-lastvisit-label {
+		position: relative;
+		left: 10px;
+		color: $favcommerce-lastvisit-color;
+	}
 

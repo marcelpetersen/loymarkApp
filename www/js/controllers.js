@@ -45,24 +45,24 @@ ctrl.controller('KenuuCtrl', [ '$scope', '$timeout', 'userFactory', '$state', fu
     // Code that runs when the View is finished rendering
     $timeout(function(){
         
-        var animationShown = localStorage.getItem('animationShown');
-        if (animationShown != undefined) animationShown = JSON.parse(animationShown);
+        // var animationShown = localStorage.getItem('animationShown');
+        // if (animationShown != undefined) animationShown = JSON.parse(animationShown);
         
-        if (animationShown) 
-        {
-            $("#viewKenuu").removeClass("animated slideInUp");
-        }
-        else 
-        { 
-            localStorage.setItem('animationShown', true); 
-            $("#viewKenuu").show();
-            $("#viewKenuu").addClass("animated slideInUp");
-            setTimeout(function(){
-                $("#viewKenuu").removeClass("animated slideInUp");
-            }, 800);
-        }
+        // if (animationShown) 
+        // {
+        //     $("#viewKenuu").removeClass("animated slideInUp");
+        // }
+        // else 
+        // { 
+        //     localStorage.setItem('animationShown', true); 
+        //     $("#viewKenuu").show();
+        //     $("#viewKenuu").addClass("animated slideInUp");
+        //     setTimeout(function(){
+        //         $("#viewKenuu").removeClass("animated slideInUp");
+        //     }, 800);
+        // }
         
-        // $("#viewKenuu").show();
+        $("#viewKenuu").show();
     });
 
 	$scope.viewdata = {
@@ -109,12 +109,13 @@ ctrl.controller('KenuuPricesCtrl', [ '$scope', '$state', 'rewardFactory', 'userF
             
             setTimeout(function() {                
                 $scope.viewdata.rewards = data.Elements;
+                console.log($scope.viewdata.rewards);
 
-                $("#rewardsListContainer").show();
-                $("#rewardsListContainer").addClass("animated fadeIn");
+                // $("#rewardsListContainer").show();
+                // $(".rewards-card").addClass("animated fadeIn");
 
                 $scope.$apply();                
-            }, 50);
+            }, 150);
         });
 
     userFactory.info.get(true,2)
@@ -159,15 +160,27 @@ ctrl.controller('KenuuPricesCtrl', [ '$scope', '$state', 'rewardFactory', 'userF
     };
 }]);
 
-ctrl.controller('KenuuCommerceCtrl', ['$scope', '$state', 'rewardFactory', function($scope, $state, rewardFactory){
+ctrl.controller('KenuuCommerceCtrl', ['$scope', '$state', 'rewardFactory', 'commerceFactory', function($scope, $state, rewardFactory, commerceFactory){
     $scope.viewdata = {
-        selectedReward: rewardFactory.selectedReward.get()
+        selectedReward: rewardFactory.selectedReward.get(),
+        selectedCommerce: commerceFactory.selectedCommerce.get()
     };
     $scope.GoToStores = function() {
         $state.go('tab.kenuu-stores')
     };
     $scope.GoToRewards = function() {
         $state.go('tab.kenuu-prices');
+    };
+    $scope.GetCommerceImage = function(image) {
+        if (image != undefined) 
+        {
+            if (image != "")
+            {
+                return imageserverurl + image;
+            }
+        }
+
+        return "./img/empty.png";
     };
 }]);
 
@@ -177,24 +190,42 @@ ctrl.controller('KenuuStoresCtrl', ['$scope','rewardFactory', function($scope, r
     };
 }]);
 
-ctrl.controller('KenuuFavCommercesCtrl', [ '$scope', 'userFactory', function($scope,userFactory){
+ctrl.controller('KenuuFavCommercesCtrl', [ '$scope', '$state', 'userFactory', 'commerceFactory', function($scope,$state,userFactory,commerceFactory){
 
 	$scope.viewdata = {
-        commerces: {}
+        commerces: []
     };
 
     userFactory.activity.visits.commerce(2)
         .then(function(data){
-            $scope.viewdata.commerces = data.VisitedCommerces;
-            $scope.$apply();
-            console.log($scope.viewdata.commerces);
+            $("#favCommercePleaseWaitSpinner").addClass("animated slideOutUp");
+            
+            setTimeout(function() {                
+                $scope.viewdata.commerces = data.VisitedCommerces;
+                console.log($scope.viewdata.commerces);
+
+                $("#favcommerces-list").show();
+                $("#favcommerces-list").addClass("animated fadeIn");
+
+                $scope.$apply();                
+            }, 150);
         });
+
+    $scope.gDate = function(date) {
+        var _date = new Date(parseInt(date.substr(6)));
+        return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
+    };
+
+    $scope.GoToCommerce = function(commerce) {
+        commerceFactory.selectedCommerce.set(commerce);
+        $state.go('tab.kenuu-commerce');
+    };
 }]);
 
 ctrl.controller('KenuuProfileCtrl', ['$scope', '$timeout', 'userFactory', '$state', function($scope, $timeout, userFactory, $state){
 }]);
 
-ctrl.controller('KenuuRewardDetailCtrl', ['$scope', '$timeout', 'userFactory', 'rewardFactory', '$state', function($scope, $timeout, userFactory, rewardFactory, $state){
+ctrl.controller('KenuuRewardDetailCtrl', ['$scope', '$timeout', 'userFactory', 'rewardFactory', 'commerceFactory', '$state', function($scope, $timeout, userFactory, rewardFactory, commerceFactory, $state){
 
     $scope.viewdata = {
         selectedReward: rewardFactory.selectedReward.get(),
@@ -203,6 +234,8 @@ ctrl.controller('KenuuRewardDetailCtrl', ['$scope', '$timeout', 'userFactory', '
             activity: ''
         }
     };
+
+    var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
     userFactory.info.get(true, 2)
         .then(function(data){
@@ -219,13 +252,31 @@ ctrl.controller('KenuuRewardDetailCtrl', ['$scope', '$timeout', 'userFactory', '
 
     $scope.viewdata.rewardId = $scope.viewdata.selectedReward.SRewardID.toString();
 
+    $scope.GetCommerceImage = function(image) {
+        if (image != undefined) 
+        {
+            if (image != "")
+            {
+                return imageserverurl + image;
+            }
+        }
+
+        return "./img/empty.png";
+    };
+
     $scope.gDate = function(date) {
         var _date = new Date(parseInt(date.substr(6)));
         return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
     };
 
     $scope.GoToCommerce = function() {
+        // TODO: Sacar el comercio asociado al premio y definirlo como el seleccionado
+        // commerceFactory.selectedCommerce.set(commerce);
         $state.go('tab.kenuu-commerce');
+    };
+
+    $scope.RedeemReward = function() {
+        swal({   title: "Está seguro?",   text: "Desea canjear este premio?",   type: "warning",   showCancelButton: true,   confirmButtonColor: "#4E0F5B", cancelButtonText:"Cancelar",  confirmButtonText: "Si, Canjear!",   closeOnConfirm: false }, function(){   swal("Deleted!", "Your imaginary file has been deleted.", "success"); });
     };
 }]);
 

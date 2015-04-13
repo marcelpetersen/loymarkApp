@@ -7648,7 +7648,8 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
 #pleaseWaitSpinner {
   -webkit-animation-duration: 0.5s;
   -webkit-animation-delay: 0;
-  -webkit-animation-iteration-count: 1; }
+  -webkit-animation-iteration-count: 1;
+  opacity: 0.9; }
 
 .kenuu-code-tab {
   color: #8f04a9; }
@@ -7675,6 +7676,12 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
 .pleaseWaitSpinner {
   position: absolute;
   width: 100vw; }
+
+.spinner svg {
+  width: 28px;
+  height: 28px;
+  stroke: #8f04a9;
+  fill: #8f04a9; }
 
 /* ******* Modal ******* */
 .modal-bg {
@@ -7995,6 +8002,12 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
   background-image: url('../img/bgblur.png');
   min-height: 102px !important; }
 
+#btnRedeem {
+  -webkit-transition: all 0.1s ease-in-out;
+  -moz-transition: all 0.1s ease-in-out;
+  -o-transition: all 0.1s ease-in-out;
+  transition: all 0.1s ease-in-out; }
+
 .rewarddet-content .item h2, .rewarddet-content .item h4, .rewarddet-content .button {
   color: white !important;
   margin-left: 30px; }
@@ -8105,3 +8118,37 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
 .stores-map {
   width: 100px;
   height: 50px; }
+
+/* ******** Favorite Commerces ******** */
+.favcommerces-content {
+  background-color: #D6C8FF !important; }
+
+.favcommerces-card {
+  border-radius: 10px !important; }
+
+.favcommerce-commerceimg {
+  height: 50px !important;
+  width: 50px !important;
+  border-radius: 50%; }
+
+.favcommerce-entityname {
+  position: relative;
+  left: 10px; }
+
+.favcommerce-mybalance-title {
+  position: absolute;
+  top: 8px;
+  right: 0px;
+  font-size: 12px;
+  color: #757575; }
+
+.favcommerce-mybalance-label {
+  margin-top: 20px; }
+
+.favcommerce-arlequin {
+  margin-top: 20px !important; }
+
+.favcommerce-lastvisit-label {
+  position: relative;
+  left: 10px;
+  color: #757575; }
