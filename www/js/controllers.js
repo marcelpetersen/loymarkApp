@@ -19,9 +19,12 @@ ctrl.controller('WelcomeCtrl', [ '$scope', '$timeout', '$state', '$ionicSlideBox
     };
 
     $scope.Enter = function() {
-        localStorage.setItem('animationShown', false);
-        localStorage.setItem('userAPIKey', "");
+        // Sets the flags indicating the user has already logged.
+        localStorage.setItem('animationShown', false);        
+        localStorage.setItem('userAPIKey', "Prueba");
+        
         $("#viewWelcome").addClass("animated slideOutDown");
+        
         setTimeout(function(){
             $state.go('tab.kenuu');
         },800);
@@ -195,12 +198,20 @@ ctrl.controller('KenuuPricesCtrl', [ '$scope', '$state', 'rewardFactory', 'userF
     LoadData();
 }]);
 
-ctrl.controller('KenuuCommerceCtrl', ['$scope', '$state', 'rewardFactory', 'commerceFactory', function($scope, $state, rewardFactory, commerceFactory){
+ctrl.controller('KenuuCommerceCtrl', ['$scope', '$state', 'rewardFactory', 'commerceFactory', 'userFactory', '$window', '$cordovaEmailComposer', function($scope, $state, rewardFactory, commerceFactory, userFactory, $window, $cordovaEmailComposer){
     $scope.viewdata = {
         selectedReward: rewardFactory.selectedReward.get(),
         selectedCommerce: commerceFactory.selectedCommerce.get()
     };
     
+    userFactory.info.get(true,2)
+        .then(function(data){
+            $scope.viewdata.user = data;
+            $scope.$apply();
+            var userData = data;
+        })
+        .catch(function(err){});
+
     var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
     $scope.GoToStores = function() {
@@ -220,11 +231,46 @@ ctrl.controller('KenuuCommerceCtrl', ['$scope', '$state', 'rewardFactory', 'comm
 
         return "./img/empty.png";
     };
+    $scope.GoToAddress = function(address) {
+        $window.open("waze://?q="+ address);
+    };
+    $scope.ComposeEmail = function(storeEmail) {
+        var email = {
+            to: storeEmail,
+            cc: $scope.viewdata.user.Email,
+            // bcc: ['john@doe.com', 'jane@doe.com'],
+            subject: 'Kenuu - Asistencia al Cliente',
+            body: 'Quiero Ayuda!',
+            isHtml: true
+        };
+
+        $cordovaEmailComposer.open(email).then(null, function () {
+            // user cancelled email
+        });
+    };
 }]);
 
-ctrl.controller('KenuuStoresCtrl', ['$scope','rewardFactory', function($scope, rewardFactory) {
+ctrl.controller('KenuuStoresCtrl', ['$scope','rewardFactory', '$window', '$cordovaActionSheet', function($scope, rewardFactory, $window, $cordovaActionSheet) {
     $scope.viewdata = {
         selectedReward: rewardFactory.selectedReward.get()
+    };
+    
+    $scope.GoToAddress = function(address) {
+        var options = {
+            title: 'Cómo desea navegar hasta esa dirección?',
+            buttonLabels: ['Usando Waze'],
+            addCancelButtonWithLabel: 'Cancelar',
+            androidEnableCancelButton : true,
+            winphoneEnableCancelButton : true
+            // addDestructiveButtonWithLabel : 'Vamos!'
+        };
+        $cordovaActionSheet.show(options)
+            .then(function(btnIndex) {
+                var index = btnIndex;
+                if (index == 1) {
+                    $window.open("waze://?q="+ address);
+                }
+            });
     };
 }]);
 
