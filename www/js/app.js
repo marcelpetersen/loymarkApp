@@ -56,7 +56,6 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 		}
 	})
 
-
 	.state('tab.kenuu', {
 		url: '/kenuu',
 		views: {
@@ -165,8 +164,20 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	// $urlRouterProvider.otherwise('/tab/kenuu/commerce');
 	// $urlRouterProvider.otherwise('/tab/kenuu/rewardDetail');
 	// $urlRouterProvider.otherwise('/tab/kenuu/prices');
-	$urlRouterProvider.otherwise('/tab/kenuu');
-	// $urlRouterProvider.otherwise('/welcome');
+	// $urlRouterProvider.otherwise('/tab/kenuu');
+	// $urlRouterProvider.otherwise('/tab/qrcode');	
+
+	// Verifies the App has already shown the welcome screen
+	var _apikey = localStorage.getItem('userAPIKey');
+	localStorage.setItem('animationShown', false);
+	if (_apikey != undefined)
+	{
+		$urlRouterProvider.otherwise('/tab/kenuu');
+	}
+	else
+	{
+		$urlRouterProvider.otherwise('/welcome');
+	}	
 })
 
 .directive('map', function() {

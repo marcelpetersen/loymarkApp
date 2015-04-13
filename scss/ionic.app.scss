@@ -55,7 +55,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 	$item-divider-color:			 white;
 	$input-label-color:			     white;
 	$input-font-color:				 white; 
-	$input-profile-font-color: 		 #757575;
+	$input-profile-font-color: 		 #333333;
 
 	$action-btn-color:				 $kenuu-purple;
 	$action-back-color:			     #757575;
@@ -148,8 +148,7 @@ ion-nav-view[nav-view-transition="ios"] {
 #pleaseWaitSpinner {
 	-webkit-animation-duration: 0.5s;
 	-webkit-animation-delay: 0;
-	-webkit-animation-iteration-count: 1;
-	opacity: 0.9;
+	-webkit-animation-iteration-count: 1;	
 }
 
 .kenuu-code-tab {
@@ -163,6 +162,12 @@ ion-nav-view[nav-view-transition="ios"] {
 	// border-top-left-radius: 10px;
 	// opacity: 1;
 	color: $kenuu-purple;
+}
+
+#errorWhenLoadingDiv {
+	-webkit-animation-duration: 0.5s;
+	-webkit-animation-delay: 0;
+	-webkit-animation-iteration-count: 1;		
 }
 
 
@@ -194,6 +199,7 @@ ion-nav-view[nav-view-transition="ios"] {
 	.pleaseWaitSpinner {
 		position: absolute;
 		width: 100vw;
+		opacity: 0.7;
 	}
 	.spinner svg {
 		width: 38px;
@@ -371,7 +377,7 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 	.reward-reqpoints-label {
 		position: relative;
-		top: 10px;
+		top: 17px;
 		font-size: 12px;
 	}
 	.reward-reqpoints-title {
@@ -381,7 +387,7 @@ ion-nav-view[nav-view-transition="ios"] {
 		font-size: 12px;
 	}
 	.reward-arlequinsimple {		
-		margin-top:-20px;
+		margin-top:-10px;
 		height: 40px !important;
 		width: 40px !important;
 	}
@@ -506,6 +512,9 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 	.reward-searchpanel-hidden {
 		top:-100vh;
+	}
+	.reward-bottomspacer {
+		height:73px;
 	}
 
 /* ******** QR Code ********* */
@@ -700,7 +709,7 @@ ion-nav-view[nav-view-transition="ios"] {
 
 	}
 	.commerce-content {
-
+		// background-color: $reward-content-bgcolor !important;
 	}
 	.commerce-commerceheader {
 		background-image: url('../img/bgblur.png');
@@ -723,9 +732,9 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 	.stores-content {		
 		height: 100vh;
+		background-color: $reward-content-bgcolor !important;
 	}
-	.stores-list-container {
-		background-color: $reward-content-bgcolor !important;		
+	.stores-list-container {		
 	}
 	.stores-card {
 		border-radius: 10px !important;
@@ -738,6 +747,11 @@ ion-nav-view[nav-view-transition="ios"] {
 		width: 100px;
 		height: 50px;
 	}	
+
+	.stores-bottomseparator {
+		height: 0px;
+	}
+
 	ion-nav-view[nav-view-transition="android"] {
 		.stores-bottomseparator {
 			
@@ -787,13 +801,23 @@ ion-nav-view[nav-view-transition="ios"] {
 
 /* ******** Profile Edit ********* */
 
+	.profileedit-content {		
+		height: 100vh;
+		background-color: $reward-content-bgcolor !important;
+	}
 	.profileedit-input {
 		color: $input-profile-font-color;
 		border-bottom: 1px solid #eeeeee !important;
+		background-color: transparent !important; 
 	}
 	.profileedit-label {
 		color: $input-profile-font-color;
+		font-weight: bold;
 	}
 	.profileedit-button {
 		background-color: $action-btn-color !important;
 	}
+
+
+
+

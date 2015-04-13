@@ -457,6 +457,7 @@ fact.factory('rewardFactory', ['restFactory', function(restFactory){
                             .catch(function(err){
                                 reject(err);
                             });
+                        
                     } else {
                         if(!_rewards){
                             restFactory.reward.active.get(_data)

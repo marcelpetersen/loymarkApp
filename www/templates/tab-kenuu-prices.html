@@ -3,14 +3,14 @@
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
     </ion-nav-title>
     <ion-content class="rewards-content gradient-pattern">       
-        <!-- <div class="bar bar-sub-header item-input-inset">
+        <!-- <div class="bar bar-sub-header item-input-inset">            
             <label class="item-input-wrapper">
                 <i class="icon ion-ios7-search placeholder-icon"></i>
                 <input type="search" ng-model="viewdata.searchText" placeholder="Buscar">
             </label>
             <button class="button button-clear" ng-click="ShowSideMenu()">
                 <i class="icon ion-android-more-horizontal profile-item-icon"></i> 
-            </button>
+            </button>        
         </div> -->
         <div class="reward-searchpanel reward-searchpanel-hidden">
             <div class="item item-clear item-icon-right">
@@ -24,7 +24,14 @@
         <div id="pleaseWaitSpinner" class="item item-clear text-center pleaseWaitSpinner" ng-show="viewdata.rewards.length == 0">
             <ion-spinner icon="dots" class="spinner"></ion-spinner>
         </div>
-        <div class="list">            
+        <div id="errorWhenLoadingDiv" class="pleaseWaitSpinner" style="display:none">
+            <div class="item item-clear item-icon-right" ng-click="Reload()">
+                <p><strong>Oops, no hay premios!</strong></p>
+                <p>Haga tap aquí para recargar</p>
+                <i class="icon ion-ios-refresh-empty"></i>
+            </div>                
+        </div>
+        <div class="list">                        
             <span id="rewardsListContainer" class="rewards-list-container" ng-repeat="reward in viewdata.rewards">
                 <div class="row" ng-if="$index<viewdata.rewards.length/2+1">
                     <span ng-repeat="reward in viewdata.rewards">
@@ -62,7 +69,7 @@
                 </div>
             </span>
         </div>
-        <div style="height:36px;"></div>
+        <div class="reward-bottomspacer"></div>
     </ion-content>
     
     <!-- Side Menu -->

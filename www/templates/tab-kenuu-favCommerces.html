@@ -2,13 +2,20 @@
     <ion-nav-title>
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
     </ion-nav-title>
-    <ion-content class="favcommerces-content">
+    <ion-content class="favcommerces-content gradient-pattern">
         <div id="favCommercePleaseWaitSpinner" class="item item-clear text-center pleaseWaitSpinner" ng-show="viewdata.commerces.length == 0">
             <ion-spinner icon="dots" class="spinner"></ion-spinner>
         </div>
+        <div id="errorWhenLoadingDiv" class="pleaseWaitSpinner" style="display:none">
+            <div class="item item-clear item-icon-right" ng-click="Reload()">
+                <p><strong>Oops, no hay comercios!</strong></p>
+                <p>Haga tap aquí para recargar</p>
+                <i class="icon ion-ios-refresh-empty"></i>
+            </div>                
+        </div>
         <div id="favcommerces-list" class="list">
-            <div ng-repeat="commerce in viewdata.commerces" class="card favcommerces-card" ng-click="GoToCommerce(commerce)">
-                <div class="item item-text-wrap item-icon-right text-left favcommerce-entitycontainer">
+            <div ng-repeat="commerce in viewdata.commerces" class="item card favcommerces-card" ng-click="GoToCommerce(commerce)" style="padding-left:0; padding-right:0;">
+                <div class="item item-text-wrap item-icon-right text-left">
                     <div class="row">
                         <div class="col-40">
                             <div class="reward-entityicon">
