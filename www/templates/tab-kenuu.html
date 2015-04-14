@@ -1,4 +1,4 @@
-<ion-view id="viewKenuu" style="display:none">
+<ion-view id="viewKenuu" style="display:none">	
 	<ion-nav-title>
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
     </ion-nav-title>	
@@ -21,7 +21,7 @@
 				<div class="profile-item-title">premios disponibles</div>
 				<div>consulte que premios tiene disponibles</div>
 			</div>
-			<a class="item item-icon-left profile_item" href="#">
+			<a class="item item-icon-left profile_item" href="#/tab/kenuu/activity">
 				<i class="icon ion-stats-bars profile-item-icon"></i>
 				<div class="profile-item-title">mi actividad</div>
 				<div>consulte sus últimos movimientos</div>
@@ -33,9 +33,24 @@
 			</a>
 			<a class="item item-icon-left profile_item" href="#">
 				<i class="icon ion-ios-cart profile-item-icon"></i>
-				<div class="profile-item-title">mis premios canjeados</div>
+				<div class="profile-item-title">mis premios</div>
 				<div>la lista de sus premios canajeados</div>
 			</a>			
 		</div>
+  	</ion-content>
+</ion-view>
+
+<ion-view id="viewKenuuError" style="display:none">
+	<ion-nav-title>
+        <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
+    </ion-nav-title>	
+  	<ion-content scroll=false>
+  		<div class="item item-icon-left item-wrap-text">
+  			<img class="icon" src="./img/empty.png">
+  			<h4 style="margin-left:10px;">Oops, no se puede traer su información...</h4>	
+  		</div>
+  		<div class="item item-clear text-center" ng-click="ReloadData()">
+  			<i class="ion-ios-refresh-empty" style="font-size:40px;"></i>
+  		</div>
   	</ion-content>
 </ion-view>

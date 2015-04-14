@@ -21,6 +21,10 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
 
+body, h1, h2, h3, p, div , span  {
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
 .bottom-border-blue {
 	// border-bottom: 2px solid $borde-azul; 
 }
@@ -762,6 +766,9 @@ ion-nav-view[nav-view-transition="ios"] {
 			height:93px;
 		}
 	}
+	.stores-map-snapshot {
+
+	}
 
 /* ******** Favorite Commerces ******** */
 
@@ -800,7 +807,7 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 
 /* ******** Profile Edit ********* */
-
+	
 	.profileedit-content {		
 		height: 100vh;
 		background-color: $reward-content-bgcolor !important;
@@ -818,6 +825,12 @@ ion-nav-view[nav-view-transition="ios"] {
 		background-color: $action-btn-color !important;
 	}
 
+/* ******** Activity ******** */
+
+	.activity-content {		
+		height: 100vh;
+		background-color: $reward-content-bgcolor !important;
+	}
 
 
 

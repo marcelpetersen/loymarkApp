@@ -1,14 +1,22 @@
-<ion-view class="commerce-view">
+<ion-view>
     <ion-nav-title>
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
     </ion-nav-title>
-    <div class="bar bar-sub-header item-input-inset">            
-        <label class="item-input-wrapper">
-            <i class="icon ion-ios7-search placeholder-icon"></i>
-            <input type="search" ng-model="viewdata.searchText" placeholder="Buscar">
-        </label>        
-    </div>
-    <ion-content class="gradient-pattern">       
-        Prueba
+    
+    <ion-content class="profileedit-content gradient-pattern" has-subheader>       
+        <div class="bar bar-sub-header item-input-inset">            
+            <label class="item-input-wrapper">
+                <i class="icon ion-ios7-search placeholder-icon"></i>
+                <input type="search" ng-model="viewdata.searchText" placeholder="Buscar">
+            </label>
+            <button class="button button-clear" ng-click="ClearSearch()">
+                <i class="icon ion-android-more-horizontal ion-ios-close-outline"></i> 
+            </button>        
+        </div>
+        <div class="reward-searchpanel reward-searchpanel-hidden">            
+            <div class="item item-clear text-center" ng-show="viewdata.searchResults.length == 0">
+                <ion-spinner icon="dots" class="spinner-dark"></ion-spinner>
+            </div>
+        </div>
     </ion-content>
 </ion-view>

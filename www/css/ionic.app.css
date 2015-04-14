@@ -7603,6 +7603,9 @@ a.button {
   -webkit-transition-duration: 0s;
   transition-duration: 0s; }
 
+body, h1, h2, h3, p, div, span {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; }
+
 .tabs-top.tabs-striped .tab-item.tab-item-active {
   border: none; }
 
@@ -8203,3 +8206,8 @@ ion-nav-view[nav-view-transition="ios"] .stores-bottomseparator {
 
 .profileedit-button {
   background-color: #8f04a9 !important; }
+
+/* ******** Activity ******** */
+.activity-content {
+  height: 100vh;
+  background-color: #D6C8FF !important; }

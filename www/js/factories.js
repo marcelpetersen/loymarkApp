@@ -147,13 +147,16 @@ fact.factory('restFactory', ['$http', function($http){
                 });
             },
             stores: {
-                get: function(_data){
+                get: function(userID, entityID){
                     var url = serverURL + '/commerce/stores';
                     return new Promise(function(resolve,reject){
                         $http({
                             method: 'GET',
                             url: url,
-                            params: _data
+                            params: {
+                                tokenID: userID,
+                                entityID: entityID
+                            }
                         })
                             .success(function(data,status,headers,config){
                                 if(data.status===true){
@@ -285,7 +288,7 @@ fact.factory('userFactory',[ 'restFactory', function(restFactory){
 	var _login = {};
 	var _data ={};
 	return {
-        info: {
+        info: {            
             get: function(newData,userID){
                 return new Promise(function(resolve,reject){
                     if(newData===true){
@@ -299,7 +302,7 @@ fact.factory('userFactory',[ 'restFactory', function(restFactory){
                             });
                     } else {
                         if(_user.Email){
-                            return _user;
+                            resolve(_user);
                         } else {
                             restFactory.user.info.get(userID)
                                 .then(function(response){
@@ -316,6 +319,17 @@ fact.factory('userFactory',[ 'restFactory', function(restFactory){
         },
         activity: {
             visits: {
+                // _data:
+                // --------------------------
+                // entityID     = 1
+                // subEntityID  = 5
+                // rangeDate    = A
+                // typeFilter   =
+                // valueFilter  =
+                // paging       = false
+                // pageNum      = 0
+                // tokenID      = 1
+                // --------------------------
                 general: function(_data){
                     return new Promise(function(resolve,reject){
                         restFactory.user.activity.visits.get(_data)
@@ -323,7 +337,7 @@ fact.factory('userFactory',[ 'restFactory', function(restFactory){
                                 resolve(response);
                             })
                             .catch(function(err){
-                                reject(response);
+                                reject(err);
                             });
                     });
                 },
@@ -370,9 +384,26 @@ fact.factory('userFactory',[ 'restFactory', function(restFactory){
 fact.factory('commerceFactory', ['restFactory', function(restFactory){
     var _selectedCommerce = {};
     var _thereIsACommerceSelected = false;
+    
+    function storeInLocalStorage(varName, value) {
+        localStorage.setItem(varName, JSON.stringify(value));
+    };
+    function getFromLocalStorage(varName, defaultVal) {
+        var _value = localStorage.getItem(varName);
+        if (_value === undefined)
+        {
+            return defaultVal;
+        }
+        else
+        {
+            return JSON.parse(_value);
+        }
+    };
+
     return {
         selectedCommerce: {
             set: function(commerce) {
+                storeInLocalStorage('selectedCommerce', commerce);
                 _thereIsACommerceSelected = true;
                 _selectedCommerce = commerce;
             },
@@ -381,7 +412,8 @@ fact.factory('commerceFactory', ['restFactory', function(restFactory){
                 _thereIsACommerceSelected = false;
             },
             get: function() {
-                return _selectedCommerce;
+                var retVal = getFromLocalStorage('selectedCommerce', _selectedCommerce);
+                return retVal;
             },
             isSelected: function() {
                 return _thereIsACommerceSelected;
@@ -399,9 +431,9 @@ fact.factory('commerceFactory', ['restFactory', function(restFactory){
             });
         },
         stores: {
-            general: function(_data){
+            general: function(userID, entityID){
                 return new Promise(function(resolve,reject){
-                    restFactory.commerce.stores.get(_data)
+                    restFactory.commerce.stores.get(userID, entityID)
                         .then(function(response){
                             resolve(response);
                         })

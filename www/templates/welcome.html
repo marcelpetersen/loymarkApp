@@ -12,11 +12,8 @@
 					<img src="./img/kenuulogowhite.png" class="welcome-kenuulogo">
 				</div>
 				<div class="welcome-text text-center">
-					<p class="text-justify" style="padding:40px;">
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-					consequat. 
+					<p class="text-justify" style="padding:40px; font-size:12px;">
+						KENUU ES EL MEJOR PROGRAMA DE LEALTAD EN EL MERCADO, INTEGRA LA TECNOLOGÍA ACTUAL DE UNA MANERA SENCILLA Y PRÁCTICA PERMITIENDO LA PARTICIPACIÓN DE TODOS LOS COMERCIOS Y CLIENTES DE UNA MANERA NATURAL, LOGRANDO UNA INTERACCIÓN Y LEALTAD ÚNICA.
 					</p>
 				</div>
 				<div class="item welcome-item" style="top:0px;">
@@ -28,15 +25,17 @@
 					<strong>Inscríbase</strong>
 					<p class="welcome-regular-text">Es muy fácil, sólamente se requiere su correo:</p>
 				</div>
-				<div class="text-left" style="padding-left:30px; padding-right:30px;">					
-					<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
-						<span class="input-label">Email</span>
-						<input class="kenuu-input" type="text" placeholder="john@suhr.com">
-					</label>
-				</div>
-				<div class="item welcome-item" style="top:20px;">
-					<button ng-click="SignUp()" class="button button-block button-light welcome-btn">Enviar!</button>
-				</div>
+				<form ng-submit="SignUp()">
+					<div class="text-left" style="padding-left:30px; padding-right:30px;">					
+						<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
+							<span class="input-label">Email</span>
+							<input class="kenuu-input" type="text" placeholder="john@suhr.com">
+						</label>
+					</div>
+					<div class="item welcome-item" style="top:20px;">
+						<button type="submit" class="button button-block button-light welcome-btn">Enviar!</button>
+					</div>
+				</form>
 				<div class="item clear-item text-center welcome-text" style="margin-top:20px; padding-left:30px; padding-right:30px;">
 					<strong>Ya estoy inscrito...</strong>
 					<p class="welcome-regular-text">Si ya está inscrito, haga tap en este botón:</p>
@@ -50,19 +49,21 @@
 					<strong>Ingrese</strong>
 					<p class="welcome-regular-text">Ingrese con su correo y contraseña:</p>
 				</div>
-				<div class="text-left" style="padding-left:30px; padding-right:30px;">					
-					<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
-						<span class="input-label">Email</span>
-						<input class="kenuu-input" type="text" placeholder="john@suhr.com">
-					</label>
-					<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
-						<span class="input-label">Password</span>
-						<input class="kenuu-input" type="password" placeholder="">
-					</label>
-				</div>
-				<div class="item welcome-item" style="top:20px;">
-					<button ng-click="Enter()" class="button button-block button-light welcome-btn">Ingresar!</button>
-				</div>				
+				<form ng-submit="Enter()">
+					<div class="text-left" style="padding-left:30px; padding-right:30px;">					
+						<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
+							<span class="input-label">Email</span>
+							<input class="kenuu-input" type="text" placeholder="john@suhr.com">
+						</label>
+						<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
+							<span class="input-label">Password</span>
+							<input class="kenuu-input" type="password" placeholder="">
+						</label>
+					</div>
+					<div class="item welcome-item" style="top:20px;">
+						<button type="submit" class="button button-block button-light welcome-btn">Ingresar!</button>
+					</div>
+				</form>				
 			</ion-slide>
 		</ion-slide-box>
 	</ion-content>

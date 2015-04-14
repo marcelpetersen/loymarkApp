@@ -126,12 +126,22 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	  	}
 	})
 
+	.state('tab.kenuu-activity', {
+	  	url: '/kenuu/activity',
+	  	views: {
+	    	'tab-kenuu': {
+	      		templateUrl: 'templates/tab-kenuu-activity.html',
+	      		controller: 'ActivityCtrl'
+	    	}
+	  	}
+	})
+
 	.state('tab.search', {
 		url: '/search',
 		views: {
 	  		'tab-search': {
 	    		templateUrl: 'templates/tab-search.html',
-	    		controller: 'Searchtrl'
+	    		controller: 'SearchCtrl'
 	  		}
 		}
 	})
@@ -176,7 +186,7 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	// $urlRouterProvider.otherwise('/tab/kenuu/prices');
 	// $urlRouterProvider.otherwise('/tab/kenuu');
 	// $urlRouterProvider.otherwise('/tab/qrcode');
-	$urlRouterProvider.otherwise('/tab/search');	
+	// $urlRouterProvider.otherwise('/tab/search');	
 
 	// Verifies the App has already shown the welcome screen
 	var _apikey = localStorage.getItem('userAPIKey');

@@ -5,13 +5,13 @@
     <ion-content scroll=true class="commerce-content">
         <div class="item item-avatar item-icon-right commerce-commerceheader">
             
-            <img class="rewarddet-image" ng-src="{{GetCommerceImage(viewdata.selectedReward.EntityImage)}}">            
+            <img class="rewarddet-image" ng-src="{{GetCommerceImage(viewdata.selectedCommerce.Image)}}">            
 
-            <h4>{{viewdata.selectedReward.EntityName}}</h4>
-            <h2><strong>{{viewdata.selectedReward.SubEntityName}}</strong></h2>
+            <h4>{{viewdata.selectedCommerce.Name}}</h4>
+            <h2><strong>{{viewdata.selectedCommerce.Description}}</strong></h2>
             <div class="icon">
                 <div class="rewarddet-mybalance-title">Mi Balance</div>
-                <div class="rewarddet-mybalance-label text-center">24</div>
+                <div class="rewarddet-mybalance-label text-center">{{viewdata.selectedCommerce.PointsAvailable}}</div>
                 <img src="./img/arlequin.png" class="rewarddet-arlequin">
             </div>
         </div>        
@@ -21,19 +21,28 @@
         <div class="item item-clear">
             <div class="row">
                 <div class="col-50">
-                    <strong><i class="ion-android-time"></i> Horario</strong>
-                    <p>10:00am - 12:00pm</p>        
+                    <p>Última visita</p>
+                    <h3>{{gDate(viewdata.selectedCommerce.LastVisit)}}</h3>  
                 </div>
                 <div class="col-50">
+                    <p>Cantidad de Visitas</p>
+                    <h3>{{viewdata.selectedCommerce.TotalVisits}}</h3>  
+                </div>
+            </div>
+        </div>
+        <div class="item item-clear">
+            <div class="row">
+                <div class="col">
                     <strong><i class="ion-android-call"></i> Teléfono</strong>
-                    <p>2525-0000 / 2266-5522</p>        
+                    <p>{{FormatField(viewdata.selectedCommerce.Phone)}}</p>
+                </div>
+                <div class="col">
+                    <strong><i class="ion-at"></i> Email</strong>
+                    <p>{{FormatField(viewdata.selectedCommerce.Email)}}</p>
                 </div>
             </div>
             <div class="row" style="margin-top:10px;" ng-click="ComposeEmail('servicioalcliente@empresa.com')">
-                <div class="col">
-                    <strong><i class="ion-at"></i> Email</strong>
-                    <p>servicioalcliente@empresa.com</p>
-                </div>
+                
             </div>            
         </div>
         <div class="item item-icon-left" ng-click="GoToStores()">
