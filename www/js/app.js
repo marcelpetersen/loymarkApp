@@ -187,6 +187,7 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	// $urlRouterProvider.otherwise('/tab/kenuu');
 	// $urlRouterProvider.otherwise('/tab/qrcode');
 	// $urlRouterProvider.otherwise('/tab/search');	
+	// $urlRouterProvider.otherwise('/tab/map');	
 
 	// Verifies the App has already shown the welcome screen
 	var _apikey = localStorage.getItem('userAPIKey');

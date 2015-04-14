@@ -422,7 +422,7 @@ ctrl.controller('KenuuStoresCtrl', ['$scope','rewardFactory', '$window', '$cordo
     };
 }]);
 
-ctrl.controller('KenuuProfileCtrl', ['$scope', '$timeout', 'userFactory', '$state', function($scope, $timeout, userFactory, $state){
+ctrl.controller('KenuuProfileCtrl', ['$scope', '$timeout', 'userFactory', '$state', '$ionicHistory', function($scope, $timeout, userFactory, $state, $ionicHistory){
     $scope.viewdata = {
         qrcode: "Kenuu",
         counter: 1,
@@ -442,6 +442,13 @@ ctrl.controller('KenuuProfileCtrl', ['$scope', '$timeout', 'userFactory', '$stat
 
     $scope.SaveProfile = function() {
 
+    };
+
+    $scope.DoLogout = function() {
+        userFactory.session.logout();
+        $ionicHistory.clearHistory();
+        $ionicHistory.clearCache();
+        $state.go("welcome");
     };
 }]);
 
@@ -574,10 +581,32 @@ ctrl.controller('KenuuRewardDetailCtrl', ['$scope', '$timeout', 'userFactory', '
 //         });
 // }]);
 
-ctrl.controller('MapCtrl', [ '$scope', function($scope){
+ctrl.controller('MapCtrl', [ '$scope', 'commerceFactory', '$ionicLoading', function($scope, commerceFactory, $ionicLoading){
   	$scope.settings = {
     	enableFriends: true
   	};
+
+    $scope.mapCreated = function(map) {
+        $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});               
+
+        commerceFactory.stores.general(0,0).
+            then(function(data){                
+                var j=data.length;
+                for (var i=0;i<j;i++)
+                {
+                    var myLatlng = new google.maps.LatLng(data[i].LocationLatitude, data[i].LocationLongitude);
+                    var marker = new google.maps.Marker({
+                        position: myLatlng,
+                        map: map,
+                        title: data[i].Name
+                    });
+                }
+                $ionicLoading.hide();
+            })
+            .catch(function(err){
+                console.log(err);
+            });
+    };
 }]);
 
 ctrl.controller('SearchCtrl', [ '$scope', function($scope){

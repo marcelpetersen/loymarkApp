@@ -1,7 +1,7 @@
 var fact = angular.module('kenuu.factory', []);
 
 fact.factory('restFactory', ['$http', function($http){
-    var serverURL = 'http://192.168.71.91:8000';
+    var serverURL = 'http://201.201.150.159';
     return {
         user:{
             info:{
@@ -376,6 +376,14 @@ fact.factory('userFactory',[ 'restFactory', function(restFactory){
                             });
                     });
                 }
+            }
+        },
+        session: {
+            logout: function() {
+                localStorage.clear();
+                _user = {};
+                _login = {};
+                _data ={};
             }
         }
 	};

@@ -2,7 +2,7 @@
 	<ion-nav-title>
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
     </ion-nav-title>	
-  	<ion-content scroll=false class="profile-content profileedit-content gradient-pattern" id="viewcontent-QR">
+  	<ion-content class="profile-content profileedit-content gradient-pattern" id="viewcontent-QR">
   		<form ng-submit="SaveProfile()">
 	  		<div class="text-left" style="padding-left:30px; padding-right:30px;">					
 				<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
@@ -22,6 +22,14 @@
 			</div>
 			<div class="item welcome-item" style="top:20px;">
 				<button type="submit" class="button button-block button-light welcome-btn profileedit-button">Guardar!</button>
+			</div>
+
+			<div class="item item-clear item-text-wrap" style="background-color:transparent">
+				<p class="profile-label">O bien... si desea usar otra cuenta diferente, haga tap en este botón...</p>
+			</div>
+
+			<div class="item welcome-item">
+				<button ng-click="DoLogout()" class="button button-block button-light welcome-btn profileedit-button">Salir</button>
 			</div>
 		</form>
   	</ion-content>

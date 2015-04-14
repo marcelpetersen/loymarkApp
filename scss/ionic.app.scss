@@ -21,8 +21,8 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
 
-body, h1, h2, h3, p, div , span  {
-	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+body, h1, h2, h3, p, div, span, input, button  {
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif !important;
 }
 
 .bottom-border-blue {
@@ -234,6 +234,16 @@ ion-nav-view[nav-view-transition="ios"] {
 		background-size: 50px 50px;
 	}
 
+	a[href^="http://maps.google.com/maps"]{display:none !important}
+
+	.gmnoprint a, .gmnoprint span, a[title="Report problems with Street View imagery to Google"] {
+		display:none;
+	}
+	.gmnoprint div, a[title="Report problems with Street View imagery to Google"] {
+		background:none !important;
+	}
+	.gm-style-cc { display:none; }
+
 /* ******* Modal ******* */
 
 	.modal-bg {
@@ -315,6 +325,12 @@ ion-nav-view[nav-view-transition="ios"] {
 		height: 100px !important;
 		border-radius: 50%;
 		border: 1px solid $profile-avatar-border-color;
+	}
+
+	.profile-label {
+		padding-left:20px; 
+		padding-right:20px;
+		color: black !important;
 	}
 
 	/* ******** End of Profile ******** */
