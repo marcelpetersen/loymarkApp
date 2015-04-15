@@ -36,14 +36,22 @@
                     <strong><i class="ion-android-call"></i> Teléfono</strong>
                     <p>{{FormatField(viewdata.selectedCommerce.Phone)}}</p>
                 </div>
-                <div class="col">
+                <div class="col" ng-click="ComposeEmail(viewdata.selectedCommerce.Email)">
                     <strong><i class="ion-at"></i> Email</strong>
                     <p>{{FormatField(viewdata.selectedCommerce.Email)}}</p>
                 </div>
+            </div>                      
+        </div>
+        <div class="item item-divider activity-card-item">
+            <p><strong class="activity-social-share-title">compártelo!</strong></p>
+            <div class="row">
+                <div class="col-50 text-center">
+                    <i class="ion-social-facebook activity-facebook"></i> facebook
+                </div>
+                <div class="col-50 text-center">
+                    <i class="ion-social-twitter activity-twitter"></i> twitter
+                </div>
             </div>
-            <div class="row" style="margin-top:10px;" ng-click="ComposeEmail('servicioalcliente@empresa.com')">
-                
-            </div>            
         </div>
         <div class="item item-icon-left" ng-click="GoToStores()">
             <i class="icon ion-android-home profile-item-icon"></i>

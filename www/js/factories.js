@@ -29,6 +29,30 @@ fact.factory('restFactory', ['$http', function($http){
                 }
             },
             activity:{
+                all: {
+                    get: function(userID){
+                        var url = serverURL + '/member/activity';
+                        return new Promise(function(resolve,reject){
+                            $http({
+                                method: 'GET',
+                                url: url,
+                                params: {
+                                    tokenID: userID
+                                }
+                            })
+                                .success(function(data,status,headers,config){
+                                    if(data.status===true){
+                                        resolve(data.data);
+                                    } else {
+                                        reject(data);
+                                    }
+                                })
+                                .error(function(data,status,headers,config){
+                                    reject(data);
+                                });
+                        });
+                    }
+                },
                 visits:{
                     get: function(_data){
                         var url = serverURL + '/member/activity/visits';
@@ -318,6 +342,17 @@ fact.factory('userFactory',[ 'restFactory', function(restFactory){
             }
         },
         activity: {
+            all: function(userID) {
+                return new Promise(function(resolve,reject){
+                    restFactory.user.activity.all.get(userID)
+                        .then(function(response){
+                            resolve(response);
+                        })
+                        .catch(function(err){
+                            reject(err);
+                        })
+                });
+            },
             visits: {
                 // _data:
                 // --------------------------

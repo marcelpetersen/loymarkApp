@@ -234,6 +234,7 @@ ion-nav-view[nav-view-transition="ios"] {
 		background-size: 50px 50px;
 	}
 
+	// Para Eliminara las marcas del mapa
 	a[href^="http://maps.google.com/maps"]{display:none !important}
 
 	.gmnoprint a, .gmnoprint span, a[title="Report problems with Street View imagery to Google"] {
@@ -243,6 +244,12 @@ ion-nav-view[nav-view-transition="ios"] {
 		background:none !important;
 	}
 	.gm-style-cc { display:none; }
+
+	.map-info-window {
+		width: 130px;
+		text-align: center;
+		padding-left: 20px;
+	}
 
 /* ******* Modal ******* */
 
@@ -847,6 +854,44 @@ ion-nav-view[nav-view-transition="ios"] {
 		height: 100vh;
 		background-color: $reward-content-bgcolor !important;
 	}
+	.activity-icon {
+		// font-size: 20px;
+		color: $kenuu-purple;
+	}
+	.activity-card {
+		border-radius: 10px;
+	}
+	.activity-redemption-title {
+		color: $kenuu-purple;
+	}
+	.activity-card-item {		
+	}
+	.activity-points-label {
+		font-weight: bold;
+		color: $kenuu-purple;
+	}
+	.activity-social-share-title {
+		font-size: 10px;
+		color: $kenuu-purple;
+	}
+	.activity-facebook {
+		color: $social-facebook-color;	
+	}
+	.activity-twitter {
+		color: $social-twitter-color;
+	}
+	.activity-bottomspacer {
+		height: 87px;
+	}
+	on-nav-view[nav-view-transition="android"] {
+		.activity-bottomspacer {
+			height: 10px;
+		}	
+	}
 
-
+	ion-nav-view[nav-view-transition="ios"] {
+		.activity-bottomspacer {
+			height: 93px;
+		}
+	}
 

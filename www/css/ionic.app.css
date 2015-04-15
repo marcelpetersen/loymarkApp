@@ -7725,6 +7725,11 @@ a[href^="http://maps.google.com/maps"] {
 .gm-style-cc {
   display: none; }
 
+.map-info-window {
+  width: 130px;
+  text-align: center;
+  padding-left: 20px; }
+
 /* ******* Modal ******* */
 .modal-bg {
   background-color: #4E0F5B !important; }
@@ -8228,3 +8233,35 @@ ion-nav-view[nav-view-transition="ios"] .stores-bottomseparator {
 .activity-content {
   height: 100vh;
   background-color: #D6C8FF !important; }
+
+.activity-icon {
+  color: #8f04a9; }
+
+.activity-card {
+  border-radius: 10px; }
+
+.activity-redemption-title {
+  color: #8f04a9; }
+
+.activity-points-label {
+  font-weight: bold;
+  color: #8f04a9; }
+
+.activity-social-share-title {
+  font-size: 10px;
+  color: #8f04a9; }
+
+.activity-facebook {
+  color: #2D5C98; }
+
+.activity-twitter {
+  color: #2FAEEE; }
+
+.activity-bottomspacer {
+  height: 87px; }
+
+on-nav-view[nav-view-transition="android"] .activity-bottomspacer {
+  height: 10px; }
+
+ion-nav-view[nav-view-transition="ios"] .activity-bottomspacer {
+  height: 93px; }

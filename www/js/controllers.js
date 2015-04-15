@@ -586,20 +586,58 @@ ctrl.controller('MapCtrl', [ '$scope', 'commerceFactory', '$ionicLoading', funct
     	enableFriends: true
   	};
 
+    $scope.GoToCommerce = function() {
+        alert(1);
+        //$state.go("tab.kenuu-commerce");
+    };
+
     $scope.mapCreated = function(map) {
-        $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});               
+        $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
 
         commerceFactory.stores.general(0,0).
-            then(function(data){                
+            then(function(data){    
+
+                console.log(data);
+                var infoWindow = new google.maps.InfoWindow();
+
                 var j=data.length;
                 for (var i=0;i<j;i++)
                 {
                     var myLatlng = new google.maps.LatLng(data[i].LocationLatitude, data[i].LocationLongitude);
+                    
                     var marker = new google.maps.Marker({
                         position: myLatlng,
+                        title: data[i].Name,
+                        desc: data[i].Description,
+                        info: data[i].Address,
+                        horario: "Pendiente",
+                        telefono: data[i].Phone,                        
                         map: map,
-                        title: data[i].Name
+                        entityID: data[i].SubEntityID
+                        // icon: "./img/mapicon.png"
                     });
+
+                    var infowindow = new google.maps.InfoWindow({});
+                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                        return function() {
+                            if (infowindow) {
+                                infowindow.close();
+                            }
+
+                            var title = "";
+                            title += "<div style='font-weight:bold'>" + marker.title + "</div>";
+                            title += "<div>" + marker.desc + "</div>";
+                            title += "<div class='text=center'><a ng-click='GoToCommerce()' class='button button-small button-calm profile-btn' style='width:110px;'>Ver Comercio</a></div>"
+
+
+                            infoWindow.setContent(
+                                "<div class='map-info-window'>" +
+                                title +
+                                "</div>"
+                            );
+                            infoWindow.open(map, marker);
+                        }
+                    })(marker));
                 }
                 $ionicLoading.hide();
             })
@@ -640,8 +678,7 @@ ctrl.controller('ActivityCtrl', [ '$scope', 'userFactory', function($scope, user
     };
 
     function LoadData() {
-        LoadData_User();
-        // LoadData_Activity();        
+        LoadData_User();        
     };
 
     function LoadData_User() {
@@ -649,22 +686,26 @@ ctrl.controller('ActivityCtrl', [ '$scope', 'userFactory', function($scope, user
             .then(function(data){                      
                 $scope.viewdata.user = data;
                 $scope.$apply();                
-                var userData = data;
+
+                console.log(data);
+                LoadData_Activity($scope.viewdata.user.AccountID)
             })
             .catch(function(err){ 
                 console.log(err)               
             });
     };
 
-    function LoadData_Activity() {
-        userFactory.activity.visits.general()
+    function LoadData_Activity(userID) {
+        userFactory.activity.all(userID)
             .then(function(data){
                 $("#pleaseWaitSpinner").addClass("animated slideOutUp");
+
                 setTimeout(function() {
-                    $scope.viewdata.user = data;
+                    $scope.viewdata.user.activity = data.Elements;
                     $scope.$apply();
-                    var userData = data;
-                    console.log(data);
+
+                    $("#activityListDiv").show();
+                    $("#activityListDiv").addClass("animated fadeIn");
                 }, 150);            
             })
             .catch(function(err){ 
@@ -688,6 +729,21 @@ ctrl.controller('ActivityCtrl', [ '$scope', 'userFactory', function($scope, user
             $("#pleaseWaitSpinner").addClass("animated slideInDown");
             LoadData();
         }, 200);        
+    };
+
+    $scope.gDate = function(date) {
+        var _date = new Date(parseInt(date.substr(6)));
+        return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
+    };
+
+    $scope.GetActivityIcon = function(activityType) {
+        if (activityType === "V") return "ion-android-pin";
+        if (activityType === "R") return "ion-ribbon-a";
+    };
+
+    $scope.GetActivityPointsLabel = function(activityType) {
+        if (activityType === "V") return "Puntos Ganados:";
+        if (activityType === "R") return "Puntos Canjeados:";
     };
 
     LoadData();
