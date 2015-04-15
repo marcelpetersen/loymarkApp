@@ -367,6 +367,9 @@ ctrl.controller('KenuuStoresCtrl', ['$scope','rewardFactory', '$window', '$cordo
 
             commerceFactory.stores.general($scope.viewdata.user.AccountID, $scope.viewdata.selectedCommerce.EntityID)
                 .then(function(data){                    
+                    
+                    console.log(data)
+
                     $("#pleaseWaitSpinner").addClass("animated slideOutUp");
                         setTimeout(function() {                                                       
                             $scope.viewdata.stores = data;
@@ -613,8 +616,8 @@ ctrl.controller('MapCtrl', [ '$scope', 'commerceFactory', '$ionicLoading', funct
                         horario: "Pendiente",
                         telefono: data[i].Phone,                        
                         map: map,
-                        entityID: data[i].SubEntityID
-                        // icon: "./img/mapicon.png"
+                        entityID: data[i].SubEntityID,
+                        icon: "./img/mapicon.png"
                     });
 
                     var infowindow = new google.maps.InfoWindow({});
