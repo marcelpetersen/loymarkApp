@@ -350,7 +350,21 @@ ion-nav-view[nav-view-transition="ios"] {
 	.rewards-card {
 		border-radius: 10px !important;
 		min-height: 308px !important;
-		width:45vw; margin-left:7px;
+		width:45vw; 
+		margin-left:7px;
+	}
+
+	.rewards-card-single-item {
+		border-radius: 10px !important;
+		// min-height: 308px !important;
+		// width:100vw; 
+		// margin-left:7px;		
+	}
+	.reward-entityname-single-item {
+		position: relative;
+		top: 5px;
+		font-size: 15px !important;
+		// font-weight: bold;
 	}
 
 	.rewards-img {

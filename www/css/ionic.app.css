@@ -7809,6 +7809,14 @@ a[href^="http://maps.google.com/maps"] {
   width: 45vw;
   margin-left: 7px; }
 
+.rewards-card-single-item {
+  border-radius: 10px !important; }
+
+.reward-entityname-single-item {
+  position: relative;
+  top: 5px;
+  font-size: 15px !important; }
+
 .rewards-img {
   border: 1px solid #eeeeee !important;
   border-radius: 5px;

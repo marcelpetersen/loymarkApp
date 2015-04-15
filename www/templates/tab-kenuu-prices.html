@@ -32,6 +32,7 @@
             </div>                
         </div>
         <div class="list">                        
+            <!-- Using 2 items per line -->
             <span id="rewardsListContainer" class="rewards-list-container" ng-repeat="reward in viewdata.rewards">
                 <div class="row" ng-if="$index<viewdata.rewards.length/2+1">
                     <span ng-repeat="reward in viewdata.rewards">
@@ -68,6 +69,37 @@
                     </span>
                 </div>
             </span>
+
+            <!-- Using a single item per line -->
+            <div class="card rewards-card-single-item" ng-repeat="reward in viewdata.rewards" ng-click="OpenRewardDetail(reward)">
+                <div class="item item-text-wrap text-left reward-entitycontainer">
+                    <div class="row">
+                        <div class="col" style="max-width:40px;">
+                            <div class="reward-entityicon">
+                                <img ng-show='reward.EntityImage != "" && reward.EntityImage' class="reward-commerceimg" ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{reward.EntityImage}}" err-src="./img/empty.png">
+                                <img ng-show='!reward.EntityImage' class="reward-commerceimg" src="./img/empty.png">
+                            </div>        
+                        </div>
+                        <div class="col" style="margin-left:2px;">
+                            <p class="reward-entityname-single-item">{{reward.EntityName}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item item-text-wrap text-center reward-rewarinfocontainer">
+                    <div class="row">
+                        <div class="col col-50">
+                            <img class="rewarddet-image" ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{reward.Image}}">
+                            <p class="reward-rewardname">{{reward.Name}}</p>
+                        </div>
+                        <div class="col col-50">
+                            <div class="reward-reqpoints-title">Pops Requeridos</div>
+                            <div class="reward-reqpoints-label">{{reward.Points}}</div>
+                            <img src="./img/arlequinsimple.png" class="reward-arlequinsimple">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="reward-bottomspacer"></div>
     </ion-content>
