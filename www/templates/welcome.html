@@ -3,21 +3,43 @@
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
     </ion-nav-title>
 	<ion-content scroll="false" class="welcome-content">
-		<ion-slide-box show-pager="true" on-slide-changed="slideHasChanged($index)">
+		<ion-slide-box show-pager="true" on-slide-changed="slideHasChanged($index)">			
 			<ion-slide class="welcome-slide">
 				<div class="item clear-item text-center welcome-main-title" style="margin-top:50px;">
-					<!-- Bienvenido!! -->
+					<p class="welcome-title">Bienvenido a <strong>Kenuu!!</strong></p>
 				</div>
-				<div class="item clear-item text-center" style="top:20px;">
+				<!-- <div class="item clear-item text-center" style="top:20px;">
 					<img src="./img/kenuulogowhite.png" class="welcome-kenuulogo">
+				</div> -->
+				<div class="text-center" style="width:100vw">
+					<img src="./img/devices.png" style="height:198px;">
 				</div>
-				<div class="welcome-text text-center">
+				<div class="welcome-text text-center">					
 					<p class="text-center" style="padding:40px; font-size:18px;">
 						Es súper fácil!
 					</p>
 				</div>
 				<div class="item welcome-item" style="top:0px;">
 					<button ng-click="nextSlide()" class="button button-block button-light welcome-btn">Empecemos!</button>
+				</div>
+			</ion-slide>
+			<ion-slide class="welcome-slide">
+				<div class="item clear-item text-center welcome-main-title" style="margin-top:50px;">
+					<p class="welcome-title">Registra tus visitas...</p>
+				</div>
+				<!-- <div class="item clear-item text-center" style="top:20px;">
+					<img src="./img/kenuulogowhite.png" class="welcome-kenuulogo">
+				</div> -->
+				<div class="text-center" style="width:100vw">
+					<img src="./img/cupcakes.png" style="height:198px;">
+				</div>
+				<div class="welcome-text text-center">					
+					<p class="text-center" style="padding:40px; font-size:18px;">
+						y gana premios increíbles!
+					</p>
+				</div>
+				<div class="item welcome-item" style="top:0px;">
+					<button ng-click="nextSlide()" class="button button-block button-light welcome-btn">Registrate!</button>
 				</div>
 			</ion-slide>
 			<ion-slide class="welcome-slide">

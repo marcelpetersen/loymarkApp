@@ -44,7 +44,7 @@ body, h1, h2, h3, p, div, span, input, button  {
 // Used Colors
 
 	$kenuu-green: 					 #A5CD38;
-	$kenuu-purple:					 #8f04a9;
+	$kenuu-purple:					 #800080;
 	$kenuu-dark-purple: 			 #6E1780;
 	$kenuu-darker-purple: 		     #4E0F5B;
 	$kenuu-light-purple:			 #D6C8FF;
@@ -617,9 +617,7 @@ ion-nav-view[nav-view-transition="ios"] {
 	.welcome-regular-text {
 		color: $welcome-text !important;
 	}
-	.welcome-main-title {
-		font-size: 30px;
-		color: $welcome-text;
+	.welcome-main-title {				
 	}
 	.welcome-slide {
 		height: 100vh;
@@ -627,6 +625,10 @@ ion-nav-view[nav-view-transition="ios"] {
 	.welcome-input {
 		padding-left:30px; 
 		padding-right:30px;
+	}
+	.welcome-title {
+		color: $welcome-text !important;
+		font-size: 18px !important;
 	}
 
 /* ******** Reward Detail ******** */

@@ -7654,7 +7654,7 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
   -webkit-animation-iteration-count: 1; }
 
 .kenuu-code-tab {
-  color: #8f04a9; }
+  color: #800080; }
 
 #errorWhenLoadingDiv {
   -webkit-animation-duration: 0.5s;
@@ -7688,8 +7688,8 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
 .spinner svg {
   width: 38px;
   height: 38px;
-  stroke: #8f04a9;
-  fill: #8f04a9; }
+  stroke: #800080;
+  fill: #800080; }
 
 .gradient-pattern {
   -webkit-box-sizing: content-box;
@@ -7772,7 +7772,7 @@ a[href^="http://maps.google.com/maps"] {
 .profile-btn {
   width: 110px;
   border: 0px;
-  background-color: #8f04a9 !important; }
+  background-color: #800080 !important; }
 
 .profile_btn_div {
   width: 100vw; }
@@ -7782,7 +7782,7 @@ a[href^="http://maps.google.com/maps"] {
   border: 0; }
 
 .profile-item-icon {
-  color: #8f04a9 !important; }
+  color: #800080 !important; }
 
 .profile-item-title {
   font-size: 14px;
@@ -7886,7 +7886,7 @@ a[href^="http://maps.google.com/maps"] {
   padding: 5px;
   border-radius: 8px;
   font-size: 20px;
-  color: #8f04a9; }
+  color: #800080; }
 
 .reward-iconography {
   position: absolute;
@@ -7920,7 +7920,7 @@ ion-nav-view[nav-view-transition="android"] .reward-iconography {
   height: 50px; }
 
 .reward-av-points-icon {
-  color: #8f04a9; }
+  color: #800080; }
 
 .reward-sidemenu {
   height: 100vh;
@@ -7945,7 +7945,7 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
 .reward-sidemenu-button {
   min-height: 0px !important;
   height: 35px !important;
-  color: #8f04a9 !important; }
+  color: #800080 !important; }
 
 .reward-sidemenu-hidden {
   right: -80px; }
@@ -7978,10 +7978,10 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
 
 /* ******** QR Code ********* */
 .qrcode-content {
-  background-color: #8f04a9; }
+  background-color: #800080; }
 
 .qrcode-item {
-  background-color: #8f04a9;
+  background-color: #800080;
   border: none !important;
   height: 100vh;
   background-image: url('../img/buildingbg.png') !important;
@@ -8006,7 +8006,7 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
 
 /* ******** Welcome ********* */
 .welcome-view {
-  background-color: #8f04a9;
+  background-color: #800080;
   border: none !important;
   height: 100vh;
   background-image: url('../img/buildingbg.png') !important;
@@ -8041,16 +8041,16 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
 .welcome-regular-text {
   color: white !important; }
 
-.welcome-main-title {
-  font-size: 30px;
-  color: white; }
-
 .welcome-slide {
   height: 100vh; }
 
 .welcome-input {
   padding-left: 30px;
   padding-right: 30px; }
+
+.welcome-title {
+  color: white !important;
+  font-size: 18px !important; }
 
 /* ******** Reward Detail ******** */
 .rewarddet-commerce {
@@ -8070,7 +8070,7 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
 .rewarddet-commerce-btn {
   width: 110px;
   border: 0px;
-  background-color: #8f04a9 !important; }
+  background-color: #800080 !important; }
 
 .rewarddet-image {
   max-width: 70px !important;
@@ -8089,7 +8089,7 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
   margin-top: 8px;
   width: 50px;
   right: -55px;
-  color: #8f04a9; }
+  color: #800080; }
 
 .rewarddet-mybalance-title {
   position: absolute;
@@ -8227,7 +8227,7 @@ ion-nav-view[nav-view-transition="ios"] .stores-bottomseparator {
   font-weight: bold; }
 
 .profileedit-button {
-  background-color: #8f04a9 !important; }
+  background-color: #800080 !important; }
 
 /* ******** Activity ******** */
 .activity-content {
@@ -8235,21 +8235,21 @@ ion-nav-view[nav-view-transition="ios"] .stores-bottomseparator {
   background-color: #D6C8FF !important; }
 
 .activity-icon {
-  color: #8f04a9; }
+  color: #800080; }
 
 .activity-card {
   border-radius: 10px; }
 
 .activity-redemption-title {
-  color: #8f04a9; }
+  color: #800080; }
 
 .activity-points-label {
   font-weight: bold;
-  color: #8f04a9; }
+  color: #800080; }
 
 .activity-social-share-title {
   font-size: 10px;
-  color: #8f04a9; }
+  color: #800080; }
 
 .activity-facebook {
   color: #2D5C98; }
