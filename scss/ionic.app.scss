@@ -21,8 +21,9 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
 
-body, h1, h2, h3, p, div, span, input, button  {
-	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif !important;
+body, h1, h2, h3, h4, h5, p, div, span, input, button, strong  {
+	// font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif !important;
+	font-family: 'Roboto', sans-serif;
 }
 
 .bottom-border-blue {
