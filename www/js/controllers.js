@@ -366,17 +366,15 @@ ctrl.controller('KenuuStoresCtrl', ['$scope','rewardFactory', '$window', '$cordo
             $scope.viewdata.user = data;            
 
             commerceFactory.stores.general($scope.viewdata.user.AccountID, $scope.viewdata.selectedCommerce.EntityID)
-                .then(function(data){                    
-                    
-                    console.log(data)
-
+                .then(function(data){
                     $("#pleaseWaitSpinner").addClass("animated slideOutUp");
-                        setTimeout(function() {                                                       
-                            $scope.viewdata.stores = data;
-                            $scope.$apply();
-                            $("#storesListDiv").show();
-                            $("#storesListDiv").addClass("animated fadeIn"); 
-                        }, 150); 
+                    setTimeout(function() {                                                       
+                        $scope.viewdata.stores = data;
+                        $scope.$apply();
+                        $("#pleaseWaitSpinner").hide();
+                        $("#storesListDiv").show();
+                        $("#storesListDiv").addClass("animated fadeIn"); 
+                    }, 150); 
                 })
                 .catch(function(err){
                     $("#pleaseWaitSpinner").addClass("animated slideOutUp");

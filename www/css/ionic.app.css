@@ -8185,6 +8185,9 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
 .stores-bottomseparator {
   height: 0px; }
 
+ion-nav-view[nav-view-transition="android"] .stores-bottomseparator {
+  height: 53px; }
+
 ion-nav-view[nav-view-transition="ios"] .stores-bottomseparator {
   height: 93px; }
 
