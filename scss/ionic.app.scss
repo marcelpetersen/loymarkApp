@@ -346,19 +346,17 @@ ion-nav-view[nav-view-transition="ios"] {
 	.rewards-content {
 		background-color: $reward-content-bgcolor !important;
 	}
-
+	.rewards-card-row{
+		width: 100vw !important;
+	}
 	.rewards-card {
 		border-radius: 10px !important;
 		min-height: 308px !important;
-		width:45vw; 
-		margin-left:7px;
+		width:45vw; 	
 	}
 
 	.rewards-card-single-item {
-		border-radius: 10px !important;
-		// min-height: 308px !important;
-		// width:100vw; 
-		// margin-left:7px;		
+		border-radius: 10px !important;	
 	}
 	.reward-entityname-single-item {
 		position: relative;

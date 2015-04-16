@@ -7803,11 +7803,13 @@ a[href^="http://maps.google.com/maps"] {
 .rewards-content {
   background-color: #D6C8FF !important; }
 
+.rewards-card-row {
+  width: 100vw !important; }
+
 .rewards-card {
   border-radius: 10px !important;
   min-height: 308px !important;
-  width: 45vw;
-  margin-left: 7px; }
+  width: 45vw; }
 
 .rewards-card-single-item {
   border-radius: 10px !important; }
