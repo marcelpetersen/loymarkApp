@@ -536,70 +536,60 @@ ctrl.controller('KenuuRewardDetailCtrl', ['$scope', '$timeout', 'userFactory', '
     };
 }]);
 
-// ctrl.controller('CommercesCtrl', [ '$scope', 'commerceFactory', function($scope, commerceFactory){
-
-//   	$scope.viewdata = {
-//         brands: ''
-//     };
-
-//     commerceFactory.general(2)
-//         .then(function(data){
-//             console.log('DATA!!!',data);
-//             $scope.viewdata.brands = data;
-//             $scope.$apply();
-//         });
-// }]);
-
-// ctrl.controller('CommercesDetailCtrl', [ '$scope', '$stateParams', 'commerceFactory', function($scope, $stateParams, commerceFactory){
-
-//   	$scope.viewdata = {
-//         commerceSelected: $stateParams.brandID,
-//         commerce: '',
-//         commerceStores: []
-//     };
-
-//     $scope.rateFunction = function(rating) {
-//         $scope.viewdata.rated = true;
-//         setTimeout(function(){
-//             $scope.viewdata.rated = false;
-//             $scope.$apply();
-//         },3000);
-//     };
-
-//     commerceFactory.general(2)
-//         .then(function(data){
-//             for(var i=0; i<data.length; i++){
-//                 if(data[i].EntityID==$scope.viewdata.commerceSelected){
-//                     $scope.viewdata.commerce = data[i];
-//                     $scope.$apply();
-//                     console.log('COMMERCE SELECTED',$scope.viewdata.commerce);
-//                 }
-//             }
-//         });
-
-//     commerceFactory.stores.general({tokenID:2,EntityID:$scope.viewdata.commerceSelected})
-//         .then(function(data){
-//             console.log('Stores of commerce:',data);
-//             $scope.viewdata.commerceStores = data;
-//         });
-// }]);
-
-ctrl.controller('MapCtrl', [ '$scope', 'commerceFactory', '$ionicLoading', function($scope, commerceFactory, $ionicLoading){
+ctrl.controller('MapCtrl', [ '$scope', 'commerceFactory', '$ionicLoading', '$cordovaGeolocation', function($scope, commerceFactory, $ionicLoading, $cordovaGeolocation){
   	$scope.settings = {
     	enableFriends: true
   	};
+
+    var _map = false;
+    var _locationMarkerCreated = false;
 
     $scope.GoToCommerce = function() {
         alert(1);
         //$state.go("tab.kenuu-commerce");
     };
 
+    $scope.centerOnMe = function() {
+        if (!_map) return;
+        var posOptions = {timeout: 10000, enableHighAccuracy: false};
+        $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
+        $cordovaGeolocation
+            .getCurrentPosition(posOptions)
+            .then(function (position) {
+
+                var lat  = position.coords.latitude
+                var long = position.coords.longitude
+
+                var myLatlng = new google.maps.LatLng(lat, long);
+                    
+                if (!_locationMarkerCreated) {
+                    var marker = new google.maps.Marker({
+                        position: myLatlng,
+                        title: "YO!",
+                        map: _map                    
+                    });    
+                    _locationMarkerCreated = true;
+                }                
+
+                _map.setCenter(myLatlng);
+                $ionicLoading.hide();
+
+            }, function(err) {
+                // error
+                $ionicLoading.hide();
+            }
+        );
+    };
+
     $scope.mapCreated = function(map) {
         $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
 
+        // Sets the map into a local variable.
+        _map = map;        
+
         commerceFactory.stores.general(0,0).
             then(function(data){    
-
+                console.log("Stores:");
                 console.log(data);
                 var infoWindow = new google.maps.InfoWindow();
 
@@ -642,12 +632,16 @@ ctrl.controller('MapCtrl', [ '$scope', 'commerceFactory', '$ionicLoading', funct
                         }
                     })(marker));
                 }
+
+                $scope.centerOnMe();
                 $ionicLoading.hide();
             })
             .catch(function(err){
                 console.log(err);
             });
     };
+
+    
 }]);
 
 ctrl.controller('SearchCtrl', [ '$scope', function($scope){
@@ -672,7 +666,7 @@ ctrl.controller('SearchCtrl', [ '$scope', function($scope){
     };
 }]);
 
-ctrl.controller('ActivityCtrl', [ '$scope', 'userFactory', function($scope, userFactory){
+ctrl.controller('ActivityCtrl', [ '$scope', 'userFactory', 'socialSharing', function($scope, userFactory, socialSharing){
     
     $scope.viewdata = {        
         user: {
@@ -689,8 +683,6 @@ ctrl.controller('ActivityCtrl', [ '$scope', 'userFactory', function($scope, user
             .then(function(data){                      
                 $scope.viewdata.user = data;
                 $scope.$apply();                
-
-                console.log(data);
                 LoadData_Activity($scope.viewdata.user.AccountID)
             })
             .catch(function(err){ 
@@ -747,6 +739,50 @@ ctrl.controller('ActivityCtrl', [ '$scope', 'userFactory', function($scope, user
     $scope.GetActivityPointsLabel = function(activityType) {
         if (activityType === "V") return "Puntos Ganados:";
         if (activityType === "R") return "Puntos Canjeados:";
+    };
+
+    $scope.ShareViaFacebook = function(activity) {        
+        var _msg = "";
+        if (activity.ActivityType == "V")
+        {
+            _msg = "@kenuu - Fui a " + activity.SubEntityName;
+        }
+
+        if (activity.ActivityType == "R")
+        {
+            _msg = "@kenuu - Me gané ésto: " + activity.RewardName + " en " + activity.SubEntityName;
+        }
+
+        socialSharing.ShareViaFacebook(_msg, "", "")
+            .then(
+                function(result) {
+                  // Success!
+                }, function(err) {
+                  // An error occurred. Show a message to the user
+                }
+            );
+    };
+
+    $scope.ShareViaTwitter = function(activity) {        
+        var _msg = "";
+        if (activity.ActivityType == "V")
+        {
+            _msg = "@kenuu - Fui a " + activity.SubEntityName;
+        }
+
+        if (activity.ActivityType == "R")
+        {
+            _msg = "@kenuu - Me gané ésto: " + activity.RewardName + " en " + activity.SubEntityName;
+        }
+
+        socialSharing.ShareViaTwitter(_msg, "", "")
+            .then(
+                function(result) {
+                  // Success!
+                }, function(err) {
+                  // An error occurred. Show a message to the user
+                }
+            );
     };
 
     LoadData();

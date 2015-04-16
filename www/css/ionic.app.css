@@ -8275,3 +8275,28 @@ on-nav-view[nav-view-transition="android"] .activity-bottomspacer {
 
 ion-nav-view[nav-view-transition="ios"] .activity-bottomspacer {
   height: 93px; }
+
+/* ******** Map ******** */
+.map-centeronme-button {
+  height: 80px;
+  width: 80px;
+  background-color: #800080;
+  opacity: 0.7;
+  z-index: 100;
+  position: absolute;
+  right: 20px;
+  bottom: 70px;
+  border-radius: 50%; }
+
+.map-centeronme-icon {
+  font-size: 50px;
+  color: white;
+  position: relative;
+  top: 15px; }
+
+on-nav-view[nav-view-transition="android"] .map-centeronme-button {
+  top: 120px; }
+
+on-nav-view[nav-view-transition="ios"] .map-centeronme-button {
+  bottom: 70px !important; }
+
