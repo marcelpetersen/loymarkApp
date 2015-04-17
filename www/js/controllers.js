@@ -689,10 +689,9 @@ ctrl.controller('MapCtrl', [ '$scope', 'commerceFactory', '$ionicLoading', '$cor
             })
             .catch(function(err){
                 console.log(err);
+                $ionicLoading.hide();
             });
     };
-
-    
 }]);
 
 ctrl.controller('SearchCtrl', [ '$scope', function($scope){
@@ -838,3 +837,7 @@ ctrl.controller('ActivityCtrl', [ '$scope', 'userFactory', 'socialSharing', func
 
     LoadData();
 }]);
+
+ctrl.controller('WhatsNewCtrl', [function() {
+
+}])

@@ -60,6 +60,16 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 		}
 	})
 
+	.state('tab.whatsnew', {
+		url: '/whatsnew',
+		views: {
+			'tab-whatsnew': {
+				templateUrl: 'templates/tab-whatsnew.html',
+				controller: 'WhatsNewCtrl'
+			}
+		}
+	})
+
 	.state('tab.kenuu', {
 		url: '/kenuu',
 		views: {
@@ -198,7 +208,7 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	localStorage.setItem('animationShown', false);
 	if (_apikey != undefined)
 	{
-		$urlRouterProvider.otherwise('/tab/kenuu');
+		$urlRouterProvider.otherwise('/tab/whatsnew');
 	}
 	else
 	{

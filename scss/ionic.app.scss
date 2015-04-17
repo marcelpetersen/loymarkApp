@@ -82,7 +82,7 @@ body, h1, h2, h3, h4, h5, p, div, span, input, button, strong  {
 	$reward-searchpanel-border: 	 #ddd;
 
 	$qrcode-bg-color:				 $kenuu-purple;
-	$qrcode-label:					 white;
+	$qrcode-label:					 #757575;
 
 	$welcome-btn: 					 $kenuu-darker-purple;
 	$welcome-text:					 white;
@@ -590,14 +590,15 @@ ion-nav-view[nav-view-transition="ios"] {
 
 	}
 	.qrcode-content {
-		background-color: $qrcode-bg-color;		
+		// background-color: $qrcode-bg-color;		
 	}
 	.qrcode-item {
 		background-color: $qrcode-bg-color;
 		border: none !important;
 		height: 100vh;
-		background-image: url('../img/buildingbg.png') !important;
-		background-repeat: no-repeat;
+		// background-image: url('../img/buildingbg.png') !important;
+		// background-repeat: no-repeat;
+		background-image: url('../img/whatsnewbg.png');
 		background-position: bottom 68px right 0px; 
 	}
 	.qrcode-qrcontainer {
@@ -974,3 +975,32 @@ ion-nav-view[nav-view-transition="ios"] {
 	.roundButton {
 
 	}
+
+
+/* ******** Search ******** */
+
+	.search-content {
+		background-image: url('../img/whatsnewbg.png');
+	}
+
+/* ******** Whats New ********* */
+	.whatsnew-contenttitle {
+		color: $kenuu-purple;
+	}
+	.whatsnew-title {
+		color: $kenuu-purple;
+	}
+	.whatsnew-bg {
+		background-image: url('../img/whatsnewbg.png');
+	}
+	.whatsnew-icon {
+		font-size: 40px;
+	}
+	.whatsnew-url{
+		font-size: 14px;
+	}
+
+
+
+
+

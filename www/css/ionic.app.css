@@ -8005,15 +8005,11 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
   height: 73px; }
 
 /* ******** QR Code ********* */
-.qrcode-content {
-  background-color: #800080; }
-
 .qrcode-item {
   background-color: #800080;
   border: none !important;
   height: 100vh;
-  background-image: url('../img/buildingbg.png') !important;
-  background-repeat: no-repeat;
+  background-image: url('../img/whatsnewbg.png');
   background-position: bottom 68px right 0px; }
 
 .qrcode-qrcontainer {
@@ -8027,10 +8023,10 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
   border-radius: 12px; }
 
 .qrcode-qrtitle {
-  color: white !important; }
+  color: #757575 !important; }
 
 .qrcode-qrlabel {
-  color: white !important; }
+  color: #757575 !important; }
 
 /* ******** Welcome ********* */
 .welcome-view {
@@ -8324,3 +8320,22 @@ on-nav-view[nav-view-transition="android"] .map-centeronme-button {
 on-nav-view[nav-view-transition="ios"] .map-centeronme-button {
   bottom: 70px !important; }
 
+/* ******** Search ******** */
+.search-content {
+  background-image: url('../img/whatsnewbg.png'); }
+
+/* ******** Whats New ********* */
+.whatsnew-contenttitle {
+  color: #800080; }
+
+.whatsnew-title {
+  color: #800080; }
+
+.whatsnew-bg {
+  background-image: url('../img/whatsnewbg.png'); }
+
+.whatsnew-icon {
+  font-size: 40px; }
+
+.whatsnew-url {
+  font-size: 14px; }
