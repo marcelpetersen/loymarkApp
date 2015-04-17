@@ -45,12 +45,12 @@
 	<ion-nav-title>
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
     </ion-nav-title>	
-  	<ion-content scroll=false>
-  		<div class="item item-icon-left item-wrap-text">
-  			<img class="icon" src="./img/empty.png">
-  			<h4 style="margin-left:10px;">Oops, no se puede traer su información...</h4>	
+  	<ion-content class="search-content" scroll=false>
+  		<div class="item item-wrap-text item-clear text-center" style="background-color:transparent;">
+  			<!-- <img class="icon" src="./img/empty.png"> -->
+  			<p style="margin-left:10px;">Oops, no se puede traer su información...</p>	
   		</div>
-  		<div class="item item-clear text-center" ng-click="ReloadData()">
+  		<div class="item item-clear text-center" style="background-color:transparent;" ng-click="ReloadData()">
   			<i class="ion-ios-refresh-empty" style="font-size:40px;"></i>
   		</div>
   	</ion-content>

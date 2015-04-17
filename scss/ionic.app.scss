@@ -172,7 +172,7 @@ ion-nav-view[nav-view-transition="ios"] {
 	// border-top-right-radius: 10px;
 	// border-top-left-radius: 10px;
 	// opacity: 1;
-	color: $kenuu-purple;
+	// color: $kenuu-purple;
 }
 
 #errorWhenLoadingDiv {
@@ -260,42 +260,20 @@ ion-nav-view[nav-view-transition="ios"] {
 	.bottomspacer {
 		height: 87px;
 	}
+	.tab-item {
+		overflow: visible !important;
+	}
+	.tab-item.tab-item-active, .tab-item.active, .tab-item.activated {
+		color: $kenuu-green;
+	}
+	.tabs-top.tabs-striped .tab-item.tab-item-active {
+		color: $kenuu-green;
+	}
 
 /* ******* Modal ******* */
 
 	.modal-bg {
 		background-color: $modal-bg !important;
-	}
-
-/* ******* Fonts ****** */
-
-	@font-face {
-		font-family: 'icomoon';
-		src:url('../fonts/icomoon.eot?-5isgo6');
-		src:url('../fonts/icomoon.eot?#iefix-5isgo6') format('embedded-opentype'),
-			url('../fonts/icomoon.woff?-5isgo6') format('woff'),
-			url('../fonts/icomoon.ttf?-5isgo6') format('truetype'),
-			url('../fonts/icomoon.svg?-5isgo6#icomoon') format('svg');
-		font-weight: normal;
-		font-style: normal;
-	}
-
-	[class^="icon-"], [class*=" icon-"] {
-		font-family: 'icomoon';
-		speak: none;
-		font-style: normal;
-		font-weight: normal;
-		font-variant: normal;
-		text-transform: none;
-		line-height: 1;
-
-		/* Better Font Rendering =========== */
-		-webkit-font-smoothing: antialiased;
-		-moz-osx-font-smoothing: grayscale;
-	}
-
-	.icon-Sticker-Morado:before {
-		content: "\e600";
 	}
 
 /* ******** Profile ******** */
