@@ -7653,6 +7653,11 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
   -webkit-animation-delay: 0;
   -webkit-animation-iteration-count: 1; }
 
+#welcomeimg1 {
+  -webkit-animation-duration: 0.5s;
+  -webkit-animation-delay: 0;
+  -webkit-animation-iteration-count: 1; }
+
 .kenuu-code-tab {
   color: #800080; }
 
@@ -7730,6 +7735,9 @@ a[href^="http://maps.google.com/maps"] {
   text-align: center;
   padding-left: 20px; }
 
+.bottomspacer {
+  height: 87px; }
+
 /* ******* Modal ******* */
 .modal-bg {
   background-color: #4E0F5B !important; }
@@ -7798,6 +7806,9 @@ a[href^="http://maps.google.com/maps"] {
   padding-right: 20px;
   color: black !important; }
 
+.profile-bottomspacer {
+  height: 105px; }
+
 /* ******** End of Profile ******** */
 /* ******** Rewards ********* */
 .rewards-content {
@@ -7809,7 +7820,14 @@ a[href^="http://maps.google.com/maps"] {
 .rewards-card {
   border-radius: 10px !important;
   min-height: 308px !important;
-  width: 45vw; }
+  width: 160px; }
+
+ion-nav-view[nav-view-transition="ios"] .rewards-card {
+  width: 45vw !important; }
+
+@media screen and (max-width: 384px) and (-webkit-device-pixel-ratio: 2) {
+  ion-nav-view[nav-view-transition="android"] .rewards-card {
+    width: 45vw !important; } }
 
 .rewards-card-single-item {
   border-radius: 10px !important; }
@@ -8166,6 +8184,9 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
   color: white;
   margin-left: 75px; }
 
+.commerce-bottomspacer {
+  height: 93px; }
+
 /* ******** Stores ******** */
 .stores-content {
   height: 100vh;
@@ -8298,7 +8319,7 @@ ion-nav-view[nav-view-transition="ios"] .activity-bottomspacer {
   top: 15px; }
 
 on-nav-view[nav-view-transition="android"] .map-centeronme-button {
-  top: 120px; }
+  bottom: 70px !important; }
 
 on-nav-view[nav-view-transition="ios"] .map-centeronme-button {
   bottom: 70px !important; }

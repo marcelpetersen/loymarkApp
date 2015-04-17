@@ -1,7 +1,9 @@
 var fact = angular.module('kenuu.factory', []);
 
-fact.factory('restFactory', ['$http', function($http){
-    var serverURL = 'http://201.201.150.159';
+fact.factory
+
+fact.factory('restFactory', ['$http', 'ApiEndpoint', function($http, ApiEndpoint){
+    var serverURL = ApiEndpoint.url; // 'http://201.201.150.159';
     return {
         user:{
             info:{
@@ -9,6 +11,9 @@ fact.factory('restFactory', ['$http', function($http){
                     var url = serverURL + '/member/info';
                     return new Promise(function(resolve,reject){
                         $http({
+                            headers: {
+                                'authorization': 'Basic EstaEsLaPrueba'
+                            },
                             method: 'GET',
                             url: url,
                             params: {
@@ -128,23 +133,48 @@ fact.factory('restFactory', ['$http', function($http){
                 get: function(_data){
                     var url = serverURL + '/member/activity/redemptions';
                     return new Promise(function(resolve,reject){
-                        $http({
+                        $http({                            
                             method: 'GET',
                             url: url,
-                            params: _data
+                            data: _data
                         })
-                            .success(function(data,status,headers,config){
-                                if(data.status===true){
-                                    resolve(data.data);
-                                } else {
-                                    reject(data);
-                                }
-                            })
-                            .error(function(data,status,headers,cofig){
+                        .success(function(data,status,headers,config){
+                            if(data.status===true){
+                                resolve(data.data);
+                            } else {
                                 reject(data);
-                            });
+                            }
+                        })
+                        .error(function(data,status,headers,cofig){
+                            reject(data);
+                        });
                     });
                 }
+            },
+            login: function(_data) {
+                return new Promise(function(resolve, reject){
+                    var url = serverURL + '/member/login';
+                    $http({
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        method: 'POST',
+                        url: url,
+                        data: $.param({
+                            jsonData: JSON.stringify(_data)
+                        })
+                    })
+                    .success(function(data,status,headers,config){
+                        if(data.status===true){
+                            resolve(data.data);
+                        } else {
+                            reject(data);
+                        }
+                    })
+                    .error(function(data,status,headers,cofig){
+                        reject(data);
+                    });
+                })
             }
         },
         commerce:{
@@ -419,6 +449,17 @@ fact.factory('userFactory',[ 'restFactory', function(restFactory){
                 _user = {};
                 _login = {};
                 _data ={};
+            },
+            login: function(_data) {                
+                return new Promise(function(resolve,reject){
+                    restFactory.user.login(_data)
+                        .then(function(response){
+                            resolve(response);
+                        })
+                        .catch(function(err){
+                            reject(err);
+                        });
+                });
             }
         }
 	};

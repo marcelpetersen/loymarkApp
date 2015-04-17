@@ -1,7 +1,16 @@
 var ctrl = angular.module('kenuu.controllers', ['ja.qr']);
 
-ctrl.controller('WelcomeCtrl', [ '$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', function($scope, $timeout, $state, $ionicSlideBoxDelegate){
+ctrl.controller('WelcomeCtrl', [ '$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory){
     localStorage.setItem('animationShown', false);
+
+    $timeout(function(){
+        $("#welcomeimg1").addClass("animated zoomIn");
+    });
+
+    $scope.viewdata = {
+        email: "a",
+        password: "a"
+    };
 
     var _currentSlideIndex = 0;
 
@@ -19,6 +28,38 @@ ctrl.controller('WelcomeCtrl', [ '$scope', '$timeout', '$state', '$ionicSlideBox
     };
 
     $scope.Enter = function() {
+
+        // // Performs the Login Operation
+        // userFactory.session.login(
+        //     {
+        //         email: $scope.viewdata.email,
+        //         password: $scope.viewdata.password
+        //     }
+        // )
+        // .then(function(data) {
+        //     // Sets the flags indicating the user has already logged.
+        //     localStorage.setItem('animationShown', false);        
+        //     localStorage.setItem('userAPIKey', "Prueba");
+            
+        //     $("#viewWelcome").addClass("animated slideOutDown");
+            
+        //     setTimeout(function(){
+        //         $state.go('tab.kenuu');
+        //     },800);
+        // })
+        // .catch(function(data){
+        //     swal(
+        //         {   
+        //             title: "!!!",   
+        //             text: "Nop! No puedes entrar",   
+        //             type: "error",   
+        //             confirmButtonText: "Ok",
+        //             customClass: "modal-bg",
+        //             confirmButtonColor: "#8f04a9"
+        //         }
+        //     );
+        // });
+
         // Sets the flags indicating the user has already logged.
         localStorage.setItem('animationShown', false);        
         localStorage.setItem('userAPIKey', "Prueba");
@@ -54,6 +95,18 @@ ctrl.controller('KenuuCtrl', [ '$scope', '$timeout', 'userFactory', 'commerceFac
             activity: ''
         }
     };
+
+    // DEBUG CODE
+    $scope.gDate = function(date) {
+        var _date = new Date(parseInt(date.substr(6)));
+        console.log(_date);
+        return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
+    };
+
+
+    console.log("/Date(1429222325562)/");
+    console.log($scope.gDate("/Date(1429222325562)/"));
+
 
     $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
 

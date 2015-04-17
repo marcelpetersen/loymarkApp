@@ -2,10 +2,12 @@ angular.module('kenuu.services', [])
 
 .service('socialSharing', ['$cordovaSocialSharing', function($cordovaSocialSharing) {
 	this.ShareViaTwitter = function(message, image, link) {
+		// return $cordovaSocialSharing.canShareVia('twitter', message, image, link);
 		return $cordovaSocialSharing.shareViaTwitter(message, image, link);
 	};
 
 	this.ShareViaFacebook = function(message, image, link) {
+		// return $cordovaSocialSharing.canShareVia('facebook', message, image, link);
 		return $cordovaSocialSharing.shareViaFacebook(message, image, link);
 	};
 }])

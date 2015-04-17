@@ -132,29 +132,35 @@ ion-nav-view[nav-view-transition="ios"] {
 
 // Animate CSS Speed Setup
 
-#viewcontent-QR {
-	-webkit-animation-duration: 0.5s;
-	-webkit-animation-delay: 0;
-	-webkit-animation-iteration-count: 1;
-}
+	#viewcontent-QR {
+		-webkit-animation-duration: 0.5s;
+		-webkit-animation-delay: 0;
+		-webkit-animation-iteration-count: 1;
+	}
 
-#viewKenuu {
-	-webkit-animation-duration: 0.5s;
-	-webkit-animation-delay: 0;
-	-webkit-animation-iteration-count: 1;	
-}
+	#viewKenuu {
+		-webkit-animation-duration: 0.5s;
+		-webkit-animation-delay: 0;
+		-webkit-animation-iteration-count: 1;	
+	}
 
-#viewWelcome {
-	-webkit-animation-duration: 0.5s;
-	-webkit-animation-delay: 0;
-	-webkit-animation-iteration-count: 1;		
-}
+	#viewWelcome {
+		-webkit-animation-duration: 0.5s;
+		-webkit-animation-delay: 0;
+		-webkit-animation-iteration-count: 1;		
+	}
 
-#pleaseWaitSpinner {
-	-webkit-animation-duration: 0.5s;
-	-webkit-animation-delay: 0;
-	-webkit-animation-iteration-count: 1;	
-}
+	#pleaseWaitSpinner {
+		-webkit-animation-duration: 0.5s;
+		-webkit-animation-delay: 0;
+		-webkit-animation-iteration-count: 1;	
+	}
+
+	#welcomeimg1 {
+		-webkit-animation-duration: 0.5s;
+		-webkit-animation-delay: 0;
+		-webkit-animation-iteration-count: 1;		
+	}
 
 .kenuu-code-tab {
 	// background: $kenuu-green;
@@ -251,6 +257,9 @@ ion-nav-view[nav-view-transition="ios"] {
 		text-align: center;
 		padding-left: 20px;
 	}
+	.bottomspacer {
+		height: 87px;
+	}
 
 /* ******* Modal ******* */
 
@@ -341,6 +350,10 @@ ion-nav-view[nav-view-transition="ios"] {
 		color: black !important;
 	}
 
+	.profile-bottomspacer {
+		height: 105px;
+	}
+
 	/* ******** End of Profile ******** */
 
 /* ******** Rewards ********* */
@@ -352,8 +365,23 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 	.rewards-card {
 		border-radius: 10px !important;
-		min-height: 308px !important;
-		width:45vw; 	
+		min-height: 308px !important;		
+		width: 160px;
+	}	
+
+	ion-nav-view[nav-view-transition="ios"] {
+		.rewards-card {
+			width:45vw !important; 	
+		}
+	}
+
+	ion-nav-view[nav-view-transition="android"] {
+		// Nexus 4 kind of Devices
+		@media screen and (max-width: 384px) and (-webkit-device-pixel-ratio: 2) {
+			.rewards-card {
+				width:45vw !important; 	
+			}		
+		}
 	}
 
 	.rewards-card-single-item {
@@ -767,6 +795,9 @@ ion-nav-view[nav-view-transition="ios"] {
 		color: $rewarddet-titles-color;
 		margin-left: 75px;
 	}
+	.commerce-bottomspacer {
+		height: 93px;
+	}
 
 /* ******** Stores ******** */
 
@@ -931,7 +962,7 @@ ion-nav-view[nav-view-transition="ios"] {
 
 	on-nav-view[nav-view-transition="android"] {
 		.map-centeronme-button {
-			top: 120px;
+			bottom: 70px !important;
 		}
 	}
 	on-nav-view[nav-view-transition="ios"] {

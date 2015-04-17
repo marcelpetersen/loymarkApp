@@ -7,6 +7,10 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.factory', 'ngCordova'])
 
+.constant('ApiEndpoint', {
+	url: 'http://192.168.71.98:8100/api'
+})
+
 .run(function($ionicPlatform) {
   	$ionicPlatform.ready(function() {
 	    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
