@@ -2,6 +2,10 @@
 	<ion-nav-title>
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
     </ion-nav-title>	
+    <ion-nav-buttons side="right">
+        <button class="button button-clear icon-params topbar-setupicon" ng-click="ShowSetupView()">
+        </button>
+    </ion-nav-buttons>
   	<ion-content scroll=true class="whatsnew-bg">
         <!-- <div class="item item-clear text-center" style="background-color:transparent;"> 
             <h1 class="whatsnew-contenttitle">Bienvenido!</h1>  
@@ -26,15 +30,15 @@
                 <h2><strong class="whatsnew-title">Síguenos!</strong></h2>  
                 <p>Encuéntranos y síguenos en nuestras redes sociales...</p>
                 <div class="row">
-                    <div class="col-50 text-center">
+                    <a class="col-50 text-center" ng-click="OpenFacebook()">
                         <p><i class="ion-social-facebook activity-facebook whatsnew-icon"></i></p> 
                         <p>facebook</p>
-                        <strong class="whatsnew-url">facebook.com/kenuu</strong>
-                    </div>
-                    <div class="col-50 text-center">
+                        <strong class="whatsnew-url" style="text-decoration: none;">facebook.com/kenuupops</strong>
+                    </a>
+                    <div class="col-50 text-center" ng-click="OpenTwitter()">
                         <p><i class="ion-social-twitter activity-twitter whatsnew-icon"></i></p> 
                         <p>twitter</p>
-                        <strong>@kenuu</strong>
+                        <strong>@kenuupops</strong>
                     </div>
                 </div>
             </div>            

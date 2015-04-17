@@ -838,6 +838,44 @@ ctrl.controller('ActivityCtrl', [ '$scope', 'userFactory', 'socialSharing', func
     LoadData();
 }]);
 
-ctrl.controller('WhatsNewCtrl', [function() {
+ctrl.controller('WhatsNewCtrl', ['$scope', '$cordovaInAppBrowser', 'setupView', function($scope, $cordovaInAppBrowser, setupView) {
 
-}])
+    $scope.OpenTwitter = function() {
+        var options = {
+            location: 'yes',
+            clearcache: 'yes',
+            toolbar: 'yes'
+        };
+
+        $cordovaInAppBrowser.open('https://twitter.com/kenuupops', '_blank', options)
+            .then(function(event) {
+            // success
+            })
+            .catch(function(event) {
+            // error
+            });
+    };
+    $scope.OpenFacebook = function() {
+        var options = {
+            location: 'yes',
+            clearcache: 'yes',
+            toolbar: 'yes'
+        };
+
+        $cordovaInAppBrowser.open('http://www.facebook.com/kenuupops', '_blank', options)
+            .then(function(event) {
+            // success
+            })
+            .catch(function(event) {
+            // error
+            });
+    };
+
+    // Required to Show the Top Bar Setup View
+    $scope.ShowSetupView = function() {setupView.Show($scope);};
+    $scope.CloseSetup = function() {setupView.Close($scope);};
+}]);
+
+ctrl.controller('SetupCtrl', ['$scope', function($scope){
+
+}]);

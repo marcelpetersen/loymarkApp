@@ -121,6 +121,12 @@ body, h1, h2, h3, h4, h5, p, div, span, input, button, strong  {
 	border: none !important;
 }
 
+.topbar-setupicon {
+	color: $kenuu-purple !important;
+	font-size: 20px;
+	font-weight: bold;
+}
+
 ion-nav-view[nav-view-transition="android"] {
 	.scroll-content {
 		padding-top: 6px;
@@ -581,7 +587,7 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 	.qrcode-qrcontainer {
 		position: relative;
-		top: 60px;
+		top: 40px;
 		width: 70vw;
 		// background-color: white;
 		margin: auto;
@@ -978,7 +984,11 @@ ion-nav-view[nav-view-transition="ios"] {
 		font-size: 14px;
 	}
 
+/* ******** Setup View ******** */
 
+	.setupview-content {
+		background-color: #757575;
+	}
 
 
 

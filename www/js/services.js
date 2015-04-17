@@ -12,6 +12,24 @@ angular.module('kenuu.services', [])
 	};
 }])
 
+.factory('setupView', ['$ionicModal', function($ionicModal){
+	var _modal = {};
+	return {
+		Show: function($scope) {
+			$ionicModal.fromTemplateUrl('templates/setupModal.html', {
+				scope: $scope,
+				animation: 'slide-in-up'
+			}).then(function(modal) {
+				_modal = modal;
+				_modal.show();
+			});
+		},
+		Close: function() {
+			_modal.hide();
+		}
+	};
+}])
+
 .factory('Chats', function() {
 	// Might use a resource here that returns a JSON array
 

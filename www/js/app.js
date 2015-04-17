@@ -25,9 +25,17 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
   	});
 })
 
-.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, $cordovaInAppBrowserProvider) {
 
 	$ionicConfigProvider.backButton.text('').icon('ion-android-arrow-back back-btn');
+
+	var defaultOptions = {
+		location: 'yes',
+		clearcache: 'no',
+		toolbar: 'yes'
+	};
+
+	$cordovaInAppBrowserProvider.setDefaultOptions(defaultOptions);
 
 	// Ionic uses AngularUI Router which uses the concept of states
 	// Learn more here: https://github.com/angular-ui/ui-router
@@ -35,6 +43,7 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	// Each state's controller can be found in controllers.js
 	$stateProvider
 
+	// Welcome screen of the app once the user is logged
 	.state('welcome', {
 		url: '/welcome',
 		templateUrl: 'templates/welcome.html',
@@ -158,27 +167,6 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	    		controller: 'SearchCtrl'
 	  		}
 		}
-	})
-
-	// Pending to Develop
-
-	.state('tab.commerces', {
-		url: '/commerces',
-		views: {
-			'tab-commerces': {
-		  		templateUrl: 'templates/tab-commerces.html',
-		  		controller: 'CommercesCtrl'
-			}
-		}
-	})
-	.state('tab.commerces-detail', {
-	  	url: '/commerces/:commerceID',
-	  	views: {
-	    	'tab-commerces': {
-	      		templateUrl: 'templates/commerces-detail.html',
-	      		controller: 'CommercesDetailCtrl'
-	    	}
-	  	}
 	})
 
 	.state('tab.map', {
