@@ -196,7 +196,7 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	localStorage.setItem('animationShown', false);
 	if (_apikey != undefined)
 	{
-		$urlRouterProvider.otherwise('/tab/whatsnew');
+		$urlRouterProvider.otherwise('/tab/qrcode');
 	}
 	else
 	{
