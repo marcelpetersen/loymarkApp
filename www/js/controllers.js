@@ -1,15 +1,20 @@
 var ctrl = angular.module('kenuu.controllers', ['ja.qr']);
 
-ctrl.controller('WelcomeCtrl', [ '$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory){
+ctrl.controller('NoConnectionCtrl', ['$scope', '$state', function($scope, $state){    
+}]);
+
+ctrl.controller('WelcomeCtrl', [ '$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory){
     localStorage.setItem('animationShown', false);
 
     $timeout(function(){
-        $("#welcomeimg1").addClass("animated zoomIn");
+        setTimeout(function(){
+            $("#welcomeimg1").addClass("animated zoomIn");
+        }, 1100);        
     });
 
     $scope.viewdata = {
-        email: "a",
-        password: "a"
+        email: "",
+        password: ""
     };
 
     var _currentSlideIndex = 0;
@@ -29,46 +34,48 @@ ctrl.controller('WelcomeCtrl', [ '$scope', '$timeout', '$state', '$ionicSlideBox
 
     $scope.Enter = function() {
 
-        // // Performs the Login Operation
-        // userFactory.session.login(
-        //     {
-        //         email: $scope.viewdata.email,
-        //         password: $scope.viewdata.password
-        //     }
-        // )
-        // .then(function(data) {
-        //     // Sets the flags indicating the user has already logged.
-        //     localStorage.setItem('animationShown', false);        
-        //     localStorage.setItem('userAPIKey', "Prueba");
+        // Performs the Login Operation
+        userFactory.session.login(
+            {
+                email: $scope.viewdata.email,
+                password: $scope.viewdata.password
+            }
+        )
+        .then(function(data) {
+            // Sets the flags indicating the user has already logged.
+            localStorage.setItem('animationShown', false);
+
+            referenceIDFactory.setReferenceID(data.ReferenceID);            
             
-        //     $("#viewWelcome").addClass("animated slideOutDown");
+            $("#viewWelcome").addClass("animated slideOutDown");
             
-        //     setTimeout(function(){
-        //         $state.go('tab.kenuu');
-        //     },800);
-        // })
-        // .catch(function(data){
-        //     swal(
-        //         {   
-        //             title: "!!!",   
-        //             text: "Nop! No puedes entrar",   
-        //             type: "error",   
-        //             confirmButtonText: "Ok",
-        //             customClass: "modal-bg",
-        //             confirmButtonColor: "#8f04a9"
-        //         }
-        //     );
-        // });
+            setTimeout(function(){
+                $state.go('tab.kenuu');
+            },800);
+        })
+        .catch(function(data){
+            console.log(data)
+            swal(
+                {   
+                    title: "!!!",   
+                    text: "Nop! No puedes entrar",   
+                    type: "error",   
+                    confirmButtonText: "Ok",
+                    customClass: "modal-bg",
+                    confirmButtonColor: "#8f04a9"
+                }
+            );
+        });
 
         // Sets the flags indicating the user has already logged.
-        localStorage.setItem('animationShown', false);        
-        localStorage.setItem('userAPIKey', "Prueba");
+        // localStorage.setItem('animationShown', false);        
+        // localStorage.setItem('userAPIKey', "Prueba");
         
-        $("#viewWelcome").addClass("animated slideOutDown");
+        // $("#viewWelcome").addClass("animated slideOutDown");
         
-        setTimeout(function(){
-            $state.go('tab.kenuu');
-        },800);
+        // setTimeout(function(){
+        //     $state.go('tab.kenuu');
+        // },800);
     };
 
     $scope.nextSlide = function() {
@@ -80,13 +87,14 @@ ctrl.controller('WelcomeCtrl', [ '$scope', '$timeout', '$state', '$ionicSlideBox
     };
 }]);
 
-ctrl.controller('QRCodeCtrl', [ '$scope', '$timeout', function($scope, $timeout){
+ctrl.controller('QRCodeCtrl', [ '$scope', '$timeout', 'deviceFactory', function($scope, $timeout, deviceFactory){
     $timeout(function(){
-        $("#viewcontent-QR").addClass("animated slideInUp");
+        $("#viewcontent-QR").show();
+        $("#viewcontent-QR").addClass("animated slideInUp");        
     });
 }]);
 
-ctrl.controller('KenuuCtrl', [ '$scope', '$timeout', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', function($scope, $timeout, userFactory, commerceFactory, $state, $ionicLoading){
+ctrl.controller('KenuuCtrl', [ '$scope', '$timeout', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', function($scope, $timeout, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService){
     $scope.viewdata = {
         qrcode: "Kenuu",
         counter: 1,
@@ -102,11 +110,6 @@ ctrl.controller('KenuuCtrl', [ '$scope', '$timeout', 'userFactory', 'commerceFac
         console.log(_date);
         return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
     };
-
-
-    console.log("/Date(1429222325562)/");
-    console.log($scope.gDate("/Date(1429222325562)/"));
-
 
     $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
 
@@ -180,6 +183,11 @@ ctrl.controller('KenuuCtrl', [ '$scope', '$timeout', 'userFactory', 'commerceFac
         commerceFactory.selectedCommerce.clearSelection();
         $state.go("tab.kenuu-prices");
     };
+
+    // Required to Show the Top Bar Setup View
+    $scope.ShowSetupView = function() {setupView.Show($scope);};
+    $scope.CloseSetup = function() {setupView.Close($scope);};
+    $scope.ContactUs = function() {emailService.ContactCustomerService();}
 }]);
 
 ctrl.controller('KenuuPricesCtrl', [ '$scope', '$state', 'rewardFactory', 'userFactory', 'commerceFactory', function($scope,$state,rewardFactory,userFactory,commerceFactory){
@@ -838,7 +846,7 @@ ctrl.controller('ActivityCtrl', [ '$scope', 'userFactory', 'socialSharing', func
     LoadData();
 }]);
 
-ctrl.controller('WhatsNewCtrl', ['$scope', '$cordovaInAppBrowser', 'setupView', function($scope, $cordovaInAppBrowser, setupView) {
+ctrl.controller('WhatsNewCtrl', ['$scope', '$cordovaInAppBrowser', function($scope, $cordovaInAppBrowser, setupView, emailService) {
 
     $scope.OpenTwitter = function() {
         var options = {
@@ -870,12 +878,4 @@ ctrl.controller('WhatsNewCtrl', ['$scope', '$cordovaInAppBrowser', 'setupView', 
             // error
             });
     };
-
-    // Required to Show the Top Bar Setup View
-    $scope.ShowSetupView = function() {setupView.Show($scope);};
-    $scope.CloseSetup = function() {setupView.Close($scope);};
-}]);
-
-ctrl.controller('SetupCtrl', ['$scope', function($scope){
-
 }]);

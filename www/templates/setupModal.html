@@ -1,9 +1,15 @@
 <ion-modal-view>
-	<ion-header-bar class="bar bar-dark">
+	<ion-header-bar class="bar bar-light">
 		<h1 class="title"><strong>configuración</strong></h1>
-		<button class="button button-clear" ng-click="CloseSetup()"><i class="ion-ios-close-outline"></i></button>	
+		<button class="button button-clear setupview-closebtn" ng-click="CloseSetup()"><i class="ion-ios-close-outline"></i></button>	
 	</ion-header-bar>
-	<ion-content class="setupview-content">
-		
+	<ion-content class="setupview-content">		
+		<div class="list">
+			<div class="item item-icon-left item-text-wrap item-clear" ng-click="ContactUs()">
+				<i class="icon icon-mail setupview-icon"></i>
+				<p>Necesitas ayuda?</p>
+				<strong>Envíanos un E-Mail!</strong>
+			</div>
+		</div>
 	</ion-content>
 </ion-modal-view>

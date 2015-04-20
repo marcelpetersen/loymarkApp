@@ -11,7 +11,7 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	url: 'http://192.168.71.98:8100/api'
 })
 
-.run(function($ionicPlatform) {
+.run(function($rootScope, $state, $ionicPlatform, networkFactory, $cordovaNetwork) {
   	$ionicPlatform.ready(function() {
 	    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
 	    // for form inputs)
@@ -22,6 +22,16 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	      	// org.apache.cordova.statusbar required
 		    StatusBar.styleLightContent();
 	    }
+
+	    // listen for Online event
+	    $rootScope.$on('$cordovaNetwork:online', function(event, networkState){
+	    	$state.go("tab.qrcode");
+	    });
+
+	    // listen for Offline event
+	    $rootScope.$on('$cordovaNetwork:offline', function(event, networkState){
+	    	$state.go("noconnection");
+	    });
   	});
 })
 
@@ -42,6 +52,13 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	// Set up the various states which the app can be in.
 	// Each state's controller can be found in controllers.js
 	$stateProvider
+
+	// No Connection
+	.state('noconnection', {
+		url: '/noconnection',
+		templateUrl: 'templates/noconnection.html',
+		controller: 'NoConnectionCtrl'
+	})
 
 	// Welcome screen of the app once the user is logged
 	.state('welcome', {
@@ -192,7 +209,7 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	// $urlRouterProvider.otherwise('/tab/map');	
 
 	// Verifies the App has already shown the welcome screen
-	var _apikey = localStorage.getItem('userAPIKey');
+	var _apikey = localStorage.getItem('userReferenceID');
 	localStorage.setItem('animationShown', false);
 	if (_apikey != undefined)
 	{

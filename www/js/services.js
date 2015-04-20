@@ -12,6 +12,21 @@ angular.module('kenuu.services', [])
 	};
 }])
 
+.service('emailService', ['$cordovaEmailComposer', function($cordovaEmailComposer) {
+	this.ContactCustomerService = function() {
+		var email = {
+            to: 'ayudaalcliente@kenuupops.com',
+            subject: 'Kenuu - Asistencia al Cliente',
+            body: 'Quiero Ayuda!',
+            isHtml: true
+        };
+
+        $cordovaEmailComposer.open(email).then(null, function () {
+            // TODO...
+        });
+	};
+}])
+
 .factory('setupView', ['$ionicModal', function($ionicModal){
 	var _modal = {};
 	return {

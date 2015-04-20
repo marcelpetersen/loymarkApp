@@ -574,10 +574,11 @@ ion-nav-view[nav-view-transition="ios"] {
 
 	}
 	.qrcode-content {
-		// background-color: $qrcode-bg-color;		
+		//background-color: $qrcode-bg-color;
+		background-image: url('../img/whatsnewbg.png');		
 	}
 	.qrcode-item {
-		background-color: $qrcode-bg-color;
+		// background-color: $qrcode-bg-color;
 		border: none !important;
 		height: 100vh;
 		// background-image: url('../img/buildingbg.png') !important;
@@ -987,7 +988,13 @@ ion-nav-view[nav-view-transition="ios"] {
 /* ******** Setup View ******** */
 
 	.setupview-content {
-		background-color: #757575;
+		background-color: white;
+	}
+	.setupview-closebtn {
+		color: $kenuu-purple !important;font-size: 20px !important;
+	}
+	.setupview-icon {
+		color: $kenuu-purple;
 	}
 
 

@@ -1,8 +1,105 @@
 var fact = angular.module('kenuu.factory', []);
 
-fact.factory
+fact.factory('referenceIDFactory', [function(){
+    var _userReferenceId = "";
 
-fact.factory('restFactory', ['$http', 'ApiEndpoint', function($http, ApiEndpoint){
+    function GetRefID() {
+        var id = localStorage.getItem("userReferenceID");
+        if (id === undefined) return _userReferenceId;
+        else
+        {
+            _userReferenceId = id;            
+            return _userReferenceId;
+        }
+    };
+
+    function SetRefID(id) {
+        localStorage.setItem("userReferenceID", id);
+        _userReferenceId = id;
+    };
+
+    return {        
+        setReferenceID: function(id) {
+            SetRefID(id);
+        },
+        getReferenceID: function() {
+            return GetRefID();
+        }
+    }
+}])
+
+fact.factory('networkFactory', ['$cordovaNetwork', function($cordovaNetwork){
+    return {
+        connection: {
+            isOnline: function() {
+                if (navigator.connection)
+                {
+                    var isOnline = $cordovaNetwork.isOnline();
+                    var isOffline = $cordovaNetwork.isOffline();
+
+                    if ((isOffline)&&(!isOnline)) return false;
+                    if (isOffline) return false;
+                    if ((!isOffline)&&(isOnline)) return true;
+                    if (isOnline) return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+    }
+}])
+
+fact.factory('deviceFactory', ['$cordovaDevice', function($cordovaDevice){
+    var _device = {};
+    var _platform = "";
+    var _errormessage = "";
+    var _uuid = "";
+
+    return {
+        device: {
+            platform: function() {
+                // Device Recognition
+                _errormessage = "";
+                try {                    
+                    _platform = $cordovaDevice.getPlatform();
+                    return _platform;
+                }
+                catch(err)
+                {
+                    _errormessage = err;
+                    return "";
+                }
+            },
+            device: function() {
+                // ------------------------
+                // available: true
+                // platform: "iOS"
+                // version: "8.3"
+                // uuid: [token]
+                // cordova: "3.8.0"
+                // model: "iPhone7,2"
+                // manufacturer: "Apple"
+                // ------------------------
+                _device = $cordovaDevice.getDevice();
+                return _device;
+            },
+            uuid: function() {
+                _uuid = $cordovaDevice.getUUID();
+                return _uuid;
+            },
+            errmessage: function(){
+                return _errormessage;
+            },
+            registerdevice: function() {
+                return true;
+            }
+        }
+    }
+}])
+
+fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', function($http, ApiEndpoint, referenceIDFactory){
     var serverURL = ApiEndpoint.url; // 'http://201.201.150.159';
     return {
         user:{
@@ -12,7 +109,7 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', function($http, ApiEndpoint
                     return new Promise(function(resolve,reject){
                         $http({
                             headers: {
-                                'authorization': 'Basic EstaEsLaPrueba'
+                                'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
                             },
                             method: 'GET',
                             url: url,
@@ -39,6 +136,9 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', function($http, ApiEndpoint
                         var url = serverURL + '/member/activity';
                         return new Promise(function(resolve,reject){
                             $http({
+                                headers: {
+                                    'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
+                                },
                                 method: 'GET',
                                 url: url,
                                 params: {
@@ -63,6 +163,9 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', function($http, ApiEndpoint
                         var url = serverURL + '/member/activity/visits';
                         return new Promise(function(resolve,reject){
                             $http({
+                                headers: {
+                                    'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
+                                },
                                 method: 'GET',
                                 url: url,
                                 params: _data
@@ -84,6 +187,9 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', function($http, ApiEndpoint
                             var url = serverURL + '/member/activity/visits/commerce';
                             return new Promise(function(resolve,reject){
                                 $http({
+                                    headers: {
+                                        'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
+                                    },
                                     method: 'GET',
                                     url: url,
                                     params: {
@@ -108,6 +214,9 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', function($http, ApiEndpoint
                             var url = serverURL + '/member/activity/visits/stores';
                             return new Promise(function(resolve,reject){
                                 $http({
+                                    headers: {
+                                        'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
+                                    },
                                     method: 'GET',
                                     url: url,
                                     params: {
@@ -134,6 +243,9 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', function($http, ApiEndpoint
                     var url = serverURL + '/member/activity/redemptions';
                     return new Promise(function(resolve,reject){
                         $http({                            
+                            headers: {
+                                'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
+                            },
                             method: 'GET',
                             url: url,
                             data: _data
@@ -156,7 +268,8 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', function($http, ApiEndpoint
                     var url = serverURL + '/member/login';
                     $http({
                         headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
                         },
                         method: 'POST',
                         url: url,
@@ -182,6 +295,9 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', function($http, ApiEndpoint
                 var url = serverURL + '/commerce';
                 return new Promise(function(resolve,reject){
                     $http({
+                        headers: {
+                            'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
+                        },
                         method: 'GET',
                         url: url,
                         params: {
@@ -205,6 +321,9 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', function($http, ApiEndpoint
                     var url = serverURL + '/commerce/stores';
                     return new Promise(function(resolve,reject){
                         $http({
+                            headers: {
+                                'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
+                            },
                             method: 'GET',
                             url: url,
                             params: {
@@ -232,6 +351,9 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', function($http, ApiEndpoint
                     var url = serverURL + '/reward/active';
                     return new Promise(function(resolve,reject){
                         $http({
+                            headers: {
+                                'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
+                            },
                             method: 'GET',
                             url: url,
                             params: _data
@@ -253,6 +375,9 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', function($http, ApiEndpoint
                         var url = serverURL + '/reward/active/store';
                         return new Promise(function(resolve,reject){
                             $http({
+                                headers: {
+                                    'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
+                                },
                                 method: 'GET',
                                 url: url,
                                 params: _data
@@ -277,6 +402,9 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', function($http, ApiEndpoint
                 var url = serverURL + '/social';
                 return new Promise(function(resolve,reject){
                     $http({
+                        headers: {
+                            'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
+                        },
                         method: 'GET',
                         url: url,
                         params: _data
@@ -297,6 +425,9 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', function($http, ApiEndpoint
                 var url = serverURL + '/social';
                 return new Promise(function(resolve,reject){
                     $http({
+                        headers: {
+                            'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
+                        },
                         method: 'POST',
                         url: url,
                         data: {jsonData:JSON.stringify(_data)}
@@ -317,6 +448,9 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', function($http, ApiEndpoint
                 var url = serverURL + '/social/review';
                 return new Promise(function(resolve,reject){
                     $http({
+                        headers: {
+                            'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
+                        },
                         method: 'PATCH',
                         url: url,
                         data: {jsonData:JSON.stringify(_data)}
@@ -341,8 +475,9 @@ fact.factory('userFactory',[ 'restFactory', function(restFactory){
 	var _user = {};
 	var _login = {};
 	var _data ={};
+
 	return {
-        info: {            
+        info: {
             get: function(newData,userID){
                 return new Promise(function(resolve,reject){
                     if(newData===true){
