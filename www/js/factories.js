@@ -310,7 +310,7 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                 });
             },
             stores: {
-                get: function(userID, entityID){
+                get: function(entityID){
                     var url = serverURL + '/commerce/stores';
                     return new Promise(function(resolve,reject){
                         $http({
@@ -653,9 +653,9 @@ fact.factory('commerceFactory', ['restFactory', function(restFactory){
             });
         },
         stores: {
-            general: function(userID, entityID){
+            general: function(entityID){
                 return new Promise(function(resolve,reject){
-                    restFactory.commerce.stores.get(userID, entityID)
+                    restFactory.commerce.stores.get(entityID)
                         .then(function(response){
                             resolve(response);
                         })

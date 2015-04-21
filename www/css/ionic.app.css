@@ -8177,7 +8177,7 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
 /* ******** Stores ******** */
 .stores-content {
   height: 100vh;
-  background-color: #D6C8FF !important; }
+  background-image: url('../img/whatsnewbg.png'); }
 
 .stores-card {
   border-radius: 10px !important; }

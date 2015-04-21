@@ -3,7 +3,7 @@ var ctrl = angular.module('kenuu.controllers', ['ja.qr']);
 ctrl.controller('NoConnectionCtrl', ['$scope', '$state', function($scope, $state){    
 }]);
 
-ctrl.controller('WelcomeCtrl', [ '$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory){
+ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory){
     localStorage.setItem('animationShown', false);
 
     $timeout(function(){
@@ -82,19 +82,23 @@ ctrl.controller('WelcomeCtrl', [ '$scope', '$timeout', '$state', '$ionicSlideBox
         $ionicSlideBoxDelegate.next();
     };
 
+    $scope.gotoSlide = function(index) {
+        $ionicSlideBoxDelegate.slide(index);
+    };
+
     $scope.slideHasChanged = function(index) {
         _currentSlideIndex = index;
     };
 }]);
 
-ctrl.controller('QRCodeCtrl', [ '$scope', '$timeout', 'deviceFactory', function($scope, $timeout, deviceFactory){
+ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'deviceFactory', function($scope, $timeout, deviceFactory){
     $timeout(function(){
         $("#viewcontent-QR").show();
         $("#viewcontent-QR").addClass("animated slideInUp");        
     });
 }]);
 
-ctrl.controller('KenuuCtrl', [ '$scope', '$timeout', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', function($scope, $timeout, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService){
+ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', function($scope, $timeout, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService){
     $scope.viewdata = {
         qrcode: "Kenuu",
         counter: 1,
@@ -189,7 +193,7 @@ ctrl.controller('KenuuCtrl', [ '$scope', '$timeout', 'userFactory', 'commerceFac
     $scope.ContactUs = function() {emailService.ContactCustomerService();}
 }]);
 
-ctrl.controller('KenuuPricesCtrl', [ '$scope', '$state', 'rewardFactory', 'userFactory', 'commerceFactory', function($scope,$state,rewardFactory,userFactory,commerceFactory){
+ctrl.controller('KenuuPricesCtrl', ['$scope', '$state', 'rewardFactory', 'userFactory', 'commerceFactory', function($scope,$state,rewardFactory,userFactory,commerceFactory){
 
 	$scope.viewdata = {
         searchText: '',
@@ -283,7 +287,7 @@ ctrl.controller('KenuuPricesCtrl', [ '$scope', '$state', 'rewardFactory', 'userF
     LoadData();
 }]);
 
-ctrl.controller('KenuuFavCommercesCtrl', [ '$scope', '$state', 'userFactory', 'commerceFactory', 'dateFxService', function($scope,$state,userFactory,commerceFactory,dateFxService){
+ctrl.controller('KenuuFavCommercesCtrl', ['$scope', '$state', 'userFactory', 'commerceFactory', 'dateFxService', function($scope,$state,userFactory,commerceFactory,dateFxService){
 
 	$scope.viewdata = {
         commerces: []
@@ -432,23 +436,25 @@ ctrl.controller('KenuuStoresCtrl', ['$scope','rewardFactory', '$window', '$cordo
 
     var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
-    userFactory.info.get(false, "")
+    userFactory.info.get()
         .then(function(data){
             $scope.viewdata.user = data;            
 
-            commerceFactory.stores.general($scope.viewdata.user.AccountID, $scope.viewdata.selectedCommerce.EntityID)
+            commerceFactory.stores.general($scope.viewdata.selectedCommerce.EntityID)
                 .then(function(data){
-                    $("#pleaseWaitSpinner").addClass("animated slideOutUp");
+                    
+                    $("#pleaseWaitSpinner_Stores").addClass("animated slideOutUp");
+                    
                     setTimeout(function() {                                                       
                         $scope.viewdata.stores = data;
                         $scope.$apply();
-                        $("#pleaseWaitSpinner").hide();
+                        $("#pleaseWaitSpinner_Stores").hide();
                         $("#storesListDiv").show();
                         $("#storesListDiv").addClass("animated fadeIn"); 
                     }, 150); 
                 })
                 .catch(function(err){
-                    $("#pleaseWaitSpinner").addClass("animated slideOutUp");
+                    $("#pleaseWaitSpinner_Stores").addClass("animated slideOutUp");
                 
                     setTimeout(function() { 
                         $("#errorWhenLoadingDiv").removeClass("animated slideOutUp");
@@ -624,7 +630,7 @@ ctrl.controller('KenuuRewardDetailCtrl', ['$scope', '$timeout', 'userFactory', '
     };
 }]);
 
-ctrl.controller('MapCtrl', [ '$scope', 'commerceFactory', '$ionicLoading', '$cordovaGeolocation', function($scope, commerceFactory, $ionicLoading, $cordovaGeolocation){
+ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cordovaGeolocation', function($scope, commerceFactory, $ionicLoading, $cordovaGeolocation){
   	$scope.settings = {
     	enableFriends: true
   	};
@@ -731,7 +737,7 @@ ctrl.controller('MapCtrl', [ '$scope', 'commerceFactory', '$ionicLoading', '$cor
     };
 }]);
 
-ctrl.controller('SearchCtrl', [ '$scope', function($scope){
+ctrl.controller('SearchCtrl', ['$scope', function($scope){
     $scope.viewdata = {
         doingSearch: false,
         searchResults: [],
@@ -753,7 +759,7 @@ ctrl.controller('SearchCtrl', [ '$scope', function($scope){
     };
 }]);
 
-ctrl.controller('ActivityCtrl', [ '$scope', 'userFactory', 'socialSharing', function($scope, userFactory, socialSharing){
+ctrl.controller('ActivityCtrl', ['$scope', 'userFactory', 'socialSharing', function($scope, userFactory, socialSharing){
     
     $scope.viewdata = {        
         user: {

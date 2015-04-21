@@ -3,14 +3,12 @@
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
     </ion-nav-title>
 	<ion-content scroll="false" class="welcome-content">
-		<ion-slide-box show-pager="true" on-slide-changed="slideHasChanged($index)">			
+		<ion-slide-box show-pager="" on-slide-changed="slideHasChanged($index)">			
+			<!-- Welcome Slide #1 -->
 			<ion-slide class="welcome-slide">
 				<div class="item clear-item text-center welcome-main-title" style="margin-top:50px;">
 					<p class="welcome-title">Bienvenido a <strong>Kenuu!!</strong></p>
-				</div>
-				<!-- <div class="item clear-item text-center" style="top:20px;">
-					<img src="./img/kenuulogowhite.png" class="welcome-kenuulogo">
-				</div> -->
+				</div>				
 				<div class="text-center" style="width:100vw">
 					<img id="welcomeimg1" src="./img/devices.png" style="height:198px;">
 				</div>
@@ -23,13 +21,11 @@
 					<button ng-click="nextSlide()" class="button button-block button-light welcome-btn">Empecemos!</button>
 				</div>
 			</ion-slide>
+			<!-- Welcome Slide #2 -->
 			<ion-slide class="welcome-slide">
 				<div class="item clear-item text-center welcome-main-title" style="margin-top:50px;">
 					<p class="welcome-title">Registra tus visitas...</p>
-				</div>
-				<!-- <div class="item clear-item text-center" style="top:20px;">
-					<img src="./img/kenuulogowhite.png" class="welcome-kenuulogo">
-				</div> -->
+				</div>				
 				<div class="text-center" style="width:100vw">
 					<img src="./img/cupcakes.png" style="height:198px;">
 				</div>
@@ -42,6 +38,21 @@
 					<button ng-click="nextSlide()" class="button button-block button-light welcome-btn">Registrate!</button>
 				</div>
 			</ion-slide>
+
+			<!-- Access Option -->
+			<ion-slide class="welcome-slide">
+				<div class="item clear-item text-center welcome-main-title" style="margin-top:50px;">
+					<p class="welcome-title">Si no tienes tu cuenta regístrate!</p>
+				</div>
+				<div class="item welcome-item" style="top:0px;">
+					<button ng-click="gotoSlide(3)" class="button button-block button-light welcome-btn">Quiero Registrarme!</button>
+				</div>
+				<div class="item welcome-item" style="top:0px;">
+					<button ng-click="gotoSlide(4)" class="button button-block button-light welcome-btn">...Ya tengo mi cuenta!</button>
+				</div>
+			</ion-slide>
+
+			<!-- Sign Up Slide -->
 			<ion-slide class="welcome-slide">
 				<div class="item clear-item text-center welcome-text" style="margin-top:20px; padding-left:30px; padding-right:30px;">
 					<strong>Inscríbase</strong>
@@ -51,21 +62,22 @@
 					<div class="text-left" style="padding-left:30px; padding-right:30px;">					
 						<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
 							<span class="input-label">Email</span>
-							<input class="kenuu-input" type="text" placeholder="john@suhr.com">
+							<input class="kenuu-input" type="email" placeholder="john@suhr.com">
+						</label>
+					</div>
+					<div class="text-left" style="padding-left:30px; padding-right:30px;">					
+						<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
+							<span class="input-label">Password</span>
+							<input class="kenuu-input" type="password" placeholder="">
 						</label>
 					</div>
 					<div class="item welcome-item" style="top:20px;">
-						<button type="submit" class="button button-block button-light welcome-btn">Enviar!</button>
+						<button type="submit" class="button button-block button-light welcome-btn">Registrar!</button>
 					</div>
 				</form>
-				<div class="item clear-item text-center welcome-text" style="margin-top:20px; padding-left:30px; padding-right:30px;">
-					<strong>Ya estoy inscrito...</strong>
-					<p class="welcome-regular-text">Si ya está inscrito, haga tap en este botón:</p>
-				</div>
-				<div class="item welcome-item" style="top:0px;">
-					<button ng-click="nextSlide()" class="button button-block button-light welcome-btn">Ir a Ingreso!</button>
-				</div>
 			</ion-slide>
+
+			<!-- Login Slide -->
 			<ion-slide class="welcome-slide">
 				<div class="item clear-item text-center welcome-text" style="margin-top:20px; padding-left:30px; padding-right:30px;">
 					<strong>Ingrese</strong>
@@ -75,7 +87,7 @@
 					<div class="text-left" style="padding-left:30px; padding-right:30px;">					
 						<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
 							<span class="input-label">Email</span>
-							<input class="kenuu-input" type="text" placeholder="john@suhr.com" ng-model="viewdata.email">
+							<input class="kenuu-input" type="email" placeholder="john@suhr.com" ng-model="viewdata.email">
 						</label>
 						<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
 							<span class="input-label">Password</span>

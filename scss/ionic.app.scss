@@ -792,7 +792,8 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 	.stores-content {		
 		height: 100vh;
-		background-color: $reward-content-bgcolor !important;
+		background-image: url('../img/whatsnewbg.png');
+		// background-color: $reward-content-bgcolor !important;
 	}
 	.stores-list-container {		
 	}
