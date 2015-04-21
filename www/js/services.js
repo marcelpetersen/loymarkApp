@@ -27,13 +27,13 @@ angular.module('kenuu.services', [])
 	};
 }])
 
-.service('dateService' [function(){
+.service('dateFxService', [function(){
 	function getDaysInMonth(month,year) {     
         if( typeof year == "undefined") year = 1999; // any non-leap-year works as default     
         var currmon = new Date(year,month),     
             nextmon = new Date(year,month+1);
         return Math.floor((nextmon.getTime()-currmon.getTime())/(24*3600*1000));
-    } 
+    };
     function getDateTimeSince(target) { // target should be a Date object
         var now = new Date(), diff, yd, md, dd, hd, nd, sd, out = [];
         diff = Math.floor(now.getTime()-target.getTime()/1000);
@@ -75,9 +75,10 @@ angular.module('kenuu.services', [])
         }
         
         return out.join(" ");
-    }
+    };
+    
 	this.lapseSince = function(dateInStr) {
-		var d = new Date(date);
+		var d = new Date(dateInStr);
         return getDateTimeSince(d);
 	};
 }])

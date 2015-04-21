@@ -16,17 +16,18 @@
             </div>
         </div>        
         <div>
-            <img src="https://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=13&size=375x140&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284">
+            <img class="stores-map-snapshot" src="https://maps.googleapis.com/maps/api/staticmap?zoom=13&size=375x140&maptype=roadmap&markers={{viewdata.selectedCommerce.LocationLatitude}},{{viewdata.selectedCommerce.LocationLongitude}}">
         </div>
         <div class="item item-clear">
             <div class="row">
                 <div class="col-50">
                     <p>Última visita</p>
-                    <h3>{{gDate(viewdata.selectedCommerce.LastVisit)}}</h3>  
+                    <h3>{{gDate(viewdata.selectedCommerce.LastVisitDateEntity)}}</h3> 
+                    <p>{{lapseSinceLastVisit(viewdata.selectedCommerce.LastVisitDateEntity)}}</p> 
                 </div>
                 <div class="col-50">
                     <p>Cantidad de Visitas</p>
-                    <h3>{{viewdata.selectedCommerce.TotalVisits}}</h3>  
+                    <h3>{{viewdata.selectedCommerce.TotalVisitsEntity}}</h3>  
                 </div>
             </div>
         </div>

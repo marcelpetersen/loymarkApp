@@ -104,7 +104,6 @@ ctrl.controller('KenuuCtrl', [ '$scope', '$timeout', 'userFactory', 'commerceFac
         }
     };
 
-    // DEBUG CODE
     $scope.gDate = function(date) {
         var _date = new Date(parseInt(date.substr(6)));
         console.log(_date);
@@ -138,7 +137,7 @@ ctrl.controller('KenuuCtrl', [ '$scope', '$timeout', 'userFactory', 'commerceFac
     };
 
     function LoadData() {
-        userFactory.info.get(true,2)
+        userFactory.info.get()
             .then(function(data){  
                 $ionicLoading.hide();              
                 $scope.viewdata.user = data;
@@ -238,6 +237,7 @@ ctrl.controller('KenuuPricesCtrl', [ '$scope', '$state', 'rewardFactory', 'userF
 
     $scope.OpenRewardDetail = function(reward) {
         rewardFactory.selectedReward.set(reward);
+        console.log("Selected Reward:");
         console.log(reward);
         $state.go('tab.kenuu-rewarddetail');
     };
@@ -283,7 +283,7 @@ ctrl.controller('KenuuPricesCtrl', [ '$scope', '$state', 'rewardFactory', 'userF
     LoadData();
 }]);
 
-ctrl.controller('KenuuFavCommercesCtrl', [ '$scope', '$state', 'userFactory', 'commerceFactory', 'dateService', function($scope,$state,userFactory,commerceFactory,dateService){
+ctrl.controller('KenuuFavCommercesCtrl', [ '$scope', '$state', 'userFactory', 'commerceFactory', 'dateFxService', function($scope,$state,userFactory,commerceFactory,dateFxService){
 
 	$scope.viewdata = {
         commerces: []
@@ -321,7 +321,7 @@ ctrl.controller('KenuuFavCommercesCtrl', [ '$scope', '$state', 'userFactory', 'c
     };
 
     $scope.calcLapse = function(date) {        
-        return dateService.lapseSince(date);
+        return dateFxService.lapseSince(date);
     };
 
     $scope.GoToCommerce = function(commerce) {
@@ -342,7 +342,7 @@ ctrl.controller('KenuuFavCommercesCtrl', [ '$scope', '$state', 'userFactory', 'c
     LoadData();
 }]);
 
-ctrl.controller('KenuuCommerceCtrl', ['$scope', '$state', 'rewardFactory', 'commerceFactory', 'userFactory', '$window', '$cordovaEmailComposer', function($scope, $state, rewardFactory, commerceFactory, userFactory, $window, $cordovaEmailComposer){
+ctrl.controller('KenuuCommerceCtrl', ['$scope', '$state', 'rewardFactory', 'commerceFactory', 'userFactory', '$window', '$cordovaEmailComposer', 'dateFxService', function($scope, $state, rewardFactory, commerceFactory, userFactory, $window, $cordovaEmailComposer, dateFxService){
     $scope.viewdata = {
         selectedReward: rewardFactory.selectedReward.get(),
         selectedCommerce: commerceFactory.selectedCommerce.get()
@@ -371,10 +371,13 @@ ctrl.controller('KenuuCommerceCtrl', ['$scope', '$state', 'rewardFactory', 'comm
     var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
     $scope.gDate = function(date) {
-        var _date = new Date(parseInt(date.substr(6)));
+        if (date === null) return "";
+        if (date ===undefined) return "";
+        // var _date = new Date(parseInt(date.substr(6)));
+        // return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
+        var _date = new Date(date);
         return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
     };
-
     $scope.GoToStores = function() {
         $state.go('tab.kenuu-stores');
     };
@@ -391,6 +394,9 @@ ctrl.controller('KenuuCommerceCtrl', ['$scope', '$state', 'rewardFactory', 'comm
         }
 
         return "./img/empty.png";
+    };
+    $scope.lapseSinceLastVisit = function(date) {
+        return dateFxService.lapseSince(date);
     };
     $scope.FormatField = function(data) {
         if ((!data)||(data === null)||(data===""))
@@ -525,25 +531,43 @@ ctrl.controller('KenuuRewardDetailCtrl', ['$scope', '$timeout', 'userFactory', '
         rewardId: '',
         user: {
             activity: ''
-        }
+        },
+        commerce: {}
     };
 
     var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
-    userFactory.info.get(true, 2)
+    userFactory.info.get()
         .then(function(data){
             $scope.viewdata.user = data;
 
             if ($scope.viewdata.selectedReward.Points <= $scope.viewdata.user.PointsAvailable) {
                 $("#btnRedeem").show();
             }
-            
-            $scope.$apply();
             var userData = data;
+
+            // Gets the Commerce Information
+            commerceFactory.get($scope.viewdata.selectedReward["$id"])
+                .then(function(data){
+                    $scope.viewdata.commerce = data[0]; 
+                    console.log(data[0])
+                    $scope.$apply();
+                })
+                .catch(function(err){
+                    console.log(err);
+                });
         })
-        .catch(function(err){});
+        .catch(function(err){
+            console.log(err);
+        });
 
     $scope.viewdata.rewardId = $scope.viewdata.selectedReward.SRewardID.toString();
+
+    $scope.GetCommerceBalance = function(balance) {
+        if (balance === null) return 0;
+        if (balance === undefined) return 0;
+        else return balance;
+    };
 
     $scope.GetCommerceImage = function(image) {
         if (image != undefined) 
@@ -562,16 +586,11 @@ ctrl.controller('KenuuRewardDetailCtrl', ['$scope', '$timeout', 'userFactory', '
         return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
     };
 
-    $scope.GoToCommerce = function(id) {        
-        // TODO: Sacar el comercio asociado al premio y definirlo como el seleccionado
-        commerceFactory.get("", id)
-            .then(function(data){
-                commerceFactory.selectedCommerce.set(data[0]);     
-                $state.go('tab.kenuu-commerce');
-            })
-            .catch(function(err){
-                console.log(err);
-            });
+    $scope.GoToCommerce = function(id) {
+        console.log("Selected Reward's Commerce ID: ", id);
+
+        commerceFactory.selectedCommerce.set($scope.viewdata.commerce);                         
+        $state.go('tab.kenuu-commerce');
     };
 
     $scope.RedeemReward = function() {
