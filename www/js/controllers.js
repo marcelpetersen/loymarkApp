@@ -3,110 +3,128 @@ var ctrl = angular.module('kenuu.controllers', ['ja.qr']);
 ctrl.controller('NoConnectionCtrl', ['$scope', '$state', function($scope, $state){    
 }]);
 
-ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', '$ionicLoading', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory, $ionicLoading){
+ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', '$ionicLoading', '$cordovaKeyboard', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory, $ionicLoading, $cordovaKeyboard){
     localStorage.setItem('animationShown', false);
 
     $timeout(function(){
+        $("#welcome-content").addClass("animated slideInUp");
         setTimeout(function(){
             $("#welcomeimg1").addClass("animated zoomIn");
         }, 1100);        
     });
 
     $scope.viewdata = {
-        email: "",
-        password: "",
-        email_invalid: false,
-        password_invalid: false
+        signup: {
+            email: "",
+            password: "",
+            email_invalid: false,
+            password_invalid: false
+        },
+        login: {
+            email: "",
+            password: "",
+            email_invalid: false,
+            password_invalid: false
+        }
     };
 
     var _currentSlideIndex = 0;
 
     $scope.SignUp = function() {
-        swal(
-            {   
-                title: "Error!",   
-                text: "Here's my error message!",   
-                type: "error",   
-                confirmButtonText: "Cool",
-                customClass: "modal-bg",
-                confirmButtonColor: "#8f04a9"
-            }
-        );
-    };
-
-    function ShowFormErrorMsg(msg) {
-        swal(
-            {   
-                title: "Oops!",   
-                text: msg,   
-                type: "error",   
-                confirmButtonText: "Ok",
-                customClass: "modal-bg",
-                confirmButtonColor: "#8f04a9"
-            }
-        );
-    };
-
-    $scope.Enter = function() {
-
-
         // Validates the information from the form
-        if ($scope.viewdata.email === "")
+        if ($scope.viewdata.signup.email === "")
         {
-            $scope.viewdata.email_invalid = true;
+            $scope.viewdata.signup.email_invalid = true;
             ShowFormErrorMsg("Te falta el correo!");
             return;
         }
         else
         {
-            $scope.viewdata.email_invalid = false;
+            $scope.viewdata.signup.email_invalid = false;
         }
-        if ($scope.viewdata.password === "")
+        if ($scope.viewdata.signup.password === "")
         {
-            $scope.viewdata.password_invalid = true;
+            $scope.viewdata.signup.password_invalid = true;
             ShowFormErrorMsg("Te falta el password!");
             return;
         }
         else
         {
-            $scope.viewdata.password_invalid = false;
+            $scope.viewdata.signup.password_invalid = false;
         }
 
         $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
+        $ionicLoading.hide();
+    };
 
-        // Performs the Login Operation
-        userFactory.session.login(
-            {
-                email: $scope.viewdata.email,
-                password: $scope.viewdata.password
-            }
-        )
-        .then(function(data) {
-            // Sets the flags indicating the user has already logged.
-            localStorage.setItem('animationShown', false);
-
-            referenceIDFactory.setReferenceID(data.ReferenceID);            
-            
-            $("#viewWelcome").addClass("animated slideOutDown");
-            
-            setTimeout(function(){
-                $ionicLoading.hide();
-                $state.go('tab.kenuu');
-            },800);
-        })
-        .catch(function(data){
-            $ionicLoading.hide();
+    function ShowFormErrorMsg(msg) {
+        $cordovaKeyboard.close();
+        setTimeout(function(){            
             swal(
                 {   
-                    title: "!!!",   
-                    text: "Nop! No puedes entrar",   
+                    title: "Oops!",   
+                    text: msg,   
                     type: "error",   
                     confirmButtonText: "Ok",
                     customClass: "modal-bg",
                     confirmButtonColor: "#8f04a9"
                 }
             );
-        });
+        }, 250);        
+    };
+
+    $scope.Enter = function() {
+        // Validates the information from the form
+        if ($scope.viewdata.login.email === "")
+        {
+            $scope.viewdata.login.email_invalid = true;
+            ShowFormErrorMsg("Te falta el correo!");
+            return;
+        }
+        else
+        {
+            $scope.viewdata.login.email_invalid = false;
+        }
+        if ($scope.viewdata.login.password === "")
+        {
+            $scope.viewdata.login.password_invalid = true;
+            ShowFormErrorMsg("Te falta el password!");
+            return;
+        }
+        else
+        {
+            $scope.viewdata.login.password_invalid = false;
+        }
+
+        $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
+
+        $cordovaKeyboard.close();
+        setTimeout(function(){
+            // Performs the Login Operation
+            userFactory.session.login(
+                {
+                    email: $scope.viewdata.login.email,
+                    password: $scope.viewdata.login.password
+                }
+            )
+            .then(function(data) {
+                // Sets the flags indicating the user has already logged.
+                localStorage.setItem('animationShown', false);
+
+                referenceIDFactory.setReferenceID(data.ReferenceID);            
+                
+                $("#viewWelcome").addClass("animated slideOutDown");
+                
+                setTimeout(function(){
+                    $ionicLoading.hide();
+                    $state.go('tab.kenuu');
+                },800);
+            })
+            .catch(function(data){
+                $ionicLoading.hide();
+                ShowFormErrorMsg("Oops, no puedes entrar!");
+            });
+        }, 250);
     };
 
     $scope.nextSlide = function() {
@@ -946,7 +964,11 @@ ctrl.controller('ActivityCtrl', ['$scope', 'userFactory', 'socialSharing', funct
     LoadData();
 }]);
 
-ctrl.controller('WhatsNewCtrl', ['$scope', '$cordovaInAppBrowser', function($scope, $cordovaInAppBrowser, setupView, emailService) {
+ctrl.controller('WhatsNewCtrl', ['$scope', '$cordovaInAppBrowser', '$ionicSlideBoxDelegate', function($scope, $cordovaInAppBrowser, setupView, emailService, $ionicSlideBoxDelegate) {
+
+    $scope.$on("$ionicView.enter", function(event, args){
+        $ionicSlideBoxDelegate.slide(0);
+    });
 
     $scope.OpenTwitter = function() {
         var options = {

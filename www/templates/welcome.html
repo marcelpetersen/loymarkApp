@@ -2,7 +2,7 @@
 	<ion-nav-title>
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
     </ion-nav-title>
-	<ion-content scroll="false" class="welcome-content">
+	<ion-content id="welcome-content" scroll="false" class="welcome-content">
 		<ion-slide-box show-pager="" on-slide-changed="slideHasChanged($index)">			
 			<!-- Welcome Slide #1 -->
 			<ion-slide class="welcome-slide">
@@ -64,14 +64,14 @@
 				<form ng-submit="SignUp()">
 					<div class="text-left" style="padding-left:30px; padding-right:30px;">					
 						<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
-							<span class="input-label">Email</span>
-							<input class="kenuu-input" type="email" placeholder="john@suhr.com">
+							<span class="input-label">Email <span ng-show="viewdata.signup.email_invalid"><i class="ion-android-warning" style="font-size:25px; color: red;"></i></span></span>
+							<input class="kenuu-input" type="email" placeholder="john@suhr.com" ng-model="viewdata.signup.email">
 						</label>
 					</div>
 					<div class="text-left" style="padding-left:30px; padding-right:30px;">					
 						<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
-							<span class="input-label">Password</span>
-							<input class="kenuu-input" type="password" placeholder="">
+							<span class="input-label">Password <span ng-show="viewdata.signup.password_invalid"><i class="ion-android-warning" style="font-size:25px; color: red;"></i></span></span>
+							<input class="kenuu-input" type="password" placeholder="" ng-model="viewdata.signup.password">
 						</label>
 					</div>
 					<div class="item welcome-item" style="top:20px;">
@@ -92,12 +92,12 @@
 				<form ng-submit="Enter()">
 					<div class="text-left" style="padding-left:30px; padding-right:30px;">					
 						<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
-							<span class="input-label">Email <span ng-show="viewdata.email_invalid"><i class="ion-android-warning" style="font-size:25px; color: red;"></i></span></span>
-							<input class="kenuu-input" type="email" placeholder="john@suhr.com" ng-model="viewdata.email">
+							<span class="input-label">Email <span ng-show="viewdata.login.email_invalid"><i class="ion-android-warning" style="font-size:25px; color: red;"></i></span></span>
+							<input class="kenuu-input" type="email" placeholder="john@suhr.com" ng-model="viewdata.login.email">
 						</label>
 						<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
-							<span class="input-label">Password <span ng-show="viewdata.password_invalid"><i class="ion-android-warning" style="font-size:25px; color: red;"></i></span></span>
-							<input class="kenuu-input" type="password" placeholder="" ng-model="viewdata.password">
+							<span class="input-label">Password <span ng-show="viewdata.login.password_invalid"><i class="ion-android-warning" style="font-size:25px; color: red;"></i></span></span>
+							<input class="kenuu-input" type="password" placeholder="" ng-model="viewdata.login.password">
 						</label>
 					</div>
 					<div class="item welcome-item" style="top:20px;">
