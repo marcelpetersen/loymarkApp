@@ -100,8 +100,8 @@ fact.factory('deviceFactory', ['$cordovaDevice', function($cordovaDevice){
 }])
 
 fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', function($http, ApiEndpoint, referenceIDFactory){
-    // var serverURL = ApiEndpoint.url;
-    var serverURL = 'http://201.201.150.159';
+    var serverURL = ApiEndpoint.url;
+    // var serverURL = 'http://201.201.150.159';
     return {
         user:{
             info:{
@@ -289,8 +289,17 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
             }
         },
         commerce:{
-            get: function(userID){
-                var url = serverURL + '/commerce';
+            get: function(userID, entityID){
+                var url = serverURL + '/commerce/list';
+                var params = 
+                {
+                    tokenID: userID
+                };
+
+                if (entityID != undefined) {
+                    params["entityID"] = entityID;
+                }
+
                 return new Promise(function(resolve,reject){
                     $http({
                         headers: {
@@ -298,9 +307,7 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                         },
                         method: 'GET',
                         url: url,
-                        params: {
-                            tokenID: userID
-                        }
+                        params: params
                     })
                         .success(function(data,status,headers,config){
                             if(data.status===true){
@@ -643,6 +650,17 @@ fact.factory('commerceFactory', ['restFactory', function(restFactory){
                     .catch(function(err){
                         reject(err);
                     });
+            });
+        },
+        get: function(userID, entityID) {
+            return new Promise(function(resolve, reject){
+                restFactory.commerce.get(userID, entityID)
+                    .then(function(response){
+                        resolve(response);
+                    })
+                    .catch(function(err){
+                        reject(err);
+                    })
             });
         },
         stores: {

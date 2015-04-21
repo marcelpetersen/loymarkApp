@@ -283,7 +283,7 @@ ctrl.controller('KenuuPricesCtrl', [ '$scope', '$state', 'rewardFactory', 'userF
     LoadData();
 }]);
 
-ctrl.controller('KenuuFavCommercesCtrl', [ '$scope', '$state', 'userFactory', 'commerceFactory', function($scope,$state,userFactory,commerceFactory){
+ctrl.controller('KenuuFavCommercesCtrl', [ '$scope', '$state', 'userFactory', 'commerceFactory', 'dateService', function($scope,$state,userFactory,commerceFactory,dateService){
 
 	$scope.viewdata = {
         commerces: []
@@ -318,6 +318,10 @@ ctrl.controller('KenuuFavCommercesCtrl', [ '$scope', '$state', 'userFactory', 'c
     $scope.gDate = function(date) {
         var _date = new Date(parseInt(date.substr(6)));
         return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
+    };
+
+    $scope.calcLapse = function(date) {        
+        return dateService.lapseSince(date);
     };
 
     $scope.GoToCommerce = function(commerce) {
@@ -558,10 +562,16 @@ ctrl.controller('KenuuRewardDetailCtrl', ['$scope', '$timeout', 'userFactory', '
         return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
     };
 
-    $scope.GoToCommerce = function() {
+    $scope.GoToCommerce = function(id) {        
         // TODO: Sacar el comercio asociado al premio y definirlo como el seleccionado
-        // commerceFactory.selectedCommerce.set(commerce);
-        $state.go('tab.kenuu-commerce');
+        commerceFactory.get("", id)
+            .then(function(data){
+                commerceFactory.selectedCommerce.set(data[0]);     
+                $state.go('tab.kenuu-commerce');
+            })
+            .catch(function(err){
+                console.log(err);
+            });
     };
 
     $scope.RedeemReward = function() {

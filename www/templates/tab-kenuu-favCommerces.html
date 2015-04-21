@@ -25,7 +25,12 @@
                         </div>
                         <div class="col" style="margin-left:2px;">
                             <h2 class="favcommerce-entityname">{{commerce.Description}}</h2>
-                            <p><h3 class="favcommerce-lastvisit-label"><small class="textgrey-text">última visita:</small> {{gDate(commerce.LastVisit)}}</h3></p>
+                            <p>
+                                <h3 class="favcommerce-lastvisit-label">
+                                    <small class="textgrey-text">última visita:</small>
+                                    <strong>{{calcLapse(commerce.LastVisit)}}</strong>
+                                </h3>
+                            </p>
                             <p><h3 class="favcommerce-lastvisit-label"><small class="textgrey-text">visitas:</small> {{commerce.TotalVisits}}</h3></p>
                         </div>                        
                     </div>
