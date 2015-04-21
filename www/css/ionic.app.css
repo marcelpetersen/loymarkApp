@@ -8098,6 +8098,10 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
   height: 60px !important;
   width: 60px !important; }
 
+.rewarddet-commercename {
+  font-size: 20px !important;
+  margin-top: 17px !important; }
+
 .rewarddet-mybalance-label {
   position: relative;
   font-size: 20px;

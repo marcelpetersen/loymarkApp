@@ -3,15 +3,15 @@
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
     </ion-nav-title>    
     <ion-content scroll=true class="commerce-content">
-        <div class="item item-avatar item-icon-right commerce-commerceheader">
+        <div class="item item-avatar item-icon-right commerce-commerceheader item-text-wrap">
             
             <img class="rewarddet-image" ng-src="{{GetCommerceImage(viewdata.selectedCommerce.Image)}}">            
 
-            <h4>{{viewdata.selectedCommerce.Name}}</h4>
-            <h2><strong>{{viewdata.selectedCommerce.Description}}</strong></h2>
+            <h2 class="rewarddet-commercename">{{viewdata.selectedCommerce.Name}}</h2>
+            
             <div class="icon">
                 <div class="rewarddet-mybalance-title">Mi Balance</div>
-                <div class="rewarddet-mybalance-label text-center">{{viewdata.selectedCommerce.PointsAvailable}}</div>
+                <div class="rewarddet-mybalance-label text-center">{{GetCommerceBalance(viewdata.selectedCommerce.PointsAvailable)}}</div>
                 <img src="./img/arlequin.png" class="rewarddet-arlequin">
             </div>
         </div>        
@@ -21,7 +21,7 @@
         <div class="item item-clear">
             <div class="row">
                 <div class="col-50">
-                    <p>Última visita</p>
+                    <p>Mi última visita</p>
                     <h3>{{gDate(viewdata.selectedCommerce.LastVisitDateEntity)}}</h3> 
                     <p>{{lapseSinceLastVisit(viewdata.selectedCommerce.LastVisitDateEntity)}}</p> 
                 </div>
@@ -41,7 +41,13 @@
                     <strong><i class="ion-at"></i> Email</strong>
                     <p>{{FormatField(viewdata.selectedCommerce.Email)}}</p>
                 </div>
-            </div>                      
+            </div>    
+            <div class="row">
+                <div class="col">
+                    <p><strong>Detalle:</strong></p>
+                    <p>{{viewdata.selectedCommerce.Description}}</p>
+                </div>
+            </div>            
         </div>
         <div class="item item-divider activity-card-item">
             <p><strong class="activity-social-share-title">compártelo!</strong></p>

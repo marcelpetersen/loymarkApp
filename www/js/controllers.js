@@ -377,8 +377,6 @@ ctrl.controller('KenuuCommerceCtrl', ['$scope', '$state', 'rewardFactory', 'comm
     $scope.gDate = function(date) {
         if (date === null) return "";
         if (date ===undefined) return "";
-        // var _date = new Date(parseInt(date.substr(6)));
-        // return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
         var _date = new Date(date);
         return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
     };
@@ -387,6 +385,11 @@ ctrl.controller('KenuuCommerceCtrl', ['$scope', '$state', 'rewardFactory', 'comm
     };
     $scope.GoToRewards = function() {
         $state.go('tab.kenuu-prices');
+    };
+    $scope.GetCommerceBalance = function(balance) {
+        if (balance === null) return 0;
+        if (balance === undefined) return 0;
+        else return balance;
     };
     $scope.GetCommerceImage = function(image) {
         if (image != undefined) 
@@ -553,7 +556,7 @@ ctrl.controller('KenuuRewardDetailCtrl', ['$scope', '$timeout', 'userFactory', '
             var userData = data;
 
             // Gets the Commerce Information
-            commerceFactory.get($scope.viewdata.selectedReward["$id"])
+            commerceFactory.get($scope.viewdata.selectedReward.EntityID)
                 .then(function(data){
                     $scope.viewdata.commerce = data[0]; 
                     console.log(data[0])
@@ -592,9 +595,7 @@ ctrl.controller('KenuuRewardDetailCtrl', ['$scope', '$timeout', 'userFactory', '
         return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
     };
 
-    $scope.GoToCommerce = function(id) {
-        console.log("Selected Reward's Commerce ID: ", id);
-
+    $scope.GoToCommerce = function() {
         commerceFactory.selectedCommerce.set($scope.viewdata.commerce);                         
         $state.go('tab.kenuu-commerce');
     };
