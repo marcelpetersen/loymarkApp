@@ -100,8 +100,8 @@ fact.factory('deviceFactory', ['$cordovaDevice', function($cordovaDevice){
 }]);
 
 fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', function($http, ApiEndpoint, referenceIDFactory){
-    var serverURL = ApiEndpoint.url;
-    // var serverURL = 'http://201.201.150.159';
+    // var serverURL = ApiEndpoint.url;
+    var serverURL = 'http://201.201.150.159';
     return {
         user:{
             info:{
@@ -339,16 +339,27 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
         },
         reward:{
             active: {
-                get: function(){
+                get: function(entityID){
                     var url = serverURL + '/reward/active';
+
+                    var _http = 
+                    {
+                        headers: {
+                            'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
+                        },
+                        method: 'GET',
+                        url: url
+                    };
+
+                    if (entityID != undefined)
+                    {
+                        _http["params"] = {
+                            "entityID": entityID
+                        }
+                    }
+
                     return new Promise(function(resolve,reject){
-                        $http({
-                            headers: {
-                                'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
-                            },
-                            method: 'GET',
-                            url: url
-                        })
+                        $http(_http)
                             .success(function(data,status,headers,config){
                                 if(data.status===true){
                                     resolve(data.data);
@@ -701,10 +712,10 @@ fact.factory('rewardFactory', ['restFactory', function(restFactory){
             }
         },
         active: {
-            general: function(newData){
+            general: function(newData, entityID){
                 return new Promise(function(resolve,reject){
                     if(newData===true){
-                        restFactory.reward.active.get()
+                        restFactory.reward.active.get(entityID)
                             .then(function(response){
                                 _rewards = response;
                                 resolve(response);
@@ -715,7 +726,7 @@ fact.factory('rewardFactory', ['restFactory', function(restFactory){
                         
                     } else {
                         if(!_rewards){
-                            restFactory.reward.active.get()
+                            restFactory.reward.active.get(entityID)
                                 .then(function(response){
                                     _rewards = response;
                                     resolve(response);

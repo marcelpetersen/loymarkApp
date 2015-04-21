@@ -205,17 +205,20 @@ ctrl.controller('KenuuPricesCtrl', ['$scope', '$state', 'rewardFactory', 'userFa
 
     var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
-    if ($scope.viewdata.commerceSelected)
-    {
-        alert("Comercio Seleccionado!");
-    }
+    userFactory.info.get()
+        .then(function(data){
+            $scope.viewdata.user = data;
+            var userData = data;            
+        })
+        .catch(function(err){});
 
-	function LoadData() {
-        rewardFactory.active.general(true)
+    function LoadData(entityID) {
+        rewardFactory.active.general(true, entityID)
             .then(function(data){
                 $("#pleaseWaitSpinner").addClass("animated slideOutUp");
                 setTimeout(function() {
                     $scope.viewdata.rewards = data.Elements;
+                    $("#rewardsListContainer").show();
                     $scope.$apply();                
                 }, 150);
             })
@@ -230,14 +233,30 @@ ctrl.controller('KenuuPricesCtrl', ['$scope', '$state', 'rewardFactory', 'userFa
                     }, 150);                    
                 }, 220);
             });
-    };    
+    }; 
 
-    userFactory.info.get(true,2)
-        .then(function(data){
-            $scope.viewdata.user = data;
-            var userData = data;            
-        })
-        .catch(function(err){});
+    $scope.$on("$ionicView.beforeEnter", function(event, args){
+        $("#rewardsListContainer").hide();
+    });
+
+    $scope.$on("$ionicView.enter", function(event, args){
+        $scope.viewdata.commerceSelected = commerceFactory.selectedCommerce.isSelected();
+        $scope.viewdata.selectedCommerce = commerceFactory.selectedCommerce.get();
+
+        if ($scope.viewdata.commerceSelected)
+        {
+            $scope.viewdata.rewards = [];
+            $scope.$apply();
+            setTimeout(function(){
+                LoadData($scope.viewdata.selectedCommerce.EntityID);
+            }, 800);            
+        }
+        else
+        {
+            console.log("Nop, no hay comercio!");
+            LoadData();
+        }
+    });
 
     $scope.OpenRewardDetail = function(reward) {
         rewardFactory.selectedReward.set(reward);
@@ -283,8 +302,6 @@ ctrl.controller('KenuuPricesCtrl', ['$scope', '$state', 'rewardFactory', 'userFa
             LoadData();
         }, 200);        
     };
-
-    LoadData();
 }]);
 
 ctrl.controller('KenuuFavCommercesCtrl', ['$scope', '$state', 'userFactory', 'commerceFactory', 'dateFxService', function($scope,$state,userFactory,commerceFactory,dateFxService){
@@ -358,6 +375,17 @@ ctrl.controller('KenuuCommerceCtrl', ['$scope', '$state', 'rewardFactory', 'comm
             setTimeout(function() {
                 $scope.viewdata.user = data;
                 $scope.$apply();
+
+                // verifies if the client has performed any activity with the commerce
+                if ($scope.viewdata.selectedCommerce.LastVisitDateEntity === null)
+                {
+                    $("#commerce-noactivity").show();
+                }
+                else
+                {
+                    $("#commerce-myactivity").show();
+                }
+
             }, 150);            
         })
         .catch(function(err){
@@ -450,6 +478,7 @@ ctrl.controller('KenuuStoresCtrl', ['$scope','rewardFactory', '$window', '$cordo
                     
                     setTimeout(function() {                                                       
                         $scope.viewdata.stores = data;
+                        console.log($scope.viewdata.stores);
                         $scope.$apply();
                         $("#pleaseWaitSpinner_Stores").hide();
                         $("#storesListDiv").show();
@@ -543,6 +572,10 @@ ctrl.controller('KenuuRewardDetailCtrl', ['$scope', '$timeout', 'userFactory', '
         },
         commerce: {}
     };
+
+    $scope.$on("$ionicView.enter", function(event, args){
+        commerceFactory.selectedCommerce.clearSelection(); 
+    });
 
     var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 

@@ -8178,6 +8178,9 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
 .commerce-bottomspacer {
   height: 93px; }
 
+.commerce-noactivity {
+  color: #800080; }
+
 /* ******** Stores ******** */
 .stores-content {
   height: 100vh;
@@ -8236,6 +8239,9 @@ ion-nav-view[nav-view-transition="ios"] .stores-bottomseparator {
   position: relative;
   left: 10px;
   color: #757575; }
+
+.favcommerce-lastvisit, .favcommerce-visits {
+  color: #800080; }
 
 /* ******** Profile Edit ********* */
 .profileedit-content {

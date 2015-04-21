@@ -790,6 +790,9 @@ ion-nav-view[nav-view-transition="ios"] {
 	.commerce-bottomspacer {
 		height: 93px;
 	}
+	.commerce-noactivity {
+		color: $kenuu-purple;
+	}
 
 /* ******** Stores ******** */
 
@@ -868,6 +871,10 @@ ion-nav-view[nav-view-transition="ios"] {
 		position: relative;
 		left: 10px;
 		color: $favcommerce-lastvisit-color;
+	}
+	.favcommerce-lastvisit, .favcommerce-visits
+	{
+		color: $kenuu-purple;
 	}
 
 /* ******** Profile Edit ********* */

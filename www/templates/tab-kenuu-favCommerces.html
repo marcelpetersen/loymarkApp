@@ -24,14 +24,14 @@
                             </div>        
                         </div>
                         <div class="col" style="margin-left:2px;">
-                            <h2 class="favcommerce-entityname">{{commerce.Description}}</h2>
+                            <h2 class="favcommerce-entityname">{{commerce.Name}}</h2>
                             <p>
                                 <h3 class="favcommerce-lastvisit-label">
                                     <small class="textgrey-text">última visita:</small>
-                                    <strong>{{calcLapse(commerce.LastVisit)}}</strong>
+                                    <strong class="favcommerce-lastvisit">{{calcLapse(commerce.LastVisit)}}</strong>
                                 </h3>
                             </p>
-                            <p><h3 class="favcommerce-lastvisit-label"><small class="textgrey-text">visitas:</small> {{commerce.TotalVisits}}</h3></p>
+                            <p><h3 class="favcommerce-lastvisit-label"><small class="textgrey-text">visitas:</small> <strong class="favcommerce-visits">{{commerce.TotalVisits}}</strong></h3></p>
                         </div>                        
                     </div>
                     <div class="icon">

@@ -18,7 +18,10 @@
         <div>
             <img class="stores-map-snapshot" src="https://maps.googleapis.com/maps/api/staticmap?zoom=13&size=375x140&maptype=roadmap&markers={{viewdata.selectedCommerce.LocationLatitude}},{{viewdata.selectedCommerce.LocationLongitude}}">
         </div>
-        <div class="item item-clear">
+        <div id="commerce-noactivity" class="item item-clear text-center" style="display:none">
+            <h3 class="commerce-noactivity">No has visitado este comercio!</h3>
+        </div>
+        <div id="commerce-myactivity" class="item item-clear" style="display:none">
             <div class="row">
                 <div class="col-50">
                     <p>Mi última visita</p>
@@ -32,6 +35,12 @@
             </div>
         </div>
         <div class="item item-clear">
+            <p><strong>Info:</strong></p>
+            <div class="row item-text-wrap">
+                <div class="col">                    
+                    <p>{{viewdata.selectedCommerce.Description}}</p>
+                </div>
+            </div> 
             <div class="row">
                 <div class="col">
                     <strong><i class="ion-android-call"></i> Teléfono</strong>
@@ -42,12 +51,7 @@
                     <p>{{FormatField(viewdata.selectedCommerce.Email)}}</p>
                 </div>
             </div>    
-            <div class="row">
-                <div class="col">
-                    <p><strong>Detalle:</strong></p>
-                    <p>{{viewdata.selectedCommerce.Description}}</p>
-                </div>
-            </div>            
+                       
         </div>
         <div class="item item-divider activity-card-item">
             <p><strong class="activity-social-share-title">compártelo!</strong></p>
