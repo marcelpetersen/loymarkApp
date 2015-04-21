@@ -7800,7 +7800,7 @@ a[href^="http://maps.google.com/maps"] {
 /* ******** End of Profile ******** */
 /* ******** Rewards ********* */
 .rewards-content {
-  background-color: #D6C8FF !important; }
+  background-image: url('../img/whatsnewbg.png'); }
 
 .rewards-card-row {
   width: 100vw !important; }
@@ -8200,7 +8200,7 @@ ion-nav-view[nav-view-transition="ios"] .stores-bottomseparator {
 
 /* ******** Favorite Commerces ******** */
 .favcommerces-content {
-  background-color: #D6C8FF !important; }
+  background-image: url('../img/whatsnewbg.png'); }
 
 .favcommerces-card {
   border-radius: 10px !important; }
@@ -8235,7 +8235,7 @@ ion-nav-view[nav-view-transition="ios"] .stores-bottomseparator {
 /* ******** Profile Edit ********* */
 .profileedit-content {
   height: 100vh;
-  background-color: #D6C8FF !important; }
+  background-image: url('../img/whatsnewbg.png'); }
 
 .profileedit-input {
   color: #333333;
@@ -8252,7 +8252,7 @@ ion-nav-view[nav-view-transition="ios"] .stores-bottomseparator {
 /* ******** Activity ******** */
 .activity-content {
   height: 100vh;
-  background-color: #D6C8FF !important; }
+  background-image: url('../img/whatsnewbg.png'); }
 
 .activity-icon {
   color: #800080; }

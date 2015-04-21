@@ -100,7 +100,8 @@ fact.factory('deviceFactory', ['$cordovaDevice', function($cordovaDevice){
 }])
 
 fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', function($http, ApiEndpoint, referenceIDFactory){
-    var serverURL = ApiEndpoint.url; // 'http://201.201.150.159';
+    // var serverURL = ApiEndpoint.url;
+    var serverURL = 'http://201.201.150.159';
     return {
         user:{
             info:{
@@ -140,10 +141,7 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                                     'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
                                 },
                                 method: 'GET',
-                                url: url,
-                                params: {
-                                    tokenID: userID
-                                }
+                                url: url
                             })
                                 .success(function(data,status,headers,config){
                                     if(data.status===true){
@@ -327,7 +325,6 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                             method: 'GET',
                             url: url,
                             params: {
-                                tokenID: userID,
                                 entityID: entityID
                             }
                         })
@@ -347,7 +344,7 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
         },
         reward:{
             active: {
-                get: function(_data){
+                get: function(){
                     var url = serverURL + '/reward/active';
                     return new Promise(function(resolve,reject){
                         $http({
@@ -355,8 +352,7 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                                 'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
                             },
                             method: 'GET',
-                            url: url,
-                            params: _data
+                            url: url
                         })
                             .success(function(data,status,headers,config){
                                 if(data.status===true){
@@ -697,10 +693,10 @@ fact.factory('rewardFactory', ['restFactory', function(restFactory){
             }
         },
         active: {
-            general: function(newData,_data){
+            general: function(newData){
                 return new Promise(function(resolve,reject){
                     if(newData===true){
-                        restFactory.reward.active.get(_data)
+                        restFactory.reward.active.get()
                             .then(function(response){
                                 _rewards = response;
                                 resolve(response);
@@ -711,7 +707,7 @@ fact.factory('rewardFactory', ['restFactory', function(restFactory){
                         
                     } else {
                         if(!_rewards){
-                            restFactory.reward.active.get(_data)
+                            restFactory.reward.active.get()
                                 .then(function(response){
                                     _rewards = response;
                                     resolve(response);
