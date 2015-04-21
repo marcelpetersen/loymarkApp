@@ -3,7 +3,7 @@ var ctrl = angular.module('kenuu.controllers', ['ja.qr']);
 ctrl.controller('NoConnectionCtrl', ['$scope', '$state', function($scope, $state){    
 }]);
 
-ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory){
+ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', '$ionicLoading', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory, $ionicLoading){
     localStorage.setItem('animationShown', false);
 
     $timeout(function(){
@@ -14,7 +14,9 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
 
     $scope.viewdata = {
         email: "",
-        password: ""
+        password: "",
+        email_invalid: false,
+        password_invalid: false
     };
 
     var _currentSlideIndex = 0;
@@ -32,7 +34,45 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
         );
     };
 
+    function ShowFormErrorMsg(msg) {
+        swal(
+            {   
+                title: "Oops!",   
+                text: msg,   
+                type: "error",   
+                confirmButtonText: "Ok",
+                customClass: "modal-bg",
+                confirmButtonColor: "#8f04a9"
+            }
+        );
+    };
+
     $scope.Enter = function() {
+
+
+        // Validates the information from the form
+        if ($scope.viewdata.email === "")
+        {
+            $scope.viewdata.email_invalid = true;
+            ShowFormErrorMsg("Te falta el correo!");
+            return;
+        }
+        else
+        {
+            $scope.viewdata.email_invalid = false;
+        }
+        if ($scope.viewdata.password === "")
+        {
+            $scope.viewdata.password_invalid = true;
+            ShowFormErrorMsg("Te falta el password!");
+            return;
+        }
+        else
+        {
+            $scope.viewdata.password_invalid = false;
+        }
+
+        $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
 
         // Performs the Login Operation
         userFactory.session.login(
@@ -50,11 +90,12 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
             $("#viewWelcome").addClass("animated slideOutDown");
             
             setTimeout(function(){
+                $ionicLoading.hide();
                 $state.go('tab.kenuu');
             },800);
         })
         .catch(function(data){
-            console.log(data)
+            $ionicLoading.hide();
             swal(
                 {   
                     title: "!!!",   
@@ -66,16 +107,6 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
                 }
             );
         });
-
-        // Sets the flags indicating the user has already logged.
-        // localStorage.setItem('animationShown', false);        
-        // localStorage.setItem('userAPIKey', "Prueba");
-        
-        // $("#viewWelcome").addClass("animated slideOutDown");
-        
-        // setTimeout(function(){
-        //     $state.go('tab.kenuu');
-        // },800);
     };
 
     $scope.nextSlide = function() {

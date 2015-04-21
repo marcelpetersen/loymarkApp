@@ -92,11 +92,11 @@
 				<form ng-submit="Enter()">
 					<div class="text-left" style="padding-left:30px; padding-right:30px;">					
 						<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
-							<span class="input-label">Email</span>
+							<span class="input-label">Email <span ng-show="viewdata.email_invalid"><i class="ion-android-warning" style="font-size:25px; color: red;"></i></span></span>
 							<input class="kenuu-input" type="email" placeholder="john@suhr.com" ng-model="viewdata.email">
 						</label>
 						<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
-							<span class="input-label">Password</span>
+							<span class="input-label">Password <span ng-show="viewdata.password_invalid"><i class="ion-android-warning" style="font-size:25px; color: red;"></i></span></span>
 							<input class="kenuu-input" type="password" placeholder="" ng-model="viewdata.password">
 						</label>
 					</div>
