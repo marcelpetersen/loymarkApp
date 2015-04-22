@@ -58,7 +58,7 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
     };
 
     function ShowFormErrorMsg(msg) {
-        $cordovaKeyboard.close();
+        // $cordovaKeyboard.close();
         setTimeout(function(){            
             swal(
                 {   
@@ -98,7 +98,7 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
 
         $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
 
-        $cordovaKeyboard.close();
+        // $cordovaKeyboard.close();
         setTimeout(function(){
             // Performs the Login Operation
             userFactory.session.login(
@@ -117,7 +117,7 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
                 
                 setTimeout(function(){
                     $ionicLoading.hide();
-                    $state.go('tab.kenuu');
+                    $state.go('tab.qrcode');
                 },800);
             })
             .catch(function(data){
@@ -142,6 +142,12 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
 
 ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'deviceFactory', function($scope, $timeout, deviceFactory){
     $timeout(function(){
+        console.log("QR Running...")
+        $("#viewcontent-QR").show();
+        $("#viewcontent-QR").addClass("animated slideInUp");
+    });
+
+    $scope.$on("$ionicView.enter", function(event, args){
         $("#viewcontent-QR").show();
         $("#viewcontent-QR").addClass("animated slideInUp");        
     });
@@ -242,7 +248,7 @@ ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'userFactory', 'commerceFact
     $scope.ContactUs = function() {emailService.ContactCustomerService();}
 }]);
 
-ctrl.controller('KenuuPricesCtrl', ['$scope', '$state', 'rewardFactory', 'userFactory', 'commerceFactory', function($scope,$state,rewardFactory,userFactory,commerceFactory){
+ctrl.controller('KenuuPricesCtrl', ['$scope', '$state', 'rewardFactory', 'userFactory', 'commerceFactory', '$ionicLoading', function($scope,$state,rewardFactory,userFactory,commerceFactory,$ionicLoading){
 
 	$scope.viewdata = {
         searchText: '',
@@ -267,8 +273,9 @@ ctrl.controller('KenuuPricesCtrl', ['$scope', '$state', 'rewardFactory', 'userFa
                 $("#pleaseWaitSpinner").addClass("animated slideOutUp");
                 setTimeout(function() {
                     $scope.viewdata.rewards = data.Elements;
-                    $("#rewardsListContainer").show();
-                    $scope.$apply();                
+                    $("#rewardsListContainer").show();                    
+                    $scope.$apply();
+                    $ionicLoading.hide();
                 }, 150);
             })
             .catch(function(err){                
@@ -294,6 +301,7 @@ ctrl.controller('KenuuPricesCtrl', ['$scope', '$state', 'rewardFactory', 'userFa
 
         if ($scope.viewdata.commerceSelected)
         {
+            $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
             $scope.viewdata.rewards = [];
             $scope.$apply();
             setTimeout(function(){

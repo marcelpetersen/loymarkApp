@@ -52,22 +52,22 @@ angular.module('kenuu.services', [])
         if( md < 0) {hd--; md += 60;}
         if( sd < 0) {md--; sd += 60;}
 
-        if( yd > 0) out.push( yd+" year"+(yd == 1 ? "" : "s"));
+        if( yd > 0) out.push( yd+" año"+(yd == 1 ? "" : "s"));
         else
         {
-            if( md > 0) out.push( md+" month"+(md == 1 ? "" : "s"));
+            if( md > 0) out.push( md+" mes"+(md == 1 ? "" : "es"));
             else
             {
-                if( dd > 0) out.push( dd+" day"+(dd == 1 ? "" : "s"));
+                if( dd > 0) out.push( dd+" día"+(dd == 1 ? "" : "s"));
                 else
                 {
-                    if( hd > 0) out.push( hd+" hour"+(hd == 1 ? "" : "s"));
+                    if( hd > 0) out.push( hd+" hora"+(hd == 1 ? "" : "s"));
                     else
                     {
-                        if( nd > 0) out.push( nd+" minute"+(nd == 1 ? "" : "s"));
+                        if( nd > 0) out.push( nd+" minuto"+(nd == 1 ? "" : "s"));
                         else
                         {
-                            if( sd > 0) out.push( sd+" second"+(sd == 1 ? "" : "s"));        
+                            if( sd > 0) out.push( sd+" segundo"+(sd == 1 ? "" : "s"));        
                         }                        
                     }                    
                 }                
@@ -76,7 +76,7 @@ angular.module('kenuu.services', [])
         
         return out.join(" ");
     };
-    
+
 	this.lapseSince = function(dateInStr) {
 		var d = new Date(dateInStr);
         return getDateTimeSince(d);
