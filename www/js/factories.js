@@ -100,8 +100,8 @@ fact.factory('deviceFactory', ['$cordovaDevice', function($cordovaDevice){
 }]);
 
 fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', function($http, ApiEndpoint, referenceIDFactory){
-    var serverURL = ApiEndpoint.url;
-    // var serverURL = 'http://201.201.150.159';
+    // var serverURL = ApiEndpoint.url;
+    var serverURL = 'http://201.201.150.159';
     return {
         user:{
             info:{

@@ -140,9 +140,8 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
     };
 }]);
 
-ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'deviceFactory', function($scope, $timeout, deviceFactory){
+ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'deviceFactory', 'userFactory', function($scope, $timeout, deviceFactory, userFactory){
     $timeout(function(){
-        console.log("QR Running...")
         $("#viewcontent-QR").show();
         $("#viewcontent-QR").addClass("animated slideInUp");
     });
@@ -151,6 +150,22 @@ ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'deviceFactory', function($
         $("#viewcontent-QR").show();
         $("#viewcontent-QR").addClass("animated slideInUp");        
     });
+
+    $scope.viewdata = {
+        user: {},
+        CardNumber: ""
+    };
+
+    userFactory.info.get()
+        .then(function(data){              
+            $scope.viewdata.user = data;
+            $scope.$apply();
+
+            $scope.viewdata.CardNumber = data.AccountID;
+        })
+        .catch(function(err){
+            // TODO
+        });
 }]);
 
 ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', function($scope, $timeout, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService){
