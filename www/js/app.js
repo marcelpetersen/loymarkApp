@@ -1,5 +1,5 @@
 // Ionic Starter App
-
+var beaconFound = false;
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
@@ -11,7 +11,7 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	url: 'http://192.168.71.98:8100/api'
 })
 
-.run(function($rootScope, $state, $ionicPlatform, networkFactory, $cordovaNetwork) {
+.run(function($rootScope, $state, $ionicPlatform, networkFactory, $cordovaNetwork, deviceFactory, $cordovaPush) {
   	$ionicPlatform.ready(function() {
 	    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
 	    // for form inputs)
@@ -32,7 +32,30 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	    $rootScope.$on('$cordovaNetwork:offline', function(event, networkState){
 	    	$state.go("noconnection");
 	    });
-  	});
+
+		$rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
+			// alert(JSON.stringify(notification));
+			if (notification.alert) {				
+				swal(notification.alert);
+			}
+
+			if (notification.sound) {
+				var snd = new Media(event.sound);
+				snd.play();
+			}
+
+			if (notification.badge) {
+				$cordovaPush.setBadgeNumber(notification.badge).then(
+					function(result) {
+						// Success!
+					}, 
+					function(err) {
+						// An error occurred. Show a message to the user
+					}
+				);
+			}
+		});
+	});
 })
 
 .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, $cordovaInAppBrowserProvider) {

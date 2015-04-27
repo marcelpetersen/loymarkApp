@@ -51,11 +51,33 @@ fact.factory('networkFactory', ['$cordovaNetwork', function($cordovaNetwork){
     }
 }]);
 
-fact.factory('deviceFactory', ['$cordovaDevice', function($cordovaDevice){
+fact.factory('deviceFactory', ['$cordovaDevice', 'restFactory', '$cordovaPush', function($cordovaDevice, restFactory, $cordovaPush){
     var _device = {};
     var _platform = "";
     var _errormessage = "";
     var _uuid = "";
+    var _debugdata = "";
+
+    function FormatToken(platform, token) {
+        if (platform === "iOS") 
+        {
+            var _token = "<" +
+            token.substring(0,8) + " " +
+            token.substring(8,16) + " " +
+            token.substring(16,24) + " " +
+            token.substring(24,32) + " " +
+            token.substring(32,40) + " " +
+            token.substring(40,48) + " " +
+            token.substring(48,56) + " " +
+            token.substring(56,64) + ">";    
+        }
+        else
+        {
+            _token = token;   
+        }
+
+        return _token;
+    };
 
     return {
         device: {
@@ -82,7 +104,7 @@ fact.factory('deviceFactory', ['$cordovaDevice', function($cordovaDevice){
                 // model: "iPhone7,2"
                 // manufacturer: "Apple"
                 // ------------------------
-                _device = $cordovaDevice.getDevice();
+                _device = $cordovaDevice.getDevice();                
                 return _device;
             },
             uuid: function() {
@@ -92,8 +114,24 @@ fact.factory('deviceFactory', ['$cordovaDevice', function($cordovaDevice){
             errmessage: function(){
                 return _errormessage;
             },
-            registerdevice: function() {
-                return true;
+            registerdevice: function(deviceToken, userReferenceID) {
+                return new Promise(function(resolve,reject){                    
+                    _device = $cordovaDevice.getDevice();
+
+                    var token = FormatToken(_device.platform, deviceToken);
+
+                    restFactory.device.register(_device, token, userReferenceID)
+                        .then(function(response){                            
+                            resolve(response);
+                        })
+                        .catch(function(response){                            
+                            reject(response);
+                        });                    
+                });
+            },
+            debugdata: function() {
+                _device = $cordovaDevice.getDevice();
+                return JSON.stringify(_device);
             }
         }
     }
@@ -102,6 +140,7 @@ fact.factory('deviceFactory', ['$cordovaDevice', function($cordovaDevice){
 fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', function($http, ApiEndpoint, referenceIDFactory){
     // var serverURL = ApiEndpoint.url;
     var serverURL = 'http://201.201.150.159';
+
     return {
         user:{
             info:{
@@ -467,6 +506,47 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                         .error(function(data,status,headers,config){
                             reject(data);
                         });
+                });
+            }
+        },
+        device: {
+            register: function(device, tokenID, userReferenceID) {
+                var url = 'http://192.168.71.91:8050/cisdevicetoken/api/a59f70a0-ea15-11e4-9c0e-237f667d4c49/register';
+                return new Promise(function(resolve,reject){
+                    var jsonData = 
+                    {
+                        jsonData: JSON.stringify({
+                            device: {
+                                uuid: tokenID,
+                                platform: device.platform,
+                                version: device.version,
+                                model: device.model,
+                                manufacturer: device.manufacturer,
+                                userReferenceID: userReferenceID
+                            }
+                        })
+                    };
+
+                    var options = {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'                            
+                        },
+                        url: url,
+                        data: $.param(jsonData)
+                    };
+
+                    $http(options)
+                        .success(function(data,status,headers,config){ 
+                            if(data.status===true){
+                                resolve(data);
+                            } else {
+                                reject(data);
+                            }
+                        })
+                        .error(function(data,status,headers,cofig){
+                            reject(data);
+                        });           
                 });
             }
         }

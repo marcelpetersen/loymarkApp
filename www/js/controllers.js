@@ -3,7 +3,7 @@ var ctrl = angular.module('kenuu.controllers', ['ja.qr']);
 ctrl.controller('NoConnectionCtrl', ['$scope', '$state', function($scope, $state){    
 }]);
 
-ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', '$ionicLoading', '$cordovaKeyboard', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory, $ionicLoading, $cordovaKeyboard){
+ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', '$ionicLoading', '$cordovaKeyboard', '$cordovaPush', 'deviceFactory', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory, $ionicLoading, $cordovaKeyboard, $cordovaPush, deviceFactory){
     localStorage.setItem('animationShown', false);
 
     $timeout(function(){
@@ -29,6 +29,12 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
     };
 
     var _currentSlideIndex = 0;
+
+    var iosConfig = {
+        "badge": true,
+        "sound": true,
+        "alert": true,
+    };
 
     $scope.SignUp = function() {
         // Validates the information from the form
@@ -115,10 +121,26 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
                 
                 $("#viewWelcome").addClass("animated slideOutDown");
                 
-                setTimeout(function(){
-                    $ionicLoading.hide();
-                    $state.go('tab.qrcode');
-                },800);
+                $cordovaPush.register(iosConfig).then(
+                    function(deviceToken) 
+                    {
+                        // Device Token ID
+                        deviceFactory.device.registerdevice(deviceToken, $scope.viewdata.signup.email)
+                            .then(function(response){
+                                setTimeout(function(){
+                                    $ionicLoading.hide();
+                                    $state.go('tab.qrcode');
+                                },800);              
+                            })
+                            .catch(function(response){
+                                
+                            }); 
+                    }, 
+                    function(err) 
+                    {
+                        alert("Registration error: " + err)
+                    }
+                );
             })
             .catch(function(data){
                 $ionicLoading.hide();
@@ -140,7 +162,7 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
     };
 }]);
 
-ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'deviceFactory', 'userFactory', function($scope, $timeout, deviceFactory, userFactory){
+ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'userFactory', '$ionicLoading', function($scope, $timeout, userFactory, $ionicLoading){
     $timeout(function(){
         $("#viewcontent-QR").show();
         $("#viewcontent-QR").addClass("animated slideInUp");
@@ -166,6 +188,64 @@ ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'deviceFactory', 'userFacto
         .catch(function(err){
             // TODO
         });
+
+    $scope.ScanBeacons = function() {
+        $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
+
+        var delegate = new cordova.plugins.locationManager.Delegate();
+
+        var uuid = 'A77A1B68-49A7-4DBF-914C-760D07FBB87B';
+        var identifier = 'com.appcoda.testregion';
+        var minor = 1;
+        var major = 1;
+        var beaconRegion = new cordova.plugins.locationManager.BeaconRegion(identifier, uuid, major, minor);
+        
+        delegate.didDetermineStateForRegion = function (pluginResult) {
+            // logToDom('[DOM] didDetermineStateForRegion: ' + JSON.stringify(pluginResult));
+            
+            if (pluginResult.state == "CLRegionStateInside")
+            {
+                alert("Ok estas en la tienda!")
+                // cordova.plugins.locationManager.startRangingBeaconsInRegion(beaconRegion)
+                   //  .fail(console.error)
+                   //  .done();
+
+                cordova.plugins.locationManager.stopRangingBeaconsInRegion(beaconRegion);
+                $ionicLoading.hide();
+            }
+        };
+
+        delegate.didStartMonitoringForRegion = function (pluginResult) {
+            
+        };
+
+        delegate.didRangeBeaconsInRegion = function (pluginResult) {
+            if (pluginResult.beacons.length > 0)
+            {
+                var uuid = 'A77A1B68-49A7-4DBF-914C-760D07FBB87B';
+                var identifier = 'com.appcoda.testregion';
+                var minor = 1;
+                var major = 1;
+                var beaconRegion = new cordova.plugins.locationManager.BeaconRegion(identifier, uuid, major, minor);
+
+                cordova.plugins.locationManager.stopRangingBeaconsInRegion(beaconRegion);
+                cordova.plugins.locationManager.stopMonitoringForRegion(beaconRegion);
+
+                alert("Found it!");
+            };
+        };
+
+        
+        cordova.plugins.locationManager.setDelegate(delegate);
+
+        // required in iOS 8+
+        // cordova.plugins.locationManager.requestWhenInUseAuthorization(); 
+        cordova.plugins.locationManager.requestAlwaysAuthorization()
+
+        cordova.plugins.locationManager.startMonitoringForRegion(beaconRegion)
+            .fail(console.error)
+            .done();
+    };
 }]);
 
 ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', function($scope, $timeout, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService){
