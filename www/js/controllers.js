@@ -3,15 +3,16 @@ var ctrl = angular.module('kenuu.controllers', ['ja.qr']);
 ctrl.controller('NoConnectionCtrl', ['$scope', '$state', function($scope, $state){    
 }]);
 
-ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', '$ionicLoading', '$cordovaKeyboard', '$cordovaPush', 'deviceFactory', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory, $ionicLoading, $cordovaKeyboard, $cordovaPush, deviceFactory){
+ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', '$ionicLoading', '$cordovaKeyboard', '$cordovaPush', 'deviceFactory', '$cordovaBarcodeScanner', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory, $ionicLoading, $cordovaKeyboard, $cordovaPush, deviceFactory, $cordovaBarcodeScanner){
     localStorage.setItem('animationShown', false);
     
-    cordova.plugins.Keyboard.disableScroll(true);
+    // cordova.plugins.Keyboard.disableScroll(true);
 
     $timeout(function(){
         $("#welcome-content").addClass("animated slideInUp");
         setTimeout(function(){
             $("#welcomeimg1").addClass("animated zoomIn");
+            $ionicLoading.hide();
         }, 1100);        
     });
 
@@ -61,6 +62,8 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
             $scope.viewdata.signup.password_invalid = false;
         }
 
+        $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
+
         userFactory.session.signup({email:$scope.viewdata.signup.email, password:$scope.viewdata.signup.password})
             .then(function(data){
                 if ((data.status == true)||(data.status == "true"))
@@ -69,10 +72,9 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
                     localStorage.setItem('animationShown', false);
 
                     referenceIDFactory.setReferenceID(data.data.response.ReferenceID); 
-
-                    $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
-                    cordova.plugins.Keyboard.disableScroll(false);
+                    // cordova.plugins.Keyboard.disableScroll(false);
                     $ionicLoading.hide();
+                    ShowFormMsg('Listo!', 'Ya quedaste registrado.');
                     $state.go('tab.qrcode');   
                 }
                 else
@@ -81,25 +83,49 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
                 }
             })
             .catch(function(err){
-                if (err.data.responseCode == "MO0011") 
+                $ionicLoading.hide();
+
+                if (err.data != undefined)
                 {
-                    ShowFormErrorMsg(err.data.message);
-                }
+                    if (err.data.responseCode == "MO0011") 
+                    {
+                        ShowFormErrorMsg(err.data.message);
+                    }
+                    else
+                    {
+                        ShowFormErrorMsg("Oops!, no se pudo terminar el registro.");
+                    }
+                } 
                 else
                 {
-                    ShowFormErrorMsg("Oops!, no se pudo terminar el registro.");
-                }
+                    ShowFormErrorMsg(err);
+                }               
             });
     };
 
     function ShowFormErrorMsg(msg) {
-        // $cordovaKeyboard.close();
+        $cordovaKeyboard.close();
         setTimeout(function(){            
             swal(
                 {   
                     title: "Oops!",   
                     text: msg,   
                     type: "error",   
+                    confirmButtonText: "Ok",
+                    customClass: "modal-bg",
+                    confirmButtonColor: "#8f04a9"
+                }
+            );
+        }, 250);        
+    };
+
+    function ShowFormMsg(title, msg) {
+        $cordovaKeyboard.close();
+        setTimeout(function(){            
+            swal(
+                {   
+                    title: title,   
+                    text: msg,                          
                     confirmButtonText: "Ok",
                     customClass: "modal-bg",
                     confirmButtonColor: "#8f04a9"
@@ -133,7 +159,7 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
 
         $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
 
-        // $cordovaKeyboard.close();
+        $cordovaKeyboard.close();
         setTimeout(function(){
             // Performs the Login Operation
             userFactory.session.login(
@@ -180,27 +206,52 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
     };
 
     $scope.nextSlide = function() {
+        $cordovaKeyboard.close();
         $ionicSlideBoxDelegate.next();
     };
 
     $scope.gotoSlide = function(index) {
+        // $cordovaKeyboard.close();
         $ionicSlideBoxDelegate.slide(index);
     };
 
     $scope.slideHasChanged = function(index) {
         _currentSlideIndex = index;
     };
+
+    $scope.OpenScanner = function() {
+        $cordovaBarcodeScanner
+        .scan()
+        .then(function(barcodeData) {
+            // Success! Barcode data is here            
+            if (barcodeData.cancelled == 0)
+            {
+                alert(barcodeData.text)
+            }
+            else
+            {
+                // TODO.
+            }
+        }, function(error) {
+            // An error occurred
+            alert("Error!");
+        });
+    };
 }]);
 
 ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'userFactory', '$ionicLoading', '$ionicModal', '$cordovaPush', 'beaconsFactory', function($scope, $timeout, userFactory, $ionicLoading, $ionicModal, $cordovaPush, beaconsFactory){
     $timeout(function(){
+        console.log("QR Code - timeout entered");
         $("#viewcontent-QR").show();
         $("#viewcontent-QR").addClass("animated slideInUp");
+        $scope.$apply();
     });
 
     $scope.$on("$ionicView.enter", function(event, args){
+        console.log("QR Code - View Enter");
         $("#viewcontent-QR").show();
         $("#viewcontent-QR").addClass("animated slideInUp");        
+        $scope.$apply();
     });
 
     $scope.viewdata = {
@@ -329,7 +380,7 @@ ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'userFactory', 'commerceFact
     });
 
     $scope.viewdata = {
-        qrcode: "Kenuu",
+        qrcode: "",
         counter: 1,
         positions: [],
         user: {

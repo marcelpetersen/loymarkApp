@@ -641,6 +641,12 @@ ion-nav-view[nav-view-transition="ios"] {
 		border: 0;
 		color: white !important; 
 	}
+	.welcome-scan-btn {
+		background-color: $welcome-btn !important;
+		border: 0;
+		color: white !important; 
+		// font-size: 20px;	
+	}
 	.welcome-text {
 		color: $welcome-text;
 		text-align: justify;

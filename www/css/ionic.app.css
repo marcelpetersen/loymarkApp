@@ -8051,6 +8051,11 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
   border: 0;
   color: white !important; }
 
+.welcome-scan-btn {
+  background-color: #4E0F5B !important;
+  border: 0;
+  color: white !important; }
+
 .welcome-text {
   color: white;
   text-align: justify;
