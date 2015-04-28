@@ -1,0 +1,16 @@
+<ion-modal-view>
+	<ion-header-bar class="bar bar-light">
+		<h1 class="title"><strong>Tiendas</strong></h1>
+		<button class="button button-clear setupview-closebtn" ng-click="CloseModal()"><i class="ion-ios-close-outline"></i></button>	
+	</ion-header-bar>
+	<ion-content class="setupview-content">		
+		<div class="list">
+			<div class="item item-clear text-center" ng-show="viewdata.beaconsFound.length == 0">
+                <ion-spinner icon="dots" class="spinner-dark"></ion-spinner>
+            </div>
+            <div class="item item-clear text-left" ng-show="viewdata.beaconsFound.length > 0" ng-repeat="beacon in viewdata.beaconsFound">
+            	{{beacon.name}}
+            </div>
+		</div>
+	</ion-content>
+</ion-modal-view>

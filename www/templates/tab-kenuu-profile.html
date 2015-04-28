@@ -7,17 +7,17 @@
 	  		<div class="text-left" style="padding-left:30px; padding-right:30px;">					
 				<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
 					<span class="input-label profileedit-label">Nombre</span>
-					<input class="profileedit-input" type="text" placeholder="Nombre">
+					<input class="profileedit-input" ng-model="viewdata.user.name" type="text" placeholder="Nombre">
 				</label>
 				<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
 					<span class="input-label profileedit-label">Apellido</span>
-					<input class="profileedit-input" type="text" placeholder="Apellido">
+					<input class="profileedit-input" ng-model="viewdata.user.lastname" type="text" placeholder="Apellido">
 				</label>
 			</div>
 			<div class="text-left" style="padding-left:30px; padding-right:30px;">					
 				<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
 					<span class="input-label profileedit-label">Email</span>
-					<input class="profileedit-input" ng-model="viewdata.user.Email" type="text" placeholder="john@suhr.com">
+					<p>{{viewdata.user.Email}}</p>
 				</label>
 			</div>
 			<div class="item welcome-item" style="top:20px;">

@@ -148,4 +148,18 @@ angular.module('kenuu.services', [])
 			return null;
 		}
 	};
-});
+})
+
+.service('msgBox', [function(){
+	this.showOk = function(title, msg){
+        swal(
+            {   
+                title: title,   
+                text: msg,                       
+                confirmButtonText: "Ok",
+                customClass: "modal-bg",
+                confirmButtonColor: "#8f04a9"
+            }
+        );
+	};
+}]);

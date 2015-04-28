@@ -7721,6 +7721,9 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
   -webkit-background-size: 50px 50px;
   background-size: 50px 50px; }
 
+.form-validation-error-text {
+  color: white; }
+
 a[href^="http://maps.google.com/maps"] {
   display: none !important; }
 

@@ -5,6 +5,8 @@ ctrl.controller('NoConnectionCtrl', ['$scope', '$state', function($scope, $state
 
 ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', '$ionicLoading', '$cordovaKeyboard', '$cordovaPush', 'deviceFactory', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory, $ionicLoading, $cordovaKeyboard, $cordovaPush, deviceFactory){
     localStorage.setItem('animationShown', false);
+    
+    cordova.plugins.Keyboard.disableScroll(true);
 
     $timeout(function(){
         $("#welcome-content").addClass("animated slideInUp");
@@ -59,8 +61,35 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
             $scope.viewdata.signup.password_invalid = false;
         }
 
-        $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
-        $ionicLoading.hide();
+        userFactory.session.signup({email:$scope.viewdata.signup.email, password:$scope.viewdata.signup.password})
+            .then(function(data){
+                if ((data.status == true)||(data.status == "true"))
+                {
+                    // Sets the flags indicating the user has already logged.
+                    localStorage.setItem('animationShown', false);
+
+                    referenceIDFactory.setReferenceID(data.data.response.ReferenceID); 
+
+                    $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
+                    cordova.plugins.Keyboard.disableScroll(false);
+                    $ionicLoading.hide();
+                    $state.go('tab.qrcode');   
+                }
+                else
+                {
+                    ShowFormErrorMsg("Oops!, no se pudo terminar el registro.");
+                }
+            })
+            .catch(function(err){
+                if (err.data.responseCode == "MO0011") 
+                {
+                    ShowFormErrorMsg(err.data.message);
+                }
+                else
+                {
+                    ShowFormErrorMsg("Oops!, no se pudo terminar el registro.");
+                }
+            });
     };
 
     function ShowFormErrorMsg(msg) {
@@ -125,9 +154,10 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
                     function(deviceToken) 
                     {
                         // Device Token ID
-                        deviceFactory.device.registerdevice(deviceToken, $scope.viewdata.signup.email)
+                        deviceFactory.device.registerdevice(deviceToken, $scope.viewdata.login.email)
                             .then(function(response){
                                 setTimeout(function(){
+                                    cordova.plugins.Keyboard.disableScroll(false);
                                     $ionicLoading.hide();
                                     $state.go('tab.qrcode');
                                 },800);              
@@ -162,7 +192,7 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
     };
 }]);
 
-ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'userFactory', '$ionicLoading', function($scope, $timeout, userFactory, $ionicLoading){
+ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'userFactory', '$ionicLoading', '$ionicModal', '$cordovaPush', 'beaconsFactory', function($scope, $timeout, userFactory, $ionicLoading, $ionicModal, $cordovaPush, beaconsFactory){
     $timeout(function(){
         $("#viewcontent-QR").show();
         $("#viewcontent-QR").addClass("animated slideInUp");
@@ -175,7 +205,8 @@ ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'userFactory', '$ionicLoadi
 
     $scope.viewdata = {
         user: {},
-        CardNumber: ""
+        CardNumber: "",
+        beaconsFound: []
     };
 
     userFactory.info.get()
@@ -183,72 +214,120 @@ ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'userFactory', '$ionicLoadi
             $scope.viewdata.user = data;
             $scope.$apply();
 
-            $scope.viewdata.CardNumber = data.AccountID;
+            $scope.viewdata.CardNumber = "1000000000000000502"; // data.AccountID;
         })
         .catch(function(err){
             // TODO
         });
 
-    $scope.ScanBeacons = function() {
-        $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
+    $scope.ShowBeaconsModal = function() {
+        $scope.viewdata.beaconsFound = [];
 
-        var delegate = new cordova.plugins.locationManager.Delegate();
+        $ionicModal.fromTemplateUrl('templates/beaconsModal.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        })
+        .then(function(modal) {
+            $scope.modal = modal;
+            $scope.modal.show();
 
+            $scope.ScanBeacons();
+        });
+    };
+
+    $scope.CloseModal = function() {
         var uuid = 'A77A1B68-49A7-4DBF-914C-760D07FBB87B';
-        var identifier = 'com.appcoda.testregion';
-        var minor = 1;
-        var major = 1;
-        var beaconRegion = new cordova.plugins.locationManager.BeaconRegion(identifier, uuid, major, minor);
-        
-        delegate.didDetermineStateForRegion = function (pluginResult) {
-            // logToDom('[DOM] didDetermineStateForRegion: ' + JSON.stringify(pluginResult));
-            
-            if (pluginResult.state == "CLRegionStateInside")
-            {
-                alert("Ok estas en la tienda!")
-                // cordova.plugins.locationManager.startRangingBeaconsInRegion(beaconRegion)
-                   //  .fail(console.error)
-                   //  .done();
+        var identifier = 'Nuestra Tienda CIS';
+        // var minor = 1;
+        // var major = 1;
+        var beaconRegion = new cordova.plugins.locationManager.BeaconRegion(identifier, uuid);
+        cordova.plugins.locationManager.stopRangingBeaconsInRegion(beaconRegion);
+        $scope.modal.hide();
+    };
 
-                cordova.plugins.locationManager.stopRangingBeaconsInRegion(beaconRegion);
-                $ionicLoading.hide();
-            }
-        };
-
-        delegate.didStartMonitoringForRegion = function (pluginResult) {
-            
-        };
-
-        delegate.didRangeBeaconsInRegion = function (pluginResult) {
-            if (pluginResult.beacons.length > 0)
-            {
-                var uuid = 'A77A1B68-49A7-4DBF-914C-760D07FBB87B';
-                var identifier = 'com.appcoda.testregion';
-                var minor = 1;
-                var major = 1;
-                var beaconRegion = new cordova.plugins.locationManager.BeaconRegion(identifier, uuid, major, minor);
-
-                cordova.plugins.locationManager.stopRangingBeaconsInRegion(beaconRegion);
-                cordova.plugins.locationManager.stopMonitoringForRegion(beaconRegion);
-
-                alert("Found it!");
-            };
-        };
-
-        
+    $scope.ScanBeacons = function() {
+        var delegate = new cordova.plugins.locationManager.Delegate();
         cordova.plugins.locationManager.setDelegate(delegate);
 
         // required in iOS 8+
         // cordova.plugins.locationManager.requestWhenInUseAuthorization(); 
-        cordova.plugins.locationManager.requestAlwaysAuthorization()
+        cordova.plugins.locationManager.requestAlwaysAuthorization();
 
-        cordova.plugins.locationManager.startMonitoringForRegion(beaconRegion)
-            .fail(console.error)
-            .done();
+        delegate.didDetermineStateForRegion = function (pluginResult) {
+            // Enters a region
+            if (pluginResult.state == "CLRegionStateInside")
+            {
+                $scope.viewdata.beaconsFound.push({
+                    name: pluginResult.region.identifier
+                });
+
+                $scope.$apply();
+
+                $scope.scanResult = JSON.stringify(pluginResult);
+                // cordova.plugins.locationManager.startRangingBeaconsInRegion(beaconRegion)
+                   //  .fail(console.error)
+                   //  .done();
+
+                var _beaconRegion = new cordova.plugins.locationManager.BeaconRegion(pluginResult.region.identifier, pluginResult.region.uuid);
+                cordova.plugins.locationManager.stopRangingBeaconsInRegion(_beaconRegion);
+            }
+        };
+
+        // delegate.didStartMonitoringForRegion = function (pluginResult) {          
+        // };
+
+        // delegate.didRangeBeaconsInRegion = function (pluginResult) {
+        //     if (pluginResult.beacons.length > 0)
+        //     {
+        //         var uuid = 'A77A1B68-49A7-4DBF-914C-760D07FBB87B';
+        //         var identifier = 'Nuestra Tienda CIS';
+        //         // var minor = 1;
+        //         // var major = 1;
+        //         var beaconRegion = new cordova.plugins.locationManager.BeaconRegion(identifier, uuid);
+
+        //         cordova.plugins.locationManager.stopRangingBeaconsInRegion(beaconRegion);
+        //         cordova.plugins.locationManager.stopMonitoringForRegion(beaconRegion);
+        //     };
+        // };
+
+        beaconsFactory.beacons.get()
+            .then(function(data){
+                $scope.viewdata.beaconsFound = data;
+
+                var j = data.length;
+                for (var i=0; i<j; i++)
+                {
+                    var beaconRegion = new cordova.plugins.locationManager.BeaconRegion(data[i].identifier, data[i].uuid);
+                    cordova.plugins.locationManager.startMonitoringForRegion(beaconRegion)
+                        .fail(console.error)
+                        .done();
+                }
+            })
+            .catch(function(err){
+
+            })
     };
+
+    var iosConfig = {
+        "badge": true,
+        "sound": true,
+        "alert": true,
+    };
+
+    $cordovaPush.register(iosConfig).then(
+        function(deviceToken) 
+        {
+        }
+    );
 }]);
 
-ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', function($scope, $timeout, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService){
+ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', 'navigationFactory', function($scope, $timeout, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService, navigationFactory){
+    $scope.$on("$ionicView.enter", function(event, args){
+        console.log("Kenuu Entered")
+        navigationFactory.setDefaults();
+        LoadData();
+    });
+
     $scope.viewdata = {
         qrcode: "Kenuu",
         counter: 1,
@@ -343,7 +422,7 @@ ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'userFactory', 'commerceFact
     $scope.ContactUs = function() {emailService.ContactCustomerService();}
 }]);
 
-ctrl.controller('KenuuPricesCtrl', ['$scope', '$state', 'rewardFactory', 'userFactory', 'commerceFactory', '$ionicLoading', function($scope,$state,rewardFactory,userFactory,commerceFactory,$ionicLoading){
+ctrl.controller('KenuuPricesCtrl', ['$scope', '$state', 'rewardFactory', 'userFactory', 'commerceFactory', '$ionicLoading', 'navigationFactory', function($scope,$state,rewardFactory,userFactory,commerceFactory,$ionicLoading,navigationFactory){
 
 	$scope.viewdata = {
         searchText: '',
@@ -414,7 +493,7 @@ ctrl.controller('KenuuPricesCtrl', ['$scope', '$state', 'rewardFactory', 'userFa
         rewardFactory.selectedReward.set(reward);
         console.log("Selected Reward:");
         console.log(reward);
-        $state.go('tab.kenuu-rewarddetail');
+        $state.go(navigationFactory.rewardDetail.get());
     };
 
     $scope.ShowSideMenu = function() {
@@ -515,7 +594,7 @@ ctrl.controller('KenuuFavCommercesCtrl', ['$scope', '$state', 'userFactory', 'co
     LoadData();
 }]);
 
-ctrl.controller('KenuuCommerceCtrl', ['$scope', '$state', 'rewardFactory', 'commerceFactory', 'userFactory', '$window', '$cordovaEmailComposer', 'dateFxService', function($scope, $state, rewardFactory, commerceFactory, userFactory, $window, $cordovaEmailComposer, dateFxService){
+ctrl.controller('KenuuCommerceCtrl', ['$scope', '$state', 'rewardFactory', 'commerceFactory', 'userFactory', '$window', '$cordovaEmailComposer', 'dateFxService', 'navigationFactory', function($scope, $state, rewardFactory, commerceFactory, userFactory, $window, $cordovaEmailComposer, dateFxService, navigationFactory){
     $scope.viewdata = {
         selectedReward: rewardFactory.selectedReward.get(),
         selectedCommerce: commerceFactory.selectedCommerce.get()
@@ -561,10 +640,10 @@ ctrl.controller('KenuuCommerceCtrl', ['$scope', '$state', 'rewardFactory', 'comm
         return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
     };
     $scope.GoToStores = function() {
-        $state.go('tab.kenuu-stores');
+        $state.go(navigationFactory.stores.get());
     };
     $scope.GoToRewards = function() {
-        $state.go('tab.kenuu-prices');
+        $state.go(navigationFactory.rewards.get());
     };
     $scope.GetCommerceBalance = function(balance) {
         if (balance === null) return 0;
@@ -684,12 +763,14 @@ ctrl.controller('KenuuStoresCtrl', ['$scope','rewardFactory', '$window', '$cordo
     };
 }]);
 
-ctrl.controller('KenuuProfileCtrl', ['$scope', '$timeout', 'userFactory', '$state', '$ionicHistory', function($scope, $timeout, userFactory, $state, $ionicHistory){
+ctrl.controller('KenuuProfileCtrl', ['$scope', '$timeout', 'userFactory', '$state', '$ionicHistory', 'msgBox', '$ionicLoading', function($scope, $timeout, userFactory, $state, $ionicHistory, msgBox, $ionicLoading){
     $scope.viewdata = {
         qrcode: "Kenuu",
         counter: 1,
         positions: [],
         user: {
+            name: '',
+            lastname: '',
             activity: ''
         }
     };
@@ -699,11 +780,40 @@ ctrl.controller('KenuuProfileCtrl', ['$scope', '$timeout', 'userFactory', '$stat
             $scope.viewdata.user = data;
             $scope.$apply();
             var userData = data;
+            $scope.viewdata.user.name = userData.FirstName;
+            $scope.viewdata.user.lastname = userData.LastName;
+            console.log(userData);
         })
         .catch(function(err){});
 
     $scope.SaveProfile = function() {
+        $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
 
+        userFactory.info.update({
+            FirstName: $scope.viewdata.user.name,
+            LastName: $scope.viewdata.user.lastname,
+            UpdatePassword: false,
+            Password: ""
+        })
+        .then(function(response){
+            $ionicLoading.hide();
+            if ((response.status=="true")||(response.status==true))
+            {
+                userFactory.info.get(true,2)
+                .then(function(data){
+                    msgBox.showOk("Listo!", "Actualizaste tu perfil.");
+                })
+                .catch(function(err){});                
+            }
+            else
+            {
+
+            }
+        })
+        .catch(function(err){
+            $ionicLoading.hide();
+            console.log(err);
+        });
     };
 
     $scope.DoLogout = function() {
@@ -923,25 +1033,81 @@ ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cord
     };
 }]);
 
-ctrl.controller('SearchCtrl', ['$scope', function($scope){
+ctrl.controller('SearchCtrl', ['$scope', 'searchFactory', '$state', 'commerceFactory', '$ionicModal', 'navigationFactory', function($scope, searchFactory, $state, commerceFactory, $ionicModal, navigationFactory){
+
     $scope.viewdata = {
         doingSearch: false,
         searchResults: [],
         searchText: ""
     };
+
+    $scope.$on("$ionicView.enter", function(event, args){
+        console.log("Entered!")
+        if ($scope.viewdata.searchText != "")
+        {
+            doSearch();
+        }
+    });
+
+    function sortByKey(array, key) {
+        return array.sort(function(a, b) {
+            var x = a[key]; var y = b[key];
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        });
+    };
+
+    function doSearch() {
+        searchFactory.doSearch($scope.viewdata.searchText)
+            .then(function(data){ 
+                console.log(data);               
+                $scope.viewdata.searchResults = data.response.Elements;
+                $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
+                $scope.$apply();
+            })
+            .catch(function(data){
+                console.log(data);
+            })
+    };
+
     $scope.$watch('viewdata.searchText', function() {
         if ($scope.viewdata.searchText != "")
         {
             $(".reward-searchpanel").removeClass("reward-searchpanel-hidden");
+            doSearch();
         }
         else
         {
             $(".reward-searchpanel").addClass("reward-searchpanel-hidden");   
+            $scope.viewdata.searchResults = [];
         }
     }); 
+
     $scope.ClearSearch = function() {
         $scope.viewdata.searchText = "";
         $(".reward-searchpanel").addClass("reward-searchpanel-hidden");
+    };
+
+    $scope.OpenCommerce = function(entityID) {
+        console.log("Entity ID: ", entityID);
+        commerceFactory.get(entityID)
+            .then(function(response){
+                commerceFactory.selectedCommerce.set(response[0]);
+                navigationFactory.stores.setTab("tab.search-stores");
+                navigationFactory.rewards.setTab("tab.search-prices");
+                navigationFactory.rewardDetail.setTab("tab.search-rewarddetail");                
+                $state.go("tab.search-commerce");
+            })
+            .catch(function(response){
+                console.log("Error when getting the commerce.")
+                console.log(response);
+            })
+        
+    };
+
+    $scope.OpenStore = function(entityID, SubEntityID) {};
+
+    $scope.OpenReward = function(entityID, SubEntityID, rewardID) {
+        // tab.search-rewarddetail
     };
 }]);
 

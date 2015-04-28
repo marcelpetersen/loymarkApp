@@ -11,16 +11,16 @@ navigation history that also transitions its views in and out.
     </ion-tab>
 
     <!-- Kenuu Tab -->
-    <ion-tab title="mi kenuu" icon-off="icon-user2" icon-on="icon-user2" href="#/tab/kenuu">
+    <ion-tab title="mi kenuu" ng-click="MyKenuuTabClicked()" icon-off="icon-user2" icon-on="icon-user2">
         <ion-nav-view name="tab-kenuu"></ion-nav-view>
     </ion-tab>
 
-    <!-- Kenuu Tab -->
+    <!-- QR Code Tab -->
     <ion-tab class="kenuu-code-tab" title="mi código" icon-off="ion-qr-scanner" icon-on="ion-qr-scanner" href="#/tab/qrcode" style="font-weight:bold;">
         <ion-nav-view name="tab-qrcode"></ion-nav-view>
     </ion-tab>
 
-    <!-- Chats Tab -->
+    <!-- Search Tab -->
     <ion-tab title="buscar" icon-off="icon-search" icon-on="icon-search" href="#/tab/search">
         <ion-nav-view name="tab-search"></ion-nav-view>
     </ion-tab>

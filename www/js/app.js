@@ -11,7 +11,7 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	url: 'http://192.168.71.98:8100/api'
 })
 
-.run(function($rootScope, $state, $ionicPlatform, networkFactory, $cordovaNetwork, deviceFactory, $cordovaPush) {
+.run(function($rootScope, $state, $ionicPlatform, networkFactory, $cordovaNetwork, deviceFactory, $cordovaPush, $ionicTabsDelegate, navigationFactory) {
   	$ionicPlatform.ready(function() {
 	    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
 	    // for form inputs)
@@ -34,9 +34,8 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	    });
 
 		$rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
-			// alert(JSON.stringify(notification));
 			if (notification.alert) {				
-				swal(notification.alert);
+				swal(notification.message);
 			}
 
 			if (notification.sound) {
@@ -55,6 +54,11 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 				);
 			}
 		});
+
+		$rootScope.MyKenuuTabClicked = function() {
+			navigationFactory.setDefaults();
+			$state.go("tab.kenuu");
+		};
 	});
 })
 
@@ -139,6 +143,16 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 		}
 	})
 
+	.state('tab.search-prices', {
+		url: '/search/prices',
+		views: {
+			'tab-search': {
+				templateUrl: 'templates/tab-kenuu-prices.html',
+				controller: 'KenuuPricesCtrl'
+			}
+		}
+	})
+
 	.state('tab.kenuu-profile', {
 		url: '/kenuu/profile',
 		views: {
@@ -179,6 +193,16 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	  	}
 	})
 
+	.state('tab.search-stores', {
+	  	url: '/search/stores',
+	  	views: {
+	    	'tab-search': {
+	      		templateUrl: 'templates/tab-kenuu-stores.html',
+	      		controller: 'KenuuStoresCtrl'
+	    	}
+	  	}
+	})
+
 	.state('tab.kenuu-commerce', {
 	  	url: '/kenuu/commerce',
 	  	views: {
@@ -207,6 +231,26 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	    		controller: 'SearchCtrl'
 	  		}
 		}
+	})
+
+	.state('tab.search-commerce', {
+	  	url: '/search/commerce',
+		views: {
+	  		'tab-search': {
+	    		templateUrl: 'templates/tab-kenuu-commerce.html',
+	    		controller: 'KenuuCommerceCtrl'
+	  		}
+		}
+	})
+
+	.state('tab.search-rewarddetail', {
+	  	url: '/search/rewardDetail',
+	  	views: {
+	    	'tab-search': {
+	      		templateUrl: 'templates/tab-kenuu-rewarddetail.html',
+	      		controller: 'KenuuRewardDetailCtrl'
+	    	}
+	  	}
 	})
 
 	.state('tab.map', {

@@ -247,6 +247,10 @@ ion-nav-view[nav-view-transition="ios"] {
 		background-size: 50px 50px;
 	}
 
+	.form-validation-error-text {
+		color: white;
+	}
+
 	// Para Eliminara las marcas del mapa
 	a[href^="http://maps.google.com/maps"]{display:none !important}
 

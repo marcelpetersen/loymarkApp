@@ -138,8 +138,8 @@ fact.factory('deviceFactory', ['$cordovaDevice', 'restFactory', '$cordovaPush', 
 }]);
 
 fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', function($http, ApiEndpoint, referenceIDFactory){
-    // var serverURL = ApiEndpoint.url;
-    var serverURL = 'http://201.201.150.159';
+    var serverURL = ApiEndpoint.url;
+    // var serverURL = 'http://201.201.150.159';
 
     return {
         user:{
@@ -165,6 +165,37 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                             reject(data);
                         });
                     });
+                },
+                update: function(_data){
+                    var url = serverURL + '/member/userProfile';
+                    return new Promise(function(resolve,reject){
+                        var _jdata = 
+                        {
+                            jsonData: JSON.stringify(_data)
+                        };
+                        console.log(JSON.stringify(_jdata));
+                        console.log(url);
+
+                        $http({
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                                'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
+                            },
+                            method: 'PATCH',
+                            url: url,
+                            data: $.param(_jdata) 
+                        })
+                        .success(function(data,status,headers,config){
+                            if(data.status===true){
+                                resolve(data);
+                            } else {
+                                reject(data);
+                            }
+                        })
+                        .error(function(data,status,headers,cofig){
+                            reject(data);
+                        });
+                    }); 
                 }
             },
             activity:{
@@ -308,6 +339,32 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                     .success(function(data,status,headers,config){
                         if(data.status===true){
                             resolve(data.data);
+                        } else {
+                            reject(data);
+                        }
+                    })
+                    .error(function(data,status,headers,cofig){
+                        reject(data);
+                    });
+                });
+            },
+            signup: function(_data) {
+                return new Promise(function(resolve, reject){
+                    var url = serverURL + '/member/signup';
+                    $http({
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
+                        },
+                        method: 'POST',
+                        url: url,
+                        data: $.param({
+                            jsonData: JSON.stringify(_data)
+                        })
+                    })
+                    .success(function(data,status,headers,config){
+                        if(data.status===true){
+                            resolve(data);
                         } else {
                             reject(data);
                         }
@@ -515,14 +572,14 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                 return new Promise(function(resolve,reject){
                     var jsonData = 
                     {
-                        jsonData: JSON.stringify({
+                        jsonData: JSON.stringify({                            
                             device: {
+                                email: userReferenceID,
                                 uuid: tokenID,
                                 platform: device.platform,
                                 version: device.version,
                                 model: device.model,
-                                manufacturer: device.manufacturer,
-                                userReferenceID: userReferenceID
+                                manufacturer: device.manufacturer                                
                             }
                         })
                     };
@@ -549,11 +606,35 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                         });           
                 });
             }
+        },
+        search: {
+            bytext: function(searchtext) {
+                var url = serverURL + '/member/search?valueFilter=' + searchtext;
+                return new Promise(function(resolve,reject){
+                    $http({
+                        headers: {
+                            'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
+                        },
+                        method: 'GET',
+                        url: url
+                    })
+                    .success(function(data,status,headers,config){
+                        if(data.status===true){
+                            resolve(data.data);
+                        } else {
+                            reject(data);
+                        }
+                    })
+                    .error(function(data,status,headers,cofig){
+                        reject(data);
+                    });
+                });
+            }
         }
     }
 }]);
 
-fact.factory('userFactory',[ 'restFactory', function(restFactory){
+fact.factory('userFactory',['restFactory', function(restFactory){
 	var _user = {};
 	var _login = {};
 	var _data ={};
@@ -585,6 +666,17 @@ fact.factory('userFactory',[ 'restFactory', function(restFactory){
                                 });
                         }
                     }
+                });
+            },
+            update: function(_data) {
+                return new Promise(function(resolve, reject){
+                    restFactory.user.info.update(_data)
+                        .then(function(response){
+                            resolve(response);
+                        })
+                        .catch(function(err){
+                            reject(err);
+                        });     
                 });
             }
         },
@@ -676,6 +768,17 @@ fact.factory('userFactory',[ 'restFactory', function(restFactory){
                         .catch(function(err){
                             reject(err);
                         });
+                });
+            },
+            signup: function(_data){
+                return new Promise(function(resolve, reject){
+                    restFactory.user.signup(_data)
+                        .then(function(response){
+                            resolve(response);
+                        })
+                        .catch(function(err){
+                            reject(err);
+                        });     
                 });
             }
         }
@@ -873,4 +976,77 @@ fact.factory('socialFactory', ['restFactory', function(restFactory){
             });
         }
     };
+}]);
+
+fact.factory('beaconsFactory', [function(){
+    return {
+        beacons: {
+            get: function() {
+                return new Promise(function(resolve,reject){
+                    resolve(
+                        [
+                            {
+                                uuid: 'A77A1B68-49A7-4DBF-914C-760D07FBB87B',
+                                identifier: 'Tienda #1'
+                            }
+                        ]
+                    );
+                });
+            }
+        }
+    };
+}]);
+
+fact.factory('searchFactory', ['restFactory', function(restFactory){
+    return {
+        doSearch: function(searchtext) {
+            return new Promise(function(resolve,reject){
+                restFactory.search.bytext(searchtext).
+                    then(function(data){
+                        resolve(data);
+                    })
+                    .catch(function(err){
+                        reject(err);
+                    })
+            });
+        }
+    }
+}])
+
+fact.factory('navigationFactory', [function(){
+    // Default values
+    var storesState = "tab.kenuu-stores"; 
+    var rewardsState = "tab.kenuu-prices";
+    var rewardDetailState = "tab.kenuu-rewarddetail";
+    return {
+        setDefaults: function() {
+            storesState = "tab.kenuu-stores"; 
+            rewardsState = "tab.kenuu-prices";
+            rewardDetailState = "tab.kenuu-rewarddetail";
+        },
+        stores: {
+            setTab: function(stateName) {
+                storesState = stateName;
+            },
+            get: function() {
+                return storesState;
+            }
+        },
+        rewards: {
+            setTab: function(stateName) {
+                rewardsState = stateName;
+            },
+            get: function() {
+                return rewardsState;
+            }
+        },
+        rewardDetail: {
+            setTab: function(stateName) {
+                rewardDetailState = stateName;
+            },
+            get: function() {
+                return rewardDetailState;
+            }
+        }
+    }
 }]);

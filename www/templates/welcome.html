@@ -57,15 +57,21 @@
 				<div class="item clear-item text-left welcome-text">
 					<span ng-click="gotoSlide(2)"><i class="ion-android-arrow-back"></i> Volver</span>
 				</div>
-				<div class="item clear-item text-center welcome-text" style="margin-top:20px; padding-left:30px; padding-right:30px;">
+				<div class="item clear-item text-center welcome-text" style="margin-top:-10px; padding-left:30px; padding-right:30px;">
 					<strong>Inscríbase</strong>
 					<p class="welcome-regular-text">Es muy fácil, sólamente se requiere su correo:</p>
 				</div>
-				<form ng-submit="SignUp()">
+				<form name="signUpForm" ng-submit="SignUp()">
 					<div class="text-left" style="padding-left:30px; padding-right:30px;">					
 						<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
-							<span class="input-label">Email <span ng-show="viewdata.signup.email_invalid"><i class="ion-android-warning" style="font-size:25px; color: red;"></i></span></span>
-							<input class="kenuu-input" type="email" placeholder="john@suhr.com" ng-model="viewdata.signup.email">
+							<span class="input-label">
+								Email <span ng-show="viewdata.signup.email_invalid"><i class="ion-android-warning" style="font-size:25px; color: red;"></i> Requerido!</span> 
+								<span class="form-validation-error-text" ng-show="signUpForm.input.$error.email">
+									<i class="ion-android-warning" style="color: red;"></i> Email inválidoß
+								</span>
+							</span>
+							
+							<input class="kenuu-input" name="input" type="email" placeholder="su.nombre@correo.com" ng-model="viewdata.signup.email">
 						</label>
 					</div>
 					<div class="text-left" style="padding-left:30px; padding-right:30px;">					

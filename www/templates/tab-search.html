@@ -17,6 +17,18 @@
             <div class="item item-clear text-center" ng-show="viewdata.searchResults.length == 0">
                 <ion-spinner icon="dots" class="spinner-dark"></ion-spinner>
             </div>
+            <div class="item item-divider">Tiendas</div>
+            <div class="item item-clear" ng-repeat="result in viewdata.searchResults | filter:{Type:'T'}">
+                <p>{{result.Name}}</p>
+            </div>
+            <div class="item item-divider">Comercios</div>
+            <div class="item item-clear" ng-click="OpenCommerce(result.EntityID)" ng-repeat="result in viewdata.searchResults | filter:{Type:'C'}">
+                <p>{{result.Name}}</p>
+            </div>
+            <div class="item item-divider">Premios</div>
+            <div class="item item-clear" ng-repeat="result in viewdata.searchResults | filter:{Type:'P'}">
+                <p>{{result.Name}}</p>
+            </div>
         </div>
     </ion-content>
 </ion-view>
