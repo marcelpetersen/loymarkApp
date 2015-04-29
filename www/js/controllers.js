@@ -3,7 +3,7 @@ var ctrl = angular.module('kenuu.controllers', ['ja.qr']);
 ctrl.controller('NoConnectionCtrl', ['$scope', '$state', function($scope, $state){    
 }]);
 
-ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', '$ionicLoading', '$cordovaKeyboard', '$cordovaPush', 'deviceFactory', '$cordovaBarcodeScanner', '$ionicModal', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory, $ionicLoading, $cordovaKeyboard, $cordovaPush, deviceFactory, $cordovaBarcodeScanner, $ionicModal){
+ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', '$ionicLoading', '$cordovaKeyboard', '$cordovaPush', 'deviceFactory', '$cordovaBarcodeScanner', 'signUpLoginView', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory, $ionicLoading, $cordovaKeyboard, $cordovaPush, deviceFactory, $cordovaBarcodeScanner, signUpLoginView){
     localStorage.setItem('animationShown', false);
     
     // cordova.plugins.Keyboard.disableScroll(true);
@@ -20,8 +20,10 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
         signup: {
             email: "",
             password: "",
+            password_confirm: "",
             email_invalid: false,
-            password_invalid: false
+            password_invalid: false,
+            password_confirm_invalid: false
         },
         login: {
             email: "",
@@ -37,6 +39,61 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
         "badge": true,
         "sound": true,
         "alert": true,
+    };
+
+    $scope.DoEmailSignUp = function() {
+        // Validates the information from the form
+        if ($scope.viewdata.login.email === "")
+        {
+            $scope.viewdata.login.email_invalid = true;
+            ShowFormErrorMsg("Te falta el correo!");
+            return;
+        }
+        else
+        {
+            $scope.viewdata.login.email_invalid = false;
+        }
+        // if ($scope.viewdata.login.password === "")
+        // {
+        //     $scope.viewdata.login.password_invalid = true;
+        //     ShowFormErrorMsg("Te falta el password!");
+        //     return;
+        // }
+        // else
+        // {
+        //     $scope.viewdata.login.password_invalid = false;
+        // }
+
+        // $cordovaKeyboard.close();
+        userFactory.datavalidation.emailvalidation($scope.viewdata.login.email)
+            .then(function(response){
+                console.log(response);
+                if (response.status)
+                {
+                    if (response.data.ErrorCode == "ERRORTEST")
+                    {                        
+                        signUpLoginView.ShowLogin($scope);   
+                    }
+
+                    if (response.data.ErrorCode == "B")
+                    {   
+                        signUpLoginView.ShowSignUp($scope);
+                    }
+                }
+                else
+                {
+                    ShowFormErrorMsg("No pudimos verificar tu correo, por favor inténtanlo de nuevo.");
+                }
+            })
+            .catch(function(err){
+                console.log(err);
+                ShowFormErrorMsg("No pudimos verificar tu correo, por favor inténtanlo de nuevo.");
+            }); 
+    };
+
+    $scope.CloseModal = function() {
+        // $cordovaKeyboard.close(); 
+        signUpLoginView.Close($scope);
     };
 
     $scope.SignUp = function() {
@@ -104,7 +161,7 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
     };
 
     function ShowFormErrorMsg(msg) {
-        $cordovaKeyboard.close();
+        // $cordovaKeyboard.close();
         setTimeout(function(){            
             swal(
                 {   
@@ -134,46 +191,11 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
         }, 250);        
     };
 
-    $scope.ValidateEmail = function() {
-        console.log("...")
-        // If the email exists but no password is setup
-        $ionicModal.fromTemplateUrl('templates/modalLogin.html', {
-            scope: $scope,
-            animation: 'slide-in-up'
-        }).then(function(modal) {
-            $scope.modal = modal;
-            $scope.modal.show();
-        });
-
-        // If the email exists and there is already a password created
-    };
-
     $scope.Enter = function() {
-        // Validates the information from the form
-        if ($scope.viewdata.login.email === "")
-        {
-            $scope.viewdata.login.email_invalid = true;
-            ShowFormErrorMsg("Te falta el correo!");
-            return;
-        }
-        else
-        {
-            $scope.viewdata.login.email_invalid = false;
-        }
-        if ($scope.viewdata.login.password === "")
-        {
-            $scope.viewdata.login.password_invalid = true;
-            ShowFormErrorMsg("Te falta el password!");
-            return;
-        }
-        else
-        {
-            $scope.viewdata.login.password_invalid = false;
-        }
-
+        // $cordovaKeyboard.close();
         $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
 
-        $cordovaKeyboard.close();
+        
         setTimeout(function(){
             // Performs the Login Operation
             userFactory.session.login(
@@ -225,7 +247,7 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
     };
 
     $scope.gotoSlide = function(index) {
-        // $cordovaKeyboard.close();
+        $cordovaKeyboard.close();
         $ionicSlideBoxDelegate.slide(index);
     };
 

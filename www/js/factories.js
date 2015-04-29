@@ -372,6 +372,25 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                     .error(function(data,status,headers,cofig){
                         reject(data);
                     });
+                });
+            },
+            validateEmail: function(email) {
+                return new Promise(function(resolve, reject){
+                    var url = serverURL + '/member/validateEmail?email=' + email;
+                    $http({
+                        method: 'GET',
+                        url: url
+                    })
+                    .success(function(data,status,headers,config){
+                        if(data.status===true){
+                            resolve(data);
+                        } else {
+                            reject(data);
+                        }
+                    })
+                    .error(function(data,status,headers,cofig){
+                        reject(data);
+                    });
                 })
             }
         },
@@ -759,7 +778,7 @@ fact.factory('userFactory',['restFactory', function(restFactory){
                 _login = {};
                 _data ={};
             },
-            login: function(_data) {                
+            login: function(_data) {
                 return new Promise(function(resolve,reject){
                     restFactory.user.login(_data)
                         .then(function(response){
@@ -779,6 +798,19 @@ fact.factory('userFactory',['restFactory', function(restFactory){
                         .catch(function(err){
                             reject(err);
                         });     
+                });
+            }
+        },
+        datavalidation: {
+            emailvalidation: function(email){
+                return new Promise(function(resolve,reject){
+                    restFactory.user.validateEmail(email)
+                        .then(function(response){
+                            resolve(response);
+                        })
+                        .catch(function(err){
+                            reject(err);
+                        });
                 });
             }
         }

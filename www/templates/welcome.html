@@ -33,16 +33,20 @@
 
 			<ion-slide class="welcome-slide">
 				<div class="item clear-item text-center welcome-main-title" style="margin-top:10px;">
-					<p class="welcome-title">Bienvenido a <strong>Kenuu!!</strong></p>
+					<p class="welcome-title">Empecemos es <strong>fácil!!</strong></p>
 				</div>
-				<form ng-submit="ValidateEmail()">
+				<form name="loginForm" ng-submit="DoEmailSignUp()">
 					<div class="text-center">
-						<i class="icon-mail" style="color:white; font-size:100px;"></i>
+						<i class="icon-mail" style="color:white; font-size:60px;"></i>
 					</div>
 					<div class="text-left" style="padding-left:30px; padding-right:30px;">											
 						<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
-							<span class="input-label" style="font-size:20px;">Ingresa tu Email <span ng-show="viewdata.login.email_invalid"><i class="ion-android-warning" style="font-size:25px; color: red;"></i> requerido</span></span>
-							<input class="kenuu-input" type="email" placeholder="john@suhr.com" ng-model="viewdata.login.email">
+							<span class="input-label" style="font-size:20px;">
+								Ingresa tu Email 
+								<span ng-show="loginForm.emailInput.$error.required"><i class="ion-ios-medical" style="font-size:20px; color: red;"></i></span>
+								<span class="error" ng-show="loginForm.emailInput.$error.email"><span class="ion-alert" style="font-size:10px; color: red;"> incorrecto</span></span>
+							</span>
+							<input class="kenuu-input" name="emailInput" type="email" placeholder="su.nombre@email.com" ng-model="viewdata.login.email" required>
 						</label>
 					</div>
 					<div class="item welcome-item text-center">
