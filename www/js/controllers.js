@@ -3,7 +3,7 @@ var ctrl = angular.module('kenuu.controllers', ['ja.qr']);
 ctrl.controller('NoConnectionCtrl', ['$scope', '$state', function($scope, $state){    
 }]);
 
-ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', '$ionicLoading', '$cordovaKeyboard', '$cordovaPush', 'deviceFactory', '$cordovaBarcodeScanner', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory, $ionicLoading, $cordovaKeyboard, $cordovaPush, deviceFactory, $cordovaBarcodeScanner){
+ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', '$ionicLoading', '$cordovaKeyboard', '$cordovaPush', 'deviceFactory', '$cordovaBarcodeScanner', '$ionicModal', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory, $ionicLoading, $cordovaKeyboard, $cordovaPush, deviceFactory, $cordovaBarcodeScanner, $ionicModal){
     localStorage.setItem('animationShown', false);
     
     // cordova.plugins.Keyboard.disableScroll(true);
@@ -132,6 +132,20 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
                 }
             );
         }, 250);        
+    };
+
+    $scope.ValidateEmail = function() {
+        console.log("...")
+        // If the email exists but no password is setup
+        $ionicModal.fromTemplateUrl('templates/modalLogin.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(modal) {
+            $scope.modal = modal;
+            $scope.modal.show();
+        });
+
+        // If the email exists and there is already a password created
     };
 
     $scope.Enter = function() {

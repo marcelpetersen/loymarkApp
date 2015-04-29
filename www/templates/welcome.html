@@ -4,15 +4,19 @@
     </ion-nav-title>
 	<ion-content id="welcome-content" scroll="false" class="welcome-content">
 		<ion-slide-box show-pager="" on-slide-changed="slideHasChanged($index)">			
+			
 			<!-- Welcome Slide #0 -->
 			<ion-slide class="welcome-slide">
 				<div class="item clear-item text-center welcome-main-title" style="margin-top:10px;">
 					<p class="welcome-title">Bienvenido a <strong>Kenuu!!</strong></p>
 				</div>
 				<div class="text-center" style="width:100vw">
-					<img id="welcomeimg1" src="./img/devices.png" style="height:148px;">
+					<img id="welcomeimg1" src="./img/devices.png" style="height:70%px; max-width:80vw">
 				</div>
-				<div class="item clear-item">
+				<div class="item clear-item text-center welcome-main-title" style="margin-top:10px;">
+					<p class="welcome-title">Haga un swipe para empezar...</p>
+				</div>
+				<!-- <div class="item clear-item">
 					<div class="row text-center" style="padding:0">
 						<div class="col-50" style="padding-right:2px">
 							<button class="button button-block welcome-btn" ng-click="gotoSlide(2)">Ingresar</button>
@@ -24,18 +28,35 @@
 				</div>
 				<div class="item welcome-item text-center" style="top:-40px;">
 					<button ng-click="OpenScanner()" class="button button-block button-light welcome-btn">Ya tengo mi ID</button>
+				</div> -->
+			</ion-slide>
+
+			<ion-slide class="welcome-slide">
+				<div class="item clear-item text-center welcome-main-title" style="margin-top:10px;">
+					<p class="welcome-title">Bienvenido a <strong>Kenuu!!</strong></p>
 				</div>
+				<form ng-submit="ValidateEmail()">
+					<div class="text-center">
+						<i class="icon-mail" style="color:white; font-size:100px;"></i>
+					</div>
+					<div class="text-left" style="padding-left:30px; padding-right:30px;">											
+						<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
+							<span class="input-label" style="font-size:20px;">Ingresa tu Email <span ng-show="viewdata.login.email_invalid"><i class="ion-android-warning" style="font-size:25px; color: red;"></i> requerido</span></span>
+							<input class="kenuu-input" type="email" placeholder="john@suhr.com" ng-model="viewdata.login.email">
+						</label>
+					</div>
+					<div class="item welcome-item text-center">
+						<button class="button button-block button-light welcome-btn">Enviar</button>
+					</div>
+				</form>
 			</ion-slide>
 
 			<!-- Sign Up Slide -->
+			<!--
 			<ion-slide class="welcome-slide">
 				<div class="item clear-item text-left welcome-text">
 					<span ng-click="gotoSlide(0)"><i class="ion-android-arrow-back"></i> Volver</span>
 				</div>
-				<!-- <div class="item clear-item text-center welcome-text" style="margin-top:-10px; padding-left:30px; padding-right:30px;">
-					<strong>Inscríbase</strong>
-					<p class="welcome-regular-text">Es muy fácil, sólamente se requiere su correo:</p>
-				</div> -->
 				<form name="signUpForm" ng-submit="SignUp()">
 					<div class="text-left" style="padding-left:30px; padding-right:30px;">					
 						<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
@@ -60,16 +81,14 @@
 					</div>
 				</form>
 			</ion-slide>
+			-->
 
 			<!-- Login Slide -->
+			<!--
 			<ion-slide class="welcome-slide">
 				<div class="item clear-item text-left welcome-text">
 					<span ng-click="gotoSlide(0)"><i class="ion-android-arrow-back"></i> Volver</span>
 				</div>
-				<!-- <div class="item clear-item text-center welcome-text" style="margin-top:-10px; padding-left:30px; padding-right:30px;">
-					<strong>Ingrese</strong>
-					<p class="welcome-regular-text">Ingrese con su correo y contraseña:</p>
-				</div> -->
 				<form ng-submit="Enter()">
 					<div class="text-left" style="padding-left:30px; padding-right:30px;">					
 						<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
@@ -86,6 +105,7 @@
 					</div>
 				</form>				
 			</ion-slide>
+			-->
 		</ion-slide-box>
 	</ion-content>
 </ion-view>
