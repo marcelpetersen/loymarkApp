@@ -280,6 +280,24 @@ ion-nav-view[nav-view-transition="ios"] {
 		color: $kenuu-green;
 	}
 
+/* ******* Modal MsgBox ******** */
+
+	.md-overlay-ok {
+		background: #2A852E !important;
+	}
+
+	.md-content-ok h3 {
+		background: #47AC37 !important;
+	}
+
+	.md-content-ok > div {
+		background: #62CA3F !important;
+	}
+
+	.md-content-ok button {
+		background: #2A852E !important;	
+	}
+
 /* ******* Modal ******* */
 
 	.modal-bg {
@@ -574,6 +592,12 @@ ion-nav-view[nav-view-transition="ios"] {
 		height:73px;
 	}
 
+/* ******** Rewards Using Single Item List ********* */
+
+	.reward-item-price-label {
+		color: $kenuu-purple;
+	}
+
 /* ******** QR Code ********* */
 	.qrcode-view {
 
@@ -687,7 +711,8 @@ ion-nav-view[nav-view-transition="ios"] {
 		margin-left: 30px;
 	}
 	.rewarddet-commerce-btn {
-		width: 110px;
+		width: 118px !important;
+		font-size: 12px !important;
 		border: 0px;
 		background-color: $action-btn-color !important;
 	}

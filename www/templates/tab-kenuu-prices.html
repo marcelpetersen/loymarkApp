@@ -33,7 +33,7 @@
         </div>
         <div class="list">                        
             <!-- Using 2 items per line -->
-            <span id="rewardsListContainer" class="rewards-list-container" ng-repeat="reward in viewdata.rewards">
+            <!-- <span id="rewardsListContainer" class="rewards-list-container" ng-repeat="reward in viewdata.rewards">
                 <div class="row rewards-card-row" ng-if="$index<viewdata.rewards.length/2+1">
                     <span ng-repeat="reward in viewdata.rewards">
                         <div class="card rewards-card" ng-if="$index>=2*$parent.$index && $index <= 2*($parent.$index+1)-1" ng-click="OpenRewardDetail(reward)">                            
@@ -54,9 +54,6 @@
                             <div class="item item-text-wrap text-center reward-rewarinfocontainer">
                                 <img class="rewarddet-image" ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{reward.Image}}">
                                 <p class="reward-rewardname">{{reward.Name}}</p>                                                                
-                                <!-- <div class="reward-reached text-center" ng-show="reward.Points <= viewdata.user.PointsAvailable">
-                                    <i class="icon ion-ribbon-a"></i>
-                                </div> -->
                             </div>
                             
                             <div class="item text-center">
@@ -67,7 +64,7 @@
                         </div>
                     </span>
                 </div>
-            </span>
+            </span> -->
 
             <!-- Using a single item per line -->
             <!-- <div class="card rewards-card-single-item" ng-repeat="reward in viewdata.rewards" ng-click="OpenRewardDetail(reward)">
@@ -99,6 +96,16 @@
                     </div>
                 </div>
             </div> -->
+
+            <div class="card rewards-card-single-item" ng-style="{'border-left':'5px solid ' + reward.bordercolor }" ng-click="OpenRewardDetail(reward)" ng-repeat="reward in viewdata.rewards">
+                <div class="item item-text-wrap text-left item-icon-right">
+                    <p><strong ng-bind="reward.Name"></strong></p>
+                    <p ng-bind="reward.EntityName"></p>
+                    <span class="icon">
+                        <strong class="reward-item-price-label" ng-bind="reward.Points"></strong>
+                    </span>
+                </div>
+            </div>            
         </div>
         <div class="reward-bottomspacer"></div>
     </ion-content>

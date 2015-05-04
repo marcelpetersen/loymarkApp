@@ -8,7 +8,8 @@ var beaconFound = false;
 angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.factory', 'ngCordova'])
 
 .constant('ApiEndpoint', {
-	url: 'http://192.168.71.98:8100/api'
+	// url: 'http://192.168.71.98:8100/api' // CIS Network Development
+	url: 'http://192.168.1.9:8100/api' // Home Development Environment
 })
 
 .run(function($rootScope, $state, $ionicPlatform, networkFactory, $cordovaNetwork, deviceFactory, $cordovaPush, $ionicTabsDelegate, navigationFactory) {
@@ -92,6 +93,27 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 		url: '/welcome',
 		templateUrl: 'templates/welcome.html',
 		controller: 'WelcomeCtrl'
+	})
+
+	// Welcome screen of the app once the user is logged
+	.state('login', {
+		url: '/login',
+		templateUrl: 'templates/welcome-login.html',
+		controller: 'LoginCtrl'
+	})
+
+	// Welcome screen of the app once the user is logged
+	.state('passwordcreate', {
+		url: '/passwordcreate',
+		templateUrl: 'templates/welcome-passwordcreate.html',
+		controller: 'PasswordCreateCtrl'
+	})
+
+	// Welcome screen of the app once the user is logged
+	.state('signup', {
+		url: '/signup',
+		templateUrl: 'templates/welcome-signup.html',
+		controller: 'SignUpCtrl'
 	})
 
 	// setup an abstract state for the tabs directive

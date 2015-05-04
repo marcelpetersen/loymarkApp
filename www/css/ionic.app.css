@@ -7753,6 +7753,19 @@ a[href^="http://maps.google.com/maps"] {
 .tabs-top.tabs-striped .tab-item.tab-item-active {
   color: #A5CD38; }
 
+/* ******* Modal MsgBox ******** */
+.md-overlay-ok {
+  background: #2A852E !important; }
+
+.md-content-ok h3 {
+  background: #47AC37 !important; }
+
+.md-content-ok > div {
+  background: #62CA3F !important; }
+
+.md-content-ok button {
+  background: #2A852E !important; }
+
 /* ******* Modal ******* */
 .modal-bg {
   background-color: #4E0F5B !important; }
@@ -7996,6 +8009,10 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
 .reward-bottomspacer {
   height: 73px; }
 
+/* ******** Rewards Using Single Item List ********* */
+.reward-item-price-label {
+  color: #800080; }
+
 /* ******** QR Code ********* */
 .qrcode-content {
   background-image: url('../img/whatsnewbg.png'); }
@@ -8091,7 +8108,8 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
   margin-left: 30px; }
 
 .rewarddet-commerce-btn {
-  width: 110px;
+  width: 118px !important;
+  font-size: 12px !important;
   border: 0px;
   background-color: #800080 !important; }
 

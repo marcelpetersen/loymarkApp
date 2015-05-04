@@ -138,8 +138,8 @@ fact.factory('deviceFactory', ['$cordovaDevice', 'restFactory', '$cordovaPush', 
 }]);
 
 fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', function($http, ApiEndpoint, referenceIDFactory){
-    // var serverURL = ApiEndpoint.url;
-    var serverURL = 'http://201.201.150.159';
+    var serverURL = ApiEndpoint.url;
+    // var serverURL = 'http://201.201.150.159';
 
     return {
         user:{
@@ -587,7 +587,7 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
         },
         device: {
             register: function(device, tokenID, userReferenceID) {
-                var url = 'http://192.168.71.91:8050/cisdevicetoken/api/a59f70a0-ea15-11e4-9c0e-237f667d4c49/register';
+                var url = 'http://192.168.111.110/devicetoken/kenuu/a59f70a0-ea15-11e4-9c0e-237f667d4c49/register';
                 return new Promise(function(resolve,reject){
                     var jsonData = 
                     {
@@ -1081,4 +1081,25 @@ fact.factory('navigationFactory', [function(){
             }
         }
     }
+}])
+
+fact.factory('loginSignUpFactory', [function(){
+    var _loginInfo = {
+        email: ""
+    };
+    return {
+        login: {
+            get: function() {
+                return _loginInfo;
+            },
+            email: {
+                set: function(_email) {
+                    _loginInfo.email = _email;
+                },
+                get: function() {
+                    return _loginInfo.email;
+                }
+            }            
+        }
+    };
 }]);
