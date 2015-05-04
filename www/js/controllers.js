@@ -1567,7 +1567,7 @@ ctrl.controller('ActivityCtrl', ['$scope', 'userFactory', 'socialSharing', funct
 ctrl.controller('WhatsNewCtrl', ['$scope', '$cordovaInAppBrowser', '$ionicSlideBoxDelegate', function($scope, $cordovaInAppBrowser, setupView, emailService, $ionicSlideBoxDelegate) {
 
     $scope.$on("$ionicView.enter", function(event, args){
-        $ionicSlideBoxDelegate.slide(0);
+        // $ionicSlideBoxDelegate.slide(0);
     });
 
     $scope.OpenTwitter = function() {

@@ -7777,7 +7777,7 @@ a[href^="http://maps.google.com/maps"] {
 .profile-avatar-container {
   padding: 40px 0 40px 0;
   border-bottom: 1px solid #eeeeee;
-  background-image: url('../img/bgblur.png'); }
+  background-image: url('../img/qrcodebg.png'); }
 
 .profile-avatar-div {
   min-width: 135px; }
@@ -8094,7 +8094,7 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
 
 /* ******** Reward Detail ******** */
 .rewarddet-commerce {
-  background-image: url('../img/bgblur.png');
+  background-image: url('../img/qrcodebg.png');
   min-height: 102px !important; }
 
 #btnRedeem {
@@ -8103,7 +8103,11 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
   -o-transition: all 0.1s ease-in-out;
   transition: all 0.1s ease-in-out; }
 
-.rewarddet-content .item h2, .rewarddet-content .item h4, .rewarddet-content .button {
+.rewarddet-content .item h2, .rewarddet-content .item h4 {
+  color: #757575 !important;
+  margin-left: 30px; }
+
+.rewarddet-content .button {
   color: white !important;
   margin-left: 30px; }
 
@@ -8141,7 +8145,7 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
   top: 8px;
   right: 0px;
   font-size: 12px;
-  color: white; }
+  color: #757575; }
 
 .rewarddet-rewardheader {
   margin-top: 0px;
@@ -8190,7 +8194,7 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
 
 /* ******** Commerce ******** */
 .commerce-commerceheader {
-  background-image: url('../img/bgblur.png');
+  background-image: url('../img/qrcodebg.png');
   min-height: 102px !important;
   margin-top: 0px;
   background-color: #eeeeee;
@@ -8198,7 +8202,7 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
   border: none !important; }
 
 .commerce-commerceheader h2, .commerce-commerceheader h4, .commerce-commerceheader p {
-  color: white;
+  color: #757575;
   margin-left: 75px; }
 
 .commerce-bottomspacer {

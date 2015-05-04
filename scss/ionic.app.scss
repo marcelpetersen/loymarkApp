@@ -88,7 +88,7 @@ body, h1, h2, h3, h4, h5, p, div, span, input, button, strong  {
 	$welcome-text:					 white;
 
 	$rewarddet-mybalance-color: 	 $kenuu-purple;
-	$rewarddet-titles-color:		 white;
+	$rewarddet-titles-color:		 #757575;
 	$rewarddet-item-border: 		 #eeeeee;
 	$rewarddet-infocell-bgcolor:	 #eeeeee;
 
@@ -313,7 +313,7 @@ ion-nav-view[nav-view-transition="ios"] {
 	.profile-avatar-container {
 		padding: 40px 0 40px 0;
 		border-bottom: 1px solid $profile-border-color;
-		background-image: url('../img/bgblur.png');
+		background-image: url('../img/qrcodebg.png');
 	}
 
 	.profile-avatar-div {
@@ -695,7 +695,7 @@ ion-nav-view[nav-view-transition="ios"] {
 
 /* ******** Reward Detail ******** */
 	.rewarddet-commerce {
-		background-image: url('../img/bgblur.png');
+		background-image: url('../img/qrcodebg.png');
 		min-height: 102px !important;
 	}
 	#btnRedeem {
@@ -705,9 +705,12 @@ ion-nav-view[nav-view-transition="ios"] {
 		transition: all 0.1s ease-in-out;
 	}
 	.rewarddet-content .item h2, 
-	.rewarddet-content .item h4,
-	.rewarddet-content .button {
+	.rewarddet-content .item h4 {
 		color: $rewarddet-titles-color !important;
+		margin-left: 30px;
+	}
+	.rewarddet-content .button {
+		color: white !important;
 		margin-left: 30px;
 	}
 	.rewarddet-commerce-btn {
@@ -809,7 +812,7 @@ ion-nav-view[nav-view-transition="ios"] {
 		// background-color: $reward-content-bgcolor !important;
 	}
 	.commerce-commerceheader {
-		background-image: url('../img/bgblur.png');
+		background-image: url('../img/qrcodebg.png');
 		min-height: 102px !important;
 		margin-top: 0px;
 		background-color: #eeeeee;
