@@ -499,14 +499,12 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
 
 ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'userFactory', '$ionicLoading', '$ionicModal', '$cordovaPush', 'beaconsFactory', function($scope, $timeout, userFactory, $ionicLoading, $ionicModal, $cordovaPush, beaconsFactory){
     $timeout(function(){
-        console.log("QR Code - timeout entered");
         $("#viewcontent-QR").show();
         $("#viewcontent-QR").addClass("animated slideInUp");
         $scope.$apply();
     });
 
-    $scope.$on("$ionicView.enter", function(event, args){
-        console.log("QR Code - View Enter");
+    $scope.$on("$ionicView.enter", function(event, args){        
         $("#viewcontent-QR").show();
         $("#viewcontent-QR").addClass("animated slideInUp");        
         $scope.$apply();
@@ -549,18 +547,19 @@ ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'userFactory', '$ionicLoadi
         var identifier = 'Nuestra Tienda CIS';
         // var minor = 1;
         // var major = 1;
-        var beaconRegion = new cordova.plugins.locationManager.BeaconRegion(identifier, uuid);
-        cordova.plugins.locationManager.stopRangingBeaconsInRegion(beaconRegion);
+        if(!devEnvironment) beaconRegion = new cordova.plugins.locationManager.BeaconRegion(identifier, uuid);
+        if(!devEnvironment) cordova.plugins.locationManager.stopRangingBeaconsInRegion(beaconRegion);
         $scope.modal.hide();
     };
 
     $scope.ScanBeacons = function() {
-        var delegate = new cordova.plugins.locationManager.Delegate();
-        cordova.plugins.locationManager.setDelegate(delegate);
+        if(devEnvironment) return;
+        if(!devEnvironment) delegate = new cordova.plugins.locationManager.Delegate();
+        if(!devEnvironment) cordova.plugins.locationManager.setDelegate(delegate);
 
         // required in iOS 8+
         // cordova.plugins.locationManager.requestWhenInUseAuthorization(); 
-        cordova.plugins.locationManager.requestAlwaysAuthorization();
+        if(!devEnvironment) cordova.plugins.locationManager.requestAlwaysAuthorization();
 
         delegate.didDetermineStateForRegion = function (pluginResult) {
             // Enters a region
@@ -578,7 +577,7 @@ ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'userFactory', '$ionicLoadi
                    //  .done();
 
                 var _beaconRegion = new cordova.plugins.locationManager.BeaconRegion(pluginResult.region.identifier, pluginResult.region.uuid);
-                cordova.plugins.locationManager.stopRangingBeaconsInRegion(_beaconRegion);
+                if(!devEnvironment) cordova.plugins.locationManager.stopRangingBeaconsInRegion(_beaconRegion);
             }
         };
 
@@ -632,7 +631,6 @@ ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'userFactory', '$ionicLoadi
 
 ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', 'navigationFactory', function($scope, $timeout, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService, navigationFactory){
     $scope.$on("$ionicView.enter", function(event, args){
-        console.log("Kenuu Entered")
         navigationFactory.setDefaults();
         LoadData();
     });
@@ -738,8 +736,10 @@ ctrl.controller('KenuuPricesCtrl', ['$scope', '$state', 'rewardFactory', 'userFa
         searchResults: [],
         rewards: [],
         commerceSelected: commerceFactory.selectedCommerce.isSelected(),
-        selectedCommerce: commerceFactory.selectedCommerce.get()        
+        selectedCommerce: commerceFactory.selectedCommerce.get(),
+        sorter: 'Name'
     };
+    $scope.nameSorter = "rewards-filter-header-selected";
 
     var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
@@ -821,15 +821,12 @@ ctrl.controller('KenuuPricesCtrl', ['$scope', '$state', 'rewardFactory', 'userFa
         }
         else
         {
-            console.log("Nop, no hay comercio!");
             LoadData();
         }
     });
 
     $scope.OpenRewardDetail = function(reward) {
         rewardFactory.selectedReward.set(reward);
-        console.log("Selected Reward:");
-        console.log(reward);
         $state.go(navigationFactory.rewardDetail.get());
     };
 
@@ -873,6 +870,22 @@ ctrl.controller('KenuuPricesCtrl', ['$scope', '$state', 'rewardFactory', 'userFa
 
     $scope.doRefresh = function() { 
         $scope.Reload();
+    };
+
+    $scope.sortBy = function(sortOption) {        
+        if (sortOption == "Nombre") 
+        {
+            $scope.viewdata.sorter = "Name";
+            $scope.nameSorter = "rewards-filter-header-selected";
+            $scope.pointsSorter = "";
+        }
+        else 
+        {
+            $scope.viewdata.sorter = "Points";
+            $scope.nameSorter = "";
+            $scope.pointsSorter = "rewards-filter-header-selected";
+        }
+
     };
 }]);
 
@@ -941,7 +954,6 @@ ctrl.controller('KenuuCommerceCtrl', ['$scope', '$state', 'rewardFactory', 'comm
         selectedCommerce: commerceFactory.selectedCommerce.get()
     };
 
-    console.log($stateParams.entityID);
     if ($stateParams.entityID != undefined)
     {
         commerceFactory.get($stateParams.entityID)
@@ -1063,7 +1075,6 @@ ctrl.controller('KenuuStoresCtrl', ['$scope','rewardFactory', '$window', '$cordo
                     
                     setTimeout(function() {                                                       
                         $scope.viewdata.stores = data;
-                        console.log($scope.viewdata.stores);
                         $scope.$apply();
                         $("#pleaseWaitSpinner_Stores").hide();
                         $("#storesListDiv").show();
@@ -1083,7 +1094,6 @@ ctrl.controller('KenuuStoresCtrl', ['$scope','rewardFactory', '$window', '$cordo
                 });
         })
         .catch(function(err){
-            console.log(err);
         });
 
     $scope.GetCommerceImage = function(image) {
@@ -1136,7 +1146,6 @@ ctrl.controller('KenuuProfileCtrl', ['$scope', '$timeout', 'userFactory', '$stat
             var userData = data;
             $scope.viewdata.user.name = userData.FirstName;
             $scope.viewdata.user.lastname = userData.LastName;
-            console.log(userData);
         })
         .catch(function(err){});
 
@@ -1166,7 +1175,6 @@ ctrl.controller('KenuuProfileCtrl', ['$scope', '$timeout', 'userFactory', '$stat
         })
         .catch(function(err){
             $ionicLoading.hide();
-            console.log(err);
         });
     };
 
@@ -1208,11 +1216,10 @@ ctrl.controller('KenuuRewardDetailCtrl', ['$scope', '$timeout', 'userFactory', '
             commerceFactory.get($scope.viewdata.selectedReward.EntityID)
                 .then(function(data){
                     $scope.viewdata.commerce = data[0]; 
-                    console.log(data[0])
                     $scope.$apply();
                 })
                 .catch(function(err){
-                    console.log(err);
+                    
                 });
         })
         .catch(function(err){
@@ -1336,9 +1343,7 @@ ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cord
         _map = map;        
 
         commerceFactory.stores.general(0,0).
-            then(function(data){    
-                console.log("Stores:");
-                console.log(data);
+            then(function(data){
                 var infoWindow = new google.maps.InfoWindow();
 
                 var j=data.length;
@@ -1399,8 +1404,7 @@ ctrl.controller('SearchCtrl', ['$scope', 'searchFactory', '$state', 'commerceFac
         searchText: ""
     };
 
-    $scope.$on("$ionicView.enter", function(event, args){
-        console.log("Entered!")
+    $scope.$on("$ionicView.enter", function(event, args){        
         if ($scope.viewdata.searchText != "")
         {
             doSearch();
@@ -1416,14 +1420,13 @@ ctrl.controller('SearchCtrl', ['$scope', 'searchFactory', '$state', 'commerceFac
 
     function doSearch() {
         searchFactory.doSearch($scope.viewdata.searchText)
-            .then(function(data){ 
-                console.log(data);               
+            .then(function(data){                
                 $scope.viewdata.searchResults = data.response.Elements;
                 $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
                 $scope.$apply();
             })
             .catch(function(data){
-                console.log(data);
+                
             })
     };
 
@@ -1446,7 +1449,6 @@ ctrl.controller('SearchCtrl', ['$scope', 'searchFactory', '$state', 'commerceFac
     };
 
     $scope.OpenCommerce = function(entityID) {
-        console.log("Entity ID: ", entityID);
         commerceFactory.get(entityID)
             .then(function(response){
                 commerceFactory.selectedCommerce.set(response[0]);

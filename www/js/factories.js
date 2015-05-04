@@ -157,8 +157,6 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                             url: url
                         })
                         .success(function(data,status,headers,config){
-                            console.log("Member Info:");
-                            console.log(data);
                             if(data.status===true){
                                 resolve(data.data);
                             } else {
@@ -177,8 +175,6 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                         {
                             jsonData: JSON.stringify(_data)
                         };
-                        console.log(JSON.stringify(_jdata));
-                        console.log(url);
 
                         $http({
                             headers: {

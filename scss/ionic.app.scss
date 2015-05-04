@@ -217,6 +217,7 @@ ion-nav-view[nav-view-transition="ios"] {
 		width: 100vw;
 		opacity: 0.7;
 		background-color: #eeeeee;
+		z-index: 888;
 	}
 	.spinner svg {
 		width: 38px;
@@ -594,6 +595,15 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 	.reward-bottomspacer {
 		height:73px;
+	}
+
+	.rewards-filter-header {
+		// height: 60px !important;
+		padding: 0;
+	}
+
+	.rewards-filter-header-selected {
+		color: $kenuu-purple;		
 	}
 
 /* ******** Rewards Using Single Item List ********* */

@@ -7691,7 +7691,8 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
   position: absolute;
   width: 100vw;
   opacity: 0.7;
-  background-color: #eeeeee; }
+  background-color: #eeeeee;
+  z-index: 888; }
 
 .spinner svg {
   width: 38px;
@@ -8011,6 +8012,12 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
 
 .reward-bottomspacer {
   height: 73px; }
+
+.rewards-filter-header {
+  padding: 0; }
+
+.rewards-filter-header-selected {
+  color: #800080; }
 
 /* ******** Rewards Using Single Item List ********* */
 .reward-item-price-label {

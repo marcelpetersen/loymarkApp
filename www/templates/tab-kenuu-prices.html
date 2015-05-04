@@ -23,8 +23,16 @@
             </div>                
         </div>
         <ion-refresher class="refresher-text" pulling-text="Hale para refrescar..." on-refresh="doRefresh()">
-        </ion-refresher>
+        </ion-refresher>        
         <div class="list">                        
+            <div class="item rewards-filter-header">
+                <div class="row">
+                    <div class="col"><p><strong>Ordenar por</strong></p></div>
+                    <div class="col text-center" ng-class="nameSorter" ng-click="sortBy('Nombre')"><b>Nombre</b></div>
+                    <div class="col text-center" ng-class="pointsSorter" ng-click="sortBy('Puntos')"><b>Pops</b></div>
+                </div>
+            </div>
+
             <!-- Using 2 items per line -->
             <!-- <span id="rewardsListContainer" class="rewards-list-container" ng-repeat="reward in viewdata.rewards">
                 <div class="row rewards-card-row" ng-if="$index<viewdata.rewards.length/2+1">
@@ -90,7 +98,7 @@
                 </div>
             </div> -->
 
-            <div class="card rewards-card-single-item" ng-style="{'border-left':'5px solid ' + reward.bordercolor }" ng-click="OpenRewardDetail(reward)" ng-repeat="reward in viewdata.rewards">
+            <div class="card rewards-card-single-item" ng-style="{'border-left':'5px solid ' + reward.bordercolor }" ng-click="OpenRewardDetail(reward)" ng-repeat="reward in viewdata.rewards | orderBy:viewdata.sorter">
                 <div class="item item-text-wrap text-left item-icon-left item-icon-right">
                     <i class="icon">
                         <img ng-show='reward.EntityImage != "" && reward.EntityImage' class="reward-commerceimg" ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{reward.EntityImage}}" err-src="./img/empty.png">
