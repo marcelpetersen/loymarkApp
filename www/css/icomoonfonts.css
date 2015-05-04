@@ -35,6 +35,10 @@
 	content: "\e938";
 }
 
+.icon-history:before {
+	content: "\e94d";
+}
+
 .icon-user:before {
 	content: "\e971";
 }
