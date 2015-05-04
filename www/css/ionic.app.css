@@ -7753,15 +7753,18 @@ a[href^="http://maps.google.com/maps"] {
 .tabs-top.tabs-striped .tab-item.tab-item-active {
   color: #A5CD38; }
 
+.refresher-text {
+  color: #800080 !important; }
+
 /* ******* Modal MsgBox ******** */
 .md-overlay-ok {
-  background: #2A852E !important; }
+  background: #489A0F !important; }
 
 .md-content-ok h3 {
   background: #47AC37 !important; }
 
 .md-content-ok > div {
-  background: #62CA3F !important; }
+  background: #56B912 !important; }
 
 .md-content-ok button {
   background: #2A852E !important; }

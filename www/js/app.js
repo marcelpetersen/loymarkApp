@@ -1,5 +1,6 @@
 // Ionic Starter App
 var beaconFound = false;
+var devEnvironment = true;
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
@@ -8,11 +9,11 @@ var beaconFound = false;
 angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.factory', 'ngCordova'])
 
 .constant('ApiEndpoint', {
-	// url: 'http://192.168.71.98:8100/api' // CIS Network Development
-	url: 'http://192.168.1.9:8100/api' // Home Development Environment
+	url: 'http://192.168.71.98:8100/api' // CIS Network Development
+	// url: 'http://192.168.1.9:8100/api' // Home Development Environment
 })
 
-.run(function($rootScope, $state, $ionicPlatform, networkFactory, $cordovaNetwork, deviceFactory, $cordovaPush, $ionicTabsDelegate, navigationFactory) {
+.run(function($rootScope, $state, $ionicPlatform, networkFactory, $cordovaNetwork, deviceFactory, $cordovaPush, $ionicTabsDelegate, navigationFactory, commerceFactory, $ionicHistory) {
   	$ionicPlatform.ready(function() {
 	    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
 	    // for form inputs)
@@ -26,11 +27,33 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 
 	    // listen for Online event
 	    $rootScope.$on('$cordovaNetwork:online', function(event, networkState){
-	    	$state.go("tab.qrcode");
+	    	$ionicHistory.clearHistory();
+            $ionicHistory.clearCache();
+            $ionicHistory.nextViewOptions({
+                disableAnimate: true,
+                disableBack: true,
+                historyRoot: true
+            });
+            var _apikey = localStorage.getItem('userReferenceID');			
+			if (_apikey != undefined)
+			{
+	    		$state.go("tab.qrcode");
+	    	}
+	    	else
+	    	{
+	    		$state.go("welcome");	
+	    	}
 	    });
 
 	    // listen for Offline event
 	    $rootScope.$on('$cordovaNetwork:offline', function(event, networkState){
+	    	$ionicHistory.clearHistory();
+            $ionicHistory.clearCache();
+            $ionicHistory.nextViewOptions({
+                disableAnimate: true,
+                disableBack: true,
+                historyRoot: true
+            });
 	    	$state.go("noconnection");
 	    });
 
@@ -59,6 +82,15 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 		$rootScope.MyKenuuTabClicked = function() {
 			navigationFactory.setDefaults();
 			$state.go("tab.kenuu");
+		};
+
+		$rootScope.RewardsTabClicked = function() {
+			commerceFactory.selectedCommerce.clearSelection();
+			navigationFactory.rewards.setTab("tab.rewards");
+			navigationFactory.rewardDetail.setTab("tab.rewards-rewardDetail");
+			navigationFactory.commerce.setTab("tab.rewards-commerce");
+			navigationFactory.stores.setTab("tab.rewards-stores");
+			$state.go("tab.rewards");
 		};
 	});
 })
@@ -143,6 +175,46 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 				controller: 'WhatsNewCtrl'
 			}
 		}
+	})
+
+	.state('tab.rewards', {
+		url: '/rewards',
+		views: {
+			'tab-rewards': {
+				templateUrl: 'templates/tab-kenuu-prices.html',
+				controller: 'KenuuPricesCtrl'
+			}
+		}
+	})
+
+	.state('tab.rewards-rewardDetail', {		
+		url: '/rewards/rewardDetail',
+	  	views: {
+	    	'tab-rewards': {
+	      		templateUrl: 'templates/tab-kenuu-rewarddetail.html',
+	      		controller: 'KenuuRewardDetailCtrl'
+	    	}
+	  	}
+	})
+
+	.state('tab.rewards-commerce', {		
+		url: '/rewards/commerce',
+	  	views: {
+	    	'tab-rewards': {
+	      		templateUrl: 'templates/tab-kenuu-commerce.html',
+	      		controller: 'KenuuCommerceCtrl'
+	    	}
+	  	}
+	})
+
+	.state('tab.rewards-stores', {		
+		url: '/rewards/stores',
+	  	views: {
+	    	'tab-rewards': {
+	      		templateUrl: 'templates/tab-kenuu-stores.html',
+	      		controller: 'KenuuStoresCtrl'
+	    	}
+	  	}
 	})
 
 	.state('tab.kenuu', {
@@ -283,6 +355,16 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	    		controller: 'MapCtrl'
 	  		}
 		}
+	})
+
+	.state('tab.map-store', {
+		url: '/map/store/:entityID',
+		views: {
+	  		'tab-map': {
+	    		templateUrl: 'templates/tab-kenuu-commerce.html',
+	    		controller: 'KenuuCommerceCtrl'
+	  		}
+		}
 	});
 
 	// if none of the above states are matched, use this as the fallback	
@@ -300,14 +382,17 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	// Verifies the App has already shown the welcome screen
 	var _apikey = localStorage.getItem('userReferenceID');
 	localStorage.setItem('animationShown', false);
+	var _url = "";
 	if (_apikey != undefined)
 	{
-		$urlRouterProvider.otherwise('/tab/qrcode');
+		_url = "/tab/qrcode";
 	}
 	else
 	{
-		$urlRouterProvider.otherwise('/welcome');
+		_url = '/welcome';
 	}	
+
+	$urlRouterProvider.otherwise(_url);
 })
 
 .directive('map', function() {

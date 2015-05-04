@@ -138,8 +138,10 @@ fact.factory('deviceFactory', ['$cordovaDevice', 'restFactory', '$cordovaPush', 
 }]);
 
 fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', function($http, ApiEndpoint, referenceIDFactory){
-    var serverURL = ApiEndpoint.url;
-    // var serverURL = 'http://201.201.150.159';
+    var serverURL = "";
+
+    if (devEnvironment) { serverURL = ApiEndpoint.url; }
+    else { serverURL = 'http://201.201.150.159'; }
 
     return {
         user:{
@@ -155,6 +157,8 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                             url: url
                         })
                         .success(function(data,status,headers,config){
+                            console.log("Member Info:");
+                            console.log(data);
                             if(data.status===true){
                                 resolve(data.data);
                             } else {
@@ -1050,11 +1054,21 @@ fact.factory('navigationFactory', [function(){
     var storesState = "tab.kenuu-stores"; 
     var rewardsState = "tab.kenuu-prices";
     var rewardDetailState = "tab.kenuu-rewarddetail";
+    var commerceState = "tab.kenuu-commerce";
     return {
         setDefaults: function() {
             storesState = "tab.kenuu-stores"; 
             rewardsState = "tab.kenuu-prices";
             rewardDetailState = "tab.kenuu-rewarddetail";
+            commerceState = "tab.kenuu-commerce";
+        },
+        commerce: {
+            setTab: function(stateName) {
+                commerceState = stateName;
+            },
+            get: function() {
+                return commerceState;
+            }
         },
         stores: {
             setTab: function(stateName) {

@@ -6,8 +6,13 @@ navigation history that also transitions its views in and out.
 <ion-tabs class="tabs-icon-top tabs-light" style="margin-top: 1px solid red !important;">
 
     <!-- Whats New -->
-    <ion-tab title="nuevo!" icon-off="icon-star" icon-on="icon-star" href="#/tab/whatsnew">
+    <!-- <ion-tab title="nuevo!" icon-off="icon-star" icon-on="icon-star" href="#/tab/whatsnew">
         <ion-nav-view name="tab-whatsnew"></ion-nav-view>
+    </ion-tab> -->
+
+    <!-- Rewards Tab -->
+    <ion-tab title="premios!" icon-off="icon-gift" icon-on="icon-gift" ng-click="RewardsTabClicked()">
+        <ion-nav-view name="tab-rewards"></ion-nav-view>
     </ion-tab>
 
     <!-- Kenuu Tab -->

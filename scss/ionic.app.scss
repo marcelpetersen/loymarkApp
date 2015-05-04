@@ -280,10 +280,14 @@ ion-nav-view[nav-view-transition="ios"] {
 		color: $kenuu-green;
 	}
 
+	.refresher-text {
+		color: $kenuu-purple !important;
+	}
+
 /* ******* Modal MsgBox ******** */
 
 	.md-overlay-ok {
-		background: #2A852E !important;
+		background: #489A0F !important;
 	}
 
 	.md-content-ok h3 {
@@ -291,7 +295,7 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 
 	.md-content-ok > div {
-		background: #62CA3F !important;
+		background: #56B912 !important;
 	}
 
 	.md-content-ok button {

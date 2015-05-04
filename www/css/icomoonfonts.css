@@ -39,6 +39,10 @@
 	content: "\e971";
 }
 
+.icon-gift:before {
+	content: "\e99f";
+}
+
 .icon-happy:before {
 	content: "\e9df";
 }

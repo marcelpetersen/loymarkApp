@@ -2,16 +2,7 @@
     <ion-nav-title>
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
     </ion-nav-title>
-    <ion-content class="rewards-content">       
-        <!-- <div class="bar bar-sub-header item-input-inset">            
-            <label class="item-input-wrapper">
-                <i class="icon ion-ios7-search placeholder-icon"></i>
-                <input type="search" ng-model="viewdata.searchText" placeholder="Buscar">
-            </label>
-            <button class="button button-clear" ng-click="ShowSideMenu()">
-                <i class="icon ion-android-more-horizontal profile-item-icon"></i> 
-            </button>        
-        </div> -->
+    <ion-content class="rewards-content">
         <div class="reward-searchpanel reward-searchpanel-hidden">
             <div class="item item-clear item-icon-right">
                 <p><strong>Resultados:</strong></p>                
@@ -31,6 +22,8 @@
                 <i class="icon ion-ios-refresh-empty"></i>
             </div>                
         </div>
+        <ion-refresher class="refresher-text" pulling-text="Hale para refrescar..." on-refresh="doRefresh()">
+        </ion-refresher>
         <div class="list">                        
             <!-- Using 2 items per line -->
             <!-- <span id="rewardsListContainer" class="rewards-list-container" ng-repeat="reward in viewdata.rewards">
@@ -98,7 +91,11 @@
             </div> -->
 
             <div class="card rewards-card-single-item" ng-style="{'border-left':'5px solid ' + reward.bordercolor }" ng-click="OpenRewardDetail(reward)" ng-repeat="reward in viewdata.rewards">
-                <div class="item item-text-wrap text-left item-icon-right">
+                <div class="item item-text-wrap text-left item-icon-left item-icon-right">
+                    <i class="icon">
+                        <img ng-show='reward.EntityImage != "" && reward.EntityImage' class="reward-commerceimg" ng-src="http://dev.cis-solutions.com/kenuu/imgs/{{reward.EntityImage}}" err-src="./img/empty.png">
+                        <img ng-show='!reward.EntityImage' class="reward-commerceimg" src="./img/empty.png">
+                    </i>
                     <p><strong ng-bind="reward.Name"></strong></p>
                     <p ng-bind="reward.EntityName"></p>
                     <span class="icon">
@@ -122,12 +119,4 @@
             </div>
         </div>
     </div>
-
-    <!-- Iconography Section -->
-    <!-- <div class="reward-iconography">
-        <div class="item">
-            <span><i class="icon ion-ribbon-a reward-reached"></i></span> 
-            <span class="reward-iconography-label">Premio canjeable!</span>
-        </div>
-    </div> -->
 </ion-view>
