@@ -647,6 +647,12 @@ ion-nav-view[nav-view-transition="ios"] {
 		color: $qrcode-label !important;
 	}
 
+	.qrcode-btn {
+		background-color: white !important;
+		border: 1px solid #dddddd !important;
+		color: #757575!important;
+	}
+
 /* ******** Welcome ********* */
 
 	.welcome-view {

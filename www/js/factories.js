@@ -1113,3 +1113,43 @@ fact.factory('loginSignUpFactory', [function(){
         }
     };
 }]);
+
+fact.factory('codeScannerFactory', ['$cordovaBarcodeScanner', function($cordovaBarcodeScanner){
+    var _storedCodes = [];
+    return {
+        scan: function() {
+            return new Promise(function(resolve,reject){
+                $cordovaBarcodeScanner
+                .scan()
+                .then(function(barcodeData) {
+                    // Success! Barcode data is here            
+                    if (barcodeData.cancelled == 0)
+                    {
+                        // Scanned
+                        _storedCodes.push({code:code});
+
+                        // TODO: Process the Scanned Code
+
+                        resolve(code);
+                    }
+                    else
+                    {
+                        // Cancelled
+                        resolve("");
+                    }
+                }, function(error) {
+                    // Error     
+                    reject(error);               
+                });
+            });
+        },
+        codes: {
+            add: function(code) {
+                _storedCodes.push({code:code});
+            },
+            get: function() {
+                return _storedCodes;
+            }
+        }
+    };
+}]);

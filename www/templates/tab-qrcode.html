@@ -6,16 +6,16 @@
         
         <div class="list card" style="width:80vw; margin:auto !important; top:20px; border-radius:10px;">
             <div class="item text-left item-text-wrap" style="background-color: #eeeeee; color: white !important;">
-                <h2 class="qrcode-qrtitle"><strong>Su identificación</strong></h2>  
+                <h2 class="qrcode-qrtitle"><strong>Tu identificación</strong></h2>  
                 <p>Preséntala en los comercios para ganar <strong>pops!</strong></p>
             </div>
             <div class="item item-image" style="background-color:transparent">
-                <img src="https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl={{viewdata.CardNumber}}&choe=UTF-8">
+                <img src="https://chart.googleapis.com/chart?chs=210x210&cht=qr&chl={{viewdata.CardNumber}}&choe=UTF-8">
             </div>
         </div>
 
         <div class="item item-clear" style="background-color:transparent; top: 20px;">
-            <button class="button button-block button-light welcome-btn profileedit-button" ng-click="ShowBeaconsModal()" style="font-size:20px;">
+            <button class="button button-block button-light qrcode-btn" ng-click="ShowBeaconsModal()" style="font-size:20px;">
                 Chequéate <i class="ion-android-done"></i>
             </button>
         </div>
@@ -25,6 +25,12 @@
                 {{scanResult}}
             </textarea>
         </div> -->
+
+        <div class="item item-clear" style="background-color:transparent; top:-20px">
+            <button class="button button-block button-light qrcode-btn" ng-click="OpenScanner()" style="font-size:20px;">
+                Scanea un código <i class="icon-qrcode"></i>
+            </button>
+        </div>
 
     </ion-content>
 </ion-view>

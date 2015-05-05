@@ -8049,6 +8049,11 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
 .qrcode-qrlabel {
   color: #800080 !important; }
 
+.qrcode-btn {
+  background-color: white !important;
+  border: 1px solid #dddddd !important;
+  color: #757575 !important; }
+
 /* ******** Welcome ********* */
 .welcome-view {
   background-color: #800080;

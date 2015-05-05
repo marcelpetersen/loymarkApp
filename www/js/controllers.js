@@ -462,25 +462,6 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
 
     // ***********************************
 
-    $scope.OpenScanner = function() {
-        $cordovaBarcodeScanner
-        .scan()
-        .then(function(barcodeData) {
-            // Success! Barcode data is here            
-            if (barcodeData.cancelled == 0)
-            {
-                alert(barcodeData.text)
-            }
-            else
-            {
-                // TODO.
-            }
-        }, function(error) {
-            // An error occurred
-            alert("Error!");
-        });
-    };
-
     $scope.nextSlide = function() {
         $cordovaKeyboard.close();
         $ionicSlideBoxDelegate.next();
@@ -497,7 +478,7 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
     };
 }]);
 
-ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'userFactory', '$ionicLoading', '$ionicModal', '$cordovaPush', 'beaconsFactory', function($scope, $timeout, userFactory, $ionicLoading, $ionicModal, $cordovaPush, beaconsFactory){
+ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'userFactory', '$ionicLoading', '$ionicModal', '$cordovaPush', 'beaconsFactory', 'codeScannerFactory', function($scope, $timeout, userFactory, $ionicLoading, $ionicModal, $cordovaPush, beaconsFactory, codeScannerFactory){
     $timeout(function(){
         $("#viewcontent-QR").show();
         $("#viewcontent-QR").addClass("animated slideInUp");
@@ -627,6 +608,16 @@ ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'userFactory', '$ionicLoadi
     //     {
     //     }
     // );
+
+    $scope.OpenScanner = function() {
+        codeScannerFactory.scan()
+        .then(function(response){
+
+        })
+        .catch(function(err){
+            
+        })
+    };
 }]);
 
 ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', 'navigationFactory', function($scope, $timeout, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService, navigationFactory){
@@ -1467,7 +1458,7 @@ ctrl.controller('SearchCtrl', ['$scope', 'searchFactory', '$state', 'commerceFac
     $scope.OpenStore = function(entityID, SubEntityID) {};
 
     $scope.OpenReward = function(entityID, SubEntityID, rewardID) {
-        // tab.search-rewarddetail
+        $state.go("tab.search-rewarddetail");
     };
 }]);
 
