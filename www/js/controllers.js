@@ -478,7 +478,7 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
     };
 }]);
 
-ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'userFactory', '$ionicLoading', '$ionicModal', '$cordovaPush', 'beaconsFactory', 'codeScannerFactory', function($scope, $timeout, userFactory, $ionicLoading, $ionicModal, $cordovaPush, beaconsFactory, codeScannerFactory){
+ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'userFactory', '$ionicLoading', '$ionicModal', '$cordovaPush', 'beaconsFactory', 'codeScannerFactory', 'deviceFactory', function($scope, $timeout, userFactory, $ionicLoading, $ionicModal, $cordovaPush, beaconsFactory, codeScannerFactory, deviceFactory){
     $timeout(function(){
         $("#viewcontent-QR").show();
         $("#viewcontent-QR").addClass("animated slideInUp");
@@ -503,6 +503,30 @@ ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'userFactory', '$ionicLoadi
             $scope.$apply();
 
             $scope.viewdata.CardNumber = data.CardNumber; // data.AccountID;
+
+            if (!devEnvironment)
+            { 
+                var iosConfig = {
+                    "badge": true,
+                    "sound": true,
+                    "alert": true,
+                };
+
+                $cordovaPush.register(iosConfig).then(
+                    function(deviceToken) 
+                    {
+                        deviceFactory.device.registerdevice(deviceToken, data.Email)
+                        .then(function(response){
+                            console.log("Device Register Ok!")
+                            console.log(response)
+                        })
+                        .catch(function(err){
+                            console.log("Device Register Error!")
+                            console.log(err)
+                        })
+                    }
+                );
+            }
         })
         .catch(function(err){
             // TODO
@@ -597,17 +621,7 @@ ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'userFactory', '$ionicLoadi
             })
     };
 
-    var iosConfig = {
-        "badge": true,
-        "sound": true,
-        "alert": true,
-    };
-
-    // $cordovaPush.register(iosConfig).then(
-    //     function(deviceToken) 
-    //     {
-    //     }
-    // );
+    
 
     $scope.OpenScanner = function() {
         codeScannerFactory.scan()
