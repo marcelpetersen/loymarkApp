@@ -391,7 +391,26 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                     .error(function(data,status,headers,cofig){
                         reject(data);
                     });
-                })
+                });
+            },
+            passwordrecovery: function(email) {
+                return new Promise(function(resolve, reject){
+                    var url = serverURL + '/member/password/recovery?email=' + email;
+                    $http({
+                        method: 'POST',
+                        url: url
+                    })
+                    .success(function(data,status,headers,config){
+                        if(data.status===true){
+                            resolve(data.data);
+                        } else {
+                            reject(data.data);
+                        }
+                    })
+                    .error(function(data,status,headers,cofig){
+                        reject(data);
+                    });
+                });
             }
         },
         commerce:{
@@ -799,6 +818,17 @@ fact.factory('userFactory',['restFactory', function(restFactory){
                             reject(err);
                         });     
                 });
+            },
+            passwordrecovery: function(email) {
+               return new Promise(function(resolve, reject){
+                    restFactory.user.passwordrecovery(email)
+                        .then(function(response){
+                            resolve(response);
+                        })
+                        .catch(function(err){
+                            reject(err);
+                        });     
+                }); 
             }
         },
         datavalidation: {
