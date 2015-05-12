@@ -63,7 +63,7 @@ body, h1, h2, h3, h4, h5, p, div, span, input, button, strong  {
 	$input-profile-font-color: 		 #333333;
 
 	$action-btn-color:				 $kenuu-purple;
-	$action-back-color:			     #757575;
+	$action-back-color:			     #bbbbbb;
 
 	$profile-bg-color: 			   	 white;
 	$profile-border-color: 		  	 #eeeeee;
@@ -318,7 +318,7 @@ ion-nav-view[nav-view-transition="ios"] {
 	.profile-avatar-container {
 		padding: 40px 0 40px 0;
 		border-bottom: 1px solid $profile-border-color;
-		background-image: url('../img/qrcodebg.png');
+		background-image: url('../img/food.png');
 	}
 
 	.profile-avatar-div {
@@ -1107,7 +1107,13 @@ ion-nav-view[nav-view-transition="ios"] {
 
 	.nearme-commerce-name {
 		font-size: 20px !important;
-		color: #333333 !important;
+		color: #888888 !important;
+	}
+
+	.nearme-search-item {
+		background-color: $kenuu-purple;
+		color: white;
+		border: none;
 	}
 
 	.nearme-commerce-avatar {
@@ -1121,21 +1127,24 @@ ion-nav-view[nav-view-transition="ios"] {
 
 	.nearme-commerce-sublabel {
 		font-size: 14px !important;
-		color: $kenuu-purple !important;		
+		color: #777777 !important;		
 	}
 
 	.nearme-commerce-item {
-		border: 1px solid #eeeeee !important;
+		border: 1px solid #F8F8F8 !important;
 	}
 
 /* ******* Commerce With Rewards ******* */
-
+	.commercewr-content {
+		border: none !important;
+	}
 	.commercewr-header {
 		background-image: url('../img/food.png');		
 	}
 	.commercewr-header h2 {
 		font-size: 20px !important;
 		color: #333333 !important;
+		border: none;
 	}
 	.commercewr-gobtn {
 		position: fixed;
@@ -1160,13 +1169,17 @@ ion-nav-view[nav-view-transition="ios"] {
 		border: 1px #eeeeee;
 	}
 	.commercewr-detail-header-item {
-		background-color: #eeeeee;
-		color: #757575;
+		background-color: #222222;
+		color: #cccccc;
+		border: none;
+	}
+	.commercewr-detail-pops-item {
+		background-color: #333333;
 		border: none;
 	}
 	.commercewr-detail-title {
 		font-size: 10px;
-		color: black;
+		color: #757575;
 	}
 	.commercewr-detail-subtitle {
 		font-size: 15px;
@@ -1178,5 +1191,30 @@ ion-nav-view[nav-view-transition="ios"] {
 		border: 0px solid !important;
 	}
 	.commercewr-points {
-		color: $kenuu-purple;
+		color: white;
 	}
+	.commercewr-points-list {
+		color: $kenuu-purple;
+		font-size: 24px;
+	}
+	.commercewr-points-notlist {
+		color: #bbbbbb;
+		font-size: 24px;
+	}
+	.commercewr-reward-desc {
+		font-size: 10px !important;
+	}
+	.commercewr-reward-available {
+		color: $kenuu-green;
+	}
+	.commercewr-reward-unavailable {
+		display: none;
+	}
+
+
+
+
+
+
+
+

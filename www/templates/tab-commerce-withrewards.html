@@ -2,24 +2,24 @@
 	<ion-nav-title>
 		<img src="img/kenuulogo.png" alt="" class="top-bar-logo">
 	</ion-nav-title>
-	<ion-content class="homeTabsContent">
+	<ion-content class="commercewr-content">
 		<div class="item text-center commercewr-header">			
 			<h2>{{viewdata.commerce.Name}}</h2>	
 			<div>
 				<img class="commercewr-avatar" src="{{GetAvatarImage(viewdata.commerce.Image)}}">
 			</div>
 			<div class="commercewr-gobtn">
-				<p class="commercewr-gobtn-text">Ir!</p>
+				<p class="commercewr-gobtn-text"><i class="icon-location" style="font-size:20px;"></i></p>
 			</div>		
 		</div>
 		<div class="item commercewr-detail-header-item ">
 			<div class="row">
 				<div class="col commercewr-detail-title">
-					<strong>Dirección</strong>
+					<strong style="margin-left:-5px">Dirección</strong>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-50">
+				<div class="col-100 item-text-wrap">
 					{{viewdata.commerce.Address}}
 				</div>
 			</div>
@@ -35,14 +35,14 @@
 				<div class="col-50">
 					{{viewdata.commerce.Phone}}
 				</div>
-				<div class="col-50">
+				<div class="col-50 item-text-wrap">
 					{{viewdata.commerce.Email}}
 				</div>
 			</div>
 		</div>
-		<div class="item commercewr-detail-header-item ">
+		<div class="item commercewr-detail-pops-item">
 			<div class="row">
-				<div class="col commercewr-detail-title"><strong>Tu Balance</strong></div>
+				<div class="col commercewr-detail-title"><strong style="margin-left:-5px">Tu Balance</strong></div>
 			</div>
 			<div class="row">
 				<div class="col text-right">
@@ -53,16 +53,21 @@
 			</div>
 		</div>
 		<ul class="list">
-		    <div class="item item-divider">
-				Premios
+		    <div class="item item-divider commercewr-detail-title">
+				<strong style="margin-left:5px">Premios</strong>
 			</div>
 			<li class="item" ng-show="viewdata.rewards.length == 0">
 				No hay premios disponibles
 			</li>
 		    <li ng-show="viewdata.rewards.length > 0" class="item item-icon-left item-text-wrap commercewr-detail-item" ng-repeat="item in viewdata.rewards | orderBy:'Points'">
-		    	<i class="icon commercewr-points" ng-bind="item.Points"></i>
-		    	<strong><p style="margin-left:15px;" ng-bind="item.Name"></p></strong>
-		    	<p style="margin-left:15px;" ng-bind="item.Description"></p>
+		    	<i class="icon">
+		    		<h1 ng-class="GetPointsClass(viewdata.commerce.PointsAvailable, item.Points)" style="margin-left:10px;" ng-bind="item.Points"></h1>
+		    	</i>
+		    	<strong>
+		    		<span style="margin-left:15px;" ng-bind="item.Name"></span>
+		    		<span><i class="ion-ios-checkmark" ng-class="GetRewardAvailableCheckClass(viewdata.commerce.PointsAvailable, item.Points)"></i></span>
+		    	</strong>
+		    	<p style="margin-left:15px;" class="commercewr-reward-desc" ng-bind="item.Description"></p>
 		    </li>
 		</ul>
 	</ion-content>		

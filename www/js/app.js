@@ -1,7 +1,7 @@
 // Ionic Starter App
 var beaconFound = false;
 
-var devEnvironment = false; // To use the app through "ionic serve --lab"
+var devEnvironment = true; // To use the app through "ionic serve --lab"
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
@@ -11,8 +11,8 @@ var devEnvironment = false; // To use the app through "ionic serve --lab"
 angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.factory', 'ngCordova'])
 
 .constant('ApiEndpoint', {
-	url: 'http://192.168.71.98:8100/api' // CIS Network Development
-	// url: 'http://192.168.1.9:8100/api' // Home Development Environment
+	// url: 'http://192.168.71.98:8100/api' // CIS Network Development
+	url: 'http://192.168.1.9:8100/api' // Home Development Environment
 })
 
 .run(function($rootScope, $state, $ionicPlatform, networkFactory, $cordovaNetwork, deviceFactory, $cordovaPush, $ionicTabsDelegate, navigationFactory, commerceFactory, $ionicHistory) {

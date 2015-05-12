@@ -91,6 +91,28 @@ ctrl.controller('CommerceWithRewardsCtrl', ['$scope', '$state', 'commerceFactory
         return imageserverurl + img;
     };
 
+    $scope.GetPointsClass = function(availablepoints, rewardpoints) {
+        if (availablepoints > rewardpoints)
+        {
+            return "commercewr-points-list";
+        }
+        else
+        {
+            return "commercewr-points-notlist";
+        }
+    };
+
+    $scope.GetRewardAvailableCheckClass = function(availablepoints, rewardpoints) {
+        if (availablepoints > rewardpoints)
+        {
+            return "commercewr-reward-available";
+        }
+        else
+        {
+            return "commercewr-reward-unavailable";
+        }
+    };
+
     function LoadData(entityID) {        
         rewardFactory.active.general(true, entityID)
             .then(function(data){                
