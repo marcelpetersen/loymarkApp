@@ -1,0 +1,69 @@
+<ion-view cache-view="true">
+	<ion-nav-title>
+		<img src="img/kenuulogo.png" alt="" class="top-bar-logo">
+	</ion-nav-title>
+	<ion-content class="homeTabsContent">
+		<div class="item text-center commercewr-header">			
+			<h2>{{viewdata.commerce.Name}}</h2>	
+			<div>
+				<img class="commercewr-avatar" src="{{GetAvatarImage(viewdata.commerce.Image)}}">
+			</div>
+			<div class="commercewr-gobtn">
+				<p class="commercewr-gobtn-text">Ir!</p>
+			</div>		
+		</div>
+		<div class="item commercewr-detail-header-item ">
+			<div class="row">
+				<div class="col commercewr-detail-title">
+					<strong>Dirección</strong>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-50">
+					{{viewdata.commerce.Address}}
+				</div>
+			</div>
+			<div class="row" style="margin-top:10px;">
+				<div class="col-50 commercewr-detail-title">
+					<strong>Teléfono</strong>
+				</div>
+				<div class="col-50 commercewr-detail-title">
+					<strong>Contacto</strong>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-50">
+					{{viewdata.commerce.Phone}}
+				</div>
+				<div class="col-50">
+					{{viewdata.commerce.Email}}
+				</div>
+			</div>
+		</div>
+		<div class="item commercewr-detail-header-item ">
+			<div class="row">
+				<div class="col commercewr-detail-title"><strong>Tu Balance</strong></div>
+			</div>
+			<div class="row">
+				<div class="col text-right">
+					<strong class="commercewr-detail-balance commercewr-points">
+						{{GetPops(viewdata.commerce.PointsAvailable)}} pops
+					</strong>
+				</div>
+			</div>
+		</div>
+		<ul class="list">
+		    <div class="item item-divider">
+				Premios
+			</div>
+			<li class="item" ng-show="viewdata.rewards.length == 0">
+				No hay premios disponibles
+			</li>
+		    <li ng-show="viewdata.rewards.length > 0" class="item item-icon-left item-text-wrap commercewr-detail-item" ng-repeat="item in viewdata.rewards | orderBy:'Points'">
+		    	<i class="icon commercewr-points" ng-bind="item.Points"></i>
+		    	<strong><p style="margin-left:15px;" ng-bind="item.Name"></p></strong>
+		    	<p style="margin-left:15px;" ng-bind="item.Description"></p>
+		    </li>
+		</ul>
+	</ion-content>		
+</ion-view>

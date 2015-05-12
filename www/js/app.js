@@ -1,7 +1,7 @@
 // Ionic Starter App
 var beaconFound = false;
 
-var devEnvironment = true; // To use the app through "ionic serve --lab"
+var devEnvironment = false; // To use the app through "ionic serve --lab"
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
@@ -94,6 +94,10 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 			navigationFactory.stores.setTab("tab.rewards-stores");
 			$state.go("tab.rewards");
 		};
+
+		$rootScope.NearMeTabClicked = function() {
+			$state.go("tab.nearme");
+		};
 	});
 })
 
@@ -158,6 +162,26 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	})
 
 	// Each tab has its own nav history stack:
+
+	.state('tab.nearme', {
+		url: '/nearme',
+		views: {
+			'tab-nearme': {
+				templateUrl: 'templates/tab-nearme.html',
+				controller: 'NearMeCtrl'
+			}
+		}
+	})
+
+	.state('tab.nearme-commerce', {
+		url: '/nearme/commerce',
+		views: {
+			'tab-nearme': {
+				templateUrl: 'templates/tab-commerce-withrewards.html',
+				controller: 'CommerceWithRewardsCtrl'
+			}
+		}
+	})	
 
 	.state('tab.qrcode', {
 		url: '/qrcode',
@@ -387,7 +411,7 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	var _url = "";
 	if (_apikey != undefined)
 	{
-		_url = "/tab/qrcode";
+		_url = "/tab/nearme";
 	}
 	else
 	{

@@ -10,9 +10,19 @@ navigation history that also transitions its views in and out.
         <ion-nav-view name="tab-whatsnew"></ion-nav-view>
     </ion-tab> -->
 
+    <!-- Near Me -->
+    <ion-tab title="Cerca mío" icon-off="icon-location" icon-on="icon-location" ng-click="NearMeTabClicked()">
+        <ion-nav-view name="tab-nearme"></ion-nav-view>
+    </ion-tab>
+
     <!-- Rewards Tab -->
-    <ion-tab title="premios!" icon-off="icon-gift" icon-on="icon-gift" ng-click="RewardsTabClicked()">
+    <!-- <ion-tab title="premios!" icon-off="icon-gift" icon-on="icon-gift" ng-click="RewardsTabClicked()">
         <ion-nav-view name="tab-rewards"></ion-nav-view>
+    </ion-tab> -->
+
+    <!-- QR Code Tab -->
+    <ion-tab class="kenuu-code-tab" title="mi código" icon-off="ion-qr-scanner" icon-on="ion-qr-scanner" href="#/tab/qrcode" style="font-weight:bold;">
+        <ion-nav-view name="tab-qrcode"></ion-nav-view>
     </ion-tab>
 
     <!-- Kenuu Tab -->
@@ -20,19 +30,14 @@ navigation history that also transitions its views in and out.
         <ion-nav-view name="tab-kenuu"></ion-nav-view>
     </ion-tab>
 
-    <!-- QR Code Tab -->
-    <ion-tab class="kenuu-code-tab" title="mi código" icon-off="ion-qr-scanner" icon-on="ion-qr-scanner" href="#/tab/qrcode" style="font-weight:bold;">
-        <ion-nav-view name="tab-qrcode"></ion-nav-view>
-    </ion-tab>
-
     <!-- Search Tab -->
-    <ion-tab title="buscar" icon-off="icon-search" icon-on="icon-search" href="#/tab/search">
+    <!-- <ion-tab title="buscar" icon-off="icon-search" icon-on="icon-search" href="#/tab/search">
         <ion-nav-view name="tab-search"></ion-nav-view>
-    </ion-tab>
+    </ion-tab> -->
 
-    <!-- Account Tab -->
-    <ion-tab title="map" icon-off="icon-location" icon-on="icon-location" href="#/tab/map">
+    <!-- Map -->
+    <!-- <ion-tab title="map" icon-off="icon-location" icon-on="icon-location" href="#/tab/map">
         <ion-nav-view name="tab-map"></ion-nav-view>
-    </ion-tab>
+    </ion-tab> -->
 
 </ion-tabs>

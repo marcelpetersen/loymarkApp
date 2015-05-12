@@ -1,5 +1,110 @@
 var ctrl = angular.module('kenuu.controllers', ['ja.qr']);
 
+var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
+
+ctrl.controller('NearMeCtrl', ['$scope', '$state', 'searchFactory', 'commerceFactory', 'navigationFactory', function($scope, $state, searchFactory, commerceFactory, navigationFactory){
+    $scope.viewdata = {
+        doingSearch: false,
+        searchResults: [],
+        searchText: ""
+    };    
+
+    $scope.GetAvatarImage = function(img) {
+        if (img == undefined) return "";
+        if (img == null) return "";
+        if (img == "") return ""
+
+        return imageserverurl + img;
+    };
+
+    $scope.ClearSearch = function() {
+        $scope.viewdata.searchText = "";
+        // $(".reward-searchpanel").addClass("reward-searchpanel-hidden");
+    };
+
+    $scope.OpenCommerce = function(commerce) {
+        
+        commerceFactory.get(commerce.EntityID)
+            .then(function(response){
+                console.log(response);
+                commerceFactory.selectedCommerce.set(response[0]);
+                navigationFactory.stores.setTab("tab.search-stores");
+                navigationFactory.rewards.setTab("tab.search-prices");
+                navigationFactory.rewardDetail.setTab("tab.search-rewarddetail");                
+                $state.go("tab.nearme-commerce");
+            })
+            .catch(function(response){
+                console.log("Error when getting the commerce.")
+                console.log(response);
+            });        
+    };
+
+    $scope.$watch('viewdata.searchText', function() {
+        if ($scope.viewdata.searchText != "")
+        {
+            // $(".reward-searchpanel").removeClass("reward-searchpanel-hidden");
+            doSearch();
+        }
+        else
+        {
+            // $(".reward-searchpanel").addClass("reward-searchpanel-hidden");   
+            $scope.viewdata.searchResults = [];
+        }
+    });
+
+    function doSearch() {
+        searchFactory.doSearch($scope.viewdata.searchText)
+            .then(function(data){     
+                console.log(data)           
+                $scope.viewdata.searchResults = data.response.Elements;
+                $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
+                $scope.$apply();
+            })
+            .catch(function(data){
+                
+            })
+    };
+
+    doSearch();
+}]);
+
+ctrl.controller('CommerceWithRewardsCtrl', ['$scope', '$state', 'commerceFactory', 'rewardFactory', function($scope, $state, commerceFactory, rewardFactory){
+    $scope.viewdata = {
+        commerce: commerceFactory.selectedCommerce.get(),
+        rewards: []
+    };
+
+    console.log($scope.viewdata.commerce);
+
+    $scope.GetPops = function(availablePoints) {
+        if (availablePoints == undefined) return 0;
+        if (availablePoints == null) return 0;
+        if (availablePoints == "") return 0;
+        return availablePoints;
+    };
+
+    $scope.GetAvatarImage = function(img) {
+        if (img == undefined) return "";
+        if (img == null) return "";
+        if (img == "") return ""
+
+        return imageserverurl + img;
+    };
+
+    function LoadData(entityID) {        
+        rewardFactory.active.general(true, entityID)
+            .then(function(data){                
+                console.log(data.Elements);
+                $scope.viewdata.rewards = data.Elements;
+            })
+            .catch(function(err){
+                console.log(err);
+            });
+    };
+
+    LoadData($scope.viewdata.commerce.EntityID);
+}]);
+
 ctrl.controller('NoConnectionCtrl', ['$scope', '$state', function($scope, $state){    
 }]);
 
@@ -1494,7 +1599,6 @@ ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cord
 }]);
 
 ctrl.controller('SearchCtrl', ['$scope', 'searchFactory', '$state', 'commerceFactory', '$ionicModal', 'navigationFactory', function($scope, searchFactory, $state, commerceFactory, $ionicModal, navigationFactory){
-
     $scope.viewdata = {
         doingSearch: false,
         searchResults: [],

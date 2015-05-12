@@ -1101,3 +1101,82 @@ ion-nav-view[nav-view-transition="ios"] {
 	.login-pwd-recovery-btn{
 		color: white !important;
 	}
+
+
+/* ******** Near Me ******** */
+
+	.nearme-commerce-name {
+		font-size: 20px !important;
+		color: #333333 !important;
+	}
+
+	.nearme-commerce-avatar {
+		border-radius: 50% !important;
+		height: 45px !important;
+		width: 45px !important;
+		background-color: #eeeeee !important;
+		border: 1px solid #eeeeee !important;
+		top: 27px !important;
+	}
+
+	.nearme-commerce-sublabel {
+		font-size: 14px !important;
+		color: $kenuu-purple !important;		
+	}
+
+	.nearme-commerce-item {
+		border: 1px solid #eeeeee !important;
+	}
+
+/* ******* Commerce With Rewards ******* */
+
+	.commercewr-header {
+		background-image: url('../img/food.png');		
+	}
+	.commercewr-header h2 {
+		font-size: 20px !important;
+		color: #333333 !important;
+	}
+	.commercewr-gobtn {
+		position: fixed;
+		right: 20px;
+		top: 20px;
+		border-radius: 50% !important;
+		height: 40px !important;
+		width: 40px !important;
+		background-color: $kenuu-green;		
+	}
+	.commercewr-gobtn-text {
+		position: relative;
+		top: 10px;
+		color: white !important;
+	}
+	.commercewr-avatar {
+		border-radius: 50% !important;
+		height: 85px !important;
+		width: 85px !important;
+		background-color: #eeeeee !important;
+		margin: auto;
+		border: 1px #eeeeee;
+	}
+	.commercewr-detail-header-item {
+		background-color: #eeeeee;
+		color: #757575;
+		border: none;
+	}
+	.commercewr-detail-title {
+		font-size: 10px;
+		color: black;
+	}
+	.commercewr-detail-subtitle {
+		font-size: 15px;
+	}
+	.commercewr-detail-balance {
+		font-size: 30px;		
+	}
+	.commercewr-detail-item {
+		border: 0px solid !important;
+	}
+	.commercewr-points {
+		color: $kenuu-purple;
+	}
