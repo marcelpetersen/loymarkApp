@@ -3,9 +3,9 @@
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
     </ion-nav-title>
     <ion-content class="favcommerces-content">
-        <div id="favCommercePleaseWaitSpinner" class="item item-clear text-center pleaseWaitSpinner" ng-show="viewdata.commerces.length == 0">
+        <!-- <div id="favCommercePleaseWaitSpinner" class="item item-clear text-center pleaseWaitSpinner" ng-show="viewdata.commerces.length == 0">
             <ion-spinner icon="dots" class="spinner"></ion-spinner>
-        </div>
+        </div> -->
         <div id="errorWhenLoadingDiv" class="pleaseWaitSpinner" style="display:none">
             <div class="item item-clear item-icon-right" ng-click="Reload()">
                 <p><strong>Oops, no hay comercios!</strong></p>
@@ -14,7 +14,24 @@
             </div>                
         </div>
         <div id="favcommerces-list" class="list">
-            <div ng-repeat="commerce in viewdata.commerces" class="item card favcommerces-card" ng-click="GoToCommerce(commerce)" style="padding-left:0; padding-right:0;">
+            <div class="item item-divider">
+                <p><strong>Tu actividad</strong></p>
+            </div>
+            <div class="item item-text-wrap item-icon-right activity-activityitem" ng-repeat="commerce in viewdata.commerces">
+                <p>Hace: <strong>{{calcLapse(commerce.LastVisit)}}</strong></p>
+                <p><strong class="activity-commerce-name">{{commerce.Name}}</strong></p>                
+                <i class="icon icon-location activity-checkin"></i>
+
+                <p>
+                    <h3 class="favcommerce-lastvisit-label">
+                        <small class="textgrey-text">visitas:</small> 
+                    </h3>
+                    <h3 class="favcommerce-lastvisit-label">
+                        <strong class="favcommerce-visits">{{commerce.TotalVisits}}</strong>
+                    </h3>
+                </p>
+            </div>
+            <!-- <div ng-repeat="commerce in viewdata.commerces" class="item card favcommerces-card" ng-click="GoToCommerce(commerce)" style="padding-left:0; padding-right:0;">
                 <div class="item item-text-wrap item-icon-right text-left">
                     <div class="row">
                         <div class="col-40">
@@ -49,7 +66,7 @@
                         <img src="./img/arlequin.png" class="rewarddet-arlequin favcommerce-arlequin">
                     </div>
                 </div>                
-            </div>
+            </div> -->
         </div>
     </ion-content>
 </ion-view>

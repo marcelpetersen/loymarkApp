@@ -3,9 +3,9 @@
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
     </ion-nav-title>
     <ion-content class="activity-content">
-    	<div id="pleaseWaitSpinner" class="item item-clear text-center pleaseWaitSpinner" ng-show="viewdata.rewards.length == 0">
+    	<!-- <div id="pleaseWaitSpinner" class="item item-clear text-center pleaseWaitSpinner" ng-show="viewdata.rewards.length == 0">
             <ion-spinner icon="dots" class="spinner"></ion-spinner>
-        </div>
+        </div> -->
         <div id="errorWhenLoadingDiv" class="pleaseWaitSpinner" style="display:none">
             <div class="item item-clear item-icon-right" ng-click="Reload()">
                 <p><strong>Oops, no hay actividad!</strong></p>
@@ -14,6 +14,24 @@
             </div>                
         </div>
         <div id="activityListDiv" class="list">
+        	<div class="item item-divider">
+        		<p><strong>Tu actividad</strong></p>
+        	</div>
+        	<div class="item item-text-wrap item-icon-right activity-activityitem" ng-repeat="activity in viewdata.user.activity">
+        		<p><strong>{{gDate(activity.ActivityDate)}}</strong></p>
+        		<p><strong class="activity-commerce-name">{{activity.SubEntityName}}</strong></p>
+        		<i class="icon icon-gift activity-redemption" ng-show="activity.ActivityType == 'R'"></i>
+        		<i class="icon icon-location activity-checkin" ng-show="activity.ActivityType == 'V'"></i>
+
+        		<div class="" ng-show="activity.ActivityType == 'R'">					
+					<p><strong>{{activity.RewardName}}</strong></p>
+				</div>
+				<div class="">
+					<p><strong>{{GetActivityPointsLabel(activity.ActivityType)}}</strong> <span class="activity-points-label">{{activity.Points}}</span></p>
+				</div>
+        	</div>
+        </div>
+        <!-- <div id="activityListDiv" class="list">
         	<div class="item card activity-card" ng-repeat="activity in viewdata.user.activity" style="padding:0;">
         		<div class="item item-icon-left activity-card-item" style="padding-top:5px; padding-bottom:5px;">
         			<i class="icon activity-icon" ng-class="GetActivityIcon(activity.ActivityType)"></i>
@@ -46,7 +64,7 @@
 					</div>
 				</div>
         	</div>
-        </div>
+        </div> -->
         <div class="activity-bottomspacer"></div>
     </ion-content>
 </ion-view>

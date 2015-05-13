@@ -2,7 +2,7 @@ var ctrl = angular.module('kenuu.controllers', ['ja.qr']);
 
 var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
-ctrl.controller('NearMeCtrl', ['$scope', '$state', 'searchFactory', 'commerceFactory', 'navigationFactory', function($scope, $state, searchFactory, commerceFactory, navigationFactory){
+ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', 'loadingBox', 'searchFactory', 'commerceFactory', 'navigationFactory', function($scope, $state, $ionicLoading, loadingBox, searchFactory, commerceFactory, navigationFactory){
     $scope.viewdata = {
         doingSearch: false,
         searchResults: [],
@@ -23,7 +23,7 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', 'searchFactory', 'commerceFac
     };
 
     $scope.OpenCommerce = function(commerce) {
-        
+        loadingBox.show();
         commerceFactory.get(commerce.EntityID)
             .then(function(response){
                 console.log(response);
@@ -34,9 +34,14 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', 'searchFactory', 'commerceFac
                 $state.go("tab.nearme-commerce");
             })
             .catch(function(response){
+                loadingBox.hide();
                 console.log("Error when getting the commerce.")
                 console.log(response);
             });        
+    };
+
+    $scope.OpenMap = function() {
+        $state.go("tab.nearme-map");
     };
 
     $scope.$watch('viewdata.searchText', function() {
@@ -52,6 +57,13 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', 'searchFactory', 'commerceFac
         }
     });
 
+    function sortByKey(array, key) {
+        return array.sort(function(a, b) {
+            var x = a[key]; var y = b[key];
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        });
+    };
+
     function doSearch() {
         searchFactory.doSearch($scope.viewdata.searchText)
             .then(function(data){     
@@ -61,20 +73,52 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', 'searchFactory', 'commerceFac
                 $scope.$apply();
             })
             .catch(function(data){
-                
+                console.log(data);
             })
     };
 
     doSearch();
 }]);
 
-ctrl.controller('CommerceWithRewardsCtrl', ['$scope', '$state', 'commerceFactory', 'rewardFactory', function($scope, $state, commerceFactory, rewardFactory){
+ctrl.controller('CommerceWithRewardsCtrl', ['$scope', '$state', '$stateParams', '$ionicLoading', 'loadingBox', 'commerceFactory', 'rewardFactory', 'deviceFactory', function($scope, $state, $stateParams, $ionicLoading, loadingBox, commerceFactory, rewardFactory, deviceFactory){
     $scope.viewdata = {
         commerce: commerceFactory.selectedCommerce.get(),
-        rewards: []
+        rewards: [],
+        imageserverurl: imageserverurl
     };
 
-    console.log($scope.viewdata.commerce);
+    function LoadData(entityID) {
+        // Pulls the rewards for the Commerce      
+        rewardFactory.active.general(true, entityID)
+            .then(function(data){
+                console.log(data);
+                loadingBox.hide();
+                $scope.viewdata.rewards = data.Elements;
+            })
+            .catch(function(err){
+                loadingBox.hide();
+                console.log(err);
+            });
+    };
+
+    if ($stateParams.entityID != undefined)
+    {
+        console.log("EntityID: ", $stateParams.entityID);
+        commerceFactory.get($stateParams.entityID)
+        .then(function(response){            
+            $scope.viewdata.commerce = response[0];
+            commerceFactory.selectedCommerce.set(response[0]);
+            LoadData($scope.viewdata.commerce.EntityID);
+        })
+        .catch(function(err){
+            loadingBox.hide();
+            console.log("Error")
+        })
+    }
+    else
+    {
+        LoadData($scope.viewdata.commerce.EntityID);
+    }
 
     $scope.GetPops = function(availablePoints) {
         if (availablePoints == undefined) return 0;
@@ -113,588 +157,160 @@ ctrl.controller('CommerceWithRewardsCtrl', ['$scope', '$state', 'commerceFactory
         }
     };
 
-    function LoadData(entityID) {        
-        rewardFactory.active.general(true, entityID)
-            .then(function(data){                
-                console.log(data.Elements);
-                $scope.viewdata.rewards = data.Elements;
-            })
-            .catch(function(err){
-                console.log(err);
-            });
-    };
-
-    LoadData($scope.viewdata.commerce.EntityID);
-}]);
-
-ctrl.controller('NoConnectionCtrl', ['$scope', '$state', function($scope, $state){    
-}]);
-
-ctrl.controller('LoginCtrl', ['$scope', '$cordovaKeyboard', 'loginSignUpFactory', 'userFactory', '$ionicLoading', 'referenceIDFactory', '$cordovaPush', 'deviceFactory', '$ionicHistory', '$state', '$ionicModal', function($scope, $cordovaKeyboard, loginSignUpFactory, userFactory, $ionicLoading, referenceIDFactory, $cordovaPush, deviceFactory, $ionicHistory, $state, $ionicModal) {
-    if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(true);
-
-    $scope.viewdata = {
-        login: {
-            email: loginSignUpFactory.login.email.get(),
-            password: "",
-            email_invalid: false,
-            password_invalid: false
-        },
-        msgbox: {
-            title: "",
-            message: "",
-            buttontext: ""
+    $scope.OpenMaps = function(lat, long) {
+        var url = "";
+        if (deviceFactory.device.platform == "iOS")
+        {
+            url = "maps://maps.apple.com/?q=" + lat + "," + long;
         }
-    };
-
-    $scope.DoLogin = function() {
-        if (!devEnvironment) $cordovaKeyboard.close();
-        if (($scope.viewdata.login.password === undefined)||($scope.viewdata.login.password === ""))
-        {            
-            ShowModalMsg('Oops!', 'Te hace falta ingresar tu password.', 'Ok');
-            return;
+        else
+        {
+            url = "maps://maps.google.com/?q=" + lat + "," + long;;
         }
 
-        $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
+        url = "waze://?ll=" + lat + "," + long + "&navigate=yes"
+        
+        window.open(url, "_system");
+    };
 
-        userFactory.session.login(
-            {
-                email: $scope.viewdata.login.email,
-                password: $scope.viewdata.login.password                
+    $scope.OpenStores = function() {
+        $state.go("tab.nearme-commercestores");
+    };
+}]);
+
+ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cordovaGeolocation', '$stateParams', 'loadingBox', function($scope, commerceFactory, $ionicLoading, $cordovaGeolocation, $stateParams, loadingBox){
+    $scope.settings = {
+        enableFriends: true
+    };
+
+    $scope.$on("$ionicView.enter", function(event, args){
+        
+    });
+
+    var _map = false;
+    var _locationMarkerCreated = false;
+
+    $scope.GoToCommerce = function() {
+        alert(1);
+        //$state.go("tab.kenuu-commerce");
+    };
+
+    $scope.centerOnMe = function() {
+        if (!_map) return;
+        var posOptions = {timeout: 10000, enableHighAccuracy: false};
+        loadingBox.show();
+        $cordovaGeolocation
+            .getCurrentPosition(posOptions)
+            .then(function (position) {
+
+                var lat  = position.coords.latitude
+                var long = position.coords.longitude
+
+                var myLatlng = new google.maps.LatLng(lat, long);
+                    
+                if (!_locationMarkerCreated) {
+                    var marker = new google.maps.Marker({
+                        position: myLatlng,
+                        title: "YO!",
+                        map: _map                    
+                    });    
+                    _locationMarkerCreated = true;
+                }                
+
+                _map.setCenter(myLatlng);
+                loadingBox.hide();
+
+            }, function(err) {
+                // error
+                loadingBox.hide();
             }
-        )
-        .then(function(data){            
-            // Sets the flags indicating the user has already logged.
-            localStorage.setItem('animationShown', false);
-            referenceIDFactory.setReferenceID(data.ReferenceID);
-
-            // $cordovaPush.register(iosConfig).then(
-            //     function(deviceToken) 
-            //     {
-            //         console.log(deviceToken);
-            //         // Device Token ID
-            //         deviceFactory.device.registerdevice(deviceToken, $scope.viewdata.login.email)
-            //             .then(function(response){
-            //                 setTimeout(function(){
-                                if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(false);
-                                $ionicLoading.hide();
-                                $ionicHistory.clearHistory();
-                                $ionicHistory.clearCache();
-                                $ionicHistory.nextViewOptions({
-                                    disableAnimate: true,
-                                    disableBack: true,
-                                    historyRoot: true
-                                });
-                                $state.go('tab.qrcode');
-            //                 },800);              
-            //             })
-            //             .catch(function(response){
-                            
-            //             }); 
-            //     }, 
-            //     function(err) 
-            //     {
-            //         alert("Registration error: " + err)
-            //     }
-            // );
-
-            console.log(data);
-        })
-        .catch(function(err){
-            $ionicLoading.hide();
-            console.log(err);
-            ShowModalMsg("Oops!", "No puedes ingresar, inténtanlo de nuevo.", "Ok");
-        });
+        );
     };
 
-    function ShowModalMsg(title, message, buttontext) {
-        if (!devEnvironment) $cordovaKeyboard.close();
-        $scope.viewdata.msgbox.title = title;
-        $scope.viewdata.msgbox.message = message;
-        $scope.viewdata.msgbox.buttontext = buttontext;
+    $scope.mapCreated = function(map) {
+        loadingBox.show();
 
-        var modal = document.querySelector('#modal-msgbox-login'),
-            close = modal.querySelector( '.md-close' );
-        var overlay = document.querySelector( '.md-overlay' );
-        classie.add( modal, 'md-show' );
-        close.addEventListener( 'click', function( ev ) {
-            ev.stopPropagation();
-            classie.remove( document.querySelector('#modal-msgbox-login'), 'md-show' );
-        });
-    };
+        // Sets the map into a local variable.
+        _map = map;        
 
-    $scope.recoverPassword = function() {
-        $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
-        userFactory.session.passwordrecovery($scope.viewdata.login.email)
-        .then(function(response){
-            $ionicLoading.hide();
+        commerceFactory.stores.general(0,0).
+            then(function(data){
+                console.log(data)
+                var infoWindow = new google.maps.InfoWindow();
 
-            $ionicModal.fromTemplateUrl('templates/password-recovery-modal.html', {
-                scope: $scope,
-                animation: 'slide-in-up'
-            }).then(function(modal) {
-                $scope.modal = modal;
-                $scope.modal.show();
-            });            
-        })
-        .catch(function(err){
-            $ionicLoading.hide();
-            ShowModalMsg("Oops!", "Ocurrió un problema, inténtanlo de nuevo.", "Ok");
-        })
-    };
-
-    $scope.CloseModal = function() {
-        $scope.modal.hide();
-    };
-
-    $scope.$on('$destroy', function() {
-        if ($scope.modal) $scope.modal.remove();
-    });
-}]);
-
-ctrl.controller('PasswordCreateCtrl', ['$scope', '$cordovaKeyboard', 'loginSignUpFactory', 'userFactory', '$ionicLoading', 'referenceIDFactory', '$cordovaPush', 'deviceFactory', '$ionicHistory', '$state', function($scope, $cordovaKeyboard, loginSignUpFactory, userFactory, $ionicLoading, referenceIDFactory, $cordovaPush, deviceFactory, $ionicHistory, $state) {
-    if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(true);
-
-    $scope.viewdata = {
-        signup: {
-            email: loginSignUpFactory.login.email.get(),
-            password: "",
-            email_invalid: false,
-            password_invalid: false
-        },
-        msgbox: {
-            title: "",
-            message: "",
-            buttontext: ""
-        }
-    };
-
-    $scope.DoSignUp = function() {
-        if (!devEnvironment) $cordovaKeyboard.close();
-        if (($scope.viewdata.login.password === undefined)||($scope.viewdata.login.password === ""))
-        {            
-            ShowModalMsg('Oops!', 'Te hace falta ingresar tu password.', 'Ok');
-            return;
-        }
-
-        $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
-
-        userFactory.session.signup({email:$scope.viewdata.signup.email, password:$scope.viewdata.signup.password})
-        .then(function(data){            
-            // Sets the flags indicating the user has already logged.
-            localStorage.setItem('animationShown', false);
-            referenceIDFactory.setReferenceID(data.ReferenceID);
-            
-            if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(false);
-            $ionicLoading.hide();
-            $ionicHistory.clearHistory();
-            $ionicHistory.clearCache();
-            $ionicHistory.nextViewOptions({
-                disableAnimate: true,
-                disableBack: true,
-                historyRoot: true
-            });
-            $state.go('tab.qrcode');
-        })
-        .catch(function(err){
-            $ionicLoading.hide();
-            console.log(err);
-            ShowModalMsg("Oops!", "No puedes ingresar, inténtanlo de nuevo.", "Ok");
-        });
-    };
-
-    function ShowModalMsg(title, message, buttontext) {
-        if (!devEnvironment) $cordovaKeyboard.close();
-        $scope.viewdata.msgbox.title = title;
-        $scope.viewdata.msgbox.message = message;
-        $scope.viewdata.msgbox.buttontext = buttontext;
-
-        var modal = document.querySelector('#modal-msgbox-login'),
-            close = modal.querySelector( '.md-close' );
-        var overlay = document.querySelector( '.md-overlay' );
-        classie.add( modal, 'md-show' );
-        close.addEventListener( 'click', function( ev ) {
-            ev.stopPropagation();
-            classie.remove( document.querySelector('#modal-msgbox-login'), 'md-show' );
-        });
-    };
-}]);
-
-ctrl.controller('SignUpCtrl', ['$scope', '$cordovaKeyboard', 'loginSignUpFactory', 'userFactory', '$ionicLoading', 'referenceIDFactory', '$cordovaPush', 'deviceFactory', '$ionicHistory', '$state', function($scope, $cordovaKeyboard, loginSignUpFactory, userFactory, $ionicLoading, referenceIDFactory, $cordovaPush, deviceFactory, $ionicHistory, $state) {
-    if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(true);
-
-    $scope.viewdata = {
-        signup: {
-            email: loginSignUpFactory.login.email.get(),
-            password: "",
-            password_confirm: "",
-            email_invalid: false,
-            password_invalid: false,
-            password_confirm_invalid: false
-        },
-        msgbox: {
-            title: "",
-            message: "",
-            buttontext: ""
-        }
-    };
-
-    $scope.DoSignUp = function() {
-        if (!devEnvironment) $cordovaKeyboard.close();
-
-        // Validates the information from the form
-        if (($scope.viewdata.signup.password === undefined)||($scope.viewdata.signup.password === ""))
-        {
-            $scope.viewdata.signup.password_invalid = true;
-            ShowModalMsg('Oops!', 'Te hace falta digitar tu password.', 'Ok');
-            return;
-        }
-        else
-        {
-            $scope.viewdata.signup.password_invalid = false;
-        }
-        if (($scope.viewdata.signup.password_confirm === undefined)||($scope.viewdata.signup.password_confirm === ""))
-        {
-            $scope.viewdata.signup.password_confirm_invalid = true;
-            ShowModalMsg('Oops!', 'Te hace falta confirmar tu password.', 'Ok');
-            return;
-        }
-        else
-        {
-            $scope.viewdata.signup.password_invalid = false;
-        }
-
-        if ($scope.viewdata.signup.password_confirm != $scope.viewdata.signup.password)
-        {
-            ShowModalMsg('Oops!', 'Tus contraseñas no coinciden.', 'Ok');
-            return;
-        }
-
-        $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
-
-        userFactory.session.signup({email:$scope.viewdata.signup.email, password:$scope.viewdata.signup.password})
-            .then(function(data){
-                // alert(JSON.stringify(data))
-                if ((data.status == true)||(data.status == "true"))
+                var j=data.length;
+                for (var i=0;i<j;i++)
                 {
-                    // alert(1);
-                    // Sets the flags indicating the user has already logged.
-                    localStorage.setItem('animationShown', false);
+                    var myLatlng = new google.maps.LatLng(data[i].LocationLatitude, data[i].LocationLongitude);
+                    
+                    var marker = new google.maps.Marker({
+                        position: myLatlng,
+                        title: data[i].Name,
+                        desc: data[i].Description,
+                        info: data[i].Address,
+                        horario: "Pendiente",
+                        telefono: data[i].Phone,                        
+                        map: map,
+                        entityID: data[i].EntityID,
+                        icon: "./img/mapicon.png"
+                    });
 
-                    referenceIDFactory.setReferenceID(data.data.response.ReferenceID);
+                    var infowindow = new google.maps.InfoWindow({});
+                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                        return function() {
+                            if (infowindow) {
+                                infowindow.close();
+                            }
 
-                    if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(false);
+                            var title = "";
+                            title += "<div style='font-weight:bold'>" + marker.title + "</div>";
+                            // title += "<div>" + marker.desc + "</div>";
+                            title += "<div class='text=center'><a href='#/tab/nearme/commercedetail/" + marker.entityID + "' class='button button-small button-calm profile-btn' style='width:110px;'>Ver Comercio</a></div>"
 
-                    $ionicLoading.hide();
-                    $(".md-overlay").addClass("md-overlay-ok");
-                    $(".md-content").addClass("md-content-ok");
-                    ShowModalMsg_Ok("Listo!", "Ya quedaste registrado! Empieza a disfrutar de Kenuu.", "Ok");
 
-                    setTimeout(function(){
-                        $state.go('tab.qrcode');   
-                    }, 3000);
+                            infoWindow.setContent(
+                                "<div class='map-info-window'>" +
+                                title +
+                                "</div>"
+                            );
+                            infoWindow.open(map, marker);
+                        }
+                    })(marker));
                 }
-                else
-                {
-                    ShowModalMsg("Oops!" ,"No se pudo terminar el registro.", "Ok");
-                }
+
+                $scope.centerOnMe();
+                loadingBox.hide();
             })
             .catch(function(err){
-                $ionicLoading.hide();
-
-                console.log("Error!");
                 console.log(err);
-
-                if (err.data != undefined)
-                {
-                    if (err.data.responseCode == "MO0011") 
-                    {                        
-                        ShowModalMsg("Oops!", err.data.message, "Ok");
-                    }
-                    else
-                    {
-                        ShowModalMsg("Oops!", "No se pudo terminar el registro.", "Ok");
-                    }
-                } 
-                else
-                {
-                    ShowModalMsg("Oops!", "Ocurrió un error, por favor inténtalo de nuevo.", "Ok");
-                }               
+                loadingBox.hide();
             });
-    };
-
-    function ShowModalMsg(title, message, buttontext) {
-        if (!devEnvironment) $cordovaKeyboard.close();
-        $(".md-overlay").removeClass("md-overlay-ok");
-        $(".md-content").removeClass("md-content-ok");
-        $scope.viewdata.msgbox.title = title;
-        $scope.viewdata.msgbox.message = message;
-        $scope.viewdata.msgbox.buttontext = buttontext;
-
-        var modal = document.querySelector('#modal-msgbox-signup'),
-            close = modal.querySelector( '.md-close' );
-        var overlay = document.querySelector( '.md-overlay' );
-        classie.add( modal, 'md-show' );
-        close.addEventListener( 'click', function( ev ) {
-            ev.stopPropagation();
-            classie.remove( document.querySelector('#modal-msgbox-signup'), 'md-show' );
-        });
-    };
-
-    function ShowModalMsg_Ok(title, message, buttontext) {
-        if (!devEnvironment) $cordovaKeyboard.close();
-        $scope.viewdata.msgbox.title = title;
-        $scope.viewdata.msgbox.message = message;
-        $scope.viewdata.msgbox.buttontext = buttontext;
-
-        var modal = document.querySelector('#modal-msgbox-signup-ok'),
-            close = modal.querySelector( '.md-close' );
-        var overlay = document.querySelector( '.md-overlay' );
-        classie.add( modal, 'md-show' );
-    };
-
-    function CloseModalMsg_Ok() {
-        classie.remove( document.querySelector('#modal-msgbox-signup-ok'), 'md-show' );
-    };
-
-    function ShowFormMsg(title, msg) {
-        $cordovaKeyboard.close();
-        setTimeout(function(){            
-            swal(
-                {   
-                    title: title,   
-                    text: msg,                          
-                    confirmButtonText: "Ok",
-                    customClass: "modal-bg",
-                    confirmButtonColor: "#8f04a9"
-                }
-            );
-        }, 250);        
     };
 }]);
 
-ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', '$ionicLoading', '$cordovaKeyboard', '$cordovaPush', 'deviceFactory', '$cordovaBarcodeScanner', 'signUpLoginView', 'loginSignUpFactory', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory, $ionicLoading, $cordovaKeyboard, $cordovaPush, deviceFactory, $cordovaBarcodeScanner, signUpLoginView, loginSignUpFactory){
-    localStorage.setItem('animationShown', false);
-    
-    if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(true);
-
+ctrl.controller('CommerceWithRewardsStoresCtrl', ['$scope', '$ionicLoading', 'loadingBox', 'commerceFactory', function($scope, $ionicLoading, loadingBox, commerceFactory){
     $scope.viewdata = {
-        signup: {
-            email: "",
-            password: "",
-            password_confirm: "",
-            email_invalid: false,
-            password_invalid: false,
-            password_confirm_invalid: false
-        },
-        login: {
-            email: "",
-            password: "",
-            email_invalid: false,
-            password_invalid: false
-        },
-        msgbox: {
-            title: "",
-            message: "",
-            buttontext: ""
-        }
+        commerce: commerceFactory.selectedCommerce.get(),
+        stores: [],
+        searchtext: ""
     };
 
-    var _currentSlideIndex = 0;
-
-    var iosConfig = {
-        "badge": true,
-        "sound": true,
-        "alert": true,
-    };
-
-    $scope.DoEmailSignUp = function() {
-        // Validates the information from the form
-        if (($scope.viewdata.login.email === undefined)||($scope.viewdata.login.email === ""))
-        {
-            $scope.viewdata.login.email_invalid = true;
-            ShowModalMsg('Oops!', 'Te hace falta digitar un correo válido.', 'Ok');
-            return;
-        }
-        else
-        {
-            $scope.viewdata.login.email_invalid = false;
-        }
-
-        $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
-
-        userFactory.datavalidation.emailvalidation($scope.viewdata.login.email)
-            .then(function(response){                
-                if (response.status)
-                {
-                    loginSignUpFactory.login.email.set($scope.viewdata.login.email);
-
-                    // Email already exists and user is also created
-                    if (response.data.responseCode == 1)
-                    {                           
-                        $ionicLoading.hide();
-                        $state.go("login");
-                    }
-
-                    // Email does not exists
-                    if (response.data.responseCode == 0)
-                    {   
-                        $ionicLoading.hide();
-                        $state.go("signup");
-                    }
-
-                    // Email exists but the user hasn't been created
-                    if (response.data.responseCode == -1)
-                    {   
-                        $ionicLoading.hide(); 
-                        $state.go("signup");                       
-                    }
-                }
-                else
-                {
-                    ShowModalMsg('Oops!', "No pudimos verificar tu correo, por favor inténtanlo de nuevo.", "Ok");
-                }
-            })
-            .catch(function(err){
-                ShowModalMsg('Oops!', "No pudimos verificar tu correo, por favor inténtanlo de nuevo.", "Ok");
-            }); 
-    };
-
-    $scope.SignUp = function() {
-        // Validates the information from the form
-        if ($scope.viewdata.signup.email === "")
-        {
-            $scope.viewdata.signup.email_invalid = true;
-            ShowFormErrorMsg("Te falta el correo!");
-            return;
-        }
-        else
-        {
-            $scope.viewdata.signup.email_invalid = false;
-        }
-        if ($scope.viewdata.signup.password === "")
-        {
-            $scope.viewdata.signup.password_invalid = true;
-            ShowFormErrorMsg("Te falta el password!");
-            return;
-        }
-        else
-        {
-            $scope.viewdata.signup.password_invalid = false;
-        }
-
-        $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
-
-        userFactory.session.signup({email:$scope.viewdata.signup.email, password:$scope.viewdata.signup.password})
-            .then(function(data){
-                if ((data.status == true)||(data.status == "true"))
-                {
-                    // Sets the flags indicating the user has already logged.
-                    localStorage.setItem('animationShown', false);
-
-                    referenceIDFactory.setReferenceID(data.data.response.ReferenceID); 
-                    if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(false);
-                    $ionicLoading.hide();
-                    ShowFormMsg('Listo!', 'Ya quedaste registrado.');
-                    $state.go('tab.qrcode');   
-                }
-                else
-                {
-                    ShowFormErrorMsg("Oops!, no se pudo terminar el registro.");
-                }
-            })
-            .catch(function(err){
-                $ionicLoading.hide();
-
-                if (err.data != undefined)
-                {
-                    if (err.data.responseCode == "MO0011") 
-                    {
-                        ShowFormErrorMsg(err.data.message);
-                    }
-                    else
-                    {
-                        ShowFormErrorMsg("Oops!, no se pudo terminar el registro.");
-                    }
-                } 
-                else
-                {
-                    ShowFormErrorMsg(err);
-                }               
-            });
-    };
-
-    function ShowFormErrorMsg(msg) {
-        $cordovaKeyboard.close();
-        setTimeout(function(){            
-            swal(
-                {   
-                    title: "Oops!",   
-                    text: msg,   
-                    type: "error",   
-                    confirmButtonText: "Ok",
-                    customClass: "modal-bg",
-                    confirmButtonColor: "#8f04a9"
-                }
-            );
-        }, 250);        
-    };
-
-    function ShowFormMsg(title, msg) {
-        $cordovaKeyboard.close();
-        setTimeout(function(){            
-            swal(
-                {   
-                    title: title,   
-                    text: msg,                          
-                    confirmButtonText: "Ok",
-                    customClass: "modal-bg",
-                    confirmButtonColor: "#8f04a9"
-                }
-            );
-        }, 250);        
-    };
-
-    function ShowModalMsg(title, message, buttontext) {
-        if (!devEnvironment) $cordovaKeyboard.close();
-        $scope.viewdata.msgbox.title = title;
-        $scope.viewdata.msgbox.message = message;
-        $scope.viewdata.msgbox.buttontext = buttontext;
-
-        var modal = document.querySelector('#modal-msgbox'),
-            close = modal.querySelector( '.md-close' );
-        var overlay = document.querySelector( '.md-overlay' );
-        classie.add( modal, 'md-show' );
-        close.addEventListener( 'click', function( ev ) {
-            ev.stopPropagation();
-            classie.remove( document.querySelector('#modal-msgbox'), 'md-show' );
+    loadingBox.show();
+    commerceFactory.stores.general($scope.viewdata.commerce.EntityID)
+        .then(function(response){
+            console.log(response)
+            loadingBox.hide();
+            $scope.viewdata.stores = response;
+        })
+        .catch(function(err){
+            loadingBox.hide();
+            console.log(err)
         });
+
+    $scope.GoToAddress = function(lat, long) {
+        url = "waze://?ll=" + lat + "," + long + "&navigate=yes";        
+        window.open(url, "_system");
     };
-
-    // ***********************************
-
-    $scope.nextSlide = function() {
-        $cordovaKeyboard.close();
-        $ionicSlideBoxDelegate.next();
-    };
-
-    $scope.gotoSlide = function(index) {
-        $cordovaKeyboard.close();
-        $ionicSlideBoxDelegate.slide(parseInt(index));
-    };
-
-    $scope.slideHasChanged = function(index) {
-        if (!devEnvironment) $cordovaKeyboard.close();
-        _currentSlideIndex = parseInt(index);
-    };
-
-    $timeout(function(){
-        $("#welcome-content").addClass("animated slideInUp");
-        setTimeout(function(){
-            $("#welcomeimg1").addClass("animated zoomIn");
-            $ionicLoading.hide();
-        }, 1100);        
-    });
 }]);
 
 ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'userFactory', '$ionicLoading', '$ionicModal', '$cordovaPush', 'beaconsFactory', 'codeScannerFactory', 'deviceFactory', function($scope, $timeout, userFactory, $ionicLoading, $ionicModal, $cordovaPush, beaconsFactory, codeScannerFactory, deviceFactory){
@@ -853,7 +469,7 @@ ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'userFactory', '$ionicLoadi
     };
 }]);
 
-ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', 'navigationFactory', function($scope, $timeout, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService, navigationFactory){
+ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', 'navigationFactory', function($scope, $timeout, loadingBox, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService, navigationFactory){
     $scope.$on("$ionicView.enter", function(event, args){
         navigationFactory.setDefaults();
         LoadData();
@@ -874,7 +490,7 @@ ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'userFactory', 'commerceFact
         return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
     };
 
-    $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
+    loadingBox.show();
 
     function ShowView() {
         var animationShown = localStorage.getItem('animationShown');
@@ -903,7 +519,7 @@ ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'userFactory', 'commerceFact
     function LoadData() {
         userFactory.info.get()
             .then(function(data){  
-                $ionicLoading.hide();              
+                loadingBox.hide();              
                 $scope.viewdata.user = data;
                 $scope.$apply();
                 
@@ -911,7 +527,7 @@ ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'userFactory', 'commerceFact
                 ShowView();
             })
             .catch(function(err){
-                $ionicLoading.hide();
+                loadingBox.hide();
                 ShowErrorView();
             });
     };
@@ -923,18 +539,18 @@ ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'userFactory', 'commerceFact
     
     $scope.ReloadData = function() {
         $("#viewKenuuError").hide();
-        $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
+        loadingBox.show();
         setTimeout(function() {
             LoadData();    
         }, 150);
     };
 
     $scope.getUserImage = function(){
-    	if($scope.viewdata.user.Avatar){
-    		return $scope.viewdata.user.Avatar;
-    	} else {
-    		return 'img/ionitron.png';
-    	}
+        if($scope.viewdata.user.Avatar){
+            return $scope.viewdata.user.Avatar;
+        } else {
+            return 'img/ionitron.png';
+        }
     };
 
     $scope.GoToProfile = function() {
@@ -952,6 +568,765 @@ ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'userFactory', 'commerceFact
     $scope.CloseSetup = function() {setupView.Close($scope);};
     $scope.ContactUs = function() {emailService.ContactCustomerService();}
 }]);
+
+ctrl.controller('ActivityCtrl', ['$scope', 'userFactory', 'socialSharing', 'loadingBox', function($scope, userFactory, socialSharing, loadingBox){
+    
+    $scope.viewdata = {
+        user: {
+            activity: ''
+        }
+    };
+
+    function LoadData() {
+        LoadData_User();        
+    };
+
+    function LoadData_User() {
+        userFactory.info.get(true,2)
+            .then(function(data){                      
+                $scope.viewdata.user = data;
+                $scope.$apply();                
+                LoadData_Activity($scope.viewdata.user.AccountID)
+            })
+            .catch(function(err){ 
+                console.log(err)               
+            });
+    };
+
+    function LoadData_Activity(userID) {
+        loadingBox.show();
+        userFactory.activity.all(userID)
+            .then(function(data){
+                setTimeout(function() {
+                    $scope.viewdata.user.activity = data.Elements;
+                    $scope.$apply();
+
+                    loadingBox.hide();
+                    $("#activityListDiv").show();
+                    $("#activityListDiv").addClass("animated fadeIn");
+                }, 150);            
+            })
+            .catch(function(err){ 
+                console.log(err);           
+                setTimeout(function() { 
+                    $("#errorWhenLoadingDiv").removeClass("animated slideOutUp");
+                    setTimeout(function(){
+                        loadingBox.hide();
+                        $("#errorWhenLoadingDiv").show();                    
+                        $("#errorWhenLoadingDiv").addClass("animated slideInDown");    
+                    }, 150);                    
+                }, 220);
+            });
+    };
+
+    $scope.Reload = function() {
+        $("#errorWhenLoadingDiv").addClass("animated slideOutUp");
+        setTimeout(function(){
+            // $("#pleaseWaitSpinner").removeClass("slideOutUp");
+            // $("#pleaseWaitSpinner").addClass("animated slideInDown");
+            LoadData();
+        }, 200);        
+    };
+
+    $scope.gDate = function(date) {
+        var _date = new Date(parseInt(date.substr(6)));
+        return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
+    };
+
+    $scope.GetActivityIcon = function(activityType) {
+        if (activityType === "V") return "ion-android-pin";
+        if (activityType === "R") return "ion-ribbon-a";
+    };
+
+    $scope.GetActivityPointsLabel = function(activityType) {
+        if (activityType === "V") return "Puntos Ganados:";
+        if (activityType === "R") return "Puntos Canjeados:";
+    };
+
+    $scope.ShareViaFacebook = function(activity) {        
+        var _msg = "";
+        if (activity.ActivityType == "V")
+        {
+            _msg = "@kenuu - Fui a " + activity.SubEntityName;
+        }
+
+        if (activity.ActivityType == "R")
+        {
+            _msg = "@kenuu - Me gané ésto: " + activity.RewardName + " en " + activity.SubEntityName;
+        }
+
+        socialSharing.ShareViaFacebook(_msg, "", "")
+            .then(
+                function(result) {
+                  // Success!
+                }, function(err) {
+                  // An error occurred. Show a message to the user
+                }
+            );
+    };
+
+    $scope.ShareViaTwitter = function(activity) {        
+        var _msg = "";
+        if (activity.ActivityType == "V")
+        {
+            _msg = "@kenuu - Fui a " + activity.SubEntityName;
+        }
+
+        if (activity.ActivityType == "R")
+        {
+            _msg = "@kenuu - Me gané ésto: " + activity.RewardName + " en " + activity.SubEntityName;
+        }
+
+        socialSharing.ShareViaTwitter(_msg, "", "")
+            .then(
+                function(result) {
+                  // Success!
+                }, function(err) {
+                  // An error occurred. Show a message to the user
+                }
+            );
+    };
+
+    LoadData();
+}]);
+
+ctrl.controller('KenuuFavCommercesCtrl', ['$scope', '$state', 'userFactory', 'commerceFactory', 'dateFxService', 'loadingBox', function($scope,$state,userFactory,commerceFactory,dateFxService,loadingBox){
+
+    $scope.viewdata = {
+        commerces: []
+    };
+
+    function LoadData() {
+        loadingBox.show();
+        userFactory.activity.visits.commerce(2)
+        .then(function(data){
+            setTimeout(function() { 
+                loadingBox.hide();
+                $scope.viewdata.commerces = data.VisitedCommerces;
+                $("#favcommerces-list").show();
+                $("#favcommerces-list").addClass("animated fadeIn");
+
+                $scope.$apply();                
+            }, 150);
+        })
+        .catch(function(err){
+            setTimeout(function() { 
+                $("#errorWhenLoadingDiv").removeClass("animated slideOutUp");
+                setTimeout(function(){
+                    loadingBox.hide();
+                    $("#errorWhenLoadingDiv").show();                    
+                    $("#errorWhenLoadingDiv").addClass("animated slideInDown");    
+                }, 150);                    
+            }, 220);
+        });;    
+    };
+
+    $scope.gDate = function(date) {
+        var _date = new Date(parseInt(date.substr(6)));
+        return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
+    };
+
+    $scope.calcLapse = function(date) {        
+        return dateFxService.lapseSince(date);
+    };
+
+    $scope.GoToCommerce = function(commerce) {
+        console.log(commerce);
+        commerceFactory.selectedCommerce.set(commerce);
+        $state.go('tab.kenuu-commerce');
+    };
+
+    $scope.Reload = function() {
+        $("#errorWhenLoadingDiv").addClass("animated slideOutUp");
+        setTimeout(function(){
+            $("#favCommercePleaseWaitSpinner").removeClass("slideOutUp");
+            $("#favCommercePleaseWaitSpinner").addClass("animated slideInDown");
+            LoadData();
+        }, 200);        
+    };
+
+    LoadData();
+}]);
+
+
+// No Connection Procedure
+
+ctrl.controller('NoConnectionCtrl', ['$scope', '$state', function($scope, $state){    
+}]);
+
+// Login Procedure
+
+ctrl.controller('LoginCtrl', ['$scope', '$cordovaKeyboard', 'loginSignUpFactory', 'userFactory', '$ionicLoading', 'referenceIDFactory', '$cordovaPush', 'deviceFactory', '$ionicHistory', '$state', '$ionicModal', function($scope, $cordovaKeyboard, loginSignUpFactory, userFactory, $ionicLoading, referenceIDFactory, $cordovaPush, deviceFactory, $ionicHistory, $state, $ionicModal) {
+    if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(true);
+
+    $scope.viewdata = {
+        login: {
+            email: loginSignUpFactory.login.email.get(),
+            password: "",
+            email_invalid: false,
+            password_invalid: false
+        },
+        msgbox: {
+            title: "",
+            message: "",
+            buttontext: ""
+        }
+    };
+
+    $scope.DoLogin = function() {
+        if (!devEnvironment) $cordovaKeyboard.close();
+        if (($scope.viewdata.login.password === undefined)||($scope.viewdata.login.password === ""))
+        {            
+            ShowModalMsg('Oops!', 'Te hace falta ingresar tu password.', 'Ok');
+            return;
+        }
+
+        loadingBox.show();
+
+        userFactory.session.login(
+            {
+                email: $scope.viewdata.login.email,
+                password: $scope.viewdata.login.password                
+            }
+        )
+        .then(function(data){            
+            // Sets the flags indicating the user has already logged.
+            localStorage.setItem('animationShown', false);
+            referenceIDFactory.setReferenceID(data.ReferenceID);
+
+            // $cordovaPush.register(iosConfig).then(
+            //     function(deviceToken) 
+            //     {
+            //         console.log(deviceToken);
+            //         // Device Token ID
+            //         deviceFactory.device.registerdevice(deviceToken, $scope.viewdata.login.email)
+            //             .then(function(response){
+            //                 setTimeout(function(){
+                                if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(false);
+                                loadingBox.hide();
+                                $ionicHistory.clearHistory();
+                                $ionicHistory.clearCache();
+                                $ionicHistory.nextViewOptions({
+                                    disableAnimate: true,
+                                    disableBack: true,
+                                    historyRoot: true
+                                });
+                                $state.go('tab.qrcode');
+            //                 },800);              
+            //             })
+            //             .catch(function(response){
+                            
+            //             }); 
+            //     }, 
+            //     function(err) 
+            //     {
+            //         alert("Registration error: " + err)
+            //     }
+            // );
+
+            console.log(data);
+        })
+        .catch(function(err){
+            loadingBox.hide();
+            console.log(err);
+            ShowModalMsg("Oops!", "No puedes ingresar, inténtanlo de nuevo.", "Ok");
+        });
+    };
+
+    function ShowModalMsg(title, message, buttontext) {
+        if (!devEnvironment) $cordovaKeyboard.close();
+        $scope.viewdata.msgbox.title = title;
+        $scope.viewdata.msgbox.message = message;
+        $scope.viewdata.msgbox.buttontext = buttontext;
+
+        var modal = document.querySelector('#modal-msgbox-login'),
+            close = modal.querySelector( '.md-close' );
+        var overlay = document.querySelector( '.md-overlay' );
+        classie.add( modal, 'md-show' );
+        close.addEventListener( 'click', function( ev ) {
+            ev.stopPropagation();
+            classie.remove( document.querySelector('#modal-msgbox-login'), 'md-show' );
+        });
+    };
+
+    $scope.recoverPassword = function() {
+        loadingBox.show();
+        userFactory.session.passwordrecovery($scope.viewdata.login.email)
+        .then(function(response){
+            loadingBox.hide();
+
+            $ionicModal.fromTemplateUrl('templates/password-recovery-modal.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            }).then(function(modal) {
+                $scope.modal = modal;
+                $scope.modal.show();
+            });            
+        })
+        .catch(function(err){
+            loadingBox.hide();
+            ShowModalMsg("Oops!", "Ocurrió un problema, inténtanlo de nuevo.", "Ok");
+        })
+    };
+
+    $scope.CloseModal = function() {
+        $scope.modal.hide();
+    };
+
+    $scope.$on('$destroy', function() {
+        if ($scope.modal) $scope.modal.remove();
+    });
+}]);
+
+ctrl.controller('PasswordCreateCtrl', ['$scope', '$cordovaKeyboard', 'loginSignUpFactory', 'userFactory', '$ionicLoading', 'referenceIDFactory', '$cordovaPush', 'deviceFactory', '$ionicHistory', '$state', function($scope, $cordovaKeyboard, loginSignUpFactory, userFactory, $ionicLoading, referenceIDFactory, $cordovaPush, deviceFactory, $ionicHistory, $state) {
+    if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(true);
+
+    $scope.viewdata = {
+        signup: {
+            email: loginSignUpFactory.login.email.get(),
+            password: "",
+            email_invalid: false,
+            password_invalid: false
+        },
+        msgbox: {
+            title: "",
+            message: "",
+            buttontext: ""
+        }
+    };
+
+    $scope.DoSignUp = function() {
+        if (!devEnvironment) $cordovaKeyboard.close();
+        if (($scope.viewdata.login.password === undefined)||($scope.viewdata.login.password === ""))
+        {            
+            ShowModalMsg('Oops!', 'Te hace falta ingresar tu password.', 'Ok');
+            return;
+        }
+
+        loadingBox.show();
+
+        userFactory.session.signup({email:$scope.viewdata.signup.email, password:$scope.viewdata.signup.password})
+        .then(function(data){            
+            // Sets the flags indicating the user has already logged.
+            localStorage.setItem('animationShown', false);
+            referenceIDFactory.setReferenceID(data.ReferenceID);
+            
+            if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(false);
+            loadingBox.hide();
+            $ionicHistory.clearHistory();
+            $ionicHistory.clearCache();
+            $ionicHistory.nextViewOptions({
+                disableAnimate: true,
+                disableBack: true,
+                historyRoot: true
+            });
+            $state.go('tab.qrcode');
+        })
+        .catch(function(err){
+            loadingBox.hide();
+            console.log(err);
+            ShowModalMsg("Oops!", "No puedes ingresar, inténtanlo de nuevo.", "Ok");
+        });
+    };
+
+    function ShowModalMsg(title, message, buttontext) {
+        if (!devEnvironment) $cordovaKeyboard.close();
+        $scope.viewdata.msgbox.title = title;
+        $scope.viewdata.msgbox.message = message;
+        $scope.viewdata.msgbox.buttontext = buttontext;
+
+        var modal = document.querySelector('#modal-msgbox-login'),
+            close = modal.querySelector( '.md-close' );
+        var overlay = document.querySelector( '.md-overlay' );
+        classie.add( modal, 'md-show' );
+        close.addEventListener( 'click', function( ev ) {
+            ev.stopPropagation();
+            classie.remove( document.querySelector('#modal-msgbox-login'), 'md-show' );
+        });
+    };
+}]);
+
+ctrl.controller('SignUpCtrl', ['$scope', '$cordovaKeyboard', 'loginSignUpFactory', 'userFactory', '$ionicLoading', 'referenceIDFactory', '$cordovaPush', 'deviceFactory', '$ionicHistory', '$state', function($scope, $cordovaKeyboard, loginSignUpFactory, userFactory, $ionicLoading, referenceIDFactory, $cordovaPush, deviceFactory, $ionicHistory, $state) {
+    if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(true);
+
+    $scope.viewdata = {
+        signup: {
+            email: loginSignUpFactory.login.email.get(),
+            password: "",
+            password_confirm: "",
+            email_invalid: false,
+            password_invalid: false,
+            password_confirm_invalid: false
+        },
+        msgbox: {
+            title: "",
+            message: "",
+            buttontext: ""
+        }
+    };
+
+    $scope.DoSignUp = function() {
+        if (!devEnvironment) $cordovaKeyboard.close();
+
+        // Validates the information from the form
+        if (($scope.viewdata.signup.password === undefined)||($scope.viewdata.signup.password === ""))
+        {
+            $scope.viewdata.signup.password_invalid = true;
+            ShowModalMsg('Oops!', 'Te hace falta digitar tu password.', 'Ok');
+            return;
+        }
+        else
+        {
+            $scope.viewdata.signup.password_invalid = false;
+        }
+        if (($scope.viewdata.signup.password_confirm === undefined)||($scope.viewdata.signup.password_confirm === ""))
+        {
+            $scope.viewdata.signup.password_confirm_invalid = true;
+            ShowModalMsg('Oops!', 'Te hace falta confirmar tu password.', 'Ok');
+            return;
+        }
+        else
+        {
+            $scope.viewdata.signup.password_invalid = false;
+        }
+
+        if ($scope.viewdata.signup.password_confirm != $scope.viewdata.signup.password)
+        {
+            ShowModalMsg('Oops!', 'Tus contraseñas no coinciden.', 'Ok');
+            return;
+        }
+
+        loadingBox.show();
+
+        userFactory.session.signup({email:$scope.viewdata.signup.email, password:$scope.viewdata.signup.password})
+            .then(function(data){
+                // alert(JSON.stringify(data))
+                if ((data.status == true)||(data.status == "true"))
+                {
+                    // alert(1);
+                    // Sets the flags indicating the user has already logged.
+                    localStorage.setItem('animationShown', false);
+
+                    referenceIDFactory.setReferenceID(data.data.response.ReferenceID);
+
+                    if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(false);
+
+                    loadingBox.hide();
+                    $(".md-overlay").addClass("md-overlay-ok");
+                    $(".md-content").addClass("md-content-ok");
+                    ShowModalMsg_Ok("Listo!", "Ya quedaste registrado! Empieza a disfrutar de Kenuu.", "Ok");
+
+                    setTimeout(function(){
+                        $state.go('tab.qrcode');   
+                    }, 3000);
+                }
+                else
+                {
+                    ShowModalMsg("Oops!" ,"No se pudo terminar el registro.", "Ok");
+                }
+            })
+            .catch(function(err){
+                loadingBox.hide();
+
+                console.log("Error!");
+                console.log(err);
+
+                if (err.data != undefined)
+                {
+                    if (err.data.responseCode == "MO0011") 
+                    {                        
+                        ShowModalMsg("Oops!", err.data.message, "Ok");
+                    }
+                    else
+                    {
+                        ShowModalMsg("Oops!", "No se pudo terminar el registro.", "Ok");
+                    }
+                } 
+                else
+                {
+                    ShowModalMsg("Oops!", "Ocurrió un error, por favor inténtalo de nuevo.", "Ok");
+                }               
+            });
+    };
+
+    function ShowModalMsg(title, message, buttontext) {
+        if (!devEnvironment) $cordovaKeyboard.close();
+        $(".md-overlay").removeClass("md-overlay-ok");
+        $(".md-content").removeClass("md-content-ok");
+        $scope.viewdata.msgbox.title = title;
+        $scope.viewdata.msgbox.message = message;
+        $scope.viewdata.msgbox.buttontext = buttontext;
+
+        var modal = document.querySelector('#modal-msgbox-signup'),
+            close = modal.querySelector( '.md-close' );
+        var overlay = document.querySelector( '.md-overlay' );
+        classie.add( modal, 'md-show' );
+        close.addEventListener( 'click', function( ev ) {
+            ev.stopPropagation();
+            classie.remove( document.querySelector('#modal-msgbox-signup'), 'md-show' );
+        });
+    };
+
+    function ShowModalMsg_Ok(title, message, buttontext) {
+        if (!devEnvironment) $cordovaKeyboard.close();
+        $scope.viewdata.msgbox.title = title;
+        $scope.viewdata.msgbox.message = message;
+        $scope.viewdata.msgbox.buttontext = buttontext;
+
+        var modal = document.querySelector('#modal-msgbox-signup-ok'),
+            close = modal.querySelector( '.md-close' );
+        var overlay = document.querySelector( '.md-overlay' );
+        classie.add( modal, 'md-show' );
+    };
+
+    function CloseModalMsg_Ok() {
+        classie.remove( document.querySelector('#modal-msgbox-signup-ok'), 'md-show' );
+    };
+
+    function ShowFormMsg(title, msg) {
+        $cordovaKeyboard.close();
+        setTimeout(function(){            
+            swal(
+                {   
+                    title: title,   
+                    text: msg,                          
+                    confirmButtonText: "Ok",
+                    customClass: "modal-bg",
+                    confirmButtonColor: "#8f04a9"
+                }
+            );
+        }, 250);        
+    };
+}]);
+
+
+ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', '$ionicLoading', '$cordovaKeyboard', '$cordovaPush', 'deviceFactory', '$cordovaBarcodeScanner', 'signUpLoginView', 'loginSignUpFactory', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory, $ionicLoading, $cordovaKeyboard, $cordovaPush, deviceFactory, $cordovaBarcodeScanner, signUpLoginView, loginSignUpFactory){
+    localStorage.setItem('animationShown', false);
+    
+    if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(true);
+
+    $scope.viewdata = {
+        signup: {
+            email: "",
+            password: "",
+            password_confirm: "",
+            email_invalid: false,
+            password_invalid: false,
+            password_confirm_invalid: false
+        },
+        login: {
+            email: "",
+            password: "",
+            email_invalid: false,
+            password_invalid: false
+        },
+        msgbox: {
+            title: "",
+            message: "",
+            buttontext: ""
+        }
+    };
+
+    var _currentSlideIndex = 0;
+
+    var iosConfig = {
+        "badge": true,
+        "sound": true,
+        "alert": true,
+    };
+
+    $scope.DoEmailSignUp = function() {
+        // Validates the information from the form
+        if (($scope.viewdata.login.email === undefined)||($scope.viewdata.login.email === ""))
+        {
+            $scope.viewdata.login.email_invalid = true;
+            ShowModalMsg('Oops!', 'Te hace falta digitar un correo válido.', 'Ok');
+            return;
+        }
+        else
+        {
+            $scope.viewdata.login.email_invalid = false;
+        }
+
+        loadingBox.show();
+
+        userFactory.datavalidation.emailvalidation($scope.viewdata.login.email)
+            .then(function(response){                
+                if (response.status)
+                {
+                    loginSignUpFactory.login.email.set($scope.viewdata.login.email);
+
+                    // Email already exists and user is also created
+                    if (response.data.responseCode == 1)
+                    {                           
+                        loadingBox.hide();
+                        $state.go("login");
+                    }
+
+                    // Email does not exists
+                    if (response.data.responseCode == 0)
+                    {   
+                        loadingBox.hide();
+                        $state.go("signup");
+                    }
+
+                    // Email exists but the user hasn't been created
+                    if (response.data.responseCode == -1)
+                    {   
+                        loadingBox.hide(); 
+                        $state.go("signup");                       
+                    }
+                }
+                else
+                {
+                    ShowModalMsg('Oops!', "No pudimos verificar tu correo, por favor inténtanlo de nuevo.", "Ok");
+                }
+            })
+            .catch(function(err){
+                ShowModalMsg('Oops!', "No pudimos verificar tu correo, por favor inténtanlo de nuevo.", "Ok");
+            }); 
+    };
+
+    $scope.SignUp = function() {
+        // Validates the information from the form
+        if ($scope.viewdata.signup.email === "")
+        {
+            $scope.viewdata.signup.email_invalid = true;
+            ShowFormErrorMsg("Te falta el correo!");
+            return;
+        }
+        else
+        {
+            $scope.viewdata.signup.email_invalid = false;
+        }
+        if ($scope.viewdata.signup.password === "")
+        {
+            $scope.viewdata.signup.password_invalid = true;
+            ShowFormErrorMsg("Te falta el password!");
+            return;
+        }
+        else
+        {
+            $scope.viewdata.signup.password_invalid = false;
+        }
+
+        loadingBox.show();
+
+        userFactory.session.signup({email:$scope.viewdata.signup.email, password:$scope.viewdata.signup.password})
+            .then(function(data){
+                if ((data.status == true)||(data.status == "true"))
+                {
+                    // Sets the flags indicating the user has already logged.
+                    localStorage.setItem('animationShown', false);
+
+                    referenceIDFactory.setReferenceID(data.data.response.ReferenceID); 
+                    if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(false);
+                    loadingBox.hide();
+                    ShowFormMsg('Listo!', 'Ya quedaste registrado.');
+                    $state.go('tab.qrcode');   
+                }
+                else
+                {
+                    ShowFormErrorMsg("Oops!, no se pudo terminar el registro.");
+                }
+            })
+            .catch(function(err){
+                loadingBox.hide();
+
+                if (err.data != undefined)
+                {
+                    if (err.data.responseCode == "MO0011") 
+                    {
+                        ShowFormErrorMsg(err.data.message);
+                    }
+                    else
+                    {
+                        ShowFormErrorMsg("Oops!, no se pudo terminar el registro.");
+                    }
+                } 
+                else
+                {
+                    ShowFormErrorMsg(err);
+                }               
+            });
+    };
+
+    function ShowFormErrorMsg(msg) {
+        $cordovaKeyboard.close();
+        setTimeout(function(){            
+            swal(
+                {   
+                    title: "Oops!",   
+                    text: msg,   
+                    type: "error",   
+                    confirmButtonText: "Ok",
+                    customClass: "modal-bg",
+                    confirmButtonColor: "#8f04a9"
+                }
+            );
+        }, 250);        
+    };
+
+    function ShowFormMsg(title, msg) {
+        $cordovaKeyboard.close();
+        setTimeout(function(){            
+            swal(
+                {   
+                    title: title,   
+                    text: msg,                          
+                    confirmButtonText: "Ok",
+                    customClass: "modal-bg",
+                    confirmButtonColor: "#8f04a9"
+                }
+            );
+        }, 250);        
+    };
+
+    function ShowModalMsg(title, message, buttontext) {
+        if (!devEnvironment) $cordovaKeyboard.close();
+        $scope.viewdata.msgbox.title = title;
+        $scope.viewdata.msgbox.message = message;
+        $scope.viewdata.msgbox.buttontext = buttontext;
+
+        var modal = document.querySelector('#modal-msgbox'),
+            close = modal.querySelector( '.md-close' );
+        var overlay = document.querySelector( '.md-overlay' );
+        classie.add( modal, 'md-show' );
+        close.addEventListener( 'click', function( ev ) {
+            ev.stopPropagation();
+            classie.remove( document.querySelector('#modal-msgbox'), 'md-show' );
+        });
+    };
+
+    // ***********************************
+
+    $scope.nextSlide = function() {
+        $cordovaKeyboard.close();
+        $ionicSlideBoxDelegate.next();
+    };
+
+    $scope.gotoSlide = function(index) {
+        $cordovaKeyboard.close();
+        $ionicSlideBoxDelegate.slide(parseInt(index));
+    };
+
+    $scope.slideHasChanged = function(index) {
+        if (!devEnvironment) $cordovaKeyboard.close();
+        _currentSlideIndex = parseInt(index);
+    };
+
+    $timeout(function(){
+        $("#welcome-content").addClass("animated slideInUp");
+        setTimeout(function(){
+            $("#welcomeimg1").addClass("animated zoomIn");
+            loadingBox.hide();
+        }, 1100);        
+    });
+}]);
+
+
+// Not Currently Used
+
 
 ctrl.controller('KenuuPricesCtrl', ['$scope', '$state', 'rewardFactory', 'userFactory', 'commerceFactory', '$ionicLoading', 'navigationFactory', function($scope,$state,rewardFactory,userFactory,commerceFactory,$ionicLoading,navigationFactory){
 
@@ -998,7 +1373,7 @@ ctrl.controller('KenuuPricesCtrl', ['$scope', '$state', 'rewardFactory', 'userFa
     };
 
     function LoadData(entityID) {
-        $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
+        loadingBox.show();
         rewardFactory.active.general(true, entityID)
             .then(function(data){
                 $("#pleaseWaitSpinner").addClass("animated slideOutUp");
@@ -1007,7 +1382,7 @@ ctrl.controller('KenuuPricesCtrl', ['$scope', '$state', 'rewardFactory', 'userFa
                     $scope.viewdata.rewards = SetColorForItem($scope.viewdata.rewards);
                     $("#rewardsListContainer").show();                    
                     $scope.$apply();
-                    $ionicLoading.hide();
+                    loadingBox.hide();
                     $scope.$broadcast('scroll.refreshComplete');                    
                 }, 150);
             })
@@ -1018,7 +1393,7 @@ ctrl.controller('KenuuPricesCtrl', ['$scope', '$state', 'rewardFactory', 'userFa
                 setTimeout(function() { 
                     $("#errorWhenLoadingDiv").removeClass("animated slideOutUp");
                     setTimeout(function(){
-                        $ionicLoading.hide();
+                        loadingBox.hide();
                         $("#errorWhenLoadingDiv").show();                    
                         $("#errorWhenLoadingDiv").addClass("animated slideInDown");    
                     }, 150);                    
@@ -1036,7 +1411,7 @@ ctrl.controller('KenuuPricesCtrl', ['$scope', '$state', 'rewardFactory', 'userFa
 
         if ($scope.viewdata.commerceSelected)
         {
-            $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
+            loadingBox.show();
             $scope.viewdata.rewards = [];
             $scope.$apply();
             setTimeout(function(){
@@ -1113,64 +1488,7 @@ ctrl.controller('KenuuPricesCtrl', ['$scope', '$state', 'rewardFactory', 'userFa
     };
 }]);
 
-ctrl.controller('KenuuFavCommercesCtrl', ['$scope', '$state', 'userFactory', 'commerceFactory', 'dateFxService', function($scope,$state,userFactory,commerceFactory,dateFxService){
 
-	$scope.viewdata = {
-        commerces: []
-    };
-
-    function LoadData() {
-        userFactory.activity.visits.commerce(2)
-        .then(function(data){
-            $("#favCommercePleaseWaitSpinner").addClass("animated slideOutUp");
-            
-            setTimeout(function() { 
-                $scope.viewdata.commerces = data.VisitedCommerces;
-                $("#favcommerces-list").show();
-                $("#favcommerces-list").addClass("animated fadeIn");
-
-                $scope.$apply();                
-            }, 150);
-        })
-        .catch(function(err){                
-            $("#favCommercePleaseWaitSpinner").addClass("animated slideOutUp");
-            
-            setTimeout(function() { 
-                $("#errorWhenLoadingDiv").removeClass("animated slideOutUp");
-                setTimeout(function(){
-                    $("#errorWhenLoadingDiv").show();                    
-                    $("#errorWhenLoadingDiv").addClass("animated slideInDown");    
-                }, 150);                    
-            }, 220);
-        });;    
-    };
-
-    $scope.gDate = function(date) {
-        var _date = new Date(parseInt(date.substr(6)));
-        return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
-    };
-
-    $scope.calcLapse = function(date) {        
-        return dateFxService.lapseSince(date);
-    };
-
-    $scope.GoToCommerce = function(commerce) {
-        console.log(commerce);
-        commerceFactory.selectedCommerce.set(commerce);
-        $state.go('tab.kenuu-commerce');
-    };
-
-    $scope.Reload = function() {
-        $("#errorWhenLoadingDiv").addClass("animated slideOutUp");
-        setTimeout(function(){
-            $("#favCommercePleaseWaitSpinner").removeClass("slideOutUp");
-            $("#favCommercePleaseWaitSpinner").addClass("animated slideInDown");
-            LoadData();
-        }, 200);        
-    };
-
-    LoadData();
-}]);
 
 ctrl.controller('KenuuCommerceCtrl', ['$scope', '$state', 'rewardFactory', 'commerceFactory', 'userFactory', '$window', '$cordovaEmailComposer', 'dateFxService', 'navigationFactory', '$stateParams', function($scope, $state, rewardFactory, commerceFactory, userFactory, $window, $cordovaEmailComposer, dateFxService, navigationFactory, $stateParams){
     $scope.viewdata = {
@@ -1351,7 +1669,7 @@ ctrl.controller('KenuuStoresCtrl', ['$scope','rewardFactory', '$window', '$cordo
     };
 }]);
 
-ctrl.controller('KenuuProfileCtrl', ['$scope', '$timeout', 'userFactory', '$state', '$ionicHistory', 'msgBox', '$ionicLoading', function($scope, $timeout, userFactory, $state, $ionicHistory, msgBox, $ionicLoading){
+ctrl.controller('KenuuProfileCtrl', ['$scope', '$timeout', 'userFactory', '$state', '$ionicHistory', 'msgBox', '$ionicLoading', 'loadingBox', function($scope, $timeout, userFactory, $state, $ionicHistory, msgBox, $ionicLoading, loadingBox){
     $scope.viewdata = {
         qrcode: "Kenuu",
         counter: 1,
@@ -1374,7 +1692,7 @@ ctrl.controller('KenuuProfileCtrl', ['$scope', '$timeout', 'userFactory', '$stat
         .catch(function(err){});
 
     $scope.SaveProfile = function() {
-        $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
+        loadingBox.show();
 
         userFactory.info.update({
             FirstName: $scope.viewdata.user.name,
@@ -1383,7 +1701,7 @@ ctrl.controller('KenuuProfileCtrl', ['$scope', '$timeout', 'userFactory', '$stat
             Password: ""
         })
         .then(function(response){
-            $ionicLoading.hide();
+            loadingBox.hide();
             if ((response.status=="true")||(response.status==true))
             {
                 userFactory.info.get(true,2)
@@ -1398,7 +1716,7 @@ ctrl.controller('KenuuProfileCtrl', ['$scope', '$timeout', 'userFactory', '$stat
             }
         })
         .catch(function(err){
-            $ionicLoading.hide();
+            loadingBox.hide();
         });
     };
 
@@ -1494,10 +1812,10 @@ ctrl.controller('KenuuRewardDetailCtrl', ['$scope', '$timeout', 'userFactory', '
             }, 
             function()
             {   
-                $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
+                loadingBox.show();
                 
                 setTimeout(function() {
-                    $ionicLoading.hide();
+                    loadingBox.hide();
                     swal(
                     {
                         title: "Listo!",
@@ -1511,114 +1829,6 @@ ctrl.controller('KenuuRewardDetailCtrl', ['$scope', '$timeout', 'userFactory', '
     };
 }]);
 
-ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cordovaGeolocation', '$stateParams', function($scope, commerceFactory, $ionicLoading, $cordovaGeolocation, $stateParams){
-  	$scope.settings = {
-    	enableFriends: true
-  	};
-
-    $scope.$on("$ionicView.enter", function(event, args){
-        
-    });
-
-    var _map = false;
-    var _locationMarkerCreated = false;
-
-    $scope.GoToCommerce = function() {
-        alert(1);
-        //$state.go("tab.kenuu-commerce");
-    };
-
-    $scope.centerOnMe = function() {
-        if (!_map) return;
-        var posOptions = {timeout: 10000, enableHighAccuracy: false};
-        $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
-        $cordovaGeolocation
-            .getCurrentPosition(posOptions)
-            .then(function (position) {
-
-                var lat  = position.coords.latitude
-                var long = position.coords.longitude
-
-                var myLatlng = new google.maps.LatLng(lat, long);
-                    
-                if (!_locationMarkerCreated) {
-                    var marker = new google.maps.Marker({
-                        position: myLatlng,
-                        title: "YO!",
-                        map: _map                    
-                    });    
-                    _locationMarkerCreated = true;
-                }                
-
-                _map.setCenter(myLatlng);
-                $ionicLoading.hide();
-
-            }, function(err) {
-                // error
-                $ionicLoading.hide();
-            }
-        );
-    };
-
-    $scope.mapCreated = function(map) {
-        $ionicLoading.show({template: 'Por favor espere <br><ion-spinner icon="dots" class="spinner"></ion-spinner>'});
-
-        // Sets the map into a local variable.
-        _map = map;        
-
-        commerceFactory.stores.general(0,0).
-            then(function(data){
-                var infoWindow = new google.maps.InfoWindow();
-
-                var j=data.length;
-                for (var i=0;i<j;i++)
-                {
-                    var myLatlng = new google.maps.LatLng(data[i].LocationLatitude, data[i].LocationLongitude);
-                    
-                    var marker = new google.maps.Marker({
-                        position: myLatlng,
-                        title: data[i].Name,
-                        desc: data[i].Description,
-                        info: data[i].Address,
-                        horario: "Pendiente",
-                        telefono: data[i].Phone,                        
-                        map: map,
-                        entityID: data[i].EntityID,
-                        icon: "./img/mapicon.png"
-                    });
-
-                    var infowindow = new google.maps.InfoWindow({});
-                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
-                        return function() {
-                            if (infowindow) {
-                                infowindow.close();
-                            }
-
-                            var title = "";
-                            title += "<div style='font-weight:bold'>" + marker.title + "</div>";
-                            title += "<div>" + marker.desc + "</div>";
-                            title += "<div class='text=center'><a href='#/tab/map/store/" + marker.entityID + "' class='button button-small button-calm profile-btn' style='width:110px;'>Ver Comercio</a></div>"
-
-
-                            infoWindow.setContent(
-                                "<div class='map-info-window'>" +
-                                title +
-                                "</div>"
-                            );
-                            infoWindow.open(map, marker);
-                        }
-                    })(marker));
-                }
-
-                $scope.centerOnMe();
-                $ionicLoading.hide();
-            })
-            .catch(function(err){
-                console.log(err);
-                $ionicLoading.hide();
-            });
-    };
-}]);
 
 ctrl.controller('SearchCtrl', ['$scope', 'searchFactory', '$state', 'commerceFactory', '$ionicModal', 'navigationFactory', function($scope, searchFactory, $state, commerceFactory, $ionicModal, navigationFactory){
     $scope.viewdata = {
@@ -1694,127 +1904,7 @@ ctrl.controller('SearchCtrl', ['$scope', 'searchFactory', '$state', 'commerceFac
     };
 }]);
 
-ctrl.controller('ActivityCtrl', ['$scope', 'userFactory', 'socialSharing', function($scope, userFactory, socialSharing){
-    
-    $scope.viewdata = {        
-        user: {
-            activity: ''
-        }
-    };
 
-    function LoadData() {
-        LoadData_User();        
-    };
-
-    function LoadData_User() {
-        userFactory.info.get(true,2)
-            .then(function(data){                      
-                $scope.viewdata.user = data;
-                $scope.$apply();                
-                LoadData_Activity($scope.viewdata.user.AccountID)
-            })
-            .catch(function(err){ 
-                console.log(err)               
-            });
-    };
-
-    function LoadData_Activity(userID) {
-        userFactory.activity.all(userID)
-            .then(function(data){
-                $("#pleaseWaitSpinner").addClass("animated slideOutUp");
-
-                setTimeout(function() {
-                    $scope.viewdata.user.activity = data.Elements;
-                    $scope.$apply();
-
-                    $("#activityListDiv").show();
-                    $("#activityListDiv").addClass("animated fadeIn");
-                }, 150);            
-            })
-            .catch(function(err){ 
-                console.log(err);           
-                $("#pleaseWaitSpinner").addClass("animated slideOutUp");
-                    
-                setTimeout(function() { 
-                    $("#errorWhenLoadingDiv").removeClass("animated slideOutUp");
-                    setTimeout(function(){
-                        $("#errorWhenLoadingDiv").show();                    
-                        $("#errorWhenLoadingDiv").addClass("animated slideInDown");    
-                    }, 150);                    
-                }, 220);
-            });
-    };
-
-    $scope.Reload = function() {
-        $("#errorWhenLoadingDiv").addClass("animated slideOutUp");
-        setTimeout(function(){
-            $("#pleaseWaitSpinner").removeClass("slideOutUp");
-            $("#pleaseWaitSpinner").addClass("animated slideInDown");
-            LoadData();
-        }, 200);        
-    };
-
-    $scope.gDate = function(date) {
-        var _date = new Date(parseInt(date.substr(6)));
-        return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
-    };
-
-    $scope.GetActivityIcon = function(activityType) {
-        if (activityType === "V") return "ion-android-pin";
-        if (activityType === "R") return "ion-ribbon-a";
-    };
-
-    $scope.GetActivityPointsLabel = function(activityType) {
-        if (activityType === "V") return "Puntos Ganados:";
-        if (activityType === "R") return "Puntos Canjeados:";
-    };
-
-    $scope.ShareViaFacebook = function(activity) {        
-        var _msg = "";
-        if (activity.ActivityType == "V")
-        {
-            _msg = "@kenuu - Fui a " + activity.SubEntityName;
-        }
-
-        if (activity.ActivityType == "R")
-        {
-            _msg = "@kenuu - Me gané ésto: " + activity.RewardName + " en " + activity.SubEntityName;
-        }
-
-        socialSharing.ShareViaFacebook(_msg, "", "")
-            .then(
-                function(result) {
-                  // Success!
-                }, function(err) {
-                  // An error occurred. Show a message to the user
-                }
-            );
-    };
-
-    $scope.ShareViaTwitter = function(activity) {        
-        var _msg = "";
-        if (activity.ActivityType == "V")
-        {
-            _msg = "@kenuu - Fui a " + activity.SubEntityName;
-        }
-
-        if (activity.ActivityType == "R")
-        {
-            _msg = "@kenuu - Me gané ésto: " + activity.RewardName + " en " + activity.SubEntityName;
-        }
-
-        socialSharing.ShareViaTwitter(_msg, "", "")
-            .then(
-                function(result) {
-                  // Success!
-                }, function(err) {
-                  // An error occurred. Show a message to the user
-                }
-            );
-    };
-
-    LoadData();
-}]);
 
 ctrl.controller('WhatsNewCtrl', ['$scope', '$cordovaInAppBrowser', '$ionicSlideBoxDelegate', function($scope, $cordovaInAppBrowser, setupView, emailService, $ionicSlideBoxDelegate) {
 

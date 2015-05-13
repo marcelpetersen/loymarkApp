@@ -49,6 +49,7 @@ body, h1, h2, h3, h4, h5, p, div, span, input, button, strong  {
 	$kenuu-dark-purple: 			 #6E1780;
 	$kenuu-darker-purple: 		     #4E0F5B;
 	$kenuu-light-purple:			 #D6C8FF;
+	$kenuu-light-blue:				 #00D9A3;
 
 	$modal-bg: 					     $kenuu-darker-purple;
 
@@ -222,8 +223,8 @@ ion-nav-view[nav-view-transition="ios"] {
 	.spinner svg {
 		width: 38px;
 		height: 38px;
-		stroke: $kenuu-purple;
-		fill: $kenuu-purple;
+		stroke: white;
+		fill: white;
 	}
 	.gradient-pattern {
 		-webkit-box-sizing: content-box;
@@ -618,7 +619,7 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 	.qrcode-content {
 		//background-color: $qrcode-bg-color;
-		background-image: url('../img/whatsnewbg.png');		
+		background-image: url('../img/food.png');		
 	}
 	.qrcode-item {
 		// background-color: $qrcode-bg-color;
@@ -626,7 +627,7 @@ ion-nav-view[nav-view-transition="ios"] {
 		height: 100vh;
 		// background-image: url('../img/buildingbg.png') !important;
 		// background-repeat: no-repeat;
-		background-image: url('../img/whatsnewbg.png');
+		background-image: url('../img/food.png');
 		background-position: bottom 68px right 0px; 
 	}
 	.qrcode-qrcontainer {
@@ -897,7 +898,7 @@ ion-nav-view[nav-view-transition="ios"] {
 
 	.favcommerces-content {
 		// background-color: $reward-content-bgcolor !important;
-		background-image: url('../img/whatsnewbg.png');
+		background-image: url('../img/food.png');
 
 	}
 	.favcommerces-card {
@@ -940,7 +941,7 @@ ion-nav-view[nav-view-transition="ios"] {
 	.profileedit-content {		
 		height: 100vh;
 		// background-color: $reward-content-bgcolor !important;
-		background-image: url('../img/whatsnewbg.png');
+		background-image: url('../img/food.png');
 	}
 	.profileedit-input {
 		color: $input-profile-font-color;
@@ -960,10 +961,23 @@ ion-nav-view[nav-view-transition="ios"] {
 	.activity-content {		
 		height: 100vh;
 		// background-color: $reward-content-bgcolor !important;
-		background-image: url('../img/whatsnewbg.png');
+		background-image: url('../img/food.png');
+	}
+	.activity-activityitem {
+		border: 1px solid #f8f8f8 !important;
 	}
 	.activity-icon {
 		// font-size: 20px;
+		color: $kenuu-purple;
+	}
+	.activity-commerce-name {
+		font-size: 20px !important;
+		color: #555555 !important;
+	}
+	.activity-redemption {
+		color: $kenuu-green;
+	}
+	.activity-checkin {
 		color: $kenuu-purple;
 	}
 	.activity-card {
@@ -1102,12 +1116,21 @@ ion-nav-view[nav-view-transition="ios"] {
 		color: white !important;
 	}
 
+/* ******** No connection ******* */
+
+	.noconnection-content {
+		background-image: url('../img/food.png');
+	}
 
 /* ******** Near Me ******** */
 
 	.nearme-commerce-name {
 		font-size: 20px !important;
-		color: #888888 !important;
+		color: #555555 !important;
+	}
+
+	.nearme-content {
+		background-image: url('../img/food.png');
 	}
 
 	.nearme-search-item {
@@ -1126,8 +1149,8 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 
 	.nearme-commerce-sublabel {
-		font-size: 14px !important;
-		color: #777777 !important;		
+		font-size: 10px !important;
+		color: #666 !important;		
 	}
 
 	.nearme-commerce-item {
@@ -1209,6 +1232,34 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 	.commercewr-reward-unavailable {
 		display: none;
+	}
+	.commercewr-storesbtn {
+		position: fixed;
+		left: 20px;
+		top: 105px;
+		height: 30px !important;
+		width: 95px !important;
+		background-color: $kenuu-purple;	
+	}
+	.commercewr-storesbtn-text {
+		position: relative;
+		top: 5px;
+		font-size: 19px !important;
+		color: white !important;
+	}
+
+/* ******** Commerce Stores ********* */
+
+	.commercewrstores-store-item {
+		border: 1px solid #F8F8F8 !important;	
+	}
+	.commercewrstores-store-name {
+		font-size: 18px !important;
+		color: #555555 !important;
+	}
+	.commercewrstores-gobtn {
+		background-color: $kenuu-green !important;
+		color: white !important;
 	}
 
 

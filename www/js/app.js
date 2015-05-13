@@ -181,7 +181,37 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 				controller: 'CommerceWithRewardsCtrl'
 			}
 		}
-	})	
+	})
+
+	.state('tab.nearme-commercedetail', {
+		url: '/nearme/commercedetail/:entityID',
+		views: {
+			'tab-nearme': {
+				templateUrl: 'templates/tab-commerce-withrewards.html',
+				controller: 'CommerceWithRewardsCtrl'
+			}
+		}
+	})
+
+	.state('tab.nearme-commercestores', {
+		url: '/nearme/commercestores',
+		views: {
+			'tab-nearme': {
+				templateUrl: 'templates/tab-commerce-stores.html',
+				controller: 'CommerceWithRewardsStoresCtrl'
+			}
+		}
+	})
+
+	.state('tab.nearme-map', {
+		url: '/nearme/map',
+		views: {
+	  		'tab-nearme': {
+	    		templateUrl: 'templates/tab-map.html',
+	    		controller: 'MapCtrl'
+	  		}
+		}
+	})
 
 	.state('tab.qrcode', {
 		url: '/qrcode',

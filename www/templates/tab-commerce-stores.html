@@ -1,0 +1,47 @@
+<ion-view>
+    <ion-nav-title>
+        <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
+    </ion-nav-title>
+    <ion-content>
+    	<div class="list">        	
+        	<div class="bar bar-header item-input-inset">
+				<label class="item-input-wrapper">
+					<i class="icon ion-ios-search placeholder-icon"></i>
+					<input type="search" ng-model="viewdata.searchtext" placeholder="Buscar">
+				</label>
+				<button class="button button-clear">
+					<i class="ion-ios-close-outline"></i>
+				</button>
+			</div>
+        	<div class="item item-text-wrap commercewrstores-store-item" ng-repeat="item in viewdata.stores | filter:{Name:viewdata.searchtext}">
+        		<strong><p class="commercewrstores-store-name" ng-bind="item.Name"></p></strong>
+        		<div style="margin-left:5px; margin-right:5px; margin-top:5px;">
+					<p><strong>Dirección</strong></p>		
+					<p ng-bind="item.Address"></p>
+				</div>
+
+
+        		<div class="row">
+        			<div class="col-50">
+        				<p><strong>Horario</strong></p>
+        			</div>
+        			<div class="col-50">
+        				<p><strong>Teléfono</strong></p>
+        			</div>
+        		</div>
+        		<div class="row">
+        			<div class="col-50">
+        				<p>
+        					<span ng-bind="item.OpeningHours.substr(0,5)"></span> a <span ng-bind="item.ClosingHours.substr(0,5)"></span>
+        				</p>
+        			</div>
+        			<div class="col-50">
+        				<p ng-bind="item.Phone"></p>
+        			</div>
+        		</div>
+        		<button class="button button-block button-light commercewrstores-gobtn" ng-click="GoToAddress(item.LocationLatitude, item.LocationLongitude)">Ir a la tienda <i class="icon-location"></i></button>
+        		
+        	</div>
+        </div>
+    </ion-content>
+</ion-view>

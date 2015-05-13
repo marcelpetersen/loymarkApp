@@ -7697,8 +7697,8 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
 .spinner svg {
   width: 38px;
   height: 38px;
-  stroke: #800080;
-  fill: #800080; }
+  stroke: white;
+  fill: white; }
 
 .gradient-pattern {
   -webkit-box-sizing: content-box;
@@ -8025,12 +8025,12 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
 
 /* ******** QR Code ********* */
 .qrcode-content {
-  background-image: url('../img/whatsnewbg.png'); }
+  background-image: url('../img/food.png'); }
 
 .qrcode-item {
   border: none !important;
   height: 100vh;
-  background-image: url('../img/whatsnewbg.png');
+  background-image: url('../img/food.png');
   background-position: bottom 68px right 0px; }
 
 .qrcode-qrcontainer {
@@ -8253,7 +8253,7 @@ ion-nav-view[nav-view-transition="ios"] .stores-bottomseparator {
 
 /* ******** Favorite Commerces ******** */
 .favcommerces-content {
-  background-image: url('../img/whatsnewbg.png'); }
+  background-image: url('../img/food.png'); }
 
 .favcommerces-card {
   border-radius: 10px !important; }
@@ -8291,7 +8291,7 @@ ion-nav-view[nav-view-transition="ios"] .stores-bottomseparator {
 /* ******** Profile Edit ********* */
 .profileedit-content {
   height: 100vh;
-  background-image: url('../img/whatsnewbg.png'); }
+  background-image: url('../img/food.png'); }
 
 .profileedit-input {
   color: #333333;
@@ -8308,9 +8308,22 @@ ion-nav-view[nav-view-transition="ios"] .stores-bottomseparator {
 /* ******** Activity ******** */
 .activity-content {
   height: 100vh;
-  background-image: url('../img/whatsnewbg.png'); }
+  background-image: url('../img/food.png'); }
+
+.activity-activityitem {
+  border: 1px solid #f8f8f8 !important; }
 
 .activity-icon {
+  color: #800080; }
+
+.activity-commerce-name {
+  font-size: 20px !important;
+  color: #555555 !important; }
+
+.activity-redemption {
+  color: #A5CD38; }
+
+.activity-checkin {
   color: #800080; }
 
 .activity-card {
@@ -8421,10 +8434,17 @@ on-nav-view[nav-view-transition="ios"] .map-centeronme-button {
 .login-pwd-recovery-btn {
   color: white !important; }
 
+/* ******** No connection ******* */
+.noconnection-content {
+  background-image: url('../img/food.png'); }
+
 /* ******** Near Me ******** */
 .nearme-commerce-name {
   font-size: 20px !important;
-  color: #888888 !important; }
+  color: #555555 !important; }
+
+.nearme-content {
+  background-image: url('../img/food.png'); }
 
 .nearme-search-item {
   background-color: #800080;
@@ -8440,8 +8460,8 @@ on-nav-view[nav-view-transition="ios"] .map-centeronme-button {
   top: 27px !important; }
 
 .nearme-commerce-sublabel {
-  font-size: 14px !important;
-  color: #777777 !important; }
+  font-size: 10px !important;
+  color: #666 !important; }
 
 .nearme-commerce-item {
   border: 1px solid #F8F8F8 !important; }
@@ -8521,3 +8541,29 @@ on-nav-view[nav-view-transition="ios"] .map-centeronme-button {
 
 .commercewr-reward-unavailable {
   display: none; }
+
+.commercewr-storesbtn {
+  position: fixed;
+  left: 20px;
+  top: 105px;
+  height: 30px !important;
+  width: 95px !important;
+  background-color: #800080; }
+
+.commercewr-storesbtn-text {
+  position: relative;
+  top: 5px;
+  font-size: 19px !important;
+  color: white !important; }
+
+/* ******** Commerce Stores ********* */
+.commercewrstores-store-item {
+  border: 1px solid #F8F8F8 !important; }
+
+.commercewrstores-store-name {
+  font-size: 18px !important;
+  color: #555555 !important; }
+
+.commercewrstores-gobtn {
+  background-color: #A5CD38 !important;
+  color: white !important; }

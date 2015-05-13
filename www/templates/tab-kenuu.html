@@ -1,30 +1,30 @@
 <ion-view id="viewKenuu" style="display:none">	
 	<ion-nav-title>
-        <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
-    </ion-nav-title>
-    <ion-nav-buttons side="right">
-        <button class="button button-clear icon-params topbar-setupicon" ng-click="ShowSetupView()">
-        </button>
-    </ion-nav-buttons>	
-  	<ion-content scroll=true>  		
-  		<div class="row profile-avatar-container">
-  			<div class="col-20 text-center profile-avatar-div">
-  				<img ng-src="{{getUserImage()}}" class="profile-avatar">
-  			</div>
-  			<div class="col-70">
-  				<h4>{{viewdata.user.FirstName}} {{viewdata.user.LastName}}</h4>
-  				<!-- <h4>Alex Ramirez</h4> -->
-	      		<p>{{viewdata.user.Email}}</p>
-	      		<button class="button button-small button-calm profile-btn" ng-click="GoToProfile()">Mi Info</button>	
-  			</div>
-  		</div>
-  		
+				<img src="img/kenuulogo.png" alt="" class="top-bar-logo">
+		</ion-nav-title>
+		<ion-nav-buttons side="right">
+				<button class="button button-clear icon-params topbar-setupicon" ng-click="ShowSetupView()">
+				</button>
+		</ion-nav-buttons>	
+		<ion-content scroll=true>  		
+			<div class="row profile-avatar-container">
+				<div class="col-20 text-center profile-avatar-div">
+					<img ng-src="{{getUserImage()}}" class="profile-avatar">
+				</div>
+				<div class="col-70">
+					<h4>{{viewdata.user.FirstName}} {{viewdata.user.LastName}}</h4>
+					<!-- <h4>Alex Ramirez</h4> -->
+						<p>{{viewdata.user.Email}}</p>
+						<button class="button button-small button-calm profile-btn" ng-click="GoToProfile()">Mi Info</button>	
+				</div>
+			</div>
+			
 		<div class="list profile_btn_div">
-			<div class="item item-icon-left profile_item item-text-wrap" ng-click="GoToRewards()">
+			<!-- <div class="item item-icon-left profile_item item-text-wrap" ng-click="GoToRewards()">
 				<i class="icon icon-gift profile-item-icon"></i>
 				<div class="profile-item-title">premios disponibles</div>
 				<div>consulte que premios tiene disponibles</div>
-			</div>
+			</div> -->
 			<a class="item item-icon-left profile_item item-text-wrap" href="#/tab/kenuu/activity">
 				<i class="icon icon-history profile-item-icon"></i>
 				<div class="profile-item-title">mi actividad</div>
@@ -42,20 +42,20 @@
 			</a> -->			
 		</div>
 		<div class="bottomspacer"></div>
-  	</ion-content>
+		</ion-content>
 </ion-view>
 
 <ion-view id="viewKenuuError" style="display:none">
 	<ion-nav-title>
-        <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
-    </ion-nav-title>	
-  	<ion-content class="search-content" scroll=false>
-  		<div class="item item-wrap-text item-clear text-center" style="background-color:transparent;">
-  			<!-- <img class="icon" src="./img/empty.png"> -->
-  			<p style="margin-left:10px;">Oops, no se puede traer su información...</p>	
-  		</div>
-  		<div class="item item-clear text-center" style="background-color:transparent;" ng-click="ReloadData()">
-  			<i class="ion-ios-refresh-empty" style="font-size:40px;"></i>
-  		</div>
-  	</ion-content>
+				<img src="img/kenuulogo.png" alt="" class="top-bar-logo">
+		</ion-nav-title>	
+		<ion-content class="search-content" scroll=false>
+			<div class="item item-wrap-text item-clear text-center" style="background-color:transparent;">
+				<!-- <img class="icon" src="./img/empty.png"> -->
+				<p style="margin-left:10px;">Oops, no se puede traer su información...</p>	
+			</div>
+			<div class="item item-clear text-center" style="background-color:transparent;" ng-click="ReloadData()">
+				<i class="ion-ios-refresh-empty" style="font-size:40px;"></i>
+			</div>
+		</ion-content>
 </ion-view>

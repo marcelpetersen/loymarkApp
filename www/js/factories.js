@@ -1,5 +1,4 @@
 var fact = angular.module('kenuu.factory', []);
-
 fact.factory('referenceIDFactory', [function(){
     var _userReferenceId = "";
 

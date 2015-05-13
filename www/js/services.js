@@ -189,4 +189,14 @@ angular.module('kenuu.services', [])
             }
         );
 	};
+}])
+
+.service('loadingBox', ['$ionicLoading', function($ionicLoading){
+	this.show = function() {
+		$ionicLoading.show({template: '<ion-spinner icon="android" class="spinner"></ion-spinner>'});
+	};
+
+	this.hide = function() {
+		$ionicLoading.hide();
+	};
 }]);
