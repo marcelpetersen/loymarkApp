@@ -2,6 +2,8 @@ var ctrl = angular.module('kenuu.controllers', ['ja.qr']);
 
 var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
+// Near Me Tab
+
 ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', 'loadingBox', 'searchFactory', 'commerceFactory', 'navigationFactory', function($scope, $state, $ionicLoading, loadingBox, searchFactory, commerceFactory, navigationFactory){
     $scope.viewdata = {
         doingSearch: false,
@@ -45,16 +47,7 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', 'loadingBox'
     };
 
     $scope.$watch('viewdata.searchText', function() {
-        if ($scope.viewdata.searchText != "")
-        {
-            // $(".reward-searchpanel").removeClass("reward-searchpanel-hidden");
-            doSearch();
-        }
-        else
-        {
-            // $(".reward-searchpanel").addClass("reward-searchpanel-hidden");   
-            $scope.viewdata.searchResults = [];
-        }
+        doSearch();
     });
 
     function sortByKey(array, key) {
@@ -65,14 +58,16 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', 'loadingBox'
     };
 
     function doSearch() {
+        // loadingBox.show();
         searchFactory.doSearch($scope.viewdata.searchText)
             .then(function(data){     
-                console.log(data)           
+                // loadingBox.hide();
                 $scope.viewdata.searchResults = data.response.Elements;
                 $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
                 $scope.$apply();
             })
             .catch(function(data){
+                // loadingBox.hide();
                 console.log(data);
             })
     };
@@ -80,11 +75,12 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', 'loadingBox'
     doSearch();
 }]);
 
-ctrl.controller('CommerceWithRewardsCtrl', ['$scope', '$state', '$stateParams', '$ionicLoading', 'loadingBox', 'commerceFactory', 'rewardFactory', 'deviceFactory', function($scope, $state, $stateParams, $ionicLoading, loadingBox, commerceFactory, rewardFactory, deviceFactory){
+ctrl.controller('CommerceWithRewardsCtrl', ['$scope', '$state', '$stateParams', '$ionicLoading', 'loadingBox', 'commerceFactory', 'rewardFactory', 'deviceFactory', 'rewardDetailModal', function($scope, $state, $stateParams, $ionicLoading, loadingBox, commerceFactory, rewardFactory, deviceFactory, rewardDetailModal){
     $scope.viewdata = {
         commerce: commerceFactory.selectedCommerce.get(),
         rewards: [],
-        imageserverurl: imageserverurl
+        imageserverurl: imageserverurl,
+        selectedreward: {}
     };
 
     function LoadData(entityID) {
@@ -175,6 +171,21 @@ ctrl.controller('CommerceWithRewardsCtrl', ['$scope', '$state', '$stateParams', 
 
     $scope.OpenStores = function() {
         $state.go("tab.nearme-commercestores");
+    };
+
+    $scope.OpenRewardDetail = function(reward) {
+        console.log(reward);
+        $scope.viewdata.selectedreward = reward;
+        rewardDetailModal.Show($scope);
+    };
+
+    $scope.CloseRewardDetailModal = function() {
+        rewardDetailModal.Close();
+    };
+
+    $scope.GetRewardImage = function(reward) {
+        var img = $scope.viewdata.imageserverurl + reward.Image;        
+        return {background:img};
     };
 }]);
 
@@ -855,7 +866,7 @@ ctrl.controller('LoginCtrl', ['$scope', '$cordovaKeyboard', 'loginSignUpFactory'
         .then(function(response){
             loadingBox.hide();
 
-            $ionicModal.fromTemplateUrl('templates/password-recovery-modal.html', {
+            $ionicModal.fromTemplateUrl('templates/modals/password-recovery-modal.html', {
                 scope: $scope,
                 animation: 'slide-in-up'
             }).then(function(modal) {
@@ -1098,7 +1109,6 @@ ctrl.controller('SignUpCtrl', ['$scope', '$cordovaKeyboard', 'loginSignUpFactory
         }, 250);        
     };
 }]);
-
 
 ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', '$ionicLoading', '$cordovaKeyboard', '$cordovaPush', 'deviceFactory', '$cordovaBarcodeScanner', 'signUpLoginView', 'loginSignUpFactory', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory, $ionicLoading, $cordovaKeyboard, $cordovaPush, deviceFactory, $cordovaBarcodeScanner, signUpLoginView, loginSignUpFactory){
     localStorage.setItem('animationShown', false);
@@ -1488,8 +1498,6 @@ ctrl.controller('KenuuPricesCtrl', ['$scope', '$state', 'rewardFactory', 'userFa
     };
 }]);
 
-
-
 ctrl.controller('KenuuCommerceCtrl', ['$scope', '$state', 'rewardFactory', 'commerceFactory', 'userFactory', '$window', '$cordovaEmailComposer', 'dateFxService', 'navigationFactory', '$stateParams', function($scope, $state, rewardFactory, commerceFactory, userFactory, $window, $cordovaEmailComposer, dateFxService, navigationFactory, $stateParams){
     $scope.viewdata = {
         selectedReward: rewardFactory.selectedReward.get(),
@@ -1829,7 +1837,6 @@ ctrl.controller('KenuuRewardDetailCtrl', ['$scope', '$timeout', 'userFactory', '
     };
 }]);
 
-
 ctrl.controller('SearchCtrl', ['$scope', 'searchFactory', '$state', 'commerceFactory', '$ionicModal', 'navigationFactory', function($scope, searchFactory, $state, commerceFactory, $ionicModal, navigationFactory){
     $scope.viewdata = {
         doingSearch: false,
@@ -1903,8 +1910,6 @@ ctrl.controller('SearchCtrl', ['$scope', 'searchFactory', '$state', 'commerceFac
         $state.go("tab.search-rewarddetail");
     };
 }]);
-
-
 
 ctrl.controller('WhatsNewCtrl', ['$scope', '$cordovaInAppBrowser', '$ionicSlideBoxDelegate', function($scope, $cordovaInAppBrowser, setupView, emailService, $ionicSlideBoxDelegate) {
 

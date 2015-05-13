@@ -715,114 +715,114 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 
 /* ******** Reward Detail ******** */
-	.rewarddet-commerce {
-		background-image: url('../img/qrcodebg.png');
-		min-height: 102px !important;
-	}
-	#btnRedeem {
-		-webkit-transition: all 0.1s ease-in-out;
-		-moz-transition: all 0.1s ease-in-out;
-		-o-transition: all 0.1s ease-in-out;
-		transition: all 0.1s ease-in-out;
-	}
-	.rewarddet-content .item h2, 
-	.rewarddet-content .item h4 {
-		color: $rewarddet-titles-color !important;
-		margin-left: 30px;
-	}
-	.rewarddet-content .button {
-		color: white !important;
-		margin-left: 30px;
-	}
-	.rewarddet-commerce-btn {
-		width: 118px !important;
-		font-size: 12px !important;
-		border: 0px;
-		background-color: $action-btn-color !important;
-	}
+	// .rewarddet-commerce {
+	// 	background-image: url('../img/qrcodebg.png');
+	// 	min-height: 102px !important;
+	// }
+	// #btnRedeem {
+	// 	-webkit-transition: all 0.1s ease-in-out;
+	// 	-moz-transition: all 0.1s ease-in-out;
+	// 	-o-transition: all 0.1s ease-in-out;
+	// 	transition: all 0.1s ease-in-out;
+	// }
+	// .rewarddet-content .item h2, 
+	// .rewarddet-content .item h4 {
+	// 	color: $rewarddet-titles-color !important;
+	// 	margin-left: 30px;
+	// }
+	// .rewarddet-content .button {
+	// 	color: white !important;
+	// 	margin-left: 30px;
+	// }
+	// .rewarddet-commerce-btn {
+	// 	width: 118px !important;
+	// 	font-size: 12px !important;
+	// 	border: 0px;
+	// 	background-color: $action-btn-color !important;
+	// }
 	
-	.rewarddet-image {
-		max-width: 70px !important;
-		max-height: 70px !important;
-		min-height: 70px;
-		// width: 100% !important;
-		// height: 100% !important; 
-		border-radius: 50%;
-	}
+	// .rewarddet-image {
+	// 	max-width: 70px !important;
+	// 	max-height: 70px !important;
+	// 	min-height: 70px;
+	// 	// width: 100% !important;
+	// 	// height: 100% !important; 
+	// 	border-radius: 50%;
+	// }
 
-	.rewarddet-arlequin {
-		margin-top: 10px;
-		height: 60px !important;
-		width: 60px !important; 
-	}
+	// .rewarddet-arlequin {
+	// 	margin-top: 10px;
+	// 	height: 60px !important;
+	// 	width: 60px !important; 
+	// }
 
-	.rewarddet-commercename {
-		font-size: 20px !important;
-		margin-top: 17px !important;		
-	}
+	// .rewarddet-commercename {
+	// 	font-size: 20px !important;
+	// 	margin-top: 17px !important;		
+	// }
 
-	.rewarddet-mybalance-label {
-		position: relative;
-		font-size: 20px;
-		margin-top:8px;
-		width: 50px;
-		right: -55px;
-		color: $rewarddet-mybalance-color; 
-	}
-	.rewarddet-mybalance-title {
-		position: absolute;
-		top: 8px;
-		right: 0px;
-		font-size: 12px;
-		color: $rewarddet-titles-color;
-	}
+	// .rewarddet-mybalance-label {
+	// 	position: relative;
+	// 	font-size: 20px;
+	// 	margin-top:8px;
+	// 	width: 50px;
+	// 	right: -55px;
+	// 	color: $rewarddet-mybalance-color; 
+	// }
+	// .rewarddet-mybalance-title {
+	// 	position: absolute;
+	// 	top: 8px;
+	// 	right: 0px;
+	// 	font-size: 12px;
+	// 	color: $rewarddet-titles-color;
+	// }
 
-	.rewarddet-rewardheader {
-		margin-top: 0px;
-		background-color: #eeeeee;
-		padding: 20px; 
-	}
-	.rewarddet-arlequinsimple {		
-		height: 60px !important;
-		width: 60px !important;
-	}
-	.rewarddet-pointsinfo-container {
-		border-top: 1px solid $rewarddet-item-border !important;
-		border-bottom: 1px solid $rewarddet-item-border !important;
-	}
-	.rewarddet-reqpoints-label {
-		position: relative;
-		top: 40px;
-	}
-	.rewarddet-reqpoints-title {
-		position: relative;
-		top: 15px;
-		right: 0px;
-		font-size: 12px;
-	}
-	.rewarddet-infocell {
-		border-right: 1px solid $rewarddet-item-border !important;
-	}
-	.rewarddet-redeem-btn {
-		margin-left: 0px !important;
-	}
-	.rewarddet-tnc-container {
-		padding: 25px;
-	}
-	.rewarddet-tnc-text {
-		text-align: justify;
-    	text-justify: inter-word;
-    	font-size: 12px;
-	}
-	.rewarddet-facebook{
-		background-color: $social-facebook-color !important;
-		color: white !important;
-	}
+	// .rewarddet-rewardheader {
+	// 	margin-top: 0px;
+	// 	background-color: #eeeeee;
+	// 	padding: 20px; 
+	// }
+	// .rewarddet-arlequinsimple {		
+	// 	height: 60px !important;
+	// 	width: 60px !important;
+	// }
+	// .rewarddet-pointsinfo-container {
+	// 	border-top: 1px solid $rewarddet-item-border !important;
+	// 	border-bottom: 1px solid $rewarddet-item-border !important;
+	// }
+	// .rewarddet-reqpoints-label {
+	// 	position: relative;
+	// 	top: 40px;
+	// }
+	// .rewarddet-reqpoints-title {
+	// 	position: relative;
+	// 	top: 15px;
+	// 	right: 0px;
+	// 	font-size: 12px;
+	// }
+	// .rewarddet-infocell {
+	// 	border-right: 1px solid $rewarddet-item-border !important;
+	// }
+	// .rewarddet-redeem-btn {
+	// 	margin-left: 0px !important;
+	// }
+	// .rewarddet-tnc-container {
+	// 	padding: 25px;
+	// }
+	// .rewarddet-tnc-text {
+	// 	text-align: justify;
+ //    	text-justify: inter-word;
+ //    	font-size: 12px;
+	// }
+	// .rewarddet-facebook{
+	// 	background-color: $social-facebook-color !important;
+	// 	color: white !important;
+	// }
 
-	.rewarddet-twitter {
-		background-color: $social-twitter-color !important;
-		color: white !important;
-	}
+	// .rewarddet-twitter {
+	// 	background-color: $social-twitter-color !important;
+	// 	color: white !important;
+	// }
 
 /* ******** Commerce ******** */
 
@@ -1137,6 +1137,7 @@ ion-nav-view[nav-view-transition="ios"] {
 		background-color: $kenuu-purple;
 		color: white;
 		border: none;
+		height: 50px;
 	}
 
 	.nearme-commerce-avatar {
@@ -1157,7 +1158,7 @@ ion-nav-view[nav-view-transition="ios"] {
 		border: 1px solid #F8F8F8 !important;
 	}
 
-/* ******* Commerce With Rewards ******* */
+/* ******** Commerce With Rewards ******* */
 	.commercewr-content {
 		border: none !important;
 	}
@@ -1250,6 +1251,9 @@ ion-nav-view[nav-view-transition="ios"] {
 
 /* ******** Commerce Stores ********* */
 
+	.commercewrstores-search-item {
+		height: 50px;
+	}
 	.commercewrstores-store-item {
 		border: 1px solid #F8F8F8 !important;	
 	}
@@ -1262,7 +1266,32 @@ ion-nav-view[nav-view-transition="ios"] {
 		color: white !important;
 	}
 
+/* ******** Reward Detail ******** */
 
+	.reward-detail-content {
+		// background-image: url('../img/food.png');
+	}
+	.reward-detail-avatar {				
+		height: 110px;
+		width: auto;
+	}
+	.reward-detail-avatar-item {
+		background-image: url('../img/food.png');	
+	}
+	.reward-detail-baseitem {
+		border: none;
+	}
+	.reward-detail-points {
+		color: $kenuu-purple;
+	}
+	.reward-detail-header-item {
+		background-color: #222222 !important;
+		color: #cccccc !important;
+		border: none;
+	}
+	.reward-detail-header-item p {
+		color: white;
+	}
 
 
 

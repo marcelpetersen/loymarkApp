@@ -1,0 +1,31 @@
+<ion-modal-view>
+	<ion-header-bar class="bar bar-light">
+		<h1 class="title"><strong ng-bind="viewdata.selectedreward.Name"></strong></h1>
+		<button class="button button-clear setupview-closebtn" ng-click="CloseRewardDetailModal()"><i class="ion-ios-close-outline"></i></button>	
+	</ion-header-bar>
+	<ion-content class="reward-detail-content">
+		<div class="list">
+			<div class="item text-center reward-detail-avatar-item">
+				<img class="reward-detail-avatar" src="{{viewdata.imageserverurl + viewdata.selectedreward.Image}}">
+			</div>
+			<div class="item item-text-wrap reward-detail-baseitem item-icon-right reward-detail-header-item">
+				<strong class="reward-detail-title">Descripción</strong>
+				<p ng-bind="viewdata.selectedreward.Description"></p>
+				<i class="icon" style="margin-right:5px;" ng-bind="viewdata.selectedreward.Points"></i>				
+			</div>
+			<div class="item item-text-wrap reward-detail-baseitem">
+				<strong class="reward-detail-title">Validez</strong>
+				<p ng-bind="viewdata.selectedreward.ValidFrom"></p>
+				<p ng-bind="viewdata.selectedreward.ValidUntil"></p>
+			</div>
+			<div class="item item-text-wrap reward-detail-baseitem">
+				<strong class="reward-detail-title">Instrucciones</strong>
+				<p ng-bind="viewdata.selectedreward.Instructions"></p>
+			</div>
+			<div class="item item-text-wrap reward-detail-baseitem">
+				<p><strong>Términos y Condiciones</strong></p>
+				<p ng-bind="viewdata.selectedreward.TermsAndConditions"></p>
+			</div>
+		</div>
+	</ion-content>
+</ion-modal-view>

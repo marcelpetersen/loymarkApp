@@ -8108,105 +8108,6 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
   font-size: 18px !important; }
 
 /* ******** Reward Detail ******** */
-.rewarddet-commerce {
-  background-image: url('../img/qrcodebg.png');
-  min-height: 102px !important; }
-
-#btnRedeem {
-  -webkit-transition: all 0.1s ease-in-out;
-  -moz-transition: all 0.1s ease-in-out;
-  -o-transition: all 0.1s ease-in-out;
-  transition: all 0.1s ease-in-out; }
-
-.rewarddet-content .item h2, .rewarddet-content .item h4 {
-  color: #757575 !important;
-  margin-left: 30px; }
-
-.rewarddet-content .button {
-  color: white !important;
-  margin-left: 30px; }
-
-.rewarddet-commerce-btn {
-  width: 118px !important;
-  font-size: 12px !important;
-  border: 0px;
-  background-color: #800080 !important; }
-
-.rewarddet-image {
-  max-width: 70px !important;
-  max-height: 70px !important;
-  min-height: 70px;
-  border-radius: 50%; }
-
-.rewarddet-arlequin {
-  margin-top: 10px;
-  height: 60px !important;
-  width: 60px !important; }
-
-.rewarddet-commercename {
-  font-size: 20px !important;
-  margin-top: 17px !important; }
-
-.rewarddet-mybalance-label {
-  position: relative;
-  font-size: 20px;
-  margin-top: 8px;
-  width: 50px;
-  right: -55px;
-  color: #800080; }
-
-.rewarddet-mybalance-title {
-  position: absolute;
-  top: 8px;
-  right: 0px;
-  font-size: 12px;
-  color: #757575; }
-
-.rewarddet-rewardheader {
-  margin-top: 0px;
-  background-color: #eeeeee;
-  padding: 20px; }
-
-.rewarddet-arlequinsimple {
-  height: 60px !important;
-  width: 60px !important; }
-
-.rewarddet-pointsinfo-container {
-  border-top: 1px solid #eeeeee !important;
-  border-bottom: 1px solid #eeeeee !important; }
-
-.rewarddet-reqpoints-label {
-  position: relative;
-  top: 40px; }
-
-.rewarddet-reqpoints-title {
-  position: relative;
-  top: 15px;
-  right: 0px;
-  font-size: 12px; }
-
-.rewarddet-infocell {
-  border-right: 1px solid #eeeeee !important; }
-
-.rewarddet-redeem-btn {
-  margin-left: 0px !important; }
-
-.rewarddet-tnc-container {
-  padding: 25px; }
-
-.rewarddet-tnc-text {
-  text-align: justify;
-  text-justify: inter-word;
-  font-size: 12px; }
-
-.rewarddet-facebook {
-  background-color: #2D5C98 !important;
-  color: white !important; }
-
-.rewarddet-twitter {
-  background-color: #2FAEEE !important;
-  color: white !important; }
-
 /* ******** Commerce ******** */
 .commerce-commerceheader {
   background-image: url('../img/qrcodebg.png');
@@ -8449,7 +8350,8 @@ on-nav-view[nav-view-transition="ios"] .map-centeronme-button {
 .nearme-search-item {
   background-color: #800080;
   color: white;
-  border: none; }
+  border: none;
+  height: 50px; }
 
 .nearme-commerce-avatar {
   border-radius: 50% !important;
@@ -8466,7 +8368,7 @@ on-nav-view[nav-view-transition="ios"] .map-centeronme-button {
 .nearme-commerce-item {
   border: 1px solid #F8F8F8 !important; }
 
-/* ******* Commerce With Rewards ******* */
+/* ******** Commerce With Rewards ******* */
 .commercewr-content {
   border: none !important; }
 
@@ -8557,6 +8459,9 @@ on-nav-view[nav-view-transition="ios"] .map-centeronme-button {
   color: white !important; }
 
 /* ******** Commerce Stores ********* */
+.commercewrstores-search-item {
+  height: 50px; }
+
 .commercewrstores-store-item {
   border: 1px solid #F8F8F8 !important; }
 
@@ -8567,3 +8472,25 @@ on-nav-view[nav-view-transition="ios"] .map-centeronme-button {
 .commercewrstores-gobtn {
   background-color: #A5CD38 !important;
   color: white !important; }
+
+/* ******** Reward Detail ******** */
+.reward-detail-avatar {
+  height: 110px;
+  width: auto; }
+
+.reward-detail-avatar-item {
+  background-image: url('../img/food.png'); }
+
+.reward-detail-baseitem {
+  border: none; }
+
+.reward-detail-points {
+  color: #800080; }
+
+.reward-detail-header-item {
+  background-color: #222222 !important;
+  color: #cccccc !important;
+  border: none; }
+
+.reward-detail-header-item p {
+  color: white; }

@@ -62,7 +62,7 @@
 			<li class="item" ng-show="viewdata.rewards.length == 0">
 				No hay premios disponibles
 			</li>
-		    <li ng-show="viewdata.rewards.length > 0" class="item item-avatar item-icon-right item-text-wrap commercewr-detail-item" ng-repeat="item in viewdata.rewards | filter:{AvailableAllStores:true} | orderBy:'Points'">
+		    <li ng-show="viewdata.rewards.length > 0" class="item item-avatar item-icon-right item-text-wrap commercewr-detail-item" ng-repeat="item in viewdata.rewards | filter:{AvailableAllStores:true} | orderBy:'Points'" ng-click="OpenRewardDetail(item)">
 		    	<!-- 
 		    	GetRewardAvailableCheckClass(viewdata.commerce.PointsAvailable, item.Points)
 		    	ng-bind="item.Name"

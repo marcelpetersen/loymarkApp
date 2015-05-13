@@ -11,8 +11,8 @@ var devEnvironment = true; // To use the app through "ionic serve --lab"
 angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.factory', 'ngCordova'])
 
 .constant('ApiEndpoint', {
-	// url: 'http://192.168.71.98:8100/api' // CIS Network Development
-	url: 'http://192.168.1.9:8100/api' // Home Development Environment
+	url: 'http://192.168.71.98:8100/api' // CIS Network Development
+	// url: 'http://192.168.1.9:8100/api' // Home Development Environment
 })
 
 .run(function($rootScope, $state, $ionicPlatform, networkFactory, $cordovaNetwork, deviceFactory, $cordovaPush, $ionicTabsDelegate, navigationFactory, commerceFactory, $ionicHistory) {
@@ -122,319 +122,329 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	// No Connection
 	.state('noconnection', {
 		url: '/noconnection',
-		templateUrl: 'templates/noconnection.html',
+		templateUrl: 'templates/views/no-connection/noconnection.html',
 		controller: 'NoConnectionCtrl'
 	})
 
-	// Welcome screen of the app once the user is logged
-	.state('welcome', {
-		url: '/welcome',
-		templateUrl: 'templates/welcome.html',
-		controller: 'WelcomeCtrl'
-	})
+	// **** Welcome and Login ****
 
-	// Welcome screen of the app once the user is logged
-	.state('login', {
-		url: '/login',
-		templateUrl: 'templates/welcome-login.html',
-		controller: 'LoginCtrl'
-	})
+		// Welcome screen of the app once the user is logged
+		.state('welcome', {
+			url: '/welcome',
+			templateUrl: 'templates/views/login-signup/welcome.html',
+			controller: 'WelcomeCtrl'
+		})
 
-	// Welcome screen of the app once the user is logged
-	.state('passwordcreate', {
-		url: '/passwordcreate',
-		templateUrl: 'templates/welcome-passwordcreate.html',
-		controller: 'PasswordCreateCtrl'
-	})
+		// Welcome screen of the app once the user is logged
+		.state('login', {
+			url: '/login',
+			templateUrl: 'templates/views/login-signup/welcome-login.html',
+			controller: 'LoginCtrl'
+		})
 
-	// Welcome screen of the app once the user is logged
-	.state('signup', {
-		url: '/signup',
-		templateUrl: 'templates/welcome-signup.html',
-		controller: 'SignUpCtrl'
-	})
+		// Welcome screen of the app once the user is logged
+		.state('passwordcreate', {
+			url: '/passwordcreate',
+			templateUrl: 'templates/views/login-signup/welcome-passwordcreate.html',
+			controller: 'PasswordCreateCtrl'
+		})
 
-	// setup an abstract state for the tabs directive
-	.state('tab', {
-		url: "/tab",
-		abstract: true,
-		templateUrl: "templates/tabs.html"
-	})
+		// Welcome screen of the app once the user is logged
+		.state('signup', {
+			url: '/signup',
+			templateUrl: 'templates/views/login-signup/welcome-signup.html',
+			controller: 'SignUpCtrl'
+		})
 
-	// Each tab has its own nav history stack:
+	// **** Main Tab Section ****
 
-	.state('tab.nearme', {
-		url: '/nearme',
-		views: {
-			'tab-nearme': {
-				templateUrl: 'templates/tab-nearme.html',
-				controller: 'NearMeCtrl'
+		// setup an abstract state for the tabs directive
+		.state('tab', {
+			url: "/tab",
+			abstract: true,
+			templateUrl: "templates/views/tabs/tabs.html"
+		})
+
+	// **** Near Me ****
+
+		// Each tab has its own nav history stack:
+
+		.state('tab.nearme', {
+			url: '/nearme',
+			views: {
+				'tab-nearme': {
+					templateUrl: 'templates/views/near-me/tab-nearme.html',
+					controller: 'NearMeCtrl'
+				}
 			}
-		}
-	})
+		})
 
-	.state('tab.nearme-commerce', {
-		url: '/nearme/commerce',
-		views: {
-			'tab-nearme': {
-				templateUrl: 'templates/tab-commerce-withrewards.html',
-				controller: 'CommerceWithRewardsCtrl'
+		.state('tab.nearme-commerce', {
+			url: '/nearme/commerce',
+			views: {
+				'tab-nearme': {
+					templateUrl: 'templates/views/near-me/tab-commerce-withrewards.html',
+					controller: 'CommerceWithRewardsCtrl'
+				}
 			}
-		}
-	})
+		})
 
-	.state('tab.nearme-commercedetail', {
-		url: '/nearme/commercedetail/:entityID',
-		views: {
-			'tab-nearme': {
-				templateUrl: 'templates/tab-commerce-withrewards.html',
-				controller: 'CommerceWithRewardsCtrl'
+		.state('tab.nearme-commercedetail', {
+			url: '/nearme/commercedetail/:entityID',
+			views: {
+				'tab-nearme': {
+					templateUrl: 'templates/views/near-me/tab-commerce-withrewards.html',
+					controller: 'CommerceWithRewardsCtrl'
+				}
 			}
-		}
-	})
+		})
 
-	.state('tab.nearme-commercestores', {
-		url: '/nearme/commercestores',
-		views: {
-			'tab-nearme': {
-				templateUrl: 'templates/tab-commerce-stores.html',
-				controller: 'CommerceWithRewardsStoresCtrl'
+		.state('tab.nearme-commercestores', {
+			url: '/nearme/commercestores',
+			views: {
+				'tab-nearme': {
+					templateUrl: 'templates/views/near-me/tab-commerce-stores.html',
+					controller: 'CommerceWithRewardsStoresCtrl'
+				}
 			}
-		}
-	})
+		})
 
-	.state('tab.nearme-map', {
-		url: '/nearme/map',
-		views: {
-	  		'tab-nearme': {
-	    		templateUrl: 'templates/tab-map.html',
-	    		controller: 'MapCtrl'
-	  		}
-		}
-	})
-
-	.state('tab.qrcode', {
-		url: '/qrcode',
-		views: {
-			'tab-qrcode': {
-				templateUrl: 'templates/tab-qrcode.html',
-				controller: 'QRCodeCtrl'
+		.state('tab.nearme-map', {
+			url: '/nearme/map',
+			views: {
+		  		'tab-nearme': {
+		    		templateUrl: 'templates/views/near-me/tab-map.html',
+		    		controller: 'MapCtrl'
+		  		}
 			}
-		}
-	})
+		})
 
-	.state('tab.whatsnew', {
-		url: '/whatsnew',
-		views: {
-			'tab-whatsnew': {
-				templateUrl: 'templates/tab-whatsnew.html',
-				controller: 'WhatsNewCtrl'
+	// **** QR Code ****
+
+		.state('tab.qrcode', {
+			url: '/qrcode',
+			views: {
+				'tab-qrcode': {
+					templateUrl: 'templates/views/qr-code/tab-qrcode.html',
+					controller: 'QRCodeCtrl'
+				}
 			}
-		}
-	})
+		})
 
-	.state('tab.rewards', {
-		url: '/rewards',
-		views: {
-			'tab-rewards': {
-				templateUrl: 'templates/tab-kenuu-prices.html',
-				controller: 'KenuuPricesCtrl'
+	// **** Kenuu ****
+
+		.state('tab.kenuu', {
+			url: '/kenuu',
+			views: {
+			  	'tab-kenuu': {
+			    	templateUrl: 'templates/views/my-kenuu/tab-kenuu.html',
+			    	controller: 'KenuuCtrl'
+			  	}
 			}
-		}
-	})
+		})
 
-	.state('tab.rewards-rewardDetail', {		
-		url: '/rewards/rewardDetail',
-	  	views: {
-	    	'tab-rewards': {
-	      		templateUrl: 'templates/tab-kenuu-rewarddetail.html',
-	      		controller: 'KenuuRewardDetailCtrl'
-	    	}
-	  	}
-	})
+		.state('tab.kenuu-profile', {
+			url: '/kenuu/profile',
+			views: {
+				'tab-kenuu': {
+					templateUrl: 'templates/views/my-kenuu/tab-kenuu-profile.html',
+					controller: 'KenuuProfileCtrl'
+				}
+			}
+		})
 
-	.state('tab.rewards-commerce', {		
-		url: '/rewards/commerce',
-	  	views: {
-	    	'tab-rewards': {
-	      		templateUrl: 'templates/tab-kenuu-commerce.html',
-	      		controller: 'KenuuCommerceCtrl'
-	    	}
-	  	}
-	})
+		.state('tab.kenuu-favCommerces', {
+			url: '/kenuu/favCommerces',
+			views: {
+				'tab-kenuu': {
+					templateUrl: 'templates/views/my-kenuu/tab-kenuu-favCommerces.html',
+					controller: 'KenuuFavCommercesCtrl'
+				}
+			}
+		})
 
-	.state('tab.rewards-stores', {		
-		url: '/rewards/stores',
-	  	views: {
-	    	'tab-rewards': {
-	      		templateUrl: 'templates/tab-kenuu-stores.html',
-	      		controller: 'KenuuStoresCtrl'
-	    	}
-	  	}
-	})
-
-	.state('tab.kenuu', {
-		url: '/kenuu',
-		views: {
-		  	'tab-kenuu': {
-		    	templateUrl: 'templates/tab-kenuu.html',
-		    	controller: 'KenuuCtrl'
+		.state('tab.kenuu-activity', {
+		  	url: '/kenuu/activity',
+		  	views: {
+		    	'tab-kenuu': {
+		      		templateUrl: 'templates/views/my-kenuu/tab-kenuu-activity.html',
+		      		controller: 'ActivityCtrl'
+		    	}
 		  	}
-		}
-	})
+		})
 
-	.state('tab.kenuu-prices', {
-		url: '/kenuu/prices',
-		views: {
-			'tab-kenuu': {
-				templateUrl: 'templates/tab-kenuu-prices.html',
-				controller: 'KenuuPricesCtrl'
-			}
-		}
-	})
+	// **** NOT USED ****
 
-	.state('tab.search-prices', {
-		url: '/search/prices',
-		views: {
-			'tab-search': {
-				templateUrl: 'templates/tab-kenuu-prices.html',
-				controller: 'KenuuPricesCtrl'
-			}
-		}
-	})
+		// .state('tab.whatsnew', {
+		// 	url: '/whatsnew',
+		// 	views: {
+		// 		'tab-whatsnew': {
+		// 			templateUrl: 'templates/tab-whatsnew.html',
+		// 			controller: 'WhatsNewCtrl'
+		// 		}
+		// 	}
+		// })
 
-	.state('tab.kenuu-profile', {
-		url: '/kenuu/profile',
-		views: {
-			'tab-kenuu': {
-				templateUrl: 'templates/tab-kenuu-profile.html',
-				controller: 'KenuuProfileCtrl'
-			}
-		}
-	})
+		// .state('tab.rewards', {
+		// 	url: '/rewards',
+		// 	views: {
+		// 		'tab-rewards': {
+		// 			templateUrl: 'templates/tab-kenuu-prices.html',
+		// 			controller: 'KenuuPricesCtrl'
+		// 		}
+		// 	}
+		// })
 
-	.state('tab.kenuu-favCommerces', {
-		url: '/kenuu/favCommerces',
-		views: {
-			'tab-kenuu': {
-				templateUrl: 'templates/tab-kenuu-favCommerces.html',
-				controller: 'KenuuFavCommercesCtrl'
-			}
-		}
-	})
+		// .state('tab.rewards-rewardDetail', {		
+		// 	url: '/rewards/rewardDetail',
+		//   	views: {
+		//     	'tab-rewards': {
+		//       		templateUrl: 'templates/tab-kenuu-rewarddetail.html',
+		//       		controller: 'KenuuRewardDetailCtrl'
+		//     	}
+		//   	}
+		// })
 
-	.state('tab.kenuu-rewarddetail', {
-	  	url: '/kenuu/rewardDetail',
-	  	views: {
-	    	'tab-kenuu': {
-	      		templateUrl: 'templates/tab-kenuu-rewarddetail.html',
-	      		controller: 'KenuuRewardDetailCtrl'
-	    	}
-	  	}
-	})
+		// .state('tab.rewards-commerce', {		
+		// 	url: '/rewards/commerce',
+		//   	views: {
+		//     	'tab-rewards': {
+		//       		templateUrl: 'templates/tab-kenuu-commerce.html',
+		//       		controller: 'KenuuCommerceCtrl'
+		//     	}
+		//   	}
+		// })
 
-	.state('tab.kenuu-stores', {
-	  	url: '/kenuu/stores',
-	  	views: {
-	    	'tab-kenuu': {
-	      		templateUrl: 'templates/tab-kenuu-stores.html',
-	      		controller: 'KenuuStoresCtrl'
-	    	}
-	  	}
-	})
+		// .state('tab.rewards-stores', {		
+		// 	url: '/rewards/stores',
+		//   	views: {
+		//     	'tab-rewards': {
+		//       		templateUrl: 'templates/tab-kenuu-stores.html',
+		//       		controller: 'KenuuStoresCtrl'
+		//     	}
+		//   	}
+		// })
 
-	.state('tab.search-stores', {
-	  	url: '/search/stores',
-	  	views: {
-	    	'tab-search': {
-	      		templateUrl: 'templates/tab-kenuu-stores.html',
-	      		controller: 'KenuuStoresCtrl'
-	    	}
-	  	}
-	})
+		
 
-	.state('tab.kenuu-commerce', {
-	  	url: '/kenuu/commerce',
-	  	views: {
-	    	'tab-kenuu': {
-	      		templateUrl: 'templates/tab-kenuu-commerce.html',
-	      		controller: 'KenuuCommerceCtrl'
-	    	}
-	  	}
-	})
+		// .state('tab.kenuu-prices', {
+		// 	url: '/kenuu/prices',
+		// 	views: {
+		// 		'tab-kenuu': {
+		// 			templateUrl: 'templates/tab-kenuu-prices.html',
+		// 			controller: 'KenuuPricesCtrl'
+		// 		}
+		// 	}
+		// })
 
-	.state('tab.kenuu-activity', {
-	  	url: '/kenuu/activity',
-	  	views: {
-	    	'tab-kenuu': {
-	      		templateUrl: 'templates/tab-kenuu-activity.html',
-	      		controller: 'ActivityCtrl'
-	    	}
-	  	}
-	})
+		// .state('tab.search-prices', {
+		// 	url: '/search/prices',
+		// 	views: {
+		// 		'tab-search': {
+		// 			templateUrl: 'templates/tab-kenuu-prices.html',
+		// 			controller: 'KenuuPricesCtrl'
+		// 		}
+		// 	}
+		// })
 
-	.state('tab.search', {
-		url: '/search',
-		views: {
-	  		'tab-search': {
-	    		templateUrl: 'templates/tab-search.html',
-	    		controller: 'SearchCtrl'
-	  		}
-		}
-	})
+		
 
-	.state('tab.search-commerce', {
-	  	url: '/search/commerce',
-		views: {
-	  		'tab-search': {
-	    		templateUrl: 'templates/tab-kenuu-commerce.html',
-	    		controller: 'KenuuCommerceCtrl'
-	  		}
-		}
-	})
+		
 
-	.state('tab.search-rewarddetail', {
-	  	url: '/search/rewardDetail',
-	  	views: {
-	    	'tab-search': {
-	      		templateUrl: 'templates/tab-kenuu-rewarddetail.html',
-	      		controller: 'KenuuRewardDetailCtrl'
-	    	}
-	  	}
-	})
+		// .state('tab.kenuu-rewarddetail', {
+		//   	url: '/kenuu/rewardDetail',
+		//   	views: {
+		//     	'tab-kenuu': {
+		//       		templateUrl: 'templates/tab-kenuu-rewarddetail.html',
+		//       		controller: 'KenuuRewardDetailCtrl'
+		//     	}
+		//   	}
+		// })
 
-	.state('tab.map', {
-		url: '/map',
-		views: {
-	  		'tab-map': {
-	    		templateUrl: 'templates/tab-map.html',
-	    		controller: 'MapCtrl'
-	  		}
-		}
-	})
+		// .state('tab.kenuu-stores', {
+		//   	url: '/kenuu/stores',
+		//   	views: {
+		//     	'tab-kenuu': {
+		//       		templateUrl: 'templates/tab-kenuu-stores.html',
+		//       		controller: 'KenuuStoresCtrl'
+		//     	}
+		//   	}
+		// })
 
-	.state('tab.map-store', {
-		url: '/map/store/:entityID',
-		views: {
-	  		'tab-map': {
-	    		templateUrl: 'templates/tab-kenuu-commerce.html',
-	    		controller: 'KenuuCommerceCtrl'
-	  		}
-		}
-	});
+		// .state('tab.search-stores', {
+		//   	url: '/search/stores',
+		//   	views: {
+		//     	'tab-search': {
+		//       		templateUrl: 'templates/tab-kenuu-stores.html',
+		//       		controller: 'KenuuStoresCtrl'
+		//     	}
+		//   	}
+		// })
 
-	// if none of the above states are matched, use this as the fallback	
-	// $urlRouterProvider.otherwise('/tab/kenuu/profile');
-	// $urlRouterProvider.otherwise('/tab/kenuu/favCommerces');
-	// $urlRouterProvider.otherwise('/tab/kenuu/stores');
-	// $urlRouterProvider.otherwise('/tab/kenuu/commerce');
-	// $urlRouterProvider.otherwise('/tab/kenuu/rewardDetail');
-	// $urlRouterProvider.otherwise('/tab/kenuu/prices');
-	// $urlRouterProvider.otherwise('/tab/kenuu');
-	// $urlRouterProvider.otherwise('/tab/qrcode');
-	// $urlRouterProvider.otherwise('/tab/search');	
-	// $urlRouterProvider.otherwise('/tab/map');	
+		// .state('tab.kenuu-commerce', {
+		//   	url: '/kenuu/commerce',
+		//   	views: {
+		//     	'tab-kenuu': {
+		//       		templateUrl: 'templates/tab-kenuu-commerce.html',
+		//       		controller: 'KenuuCommerceCtrl'
+		//     	}
+		//   	}
+		// })
 
+		
+
+		// .state('tab.search', {
+		// 	url: '/search',
+		// 	views: {
+		//   		'tab-search': {
+		//     		templateUrl: 'templates/tab-search.html',
+		//     		controller: 'SearchCtrl'
+		//   		}
+		// 	}
+		// })
+
+		// .state('tab.search-commerce', {
+		//   	url: '/search/commerce',
+		// 	views: {
+		//   		'tab-search': {
+		//     		templateUrl: 'templates/tab-kenuu-commerce.html',
+		//     		controller: 'KenuuCommerceCtrl'
+		//   		}
+		// 	}
+		// })
+
+		// .state('tab.search-rewarddetail', {
+		//   	url: '/search/rewardDetail',
+		//   	views: {
+		//     	'tab-search': {
+		//       		templateUrl: 'templates/tab-kenuu-rewarddetail.html',
+		//       		controller: 'KenuuRewardDetailCtrl'
+		//     	}
+		//   	}
+		// })
+
+		// .state('tab.map', {
+		// 	url: '/map',
+		// 	views: {
+		//   		'tab-map': {
+		//     		templateUrl: 'templates/tab-map.html',
+		//     		controller: 'MapCtrl'
+		//   		}
+		// 	}
+		// })
+
+		// .state('tab.map-store', {
+		// 	url: '/map/store/:entityID',
+		// 	views: {
+		//   		'tab-map': {
+		//     		templateUrl: 'templates/tab-kenuu-commerce.html',
+		//     		controller: 'KenuuCommerceCtrl'
+		//   		}
+		// 	}
+		// })
+
+	;
+		
 	// Verifies the App has already shown the welcome screen
 	var _apikey = localStorage.getItem('userReferenceID');
 	localStorage.setItem('animationShown', false);

@@ -87,7 +87,25 @@ angular.module('kenuu.services', [])
 	var _modal = {};
 	return {
 		Show: function($scope) {
-			$ionicModal.fromTemplateUrl('templates/setupModal.html', {
+			$ionicModal.fromTemplateUrl('templates/modals/setupModal.html', {
+				scope: $scope,
+				animation: 'slide-in-up'
+			}).then(function(modal) {
+				_modal = modal;
+				_modal.show();
+			});
+		},
+		Close: function() {
+			_modal.hide();
+		}
+	};
+}])
+
+.factory('rewardDetailModal', ['$ionicModal', function($ionicModal){
+	var _modal = {};
+	return {
+		Show: function($scope) {
+			$ionicModal.fromTemplateUrl('templates/modals/reward-detail.html', {
 				scope: $scope,
 				animation: 'slide-in-up'
 			}).then(function(modal) {
