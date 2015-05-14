@@ -50,6 +50,7 @@ body, h1, h2, h3, h4, h5, p, div, span, input, button, strong  {
 	$kenuu-darker-purple: 		     #4E0F5B;
 	$kenuu-light-purple:			 #D6C8FF;
 	$kenuu-light-blue:				 #00D9A3;
+	$kenuu-dark-green: 				 #8FB130;
 
 	$modal-bg: 					     $kenuu-darker-purple;
 
@@ -1155,7 +1156,7 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 
 	.nearme-commerce-item {
-		border: 1px solid #F8F8F8 !important;
+		border: 1px solid #efefef !important;
 	}
 
 /* ******** Commerce With Rewards ******* */
@@ -1249,6 +1250,21 @@ ion-nav-view[nav-view-transition="ios"] {
 		color: white !important;
 	}
 
+	.commercewr-progress-tracker {
+		width: 110px;
+		height: 10px;
+		border-radius: 10px;
+		background-color: $kenuu-green;
+
+		background: repeating-linear-gradient(
+			45deg,
+			$kenuu-green,
+			$kenuu-green 10px,
+			$kenuu-dark-green 10px,
+			$kenuu-dark-green 20px
+		);
+	}
+
 /* ******** Commerce Stores ********* */
 
 	.commercewrstores-search-item {
@@ -1259,7 +1275,7 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 	.commercewrstores-store-name {
 		font-size: 18px !important;
-		color: #555555 !important;
+		color: $kenuu-purple !important;
 	}
 	.commercewrstores-gobtn {
 		background-color: $kenuu-green !important;
@@ -1285,12 +1301,18 @@ ion-nav-view[nav-view-transition="ios"] {
 		color: $kenuu-purple;
 	}
 	.reward-detail-header-item {
-		background-color: #222222 !important;
-		color: #cccccc !important;
+		// background-color: #222222 !important;
+		// color: #cccccc !important;
 		border: none;
+		border-top: 1px solid #eeeeee;
+		border-bottom: 1px solid #eeeeee;
 	}
-	.reward-detail-header-item p {
-		color: white;
+	.reward-detail-title {
+		font-size: 10px;
+		color: $kenuu-purple;
+	}
+	.commercewr-detail-subtitle {
+		font-size: 15px;
 	}
 
 

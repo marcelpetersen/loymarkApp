@@ -8366,7 +8366,7 @@ on-nav-view[nav-view-transition="ios"] .map-centeronme-button {
   color: #666 !important; }
 
 .nearme-commerce-item {
-  border: 1px solid #F8F8F8 !important; }
+  border: 1px solid #efefef !important; }
 
 /* ******** Commerce With Rewards ******* */
 .commercewr-content {
@@ -8458,6 +8458,13 @@ on-nav-view[nav-view-transition="ios"] .map-centeronme-button {
   font-size: 19px !important;
   color: white !important; }
 
+.commercewr-progress-tracker {
+  width: 110px;
+  height: 10px;
+  border-radius: 10px;
+  background-color: #A5CD38;
+  background: repeating-linear-gradient(45deg, #A5CD38, #A5CD38 10px, #8FB130 10px, #8FB130 20px); }
+
 /* ******** Commerce Stores ********* */
 .commercewrstores-search-item {
   height: 50px; }
@@ -8467,7 +8474,7 @@ on-nav-view[nav-view-transition="ios"] .map-centeronme-button {
 
 .commercewrstores-store-name {
   font-size: 18px !important;
-  color: #555555 !important; }
+  color: #800080 !important; }
 
 .commercewrstores-gobtn {
   background-color: #A5CD38 !important;
@@ -8488,9 +8495,13 @@ on-nav-view[nav-view-transition="ios"] .map-centeronme-button {
   color: #800080; }
 
 .reward-detail-header-item {
-  background-color: #222222 !important;
-  color: #cccccc !important;
-  border: none; }
+  border: none;
+  border-top: 1px solid #eeeeee;
+  border-bottom: 1px solid #eeeeee; }
 
-.reward-detail-header-item p {
-  color: white; }
+.reward-detail-title {
+  font-size: 10px;
+  color: #800080; }
+
+.commercewr-detail-subtitle {
+  font-size: 15px; }

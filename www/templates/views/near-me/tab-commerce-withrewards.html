@@ -62,16 +62,27 @@
 			<li class="item" ng-show="viewdata.rewards.length == 0">
 				No hay premios disponibles
 			</li>
-		    <li ng-show="viewdata.rewards.length > 0" class="item item-avatar item-icon-right item-text-wrap commercewr-detail-item" ng-repeat="item in viewdata.rewards | filter:{AvailableAllStores:true} | orderBy:'Points'" ng-click="OpenRewardDetail(item)">
-		    	<!-- 
-		    	GetRewardAvailableCheckClass(viewdata.commerce.PointsAvailable, item.Points)
-		    	ng-bind="item.Name"
-		    	GetPointsClass(viewdata.commerce.PointsAvailable, item.Points)
-		    	ng-bind="item.Points"
-		    	-->
+		    <li ng-show="viewdata.rewards.length > 0" class="item item-avatar item-icon-right item-text-wrap commercewr-detail-item" ng-repeat="item in viewdata.rewards | filter:{AvailableAllStores:true} | orderBy:'Points'" ng-click="OpenRewardDetail(item)">		    	
 		    	<img ng-show="item.Image != null" src="{{viewdata.imageserverurl + item.Image}}">
 		    	<strong><h2 ng-bind="item.Name"></h2></strong>
-		    	<p ng-show="viewdata.commerce.PointsAvailable > item.Points"><i class="ion-ios-checkmark commercewr-reward-available"></i> Disponible!</p>
+
+		    	<p ng-show="viewdata.commerce.PointsAvailable > item.Points">
+		    		<!-- <div class="row">
+		    			<div class="col">
+		    				<p class="commercewr-progress-tracker" style="margin-top:5px; width:40%;"></p>
+		    			</div>
+		    			<div class="col">
+		    				<i class="ion-ios-checkmark commercewr-reward-available"></i>
+		    			</div>
+		    		</div> -->
+		    		<strong ng-bind="item.Points"></strong> de <strong ng-bind="item.Points"></strong> <i class="ion-ios-checkmark commercewr-reward-available"></i>
+		    	</p>
+		    	<p ng-show="viewdata.commerce.PointsAvailable == item.Points">
+		    		<strong ng-bind="item.Points"></strong> de <strong ng-bind="item.Points"></strong> <i class="ion-ios-checkmark commercewr-reward-available"></i>
+		    	</p>
+		    	<p ng-show="viewdata.commerce.PointsAvailable < item.Points">
+		    		<strong ng-bind="viewdata.commerce.PointsAvailable"></strong> de <strong ng-bind="item.Points"></strong> 
+		    	</p>
 		    	<i class="icon" ng-class="GetPointsClass(viewdata.commerce.PointsAvailable, item.Points)" style="margin-right:5px;" ng-bind="item.Points"></i>
 		    </li>
 		</ul>

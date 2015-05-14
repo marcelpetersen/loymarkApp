@@ -1,7 +1,7 @@
 // Ionic Starter App
 var beaconFound = false;
 
-var devEnvironment = true; // To use the app through "ionic serve --lab"
+var devEnvironment = false; // To use the app through "ionic serve --lab"
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
@@ -36,6 +36,7 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
                 disableBack: true,
                 historyRoot: true
             });
+            localStorage.setItem('animationShown', false); 
             var _apikey = localStorage.getItem('userReferenceID');			
 			if (_apikey != undefined)
 			{

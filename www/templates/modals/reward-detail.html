@@ -1,6 +1,6 @@
 <ion-modal-view>
 	<ion-header-bar class="bar bar-light">
-		<h1 class="title"><strong ng-bind="viewdata.selectedreward.Name"></strong></h1>
+		<h1 class="title" ng-bind="viewdata.selectedreward.Name"></h1>
 		<button class="button button-clear setupview-closebtn" ng-click="CloseRewardDetailModal()"><i class="ion-ios-close-outline"></i></button>	
 	</ion-header-bar>
 	<ion-content class="reward-detail-content">
@@ -9,21 +9,29 @@
 				<img class="reward-detail-avatar" src="{{viewdata.imageserverurl + viewdata.selectedreward.Image}}">
 			</div>
 			<div class="item item-text-wrap reward-detail-baseitem item-icon-right reward-detail-header-item">
+				<strong class="reward-detail-title">Pops Requeridos</strong>
+				<div ng-show="viewdata.availablepoints >= viewdata.selectedreward.Points"><strong ng-bind="viewdata.selectedreward.Points"></strong> de <strong ng-bind="viewdata.selectedreward.Points"></strong> <i class="ion-ios-checkmark commercewr-reward-available"></i></div>
+				<div ng-show="viewdata.availablepoints < viewdata.selectedreward.Points"><strong ng-bind="viewdata.availablepoints"></strong> de <strong ng-bind="viewdata.selectedreward.Points"></strong></div>
+				<i class="icon reward-detail-points" style="margin-right:5px;" ng-bind="viewdata.selectedreward.Points"></i>				
+			</div>
+			<div class="item item-text-wrap reward-detail-baseitem">
 				<strong class="reward-detail-title">Descripción</strong>
 				<p ng-bind="viewdata.selectedreward.Description"></p>
-				<i class="icon" style="margin-right:5px;" ng-bind="viewdata.selectedreward.Points"></i>				
 			</div>
 			<div class="item item-text-wrap reward-detail-baseitem">
 				<strong class="reward-detail-title">Validez</strong>
-				<p ng-bind="viewdata.selectedreward.ValidFrom"></p>
-				<p ng-bind="viewdata.selectedreward.ValidUntil"></p>
+				<p>
+				<strong><span ng-bind="viewdata.selectedreward.ValidFrom.substr(0,10)"></span></strong>
+				<span> hasta </span>
+				<strong><span ng-bind="viewdata.selectedreward.ValidUntil.substr(0,10)"></span></strong>
+				</p>
 			</div>
 			<div class="item item-text-wrap reward-detail-baseitem">
 				<strong class="reward-detail-title">Instrucciones</strong>
 				<p ng-bind="viewdata.selectedreward.Instructions"></p>
 			</div>
 			<div class="item item-text-wrap reward-detail-baseitem">
-				<p><strong>Términos y Condiciones</strong></p>
+				<strong class="reward-detail-title">Términos y Condiciones</strong>
 				<p ng-bind="viewdata.selectedreward.TermsAndConditions"></p>
 			</div>
 		</div>

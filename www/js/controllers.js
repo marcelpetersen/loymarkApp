@@ -33,6 +33,8 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', 'loadingBox'
                 navigationFactory.stores.setTab("tab.search-stores");
                 navigationFactory.rewards.setTab("tab.search-prices");
                 navigationFactory.rewardDetail.setTab("tab.search-rewarddetail");                
+                
+                loadingBox.hide();
                 $state.go("tab.nearme-commerce");
             })
             .catch(function(response){
@@ -75,13 +77,15 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', 'loadingBox'
     doSearch();
 }]);
 
-ctrl.controller('CommerceWithRewardsCtrl', ['$scope', '$state', '$stateParams', '$ionicLoading', 'loadingBox', 'commerceFactory', 'rewardFactory', 'deviceFactory', 'rewardDetailModal', function($scope, $state, $stateParams, $ionicLoading, loadingBox, commerceFactory, rewardFactory, deviceFactory, rewardDetailModal){
+ctrl.controller('CommerceWithRewardsCtrl', ['$scope', '$state', '$stateParams', '$ionicLoading', '$timeout', 'loadingBox', 'commerceFactory', 'rewardFactory', 'deviceFactory', 'rewardDetailModal', function($scope, $state, $stateParams, $ionicLoading, $timeout, loadingBox, commerceFactory, rewardFactory, deviceFactory, rewardDetailModal){
     $scope.viewdata = {
         commerce: commerceFactory.selectedCommerce.get(),
         rewards: [],
         imageserverurl: imageserverurl,
         selectedreward: {}
     };
+
+    $timeout(function(){loadingBox.hide();});
 
     function LoadData(entityID) {
         // Pulls the rewards for the Commerce      
@@ -175,6 +179,7 @@ ctrl.controller('CommerceWithRewardsCtrl', ['$scope', '$state', '$stateParams', 
 
     $scope.OpenRewardDetail = function(reward) {
         console.log(reward);
+        $scope.viewdata["availablepoints"] = $scope.viewdata.commerce.PointsAvailable;
         $scope.viewdata.selectedreward = reward;
         rewardDetailModal.Show($scope);
     };
@@ -767,7 +772,7 @@ ctrl.controller('NoConnectionCtrl', ['$scope', '$state', function($scope, $state
 
 // Login Procedure
 
-ctrl.controller('LoginCtrl', ['$scope', '$cordovaKeyboard', 'loginSignUpFactory', 'userFactory', '$ionicLoading', 'referenceIDFactory', '$cordovaPush', 'deviceFactory', '$ionicHistory', '$state', '$ionicModal', function($scope, $cordovaKeyboard, loginSignUpFactory, userFactory, $ionicLoading, referenceIDFactory, $cordovaPush, deviceFactory, $ionicHistory, $state, $ionicModal) {
+ctrl.controller('LoginCtrl', ['$scope', '$cordovaKeyboard', 'loginSignUpFactory', 'userFactory', '$ionicLoading', 'referenceIDFactory', '$cordovaPush', 'deviceFactory', '$ionicHistory', '$state', '$ionicModal', 'loadingBox', function($scope, $cordovaKeyboard, loginSignUpFactory, userFactory, $ionicLoading, referenceIDFactory, $cordovaPush, deviceFactory, $ionicHistory, $state, $ionicModal, loadingBox) {
     if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(true);
 
     $scope.viewdata = {
@@ -1110,7 +1115,7 @@ ctrl.controller('SignUpCtrl', ['$scope', '$cordovaKeyboard', 'loginSignUpFactory
     };
 }]);
 
-ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', '$ionicLoading', '$cordovaKeyboard', '$cordovaPush', 'deviceFactory', '$cordovaBarcodeScanner', 'signUpLoginView', 'loginSignUpFactory', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory, $ionicLoading, $cordovaKeyboard, $cordovaPush, deviceFactory, $cordovaBarcodeScanner, signUpLoginView, loginSignUpFactory){
+ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', '$ionicLoading', '$cordovaKeyboard', '$cordovaPush', 'deviceFactory', '$cordovaBarcodeScanner', 'signUpLoginView', 'loginSignUpFactory', 'loadingBox', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory, $ionicLoading, $cordovaKeyboard, $cordovaPush, deviceFactory, $cordovaBarcodeScanner, signUpLoginView, loginSignUpFactory, loadingBox){
     localStorage.setItem('animationShown', false);
     
     if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(true);
@@ -1338,613 +1343,613 @@ ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxD
 // Not Currently Used
 
 
-ctrl.controller('KenuuPricesCtrl', ['$scope', '$state', 'rewardFactory', 'userFactory', 'commerceFactory', '$ionicLoading', 'navigationFactory', function($scope,$state,rewardFactory,userFactory,commerceFactory,$ionicLoading,navigationFactory){
+    ctrl.controller('KenuuPricesCtrl', ['$scope', '$state', 'rewardFactory', 'userFactory', 'commerceFactory', '$ionicLoading', 'navigationFactory', function($scope,$state,rewardFactory,userFactory,commerceFactory,$ionicLoading,navigationFactory){
 
-	$scope.viewdata = {
-        searchText: '',
-        searchResults: [],
-        rewards: [],
-        commerceSelected: commerceFactory.selectedCommerce.isSelected(),
-        selectedCommerce: commerceFactory.selectedCommerce.get(),
-        sorter: 'Name'
-    };
-    $scope.nameSorter = "rewards-filter-header-selected";
+    	$scope.viewdata = {
+            searchText: '',
+            searchResults: [],
+            rewards: [],
+            commerceSelected: commerceFactory.selectedCommerce.isSelected(),
+            selectedCommerce: commerceFactory.selectedCommerce.get(),
+            sorter: 'Name'
+        };
+        $scope.nameSorter = "rewards-filter-header-selected";
 
-    var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
+        var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
-    var itemColorArray = [
-        "#82D275", // Green
-        "#FEB45A", // Orange
-        "#7FAEE3", // Blue
-        "#E27CBD", // Purple
-        "#DA7C79"  // Papaya
-    ];
-    var colorIndex = 0;
+        var itemColorArray = [
+            "#82D275", // Green
+            "#FEB45A", // Orange
+            "#7FAEE3", // Blue
+            "#E27CBD", // Purple
+            "#DA7C79"  // Papaya
+        ];
+        var colorIndex = 0;
 
-    function GetBorderColor() {
-        if (colorIndex === 4) colorIndex = 0;
-        return itemColorArray[colorIndex++];
-    };
-
-    userFactory.info.get()
-        .then(function(data){
-            $scope.viewdata.user = data;
-            var userData = data;            
-        })
-        .catch(function(err){});
-
-    function SetColorForItem(array) {
-        var j=array.length;
-        for (var i=0; i<j; i++)
-        {
-            array[i]["bordercolor"] = GetBorderColor();
-        }
-        return array;
-    };
-
-    function LoadData(entityID) {
-        loadingBox.show();
-        rewardFactory.active.general(true, entityID)
-            .then(function(data){
-                $("#pleaseWaitSpinner").addClass("animated slideOutUp");
-                setTimeout(function() {                    
-                    $scope.viewdata.rewards = data.Elements;
-                    $scope.viewdata.rewards = SetColorForItem($scope.viewdata.rewards);
-                    $("#rewardsListContainer").show();                    
-                    $scope.$apply();
-                    loadingBox.hide();
-                    $scope.$broadcast('scroll.refreshComplete');                    
-                }, 150);
-            })
-            .catch(function(err){                
-                $("#pleaseWaitSpinner").addClass("animated slideOutUp");
-                $scope.$broadcast('scroll.refreshComplete');
-                
-                setTimeout(function() { 
-                    $("#errorWhenLoadingDiv").removeClass("animated slideOutUp");
-                    setTimeout(function(){
-                        loadingBox.hide();
-                        $("#errorWhenLoadingDiv").show();                    
-                        $("#errorWhenLoadingDiv").addClass("animated slideInDown");    
-                    }, 150);                    
-                }, 220);
-            });
-    }; 
-
-    $scope.$on("$ionicView.beforeEnter", function(event, args){
-        $("#rewardsListContainer").hide();
-    });
-
-    $scope.$on("$ionicView.enter", function(event, args){
-        $scope.viewdata.commerceSelected = commerceFactory.selectedCommerce.isSelected();
-        $scope.viewdata.selectedCommerce = commerceFactory.selectedCommerce.get();
-
-        if ($scope.viewdata.commerceSelected)
-        {
-            loadingBox.show();
-            $scope.viewdata.rewards = [];
-            $scope.$apply();
-            setTimeout(function(){
-                LoadData($scope.viewdata.selectedCommerce.EntityID);
-            }, 800);            
-        }
-        else
-        {
-            LoadData();
-        }
-    });
-
-    $scope.OpenRewardDetail = function(reward) {
-        rewardFactory.selectedReward.set(reward);
-        $state.go(navigationFactory.rewardDetail.get());
-    };
-
-    $scope.ShowSideMenu = function() {
-        $(".reward-sidemenu").removeClass('reward-sidemenu-hidden');
-    };
-
-    $scope.HideSideMenu = function() {        
-        $(".reward-sidemenu").addClass('reward-sidemenu-hidden');  
-    };
-
-    $scope.gDate = function(date) {
-        var _date = new Date(parseInt(date.substr(6)));
-        return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
-    };
-
-    $scope.$watch('viewdata.searchText', function() {
-        if ($scope.viewdata.searchText != "")
-        {
-            $(".reward-searchpanel").removeClass("reward-searchpanel-hidden");
-        }
-        else
-        {
-            $(".reward-searchpanel").addClass("reward-searchpanel-hidden");   
-        }
-    });    
-
-    $scope.CancelSearch = function() {
-        $scope.viewdata.searchText = "";
-        $(".reward-searchpanel").removeClass("reward-searchpanel-hidden");
-    };
-
-    $scope.Reload = function() {
-        $("#errorWhenLoadingDiv").addClass("animated slideOutUp");
-        setTimeout(function(){
-            $("#pleaseWaitSpinner").removeClass("slideOutUp");
-            $("#pleaseWaitSpinner").addClass("animated slideInDown");
-            LoadData();
-        }, 200);        
-    };
-
-    $scope.doRefresh = function() { 
-        $scope.Reload();
-    };
-
-    $scope.sortBy = function(sortOption) {        
-        if (sortOption == "Nombre") 
-        {
-            $scope.viewdata.sorter = "Name";
-            $scope.nameSorter = "rewards-filter-header-selected";
-            $scope.pointsSorter = "";
-        }
-        else 
-        {
-            $scope.viewdata.sorter = "Points";
-            $scope.nameSorter = "";
-            $scope.pointsSorter = "rewards-filter-header-selected";
-        }
-
-    };
-}]);
-
-ctrl.controller('KenuuCommerceCtrl', ['$scope', '$state', 'rewardFactory', 'commerceFactory', 'userFactory', '$window', '$cordovaEmailComposer', 'dateFxService', 'navigationFactory', '$stateParams', function($scope, $state, rewardFactory, commerceFactory, userFactory, $window, $cordovaEmailComposer, dateFxService, navigationFactory, $stateParams){
-    $scope.viewdata = {
-        selectedReward: rewardFactory.selectedReward.get(),
-        selectedCommerce: commerceFactory.selectedCommerce.get()
-    };
-
-    if ($stateParams.entityID != undefined)
-    {
-        commerceFactory.get($stateParams.entityID)
-        .then(function(response){            
-            $scope.viewdata.selectedCommerce = response[0];
-            commerceFactory.selectedCommerce.set(response[0]);
-        })
-        .catch(function(err){
-            console.log("Error")
-        })
-    }
-    
-    userFactory.info.get(false, "")
-        .then(function(data){            
-            $("#pleaseWaitSpinner").addClass("animated slideOutUp");
-            setTimeout(function() {
-                $scope.viewdata.user = data;
-                $scope.$apply();
-
-                // verifies if the client has performed any activity with the commerce
-                if ($scope.viewdata.selectedCommerce.LastVisitDateEntity === null)
-                {
-                    $("#commerce-noactivity").show();
-                }
-                else
-                {
-                    $("#commerce-myactivity").show();
-                }
-
-            }, 150);            
-        })
-        .catch(function(err){
-            $("#pleaseWaitSpinner").addClass("animated slideOutUp");
-                
-            setTimeout(function() { 
-                $("#errorWhenLoadingDiv").removeClass("animated slideOutUp");
-                setTimeout(function(){
-                    $("#errorWhenLoadingDiv").show();                    
-                    $("#errorWhenLoadingDiv").addClass("animated slideInDown");    
-                }, 150);                    
-            }, 220);
-        });
-
-    var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
-
-    $scope.gDate = function(date) {
-        if (date === null) return "";
-        if (date ===undefined) return "";
-        var _date = new Date(date);
-        return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
-    };
-    $scope.GoToStores = function() {
-        $state.go(navigationFactory.stores.get());
-    };
-    $scope.GoToRewards = function() {
-        $state.go(navigationFactory.rewards.get());
-    };
-    $scope.GetCommerceBalance = function(balance) {
-        if (balance === null) return 0;
-        if (balance === undefined) return 0;
-        else return balance;
-    };
-    $scope.GetCommerceImage = function(image) {
-        if (image != undefined) 
-        {
-            if (image != "")
-            {
-                return imageserverurl + image;
-            }
-        }
-
-        return "./img/empty.png";
-    };
-    $scope.lapseSinceLastVisit = function(date) {
-        return dateFxService.lapseSince(date);
-    };
-    $scope.FormatField = function(data) {
-        if ((!data)||(data === null)||(data===""))
-        {
-            return "No disponible";
-        }
-        else
-        {
-            return data;
-        }
-    };
-    $scope.ComposeEmail = function(storeEmail) {
-        var email = {
-            to: storeEmail,
-            cc: $scope.viewdata.user.Email,
-            subject: 'Kenuu - Asistencia al Cliente',
-            body: 'Quiero Ayuda!',
-            isHtml: true
+        function GetBorderColor() {
+            if (colorIndex === 4) colorIndex = 0;
+            return itemColorArray[colorIndex++];
         };
 
-        $cordovaEmailComposer.open(email).then(null, function () {
-            // TODO...
-        });
-    };
-}]);
+        userFactory.info.get()
+            .then(function(data){
+                $scope.viewdata.user = data;
+                var userData = data;            
+            })
+            .catch(function(err){});
 
-ctrl.controller('KenuuStoresCtrl', ['$scope','rewardFactory', '$window', '$cordovaActionSheet', 'commerceFactory', 'userFactory', function($scope, rewardFactory, $window, $cordovaActionSheet, commerceFactory, userFactory) {
-    $scope.viewdata = {
-        selectedReward: rewardFactory.selectedReward.get(),
-        selectedCommerce: commerceFactory.selectedCommerce.get(),
-        stores: []
-    };
+        function SetColorForItem(array) {
+            var j=array.length;
+            for (var i=0; i<j; i++)
+            {
+                array[i]["bordercolor"] = GetBorderColor();
+            }
+            return array;
+        };
 
-    var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
-
-    userFactory.info.get()
-        .then(function(data){
-            $scope.viewdata.user = data;            
-
-            commerceFactory.stores.general($scope.viewdata.selectedCommerce.EntityID)
+        function LoadData(entityID) {
+            loadingBox.show();
+            rewardFactory.active.general(true, entityID)
                 .then(function(data){
-                    
-                    $("#pleaseWaitSpinner_Stores").addClass("animated slideOutUp");
-                    
-                    setTimeout(function() {                                                       
-                        $scope.viewdata.stores = data;
+                    $("#pleaseWaitSpinner").addClass("animated slideOutUp");
+                    setTimeout(function() {                    
+                        $scope.viewdata.rewards = data.Elements;
+                        $scope.viewdata.rewards = SetColorForItem($scope.viewdata.rewards);
+                        $("#rewardsListContainer").show();                    
                         $scope.$apply();
-                        $("#pleaseWaitSpinner_Stores").hide();
-                        $("#storesListDiv").show();
-                        $("#storesListDiv").addClass("animated fadeIn"); 
-                    }, 150); 
+                        loadingBox.hide();
+                        $scope.$broadcast('scroll.refreshComplete');                    
+                    }, 150);
                 })
-                .catch(function(err){
-                    $("#pleaseWaitSpinner_Stores").addClass("animated slideOutUp");
-                
+                .catch(function(err){                
+                    $("#pleaseWaitSpinner").addClass("animated slideOutUp");
+                    $scope.$broadcast('scroll.refreshComplete');
+                    
                     setTimeout(function() { 
                         $("#errorWhenLoadingDiv").removeClass("animated slideOutUp");
                         setTimeout(function(){
+                            loadingBox.hide();
                             $("#errorWhenLoadingDiv").show();                    
                             $("#errorWhenLoadingDiv").addClass("animated slideInDown");    
                         }, 150);                    
                     }, 220);
                 });
-        })
-        .catch(function(err){
+        }; 
+
+        $scope.$on("$ionicView.beforeEnter", function(event, args){
+            $("#rewardsListContainer").hide();
         });
 
-    $scope.GetCommerceImage = function(image) {
-        if (image != undefined) 
-        {
-            if (image != "")
+        $scope.$on("$ionicView.enter", function(event, args){
+            $scope.viewdata.commerceSelected = commerceFactory.selectedCommerce.isSelected();
+            $scope.viewdata.selectedCommerce = commerceFactory.selectedCommerce.get();
+
+            if ($scope.viewdata.commerceSelected)
             {
-                return imageserverurl + image;
-            }
-        }
-
-        return "./img/empty.png";
-    };
-
-    $scope.GoToAddress = function(address) {
-        var options = {
-            title: 'Cómo desea navegar hasta esa dirección?',
-            buttonLabels: ['Usando Waze'],
-            addCancelButtonWithLabel: 'Cancelar',
-            androidEnableCancelButton : true,
-            winphoneEnableCancelButton : true
-            // addDestructiveButtonWithLabel : 'Vamos!'
-        };
-        $cordovaActionSheet.show(options)
-            .then(function(btnIndex) {
-                var index = btnIndex;
-                if (index == 1) {
-                    $window.open("waze://?q="+ address);
-                }
-            });
-    };
-}]);
-
-ctrl.controller('KenuuProfileCtrl', ['$scope', '$timeout', 'userFactory', '$state', '$ionicHistory', 'msgBox', '$ionicLoading', 'loadingBox', function($scope, $timeout, userFactory, $state, $ionicHistory, msgBox, $ionicLoading, loadingBox){
-    $scope.viewdata = {
-        qrcode: "Kenuu",
-        counter: 1,
-        positions: [],
-        user: {
-            name: '',
-            lastname: '',
-            activity: ''
-        }
-    };
-
-    userFactory.info.get(true,2)
-        .then(function(data){
-            $scope.viewdata.user = data;
-            $scope.$apply();
-            var userData = data;
-            $scope.viewdata.user.name = userData.FirstName;
-            $scope.viewdata.user.lastname = userData.LastName;
-        })
-        .catch(function(err){});
-
-    $scope.SaveProfile = function() {
-        loadingBox.show();
-
-        userFactory.info.update({
-            FirstName: $scope.viewdata.user.name,
-            LastName: $scope.viewdata.user.lastname,
-            UpdatePassword: false,
-            Password: ""
-        })
-        .then(function(response){
-            loadingBox.hide();
-            if ((response.status=="true")||(response.status==true))
-            {
-                userFactory.info.get(true,2)
-                .then(function(data){
-                    msgBox.showOk("Listo!", "Actualizaste tu perfil.");
-                })
-                .catch(function(err){});                
+                loadingBox.show();
+                $scope.viewdata.rewards = [];
+                $scope.$apply();
+                setTimeout(function(){
+                    LoadData($scope.viewdata.selectedCommerce.EntityID);
+                }, 800);            
             }
             else
             {
-
+                LoadData();
             }
-        })
-        .catch(function(err){
-            loadingBox.hide();
         });
-    };
 
-    $scope.DoLogout = function() {
-        userFactory.session.logout();
-        $ionicHistory.clearHistory();
-        $ionicHistory.clearCache();
-        $state.go("welcome");
-    };
-}]);
+        $scope.OpenRewardDetail = function(reward) {
+            rewardFactory.selectedReward.set(reward);
+            $state.go(navigationFactory.rewardDetail.get());
+        };
 
-ctrl.controller('KenuuRewardDetailCtrl', ['$scope', '$timeout', 'userFactory', 'rewardFactory', 'commerceFactory', '$state', '$ionicLoading', 'navigationFactory', function($scope, $timeout, userFactory, rewardFactory, commerceFactory, $state, $ionicLoading, navigationFactory){
+        $scope.ShowSideMenu = function() {
+            $(".reward-sidemenu").removeClass('reward-sidemenu-hidden');
+        };
 
-    $scope.viewdata = {
-        selectedReward: rewardFactory.selectedReward.get(),
-        rewardId: '',
-        user: {
-            activity: ''
-        },
-        commerce: {}
-    };
+        $scope.HideSideMenu = function() {        
+            $(".reward-sidemenu").addClass('reward-sidemenu-hidden');  
+        };
 
-    $scope.$on("$ionicView.enter", function(event, args){
-        commerceFactory.selectedCommerce.clearSelection(); 
-    });
+        $scope.gDate = function(date) {
+            var _date = new Date(parseInt(date.substr(6)));
+            return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
+        };
 
-    var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
-
-    userFactory.info.get()
-        .then(function(data){
-            $scope.viewdata.user = data;
-
-            if ($scope.viewdata.selectedReward.Points <= $scope.viewdata.user.PointsAvailable) {
-                $("#btnRedeem").show();
+        $scope.$watch('viewdata.searchText', function() {
+            if ($scope.viewdata.searchText != "")
+            {
+                $(".reward-searchpanel").removeClass("reward-searchpanel-hidden");
             }
-            var userData = data;
+            else
+            {
+                $(".reward-searchpanel").addClass("reward-searchpanel-hidden");   
+            }
+        });    
 
-            // Gets the Commerce Information
-            commerceFactory.get($scope.viewdata.selectedReward.EntityID)
-                .then(function(data){
-                    $scope.viewdata.commerce = data[0]; 
+        $scope.CancelSearch = function() {
+            $scope.viewdata.searchText = "";
+            $(".reward-searchpanel").removeClass("reward-searchpanel-hidden");
+        };
+
+        $scope.Reload = function() {
+            $("#errorWhenLoadingDiv").addClass("animated slideOutUp");
+            setTimeout(function(){
+                $("#pleaseWaitSpinner").removeClass("slideOutUp");
+                $("#pleaseWaitSpinner").addClass("animated slideInDown");
+                LoadData();
+            }, 200);        
+        };
+
+        $scope.doRefresh = function() { 
+            $scope.Reload();
+        };
+
+        $scope.sortBy = function(sortOption) {        
+            if (sortOption == "Nombre") 
+            {
+                $scope.viewdata.sorter = "Name";
+                $scope.nameSorter = "rewards-filter-header-selected";
+                $scope.pointsSorter = "";
+            }
+            else 
+            {
+                $scope.viewdata.sorter = "Points";
+                $scope.nameSorter = "";
+                $scope.pointsSorter = "rewards-filter-header-selected";
+            }
+
+        };
+    }]);
+
+    ctrl.controller('KenuuCommerceCtrl', ['$scope', '$state', 'rewardFactory', 'commerceFactory', 'userFactory', '$window', '$cordovaEmailComposer', 'dateFxService', 'navigationFactory', '$stateParams', function($scope, $state, rewardFactory, commerceFactory, userFactory, $window, $cordovaEmailComposer, dateFxService, navigationFactory, $stateParams){
+        $scope.viewdata = {
+            selectedReward: rewardFactory.selectedReward.get(),
+            selectedCommerce: commerceFactory.selectedCommerce.get()
+        };
+
+        if ($stateParams.entityID != undefined)
+        {
+            commerceFactory.get($stateParams.entityID)
+            .then(function(response){            
+                $scope.viewdata.selectedCommerce = response[0];
+                commerceFactory.selectedCommerce.set(response[0]);
+            })
+            .catch(function(err){
+                console.log("Error")
+            })
+        }
+        
+        userFactory.info.get(false, "")
+            .then(function(data){            
+                $("#pleaseWaitSpinner").addClass("animated slideOutUp");
+                setTimeout(function() {
+                    $scope.viewdata.user = data;
+                    $scope.$apply();
+
+                    // verifies if the client has performed any activity with the commerce
+                    if ($scope.viewdata.selectedCommerce.LastVisitDateEntity === null)
+                    {
+                        $("#commerce-noactivity").show();
+                    }
+                    else
+                    {
+                        $("#commerce-myactivity").show();
+                    }
+
+                }, 150);            
+            })
+            .catch(function(err){
+                $("#pleaseWaitSpinner").addClass("animated slideOutUp");
+                    
+                setTimeout(function() { 
+                    $("#errorWhenLoadingDiv").removeClass("animated slideOutUp");
+                    setTimeout(function(){
+                        $("#errorWhenLoadingDiv").show();                    
+                        $("#errorWhenLoadingDiv").addClass("animated slideInDown");    
+                    }, 150);                    
+                }, 220);
+            });
+
+        var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
+
+        $scope.gDate = function(date) {
+            if (date === null) return "";
+            if (date ===undefined) return "";
+            var _date = new Date(date);
+            return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
+        };
+        $scope.GoToStores = function() {
+            $state.go(navigationFactory.stores.get());
+        };
+        $scope.GoToRewards = function() {
+            $state.go(navigationFactory.rewards.get());
+        };
+        $scope.GetCommerceBalance = function(balance) {
+            if (balance === null) return 0;
+            if (balance === undefined) return 0;
+            else return balance;
+        };
+        $scope.GetCommerceImage = function(image) {
+            if (image != undefined) 
+            {
+                if (image != "")
+                {
+                    return imageserverurl + image;
+                }
+            }
+
+            return "./img/empty.png";
+        };
+        $scope.lapseSinceLastVisit = function(date) {
+            return dateFxService.lapseSince(date);
+        };
+        $scope.FormatField = function(data) {
+            if ((!data)||(data === null)||(data===""))
+            {
+                return "No disponible";
+            }
+            else
+            {
+                return data;
+            }
+        };
+        $scope.ComposeEmail = function(storeEmail) {
+            var email = {
+                to: storeEmail,
+                cc: $scope.viewdata.user.Email,
+                subject: 'Kenuu - Asistencia al Cliente',
+                body: 'Quiero Ayuda!',
+                isHtml: true
+            };
+
+            $cordovaEmailComposer.open(email).then(null, function () {
+                // TODO...
+            });
+        };
+    }]);
+
+    ctrl.controller('KenuuStoresCtrl', ['$scope','rewardFactory', '$window', '$cordovaActionSheet', 'commerceFactory', 'userFactory', function($scope, rewardFactory, $window, $cordovaActionSheet, commerceFactory, userFactory) {
+        $scope.viewdata = {
+            selectedReward: rewardFactory.selectedReward.get(),
+            selectedCommerce: commerceFactory.selectedCommerce.get(),
+            stores: []
+        };
+
+        var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
+
+        userFactory.info.get()
+            .then(function(data){
+                $scope.viewdata.user = data;            
+
+                commerceFactory.stores.general($scope.viewdata.selectedCommerce.EntityID)
+                    .then(function(data){
+                        
+                        $("#pleaseWaitSpinner_Stores").addClass("animated slideOutUp");
+                        
+                        setTimeout(function() {                                                       
+                            $scope.viewdata.stores = data;
+                            $scope.$apply();
+                            $("#pleaseWaitSpinner_Stores").hide();
+                            $("#storesListDiv").show();
+                            $("#storesListDiv").addClass("animated fadeIn"); 
+                        }, 150); 
+                    })
+                    .catch(function(err){
+                        $("#pleaseWaitSpinner_Stores").addClass("animated slideOutUp");
+                    
+                        setTimeout(function() { 
+                            $("#errorWhenLoadingDiv").removeClass("animated slideOutUp");
+                            setTimeout(function(){
+                                $("#errorWhenLoadingDiv").show();                    
+                                $("#errorWhenLoadingDiv").addClass("animated slideInDown");    
+                            }, 150);                    
+                        }, 220);
+                    });
+            })
+            .catch(function(err){
+            });
+
+        $scope.GetCommerceImage = function(image) {
+            if (image != undefined) 
+            {
+                if (image != "")
+                {
+                    return imageserverurl + image;
+                }
+            }
+
+            return "./img/empty.png";
+        };
+
+        $scope.GoToAddress = function(address) {
+            var options = {
+                title: 'Cómo desea navegar hasta esa dirección?',
+                buttonLabels: ['Usando Waze'],
+                addCancelButtonWithLabel: 'Cancelar',
+                androidEnableCancelButton : true,
+                winphoneEnableCancelButton : true
+                // addDestructiveButtonWithLabel : 'Vamos!'
+            };
+            $cordovaActionSheet.show(options)
+                .then(function(btnIndex) {
+                    var index = btnIndex;
+                    if (index == 1) {
+                        $window.open("waze://?q="+ address);
+                    }
+                });
+        };
+    }]);
+
+    ctrl.controller('KenuuProfileCtrl', ['$scope', '$timeout', 'userFactory', '$state', '$ionicHistory', 'msgBox', '$ionicLoading', 'loadingBox', function($scope, $timeout, userFactory, $state, $ionicHistory, msgBox, $ionicLoading, loadingBox){
+        $scope.viewdata = {
+            qrcode: "Kenuu",
+            counter: 1,
+            positions: [],
+            user: {
+                name: '',
+                lastname: '',
+                activity: ''
+            }
+        };
+
+        userFactory.info.get(true,2)
+            .then(function(data){
+                $scope.viewdata.user = data;
+                $scope.$apply();
+                var userData = data;
+                $scope.viewdata.user.name = userData.FirstName;
+                $scope.viewdata.user.lastname = userData.LastName;
+            })
+            .catch(function(err){});
+
+        $scope.SaveProfile = function() {
+            loadingBox.show();
+
+            userFactory.info.update({
+                FirstName: $scope.viewdata.user.name,
+                LastName: $scope.viewdata.user.lastname,
+                UpdatePassword: false,
+                Password: ""
+            })
+            .then(function(response){
+                loadingBox.hide();
+                if ((response.status=="true")||(response.status==true))
+                {
+                    userFactory.info.get(true,2)
+                    .then(function(data){
+                        msgBox.showOk("Listo!", "Actualizaste tu perfil.");
+                    })
+                    .catch(function(err){});                
+                }
+                else
+                {
+
+                }
+            })
+            .catch(function(err){
+                loadingBox.hide();
+            });
+        };
+
+        $scope.DoLogout = function() {
+            userFactory.session.logout();
+            $ionicHistory.clearHistory();
+            $ionicHistory.clearCache();
+            $state.go("welcome");
+        };
+    }]);
+
+    ctrl.controller('KenuuRewardDetailCtrl', ['$scope', '$timeout', 'userFactory', 'rewardFactory', 'commerceFactory', '$state', '$ionicLoading', 'navigationFactory', function($scope, $timeout, userFactory, rewardFactory, commerceFactory, $state, $ionicLoading, navigationFactory){
+
+        $scope.viewdata = {
+            selectedReward: rewardFactory.selectedReward.get(),
+            rewardId: '',
+            user: {
+                activity: ''
+            },
+            commerce: {}
+        };
+
+        $scope.$on("$ionicView.enter", function(event, args){
+            commerceFactory.selectedCommerce.clearSelection(); 
+        });
+
+        var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
+
+        userFactory.info.get()
+            .then(function(data){
+                $scope.viewdata.user = data;
+
+                if ($scope.viewdata.selectedReward.Points <= $scope.viewdata.user.PointsAvailable) {
+                    $("#btnRedeem").show();
+                }
+                var userData = data;
+
+                // Gets the Commerce Information
+                commerceFactory.get($scope.viewdata.selectedReward.EntityID)
+                    .then(function(data){
+                        $scope.viewdata.commerce = data[0]; 
+                        $scope.$apply();
+                    })
+                    .catch(function(err){
+                        
+                    });
+            })
+            .catch(function(err){
+                console.log(err);
+            });
+
+        $scope.viewdata.rewardId = $scope.viewdata.selectedReward.SRewardID.toString();
+
+        $scope.GetCommerceBalance = function(balance) {
+            if (balance === null) return 0;
+            if (balance === undefined) return 0;
+            else return balance;
+        };
+
+        $scope.GetCommerceImage = function(image) {
+            if (image != undefined) 
+            {
+                if (image != "")
+                {
+                    return imageserverurl + image;
+                }
+            }
+
+            return "./img/empty.png";
+        };
+
+        $scope.gDate = function(date) {
+            var _date = new Date(parseInt(date.substr(6)));
+            return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
+        };
+
+        $scope.GoToCommerce = function() {
+            commerceFactory.selectedCommerce.set($scope.viewdata.commerce);
+            $state.go(navigationFactory.commerce.get());
+        };
+
+        $scope.RedeemReward = function() {
+            swal(
+                {   
+                    title: "Está seguro?",   
+                    text: "Desea canjear este premio?",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#4E0F5B", 
+                    cancelButtonText:"No",  
+                    confirmButtonText: "Si, Canjear!",   
+                    closeOnConfirm: true 
+                }, 
+                function()
+                {   
+                    loadingBox.show();
+                    
+                    setTimeout(function() {
+                        loadingBox.hide();
+                        swal(
+                        {
+                            title: "Listo!",
+                            text: "Ya tienes tu premio en la sección de 'mis premios'.",
+                            confirmButtonColor: "#8f04a9",
+                            type: "success" 
+                        });
+                    }, 1500);
+                }
+            );
+        };
+    }]);
+
+    ctrl.controller('SearchCtrl', ['$scope', 'searchFactory', '$state', 'commerceFactory', '$ionicModal', 'navigationFactory', function($scope, searchFactory, $state, commerceFactory, $ionicModal, navigationFactory){
+        $scope.viewdata = {
+            doingSearch: false,
+            searchResults: [],
+            searchText: ""
+        };
+
+        $scope.$on("$ionicView.enter", function(event, args){        
+            if ($scope.viewdata.searchText != "")
+            {
+                doSearch();
+            }
+        });
+
+        function sortByKey(array, key) {
+            return array.sort(function(a, b) {
+                var x = a[key]; var y = b[key];
+                return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+            });
+        };
+
+        function doSearch() {
+            searchFactory.doSearch($scope.viewdata.searchText)
+                .then(function(data){                
+                    $scope.viewdata.searchResults = data.response.Elements;
+                    $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
                     $scope.$apply();
                 })
-                .catch(function(err){
+                .catch(function(data){
                     
-                });
-        })
-        .catch(function(err){
-            console.log(err);
-        });
+                })
+        };
 
-    $scope.viewdata.rewardId = $scope.viewdata.selectedReward.SRewardID.toString();
-
-    $scope.GetCommerceBalance = function(balance) {
-        if (balance === null) return 0;
-        if (balance === undefined) return 0;
-        else return balance;
-    };
-
-    $scope.GetCommerceImage = function(image) {
-        if (image != undefined) 
-        {
-            if (image != "")
+        $scope.$watch('viewdata.searchText', function() {
+            if ($scope.viewdata.searchText != "")
             {
-                return imageserverurl + image;
+                $(".reward-searchpanel").removeClass("reward-searchpanel-hidden");
+                doSearch();
             }
-        }
-
-        return "./img/empty.png";
-    };
-
-    $scope.gDate = function(date) {
-        var _date = new Date(parseInt(date.substr(6)));
-        return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
-    };
-
-    $scope.GoToCommerce = function() {
-        commerceFactory.selectedCommerce.set($scope.viewdata.commerce);
-        $state.go(navigationFactory.commerce.get());
-    };
-
-    $scope.RedeemReward = function() {
-        swal(
-            {   
-                title: "Está seguro?",   
-                text: "Desea canjear este premio?",   
-                type: "warning",   
-                showCancelButton: true,   
-                confirmButtonColor: "#4E0F5B", 
-                cancelButtonText:"No",  
-                confirmButtonText: "Si, Canjear!",   
-                closeOnConfirm: true 
-            }, 
-            function()
-            {   
-                loadingBox.show();
-                
-                setTimeout(function() {
-                    loadingBox.hide();
-                    swal(
-                    {
-                        title: "Listo!",
-                        text: "Ya tienes tu premio en la sección de 'mis premios'.",
-                        confirmButtonColor: "#8f04a9",
-                        type: "success" 
-                    });
-                }, 1500);
+            else
+            {
+                $(".reward-searchpanel").addClass("reward-searchpanel-hidden");   
+                $scope.viewdata.searchResults = [];
             }
-        );
-    };
-}]);
+        }); 
 
-ctrl.controller('SearchCtrl', ['$scope', 'searchFactory', '$state', 'commerceFactory', '$ionicModal', 'navigationFactory', function($scope, searchFactory, $state, commerceFactory, $ionicModal, navigationFactory){
-    $scope.viewdata = {
-        doingSearch: false,
-        searchResults: [],
-        searchText: ""
-    };
+        $scope.ClearSearch = function() {
+            $scope.viewdata.searchText = "";
+            $(".reward-searchpanel").addClass("reward-searchpanel-hidden");
+        };
 
-    $scope.$on("$ionicView.enter", function(event, args){        
-        if ($scope.viewdata.searchText != "")
-        {
-            doSearch();
-        }
-    });
+        $scope.OpenCommerce = function(entityID) {
+            commerceFactory.get(entityID)
+                .then(function(response){
+                    commerceFactory.selectedCommerce.set(response[0]);
+                    navigationFactory.stores.setTab("tab.search-stores");
+                    navigationFactory.rewards.setTab("tab.search-prices");
+                    navigationFactory.rewardDetail.setTab("tab.search-rewarddetail");                
+                    $state.go("tab.search-commerce");
+                })
+                .catch(function(response){
+                    console.log("Error when getting the commerce.")
+                    console.log(response);
+                })
+            
+        };
 
-    function sortByKey(array, key) {
-        return array.sort(function(a, b) {
-            var x = a[key]; var y = b[key];
-            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        $scope.OpenStore = function(entityID, SubEntityID) {};
+
+        $scope.OpenReward = function(entityID, SubEntityID, rewardID) {
+            $state.go("tab.search-rewarddetail");
+        };
+    }]);
+
+    ctrl.controller('WhatsNewCtrl', ['$scope', '$cordovaInAppBrowser', '$ionicSlideBoxDelegate', function($scope, $cordovaInAppBrowser, setupView, emailService, $ionicSlideBoxDelegate) {
+
+        $scope.$on("$ionicView.enter", function(event, args){
+            // $ionicSlideBoxDelegate.slide(0);
         });
-    };
 
-    function doSearch() {
-        searchFactory.doSearch($scope.viewdata.searchText)
-            .then(function(data){                
-                $scope.viewdata.searchResults = data.response.Elements;
-                $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
-                $scope.$apply();
-            })
-            .catch(function(data){
-                
-            })
-    };
+        $scope.OpenTwitter = function() {
+            var options = {
+                location: 'yes',
+                clearcache: 'yes',
+                toolbar: 'yes'
+            };
 
-    $scope.$watch('viewdata.searchText', function() {
-        if ($scope.viewdata.searchText != "")
-        {
-            $(".reward-searchpanel").removeClass("reward-searchpanel-hidden");
-            doSearch();
-        }
-        else
-        {
-            $(".reward-searchpanel").addClass("reward-searchpanel-hidden");   
-            $scope.viewdata.searchResults = [];
-        }
-    }); 
-
-    $scope.ClearSearch = function() {
-        $scope.viewdata.searchText = "";
-        $(".reward-searchpanel").addClass("reward-searchpanel-hidden");
-    };
-
-    $scope.OpenCommerce = function(entityID) {
-        commerceFactory.get(entityID)
-            .then(function(response){
-                commerceFactory.selectedCommerce.set(response[0]);
-                navigationFactory.stores.setTab("tab.search-stores");
-                navigationFactory.rewards.setTab("tab.search-prices");
-                navigationFactory.rewardDetail.setTab("tab.search-rewarddetail");                
-                $state.go("tab.search-commerce");
-            })
-            .catch(function(response){
-                console.log("Error when getting the commerce.")
-                console.log(response);
-            })
-        
-    };
-
-    $scope.OpenStore = function(entityID, SubEntityID) {};
-
-    $scope.OpenReward = function(entityID, SubEntityID, rewardID) {
-        $state.go("tab.search-rewarddetail");
-    };
-}]);
-
-ctrl.controller('WhatsNewCtrl', ['$scope', '$cordovaInAppBrowser', '$ionicSlideBoxDelegate', function($scope, $cordovaInAppBrowser, setupView, emailService, $ionicSlideBoxDelegate) {
-
-    $scope.$on("$ionicView.enter", function(event, args){
-        // $ionicSlideBoxDelegate.slide(0);
-    });
-
-    $scope.OpenTwitter = function() {
-        var options = {
-            location: 'yes',
-            clearcache: 'yes',
-            toolbar: 'yes'
+            $cordovaInAppBrowser.open('https://twitter.com/kenuupops', '_blank', options)
+                .then(function(event) {
+                // success
+                })
+                .catch(function(event) {
+                // error
+                });
         };
+        $scope.OpenFacebook = function() {
+            var options = {
+                location: 'yes',
+                clearcache: 'yes',
+                toolbar: 'yes'
+            };
 
-        $cordovaInAppBrowser.open('https://twitter.com/kenuupops', '_blank', options)
-            .then(function(event) {
-            // success
-            })
-            .catch(function(event) {
-            // error
-            });
-    };
-    $scope.OpenFacebook = function() {
-        var options = {
-            location: 'yes',
-            clearcache: 'yes',
-            toolbar: 'yes'
+            $cordovaInAppBrowser.open('http://www.facebook.com/kenuupops', '_blank', options)
+                .then(function(event) {
+                // success
+                })
+                .catch(function(event) {
+                // error
+                });
         };
-
-        $cordovaInAppBrowser.open('http://www.facebook.com/kenuupops', '_blank', options)
-            .then(function(event) {
-            // success
-            })
-            .catch(function(event) {
-            // error
-            });
-    };
-}]);
+    }]);
