@@ -2,10 +2,8 @@
     <ion-nav-title>
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
     </ion-nav-title>
-    <ion-content class="activity-content">
-    	<!-- <div id="pleaseWaitSpinner" class="item item-clear text-center pleaseWaitSpinner" ng-show="viewdata.rewards.length == 0">
-            <ion-spinner icon="dots" class="spinner"></ion-spinner>
-        </div> -->
+    <ion-content class="activity-content" overflow-scroll="true">
+    	
         <div id="errorWhenLoadingDiv" class="pleaseWaitSpinner" style="display:none">
             <div class="item item-clear item-icon-right" ng-click="Reload()">
                 <p><strong>Oops, no hay actividad!</strong></p>
@@ -13,11 +11,11 @@
                 <i class="icon ion-ios-refresh-empty"></i>
             </div>                
         </div>
-        <div id="activityListDiv" class="list">
+        <div id="activityListDiv" class="list" style="display:none">
         	<div class="item item-divider">
         		<p><strong>Tu actividad</strong></p>
         	</div>
-        	<div class="item item-text-wrap item-icon-right activity-activityitem" ng-repeat="activity in viewdata.user.activity">
+        	<div class="item item-text-wrap item-icon-right activity-activityitem" ng-repeat="activity in viewdata.user.activity" ng-click="OpenCommerce(activity.EntityID)">
         		<p><strong>{{gDate(activity.ActivityDate)}}</strong></p>
         		<p><strong class="activity-commerce-name">{{activity.SubEntityName}}</strong></p>
         		<i class="icon icon-gift activity-redemption" ng-show="activity.ActivityType == 'R'"></i>
@@ -31,40 +29,6 @@
 				</div>
         	</div>
         </div>
-        <!-- <div id="activityListDiv" class="list">
-        	<div class="item card activity-card" ng-repeat="activity in viewdata.user.activity" style="padding:0;">
-        		<div class="item item-icon-left activity-card-item" style="padding-top:5px; padding-bottom:5px;">
-        			<i class="icon activity-icon" ng-class="GetActivityIcon(activity.ActivityType)"></i>
-					<div class="row">
-						<div class="col text-left">
-							<p><strong>{{gDate(activity.ActivityDate)}}</strong></p>		
-						</div>
-						<div class="col text-right">
-							<p>{{activity.SubEntityName}}</p>		
-						</div>
-					</div>					
-				</div>
-				<div class="item item-text-wrap activity-card-item" ng-show="activity.ActivityType == 'R'">
-					<p><strong class="activity-redemption-title">Canje:</strong></p>
-					<p><strong>{{activity.RewardName}}</strong></p>
-					<p>{{activity.RewardDescription}}</p>        			
-				</div>
-				<div class="item item-divider activity-card-item">
-					<p><strong>{{GetActivityPointsLabel(activity.ActivityType)}}</strong> <span class="activity-points-label">{{activity.Points}}</span></p>
-				</div>
-				<div class="item item-divider activity-card-item">
-					<p><strong class="activity-social-share-title">compártelo!</strong></p>
-					<div class="row">
-						<div class="col-50 text-center" ng-click="ShareViaFacebook(activity)">
-							<i class="ion-social-facebook activity-facebook"></i> facebook
-						</div>
-						<div class="col-50 text-center" ng-click="ShareViaTwitter(activity)">
-							<i class="ion-social-twitter activity-twitter"></i> twitter
-						</div>
-					</div>
-				</div>
-        	</div>
-        </div> -->
         <div class="activity-bottomspacer"></div>
     </ion-content>
 </ion-view>

@@ -6,7 +6,7 @@
 	<ion-content class="reward-detail-content">
 		<div class="list">
 			<div class="item text-center reward-detail-avatar-item">
-				<img class="reward-detail-avatar" src="{{viewdata.imageserverurl + viewdata.selectedreward.Image}}">
+				<img ng-show="viewdata.selectedreward.Image!=null" class="reward-detail-avatar" src="{{viewdata.imageserverurl + viewdata.selectedreward.Image}}">
 			</div>
 			<div class="item item-text-wrap reward-detail-baseitem item-icon-right reward-detail-header-item">
 				<strong class="reward-detail-title">Pops Requeridos</strong>

@@ -6,7 +6,7 @@
 		<button class="button button-clear ion-map topbar-setupicon" style="font-size:25px;" ng-click="OpenMap()">
 		</button>
 	</ion-nav-buttons>	
-	<ion-content class="nearme-content">
+	<ion-content class="nearme-content" overflow-scroll="true">
 		<div class="item-input-inset nearme-search-item">
 			<label class="item-input-wrapper">
 				<i class="icon ion-ios-search placeholder-icon"></i>
@@ -16,7 +16,7 @@
 				<i class="icon ion-ios-close-outline"></i>
 			</button>
 		</div>
-		<ul class="list">
+		<ul class="list" id="nearme-list">
 		    <li class="item item-icon-left nearme-commerce-item" ng-repeat="item in viewdata.searchResults | filter:{Type:'C'} | orderBy:'Name'" ng-click="OpenCommerce(item)">
 		    	<i class="icon">
 		    		<img class="nearme-commerce-avatar" src="{{GetAvatarImage(item.Image)}}">

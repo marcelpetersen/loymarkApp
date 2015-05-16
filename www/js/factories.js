@@ -326,8 +326,7 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                     var url = serverURL + '/member/login';
                     $http({
                         headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                            'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
+                            'Content-Type': 'application/x-www-form-urlencoded'                            
                         },
                         method: 'POST',
                         url: url,
@@ -352,8 +351,7 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                     var url = serverURL + '/member/signup';
                     $http({
                         headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                            'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
+                            'Content-Type': 'application/x-www-form-urlencoded'                            
                         },
                         method: 'POST',
                         url: url,
@@ -605,7 +603,7 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
         },
         device: {
             register: function(device, tokenID, userReferenceID) {
-                var url = 'http://192.168.111.110/devicetoken/kenuu/a59f70a0-ea15-11e4-9c0e-237f667d4c49/register';
+                var url = 'http://201.201.150.159/devicetoken/kenuu/a59f70a0-ea15-11e4-9c0e-237f667d4c49/register';
                 return new Promise(function(resolve,reject){
                     var jsonData = 
                     {
@@ -752,9 +750,9 @@ fact.factory('userFactory',['restFactory', function(restFactory){
                             });
                     });
                 },
-                commerce: function(userID){
+                commerce: function(){
                     return new Promise(function(resolve,reject){
-                        restFactory.user.activity.visits.commerce.get(userID)
+                        restFactory.user.activity.visits.commerce.get()
                             .then(function(response){
                                 resolve(response);
                             })
@@ -1075,17 +1073,13 @@ fact.factory('searchFactory', ['restFactory', function(restFactory){
 }])
 
 fact.factory('navigationFactory', [function(){
-    // Default values
-    var storesState = "tab.kenuu-stores"; 
-    var rewardsState = "tab.kenuu-prices";
-    var rewardDetailState = "tab.kenuu-rewarddetail";
-    var commerceState = "tab.kenuu-commerce";
+    var storesState         = "tab.nearme-commercestores"; 
+    var commerceState       = "tab.nearme-commerce";
+
     return {
         setDefaults: function() {
-            storesState = "tab.kenuu-stores"; 
-            rewardsState = "tab.kenuu-prices";
-            rewardDetailState = "tab.kenuu-rewarddetail";
-            commerceState = "tab.kenuu-commerce";
+            storesState         = "tab.nearme-commercestores"; 
+            commerceState       = "tab.nearme-commerce";
         },
         commerce: {
             setTab: function(stateName) {
@@ -1101,22 +1095,6 @@ fact.factory('navigationFactory', [function(){
             },
             get: function() {
                 return storesState;
-            }
-        },
-        rewards: {
-            setTab: function(stateName) {
-                rewardsState = stateName;
-            },
-            get: function() {
-                return rewardsState;
-            }
-        },
-        rewardDetail: {
-            setTab: function(stateName) {
-                rewardDetailState = stateName;
-            },
-            get: function() {
-                return rewardDetailState;
             }
         }
     }

@@ -2,7 +2,7 @@
 	<ion-nav-title>
 		<img src="img/kenuulogo.png" alt="" class="top-bar-logo">
 	</ion-nav-title>
-	<ion-content class="commercewr-content">
+	<ion-content class="commercewr-content" overflow-scroll="true">
 		<div class="item text-center commercewr-header">			
 			<h2><strong>{{viewdata.commerce.Name}}</strong></h2>	
 			<div>
@@ -43,17 +43,46 @@
 				</div>
 			</div>
 		</div>
-		<div class="item commercewr-detail-pops-item">
+		<div class="item commercewr-detail-pops-item" style="padding:0">
+
 			<div class="row">
-				<div class="col commercewr-detail-title"><strong style="margin-left:-5px">Tu Balance</strong></div>
-			</div>
-			<div class="row">
-				<div class="col text-right">
-					<strong class="commercewr-detail-balance commercewr-points">
-						{{GetPops(viewdata.commerce.PointsAvailable)}} pops
-					</strong>
+				<div class="col">
+					<div class="row">
+						<div class="col commercewr-detail-title text-center"><strong>Tu Balance</strong></div>
+					</div>
+					<div class="row">
+						<div class="col text-center">
+							<strong class="commercewr-detail-balance commercewr-points">
+								{{GetVal(viewdata.commerce.PointsAvailable)}}
+							</strong>
+						</div>
+					</div>
+				</div>
+				<div class="col">
+					<div class="row">
+						<div class="col commercewr-detail-title text-center"><strong>Visitas</strong></div>
+					</div>
+					<div class="row">
+						<div class="col text-center">
+							<strong class="commercewr-detail-balance commercewr-points">
+								{{GetVisitCount(viewdata.commerce)}}
+							</strong>
+						</div>
+					</div>
+				</div>
+				<div class="col">
+					<div class="row">
+						<div class="col commercewr-detail-title text-center"><strong>Ultima Visita</strong></div>
+					</div>
+					<div class="row">
+						<div class="col text-center">
+							<strong class="commercewr-detail-balance commercewr-points item-text-wrap" ng-bind="GetLastVisitDate(viewdata.commerce)" style="font-size:16px;">								
+							</strong>
+						</div>
+					</div>
 				</div>
 			</div>
+			
 		</div>
 		<ul class="list">
 		    <div class="item item-divider commercewr-detail-title">
@@ -62,28 +91,23 @@
 			<li class="item" ng-show="viewdata.rewards.length == 0">
 				No hay premios disponibles
 			</li>
-		    <li ng-show="viewdata.rewards.length > 0" class="item item-avatar item-icon-right item-text-wrap commercewr-detail-item" ng-repeat="item in viewdata.rewards | filter:{AvailableAllStores:true} | orderBy:'Points'" ng-click="OpenRewardDetail(item)">		    	
-		    	<img ng-show="item.Image != null" src="{{viewdata.imageserverurl + item.Image}}">
-		    	<strong><h2 ng-bind="item.Name"></h2></strong>
+		    <li ng-show="viewdata.rewards.length > 0" class="item item-avatar item-icon-right item-text-wrap commercewr-detail-item" collection-repeat="item in viewdata.rewards | orderBy:'Points'" ng-click="OpenRewardDetail(item)">		    	
+		    	<img ng-show="item.Image != null" src="{{viewdata.imageserverurl + item.Image}}">		    	
+		    	
+		    	<div>
+			    	<strong><h2 ng-bind="item.Name"></h2></strong>
 
-		    	<p ng-show="viewdata.commerce.PointsAvailable > item.Points">
-		    		<!-- <div class="row">
-		    			<div class="col">
-		    				<p class="commercewr-progress-tracker" style="margin-top:5px; width:40%;"></p>
-		    			</div>
-		    			<div class="col">
-		    				<i class="ion-ios-checkmark commercewr-reward-available"></i>
-		    			</div>
-		    		</div> -->
-		    		<strong ng-bind="item.Points"></strong> de <strong ng-bind="item.Points"></strong> <i class="ion-ios-checkmark commercewr-reward-available"></i>
-		    	</p>
-		    	<p ng-show="viewdata.commerce.PointsAvailable == item.Points">
-		    		<strong ng-bind="item.Points"></strong> de <strong ng-bind="item.Points"></strong> <i class="ion-ios-checkmark commercewr-reward-available"></i>
-		    	</p>
-		    	<p ng-show="viewdata.commerce.PointsAvailable < item.Points">
-		    		<strong ng-bind="viewdata.commerce.PointsAvailable"></strong> de <strong ng-bind="item.Points"></strong> 
-		    	</p>
-		    	<i class="icon" ng-class="GetPointsClass(viewdata.commerce.PointsAvailable, item.Points)" style="margin-right:5px;" ng-bind="item.Points"></i>
+			    	<p ng-show="viewdata.commerce.PointsAvailable >= item.Points">		    		
+			    		<strong ng-bind="item.Points"></strong> de <strong ng-bind="item.Points"></strong> <i class="ion-ios-checkmark commercewr-reward-available"></i>
+			    	</p>		    	
+			    	<p ng-show="viewdata.commerce.PointsAvailable < item.Points">
+			    		<strong ng-bind="GetAvailablePoints(viewdata.commerce.PointsAvailable)"></strong> de <strong ng-bind="item.Points"></strong> 
+			    	</p>
+			    	<p ng-show="!item.AvailableAllStores">Solamente en <strong ng-bind="item.SubEntityName" class="commercewr-store-label"></strong></p>
+			    	<p>&nbsp;</p>
+		    	</div>
+
+		    	<i class="icon" ng-class="GetPointsClass(viewdata.commerce.PointsAvailable, item.Points)" style="margin-right:5px;" ng-bind="item.Points"></i>		    	
 		    </li>
 		</ul>
 	</ion-content>		

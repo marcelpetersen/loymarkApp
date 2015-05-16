@@ -1213,7 +1213,7 @@ ion-nav-view[nav-view-transition="ios"] {
 		font-size: 30px;		
 	}
 	.commercewr-detail-item {
-		border: 0px solid !important;
+		border: 1px solid #efefef !important;
 	}
 	.commercewr-points {
 		color: white;
@@ -1263,6 +1263,9 @@ ion-nav-view[nav-view-transition="ios"] {
 			$kenuu-dark-green 10px,
 			$kenuu-dark-green 20px
 		);
+	}
+	.commercewr-store-label {
+		color: $kenuu-purple;
 	}
 
 /* ******** Commerce Stores ********* */

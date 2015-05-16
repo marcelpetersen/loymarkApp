@@ -15,7 +15,7 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	// url: 'http://192.168.1.9:8100/api' // Home Development Environment
 })
 
-.run(function($rootScope, $state, $ionicPlatform, networkFactory, $cordovaNetwork, deviceFactory, $cordovaPush, $ionicTabsDelegate, navigationFactory, commerceFactory, $ionicHistory) {
+.run(function($rootScope, $state, $ionicPlatform, networkFactory, $cordovaNetwork, deviceFactory, $cordovaPush, $ionicTabsDelegate, navigationFactory, commerceFactory, $ionicHistory, loadingBox) {
   	$ionicPlatform.ready(function() {
 	    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
 	    // for form inputs)
@@ -82,21 +82,23 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 			}
 		});
 
-		$rootScope.MyKenuuTabClicked = function() {
-			navigationFactory.setDefaults();
+		navigationFactory.setDefaults();
+
+		$rootScope.MyKenuuTabClicked = function() {								
 			$state.go("tab.kenuu");
 		};
 
-		$rootScope.RewardsTabClicked = function() {
-			commerceFactory.selectedCommerce.clearSelection();
-			navigationFactory.rewards.setTab("tab.rewards");
-			navigationFactory.rewardDetail.setTab("tab.rewards-rewardDetail");
-			navigationFactory.commerce.setTab("tab.rewards-commerce");
-			navigationFactory.stores.setTab("tab.rewards-stores");
-			$state.go("tab.rewards");
-		};
+		// $rootScope.RewardsTabClicked = function() {
+		// 	commerceFactory.selectedCommerce.clearSelection();
+		// 	navigationFactory.rewards.setTab("tab.rewards");
+		// 	navigationFactory.rewardDetail.setTab("tab.rewards-rewardDetail");
+		// 	navigationFactory.commerce.setTab("tab.rewards-commerce");
+		// 	navigationFactory.stores.setTab("tab.rewards-stores");
+		// 	$state.go("tab.rewards");
+		// };
 
 		$rootScope.NearMeTabClicked = function() {
+			navigationFactory.setDefaults();			
 			$state.go("tab.nearme");
 		};
 	});
@@ -274,6 +276,26 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 		  	}
 		})
 
+		.state('tab.kenuu-commerce', {
+			url: '/kenuu/commerce',
+			views: {
+				'tab-kenuu': {
+					templateUrl: 'templates/views/near-me/tab-commerce-withrewards.html',
+					controller: 'CommerceWithRewardsCtrl'
+				}
+			}
+		})
+
+		.state('tab.kenuu-commercestores', {
+			url: '/kenuu/commercestores',
+			views: {
+				'tab-kenuu': {
+					templateUrl: 'templates/views/near-me/tab-commerce-stores.html',
+					controller: 'CommerceWithRewardsStoresCtrl'
+				}
+			}
+		})
+
 	// **** NOT USED ****
 
 		// .state('tab.whatsnew', {
@@ -446,7 +468,7 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 
 	;
 		
-	// Verifies the App has already shown the welcome screen
+	// Verifies the App has already shown the welcome screen	
 	var _apikey = localStorage.getItem('userReferenceID');
 	localStorage.setItem('animationShown', false);
 	var _url = "";

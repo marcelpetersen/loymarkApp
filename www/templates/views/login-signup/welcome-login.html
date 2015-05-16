@@ -2,8 +2,8 @@
 	<ion-nav-title>
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
     </ion-nav-title>
-	<ion-content id="welcome-login-content" scroll="false" class="welcome-content">
-		<ion-slide-box on-slide-changed="slideHasChanged($index)">
+	<ion-content id="welcome-login-content" scroll="false" class="welcome-content" overflow-scroll="true">
+		<ion-slide-box show-pager="false" on-slide-changed="slideHasChanged($index)">
 			<form name="signUpPwdForm" novalidate ng-submit="DoLogin()">
 				<div class="text-left" style="padding-left:30px; padding-right:30px; margin-top: 30px;">
 					<label class="item clear-item item-input item-stacked-label" style="width:80vw;">

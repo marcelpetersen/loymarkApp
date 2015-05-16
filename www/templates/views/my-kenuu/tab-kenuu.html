@@ -13,7 +13,7 @@
 			</div>
 			<div class="col-70">
 				<h4>{{viewdata.user.FirstName}} {{viewdata.user.LastName}}</h4>					
-				<p>{{viewdata.user.Email}}</p>
+				<p ng-bind="viewdata.user.Email"></p>
 				<button class="button button-small button-calm profile-btn" ng-click="GoToProfile()">Mi Info</button>	
 			</div>
 		</div>
@@ -24,12 +24,31 @@
 				<div class="profile-item-title">mi actividad</div>
 				<div>consulte sus últimos movimientos</div>
 			</a>
-			<a class="item item-icon-left profile_item item-text-wrap" href="#/tab/kenuu/favCommerces">
+			<!-- <a class="item item-icon-left profile_item item-text-wrap" href="#/tab/kenuu/favCommerces">
 				<i class="icon icon-location profile-item-icon"></i>
 				<div class="profile-item-title">comercios visitados</div>
 				<div>consulte sus comercios favoritos</div>
-			</a>		
+			</a> -->
 		</div>
+		<div id="favcommerces-list" class="list">
+            <div class="item item-divider">
+                <p><strong>Mis comercios</strong></p>
+            </div>
+            <div class="item item-text-wrap item-icon-right activity-activityitem" ng-repeat="commerce in viewdata.commerces | orderBy:'TotalVisits'" ng-click="GoToCommerce(commerce)">
+                <p>Hace: <strong>{{calcLapse(commerce.LastVisit)}}</strong></p>
+                <p><strong class="activity-commerce-name">{{commerce.Name}}</strong></p>                
+                <i class="icon icon-location activity-checkin"></i>
+
+                <p>
+                    <h3 class="favcommerce-lastvisit-label">
+                        <small class="textgrey-text">visitas:</small> 
+                    </h3>
+                    <h3 class="favcommerce-lastvisit-label">
+                        <strong class="favcommerce-visits">{{commerce.TotalVisits}}</strong>
+                    </h3>
+                </p>
+            </div>            
+        </div>
 		<div class="bottomspacer"></div>
 	</ion-content>
 </ion-view>
