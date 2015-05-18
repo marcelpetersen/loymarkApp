@@ -22,8 +22,6 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
         .then(function(data){
             $scope.viewdata.user = data;
             $scope.$apply();
-            console.log('USER DATA!!!');
-            console.log($scope.viewdata.user);
 
             $scope.viewdata.CardNumber = data.CardNumber; // data.AccountID;
 
@@ -49,8 +47,7 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
                         })
                     },
                     function(err) {
-                        // alert("Error!");
-                        // alert(err);
+                        console.log("Error!");
                     }
                 );
             }
@@ -99,7 +96,14 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
     };
 
     $scope.$watch('viewdata.searchText', function() {
-        doSearch();
+        if ($scope.viewdata.searchText == "")
+        {
+            doSearch(false);    
+        }
+        else
+        {
+            doSearch(true);
+        }        
     });
 
     function sortByKey(array, key) {
@@ -107,10 +111,13 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
             var x = a[key]; var y = b[key];
             return ((x < y) ? -1 : ((x > y) ? 1 : 0));
         });
-    }
+    };
 
-    function doSearch() {
+    function doSearch(fromSearch) {
         var posOptions = {timeout: 10000, enableHighAccuracy: false};
+        
+        if (!fromSearch) loadingBox.show();
+
         $cordovaGeolocation
             .getCurrentPosition(posOptions)
             .then(function (position) {
@@ -119,8 +126,7 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
 
                 commerceFactory.stores.nearby(0,long,lat,0)
                     .then(function(data){
-                        // loadingBox.hide();
-                        console.log('WITH GEO!!!!!');
+                        if (!fromSearch) loadingBox.hide();
                         $scope.viewdata.searchResults = data.response.Elements;
                         console.log($scope.viewdata.searchResults);
                         $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
@@ -129,9 +135,8 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
                     .catch(function(err){
                         searchFactory.doSearch($scope.viewdata.searchText)
                             .then(function(data){
-                                // loadingBox.hide();
-                                $scope.viewdata.searchResults = data.response.Elements;
-                                console.log($scope.viewdata.searchResults);
+                                if (!fromSearch) loadingBox.hide();
+                                $scope.viewdata.searchResults = data.response.Elements;                                
                                 $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
                                 $scope.$apply();
                             })
@@ -144,7 +149,7 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
             .catch(function(err){
                 searchFactory.doSearch($scope.viewdata.searchText)
                     .then(function(data){
-                        // loadingBox.hide();
+                        if (!fromSearch) loadingBox.hide();
                         $scope.viewdata.searchResults = data.response.Elements;
                         console.log($scope.viewdata.searchResults);
                         $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
@@ -155,11 +160,9 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
                         console.log(data);
                     });
             });
-    }
+    };
 
-
-
-    doSearch();
+    doSearch(false);
 }]);
 
 ctrl.controller('CommerceWithRewardsCtrl', ['$scope', '$state', '$stateParams', '$ionicLoading', '$timeout', 'loadingBox', 'commerceFactory', 'rewardFactory', 'deviceFactory', 'rewardDetailModal', 'navigationFactory', function($scope, $state, $stateParams, $ionicLoading, $timeout, loadingBox, commerceFactory, rewardFactory, deviceFactory, rewardDetailModal, navigationFactory){

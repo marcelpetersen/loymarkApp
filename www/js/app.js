@@ -11,7 +11,8 @@ var devEnvironment = false; // To use the app through "ionic serve --lab"
 angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.factory', 'ngCordova'])
 
 .constant('ApiEndpoint', {
-	url: 'http://192.168.71.91:8100/api' // CIS Network Development
+	url: 'http://192.168.71.98:8100/api' // CIS Network Development (Tavo)
+	// url: 'http://192.168.71.91:8100/api' // CIS Network Development (Alex)
 	// url: 'http://192.168.1.9:8100/api' // Home Development Environment
 })
 
