@@ -306,6 +306,8 @@ ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cord
 
     var _map = false;
     var _locationMarkerCreated = false;
+    var longitude = '';
+    var latitude = '';
 
     $scope.GoToCommerce = function() {
         alert(1);
@@ -314,31 +316,27 @@ ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cord
 
     $scope.centerOnMe = function() {
         if (!_map) return;
-        var posOptions = {timeout: 10000, enableHighAccuracy: false};
+        var posOptions = {timeout: 100000, enableHighAccuracy: false};
         loadingBox.show();
         $cordovaGeolocation
             .getCurrentPosition(posOptions)
             .then(function (position) {
-
-                var lat  = position.coords.latitude
-                var long = position.coords.longitude
-
-                var myLatlng = new google.maps.LatLng(lat, long);
-                    
+                var lat = position.coords.latitude;
+                var lon = position.coords.longitude;
+                var myLatlng = new google.maps.LatLng(lat, lon);
                 if (!_locationMarkerCreated) {
                     var marker = new google.maps.Marker({
                         position: myLatlng,
                         title: "YO!",
-                        map: _map                    
-                    });    
+                        map: _map
+                    });
                     _locationMarkerCreated = true;
-                }                
-
+                }
                 _map.setCenter(myLatlng);
                 loadingBox.hide();
-
             }, function(err) {
                 // error
+                console.log(err);
                 loadingBox.hide();
             }
         );
@@ -348,60 +346,146 @@ ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cord
         loadingBox.show();
 
         // Sets the map into a local variable.
-        _map = map;        
-
-        commerceFactory.stores.general(0,0).
-            then(function(data){
-                console.log(data)
-                var infoWindow = new google.maps.InfoWindow();
-
-                var j=data.length;
-                for (var i=0;i<j;i++)
-                {
-                    var myLatlng = new google.maps.LatLng(data[i].LocationLatitude, data[i].LocationLongitude);
-                    
-                    var marker = new google.maps.Marker({
-                        position: myLatlng,
-                        title: data[i].Name,
-                        desc: data[i].Description,
-                        info: data[i].Address,
-                        horario: "Pendiente",
-                        telefono: data[i].Phone,                        
-                        map: map,
-                        entityID: data[i].EntityID,
-                        icon: "./img/mapicon.png"
-                    });
-
-                    var infowindow = new google.maps.InfoWindow({});
-                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
-                        return function() {
-                            if (infowindow) {
-                                infowindow.close();
-                            }
-
-                            var title = "";
-                            title += "<div style='font-weight:bold'>" + marker.title + "</div>";
-                            // title += "<div>" + marker.desc + "</div>";
-                            title += "<div class='text=center'><a href='#/tab/nearme/commercedetail/" + marker.entityID + "' class='button button-small button-calm profile-btn' style='width:110px;'>Ver Comercio</a></div>"
-
-
-                            infoWindow.setContent(
-                                "<div class='map-info-window'>" +
-                                title +
-                                "</div>"
-                            );
-                            infoWindow.open(map, marker);
+        _map = map;
+        var posOptions = {timeout: 10000, enableHighAccuracy: false};
+        $cordovaGeolocation
+            .getCurrentPosition(posOptions)
+            .then(function (position) {
+                var lat = position.coords.latitude;
+                var lon = position.coords.longitude;
+                console.log('LONGITUDE','LATITUDE');
+                console.log(lon,lat);
+                commerceFactory.stores.nearby(0,lon,lat,0)
+                    .then(function(data){
+                        console.log('WITH GEO!!!!!');
+                        var infoWindow = new google.maps.InfoWindow();
+                        var j=data.length;
+                        for (var i=0;i<j;i++){
+                            var myLatlng = new google.maps.LatLng(data[i].LocationLatitude, data[i].LocationLongitude);
+                            var marker = new google.maps.Marker({
+                                position: myLatlng,
+                                title: data[i].Name,
+                                desc: data[i].Description,
+                                info: data[i].Address,
+                                horario: "Pendiente",
+                                telefono: data[i].Phone,
+                                map: map,
+                                entityID: data[i].EntityID,
+                                icon: "./img/mapicon.png"
+                            });
+                            var infowindow = new google.maps.InfoWindow({});
+                            google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                                return function() {
+                                    if (infowindow) {
+                                        infowindow.close();
+                                    }
+                                    var title = "";
+                                    title += "<div style='font-weight:bold'>" + marker.title + "</div>";
+                                    // title += "<div>" + marker.desc + "</div>";
+                                    title += "<div class='text=center'><a href='#/tab/nearme/commercedetail/" + marker.entityID + "' class='button button-small button-calm profile-btn' style='width:110px;'>Ver Comercio</a></div>"
+                                    infoWindow.setContent(
+                                        "<div class='map-info-window'>" +
+                                        title +
+                                        "</div>"
+                                    );
+                                    infoWindow.open(map, marker);
+                                };
+                            })(marker));
                         }
-                    })(marker));
-                }
+                    })
+                    .catch(function(err){
+                        commerceFactory.stores.general(0,0).
+                            then(function(data){
+                                console.log(data);
+                                var infoWindow = new google.maps.InfoWindow();
+                                var j=data.length;
+                                for (var i=0;i<j;i++){
+                                    var myLatlng = new google.maps.LatLng(data[i].LocationLatitude, data[i].LocationLongitude);
+                                    var marker = new google.maps.Marker({
+                                        position: myLatlng,
+                                        title: data[i].Name,
+                                        desc: data[i].Description,
+                                        info: data[i].Address,
+                                        horario: "Pendiente",
+                                        telefono: data[i].Phone,
+                                        map: map,
+                                        entityID: data[i].EntityID,
+                                        icon: "./img/mapicon.png"
+                                    });
+                                    var infowindow = new google.maps.InfoWindow({});
+                                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                                        return function() {
+                                            if (infowindow) {
+                                                infowindow.close();
+                                            }
+                                            var title = "";
+                                            title += "<div style='font-weight:bold'>" + marker.title + "</div>";
+                                            // title += "<div>" + marker.desc + "</div>";
+                                            title += "<div class='text=center'><a href='#/tab/nearme/commercedetail/" + marker.entityID + "' class='button button-small button-calm profile-btn' style='width:110px;'>Ver Comercio</a></div>"
+                                            infoWindow.setContent(
+                                                "<div class='map-info-window'>" +
+                                                title +
+                                                "</div>"
+                                            );
+                                            infoWindow.open(map, marker);
+                                        };
+                                    })(marker));
+                                }
 
-                $scope.centerOnMe();
-                loadingBox.hide();
-            })
-            .catch(function(err){
-                console.log(err);
-                loadingBox.hide();
-            });
+                                $scope.centerOnMe();
+                                loadingBox.hide();
+                            })
+                            .catch(function(err){
+                                console.log(err);
+                                loadingBox.hide();
+                            });
+                    });
+            },function(err){});
+                commerceFactory.stores.general(0,0).
+                    then(function(data){
+                        console.log(data);
+                        var infoWindow = new google.maps.InfoWindow();
+                        var j=data.length;
+                        for (var i=0;i<j;i++){
+                            var myLatlng = new google.maps.LatLng(data[i].LocationLatitude, data[i].LocationLongitude);
+                            var marker = new google.maps.Marker({
+                                position: myLatlng,
+                                title: data[i].Name,
+                                desc: data[i].Description,
+                                info: data[i].Address,
+                                horario: "Pendiente",
+                                telefono: data[i].Phone,
+                                map: map,
+                                entityID: data[i].EntityID,
+                                icon: "./img/mapicon.png"
+                            });
+                            var infowindow = new google.maps.InfoWindow({});
+                            google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                                return function() {
+                                    if (infowindow) {
+                                        infowindow.close();
+                                    }
+                                    var title = "";
+                                    title += "<div style='font-weight:bold'>" + marker.title + "</div>";
+                                    // title += "<div>" + marker.desc + "</div>";
+                                    title += "<div class='text=center'><a href='#/tab/nearme/commercedetail/" + marker.entityID + "' class='button button-small button-calm profile-btn' style='width:110px;'>Ver Comercio</a></div>"
+                                    infoWindow.setContent(
+                                        "<div class='map-info-window'>" +
+                                        title +
+                                        "</div>"
+                                    );
+                                    infoWindow.open(map, marker);
+                                };
+                            })(marker));
+                        }
+
+                        $scope.centerOnMe();
+                        loadingBox.hide();
+                    })
+                    .catch(function(err){
+                        console.log(err);
+                        loadingBox.hide();
+                    });
     };
 }]);
 
