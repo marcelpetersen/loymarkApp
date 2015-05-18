@@ -15,7 +15,7 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
 
     $scope.$on("$ionicView.enter", function(event, args){
         //loadingBox.hide();
-        loadingBox.show();
+        // loadingBox.show();
     });
 
     userFactory.info.get()
@@ -119,7 +119,7 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
 
                 commerceFactory.stores.nearby(0,long,lat,0)
                     .then(function(data){
-                        loadingBox.hide();
+                        // loadingBox.hide();
                         console.log('WITH GEO!!!!!');
                         $scope.viewdata.searchResults = data.response.Elements;
                         console.log($scope.viewdata.searchResults);
@@ -129,14 +129,14 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
                     .catch(function(err){
                         searchFactory.doSearch($scope.viewdata.searchText)
                             .then(function(data){
-                                loadingBox.hide();
+                                // loadingBox.hide();
                                 $scope.viewdata.searchResults = data.response.Elements;
                                 console.log($scope.viewdata.searchResults);
                                 $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
                                 $scope.$apply();
                             })
                             .catch(function(data){
-                                loadingBox.hide();
+                                // loadingBox.hide();
                                 console.log(data);
                             });
                     });
@@ -144,14 +144,14 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
             .catch(function(err){
                 searchFactory.doSearch($scope.viewdata.searchText)
                     .then(function(data){
-                        loadingBox.hide();
+                        // loadingBox.hide();
                         $scope.viewdata.searchResults = data.response.Elements;
                         console.log($scope.viewdata.searchResults);
                         $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
                         $scope.$apply();
                     })
                     .catch(function(data){
-                        loadingBox.hide();
+                        // loadingBox.hide();
                         console.log(data);
                     });
             });
