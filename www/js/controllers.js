@@ -4,28 +4,31 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
 // Near Me Tab
 
-ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', '$cordovaPush', 'loadingBox', 'searchFactory', 'commerceFactory', 'navigationFactory', 'deviceFactory', 'userFactory', 'navigationFactory', function($scope, $state, $ionicLoading, $timeout, $cordovaPush, loadingBox, searchFactory, commerceFactory, navigationFactory, deviceFactory, userFactory, navigationFactory){
+ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', '$cordovaPush', '$cordovaGeolocation', 'loadingBox', 'searchFactory', 'commerceFactory', 'navigationFactory', 'deviceFactory', 'userFactory', 'navigationFactory', function($scope, $state, $ionicLoading, $timeout, $cordovaPush, $cordovaGeolocation, loadingBox, searchFactory, commerceFactory, navigationFactory, deviceFactory, userFactory, navigationFactory){
     $scope.viewdata = {
         doingSearch: false,
         searchResults: [],
         searchText: "",
         user: {},
         CardNumber: ""
-    };   
+    };
 
     $scope.$on("$ionicView.enter", function(event, args){
-        loadingBox.hide();
+        //loadingBox.hide();
+        loadingBox.show();
     });
 
     userFactory.info.get()
-        .then(function(data){              
+        .then(function(data){
             $scope.viewdata.user = data;
             $scope.$apply();
+            console.log('USER DATA!!!');
+            console.log($scope.viewdata.user);
 
             $scope.viewdata.CardNumber = data.CardNumber; // data.AccountID;
 
             if (!devEnvironment)
-            { 
+            {
                 var iosConfig = {
                     "badge": true,
                     "sound": true,
@@ -33,7 +36,7 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
                 };
 
                 $cordovaPush.register(iosConfig).then(
-                    function(deviceToken) 
+                    function(deviceToken)
                     {
                         deviceFactory.device.registerdevice(deviceToken, data.Email)
                         .then(function(response){
@@ -56,7 +59,7 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
             // TODO
         });
 
-    $timeout(function(){        
+    $timeout(function(){
         $("#nearme-list").show();
         $("#nearme-list").addClass("animated fadeIn");
     });
@@ -104,22 +107,55 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
             var x = a[key]; var y = b[key];
             return ((x < y) ? -1 : ((x > y) ? 1 : 0));
         });
-    };
+    }
 
     function doSearch() {
-        // loadingBox.show();
-        searchFactory.doSearch($scope.viewdata.searchText)
-            .then(function(data){     
-                // loadingBox.hide();
-                $scope.viewdata.searchResults = data.response.Elements;
-                $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
-                $scope.$apply();
+        var posOptions = {timeout: 10000, enableHighAccuracy: false};
+        $cordovaGeolocation
+            .getCurrentPosition(posOptions)
+            .then(function (position) {
+                var lat  = position.coords.latitude;
+                var long = position.coords.longitude;
+
+                commerceFactory.stores.nearby(0,long,lat,0)
+                    .then(function(data){
+                        loadingBox.hide();
+                        console.log('WITH GEO!!!!!');
+                        $scope.viewdata.searchResults = data.response.Elements;
+                        console.log($scope.viewdata.searchResults);
+                        $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
+                        $scope.$apply();
+                    })
+                    .catch(function(err){
+                        searchFactory.doSearch($scope.viewdata.searchText)
+                            .then(function(data){
+                                loadingBox.hide();
+                                $scope.viewdata.searchResults = data.response.Elements;
+                                console.log($scope.viewdata.searchResults);
+                                $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
+                                $scope.$apply();
+                            })
+                            .catch(function(data){
+                                loadingBox.hide();
+                                console.log(data);
+                            });
+                    });
             })
-            .catch(function(data){
-                // loadingBox.hide();
-                console.log(data);
-            })
-    };
+            .catch(function(err){
+                searchFactory.doSearch($scope.viewdata.searchText)
+                    .then(function(data){
+                        loadingBox.hide();
+                        $scope.viewdata.searchResults = data.response.Elements;
+                        console.log($scope.viewdata.searchResults);
+                        $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
+                        $scope.$apply();
+                    })
+                    .catch(function(data){
+                        loadingBox.hide();
+                        console.log(data);
+                    });
+            });
+    }
 
 
 
@@ -266,7 +302,6 @@ ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cord
     };
 
     $scope.$on("$ionicView.enter", function(event, args){
-        
     });
 
     var _map = false;
@@ -900,7 +935,7 @@ ctrl.controller('KenuuFavCommercesCtrl', ['$scope', '$state', 'userFactory', 'co
 
 // No Connection Procedure
 
-ctrl.controller('NoConnectionCtrl', ['$scope', '$state', function($scope, $state){    
+ctrl.controller('NoConnectionCtrl', ['$scope', '$state', function($scope, $state){
 }]);
 
 // Login Procedure

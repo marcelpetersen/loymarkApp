@@ -465,6 +465,37 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                                 reject(data);
                             });
                     });
+                },
+                nearby: function(entityID,long,lat,page){
+                    var url = serverURL + "/commerce/nearby/stores";
+                    return new Promise(function(resolve,reject){
+                        $http({
+                            headers: {
+                                'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
+                            },
+                            method: 'GET',
+                            url: url,
+                            params: {
+                                entityID: entityID,
+                                locationlongitude: long,
+                                locationlatitude: lat,
+                                kilometers: '10',
+                                paging: true,
+                                pagesize: '10',
+                                pagenum: '0'
+                            }
+                        })
+                        .success(function(data,status,headers,config){
+                            if(data.status===true){
+                                resolve(data.data);
+                            } else {
+                                reject(data);
+                            }
+                        })
+                        .catch(function(data,status,headers,config){
+                            reject(data);
+                        });
+                    });
                 }
             }
         },
@@ -666,7 +697,7 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                 });
             }
         }
-    }
+    };
 }]);
 
 fact.factory('userFactory',['restFactory', function(restFactory){
@@ -847,10 +878,10 @@ fact.factory('userFactory',['restFactory', function(restFactory){
 fact.factory('commerceFactory', ['restFactory', function(restFactory){
     var _selectedCommerce = {};
     var _thereIsACommerceSelected = false;
-    
+
     function storeInLocalStorage(varName, value) {
         localStorage.setItem(varName, JSON.stringify(value));
-    };
+    }
     function getFromLocalStorage(varName, defaultVal) {
         var _value = localStorage.getItem(varName);
         if (_value === undefined)
@@ -861,7 +892,7 @@ fact.factory('commerceFactory', ['restFactory', function(restFactory){
         {
             return JSON.parse(_value);
         }
-    };
+    }
 
     return {
         selectedCommerce: {
@@ -909,6 +940,17 @@ fact.factory('commerceFactory', ['restFactory', function(restFactory){
             general: function(entityID){
                 return new Promise(function(resolve,reject){
                     restFactory.commerce.stores.get(entityID)
+                        .then(function(response){
+                            resolve(response);
+                        })
+                        .catch(function(err){
+                            reject(err);
+                        });
+                });
+            },
+            nearby: function(entityID,long,lat,page){
+                return new Promise(function(resolve,reject){
+                    restFactory.commerce.stores.nearby(entityID,long,lat,page)
                         .then(function(response){
                             resolve(response);
                         })
@@ -1070,7 +1112,7 @@ fact.factory('searchFactory', ['restFactory', function(restFactory){
             });
         }
     }
-}])
+}]);
 
 fact.factory('navigationFactory', [function(){
     var storesState         = "tab.nearme-commercestores"; 
@@ -1098,7 +1140,7 @@ fact.factory('navigationFactory', [function(){
             }
         }
     }
-}])
+}]);
 
 fact.factory('loginSignUpFactory', [function(){
     var _loginInfo = {
