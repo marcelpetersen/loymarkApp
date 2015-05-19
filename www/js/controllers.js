@@ -60,9 +60,11 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
         $("#nearme-list").show();
         $("#nearme-list").addClass("animated fadeIn");
 
+        loadingBox.show();
+
         // Gets the User's location
         var posOptions = {timeout: 10000, enableHighAccuracy: false};
-        // setTimeout(function(){
+        setTimeout(function(){
             $cordovaGeolocation
                 .getCurrentPosition(posOptions)
                 .then(function (position) {
@@ -79,7 +81,7 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
                         .catch(function(data){                        
                         });
                 });
-        // }, 1500);
+        }, 2500);
     });
 
     $scope.GetAvatarImage = function(img) {
@@ -337,23 +339,20 @@ ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cord
     var longitude = '';
     var latitude = '';
 
-    $scope.GoToCommerce = function() {
-        alert(1);
-        //$state.go("tab.kenuu-commerce");
+    $scope.GoToCommerce = function() {        
     };
 
     $scope.centerOnMe = function() {
         if (!_map) return;
         var posOptions = {timeout: 100000, enableHighAccuracy: false};
         loadingBox.show();
-        // $cordovaGeolocation
-        //     .getCurrentPosition(posOptions)
-        //     .then(function (position) {
-                var _postition = locationFactory.location.get();
-                var lat = _postition.lat;
-                var lon = _postition.long;
+        $cordovaGeolocation
+            .getCurrentPosition(posOptions)
+            .then(function (position) {
+                var lat  = position.coords.latitude;
+                var long = position.coords.longitude;
 
-                var myLatlng = new google.maps.LatLng(lat, lon);
+                var myLatlng = new google.maps.LatLng(lat, long);
                 if (!_locationMarkerCreated) {
                     var marker = new google.maps.Marker({
                         position: myLatlng,
@@ -364,12 +363,11 @@ ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cord
                 }
                 _map.setCenter(myLatlng);
                 loadingBox.hide();
-        //     }, function(err) {
-        //         // error
-        //         console.log(err);
-        //         loadingBox.hide();
-        //     }
-        // );
+            }, function(err) {
+                console.log(err);
+                loadingBox.hide();
+            }
+        );
     };
 
     $scope.mapCreated = function(map) {
@@ -383,13 +381,15 @@ ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cord
             .then(function (position) {
                 var lat = position.coords.latitude;
                 var lon = position.coords.longitude;
-                console.log('LONGITUDE','LATITUDE');
-                console.log(lon,lat);
+                
+                // Pulls stores near the user's location
                 commerceFactory.stores.nearby(0,lon,lat,0)
                     .then(function(data){
-                        console.log('WITH GEO!!!!!');
+                        loadingBox.hide();
+                        
                         var infoWindow = new google.maps.InfoWindow();
                         var j=data.length;
+                        
                         for (var i=0;i<j;i++){
                             var myLatlng = new google.maps.LatLng(data[i].LocationLatitude, data[i].LocationLongitude);
                             var marker = new google.maps.Marker({
@@ -410,8 +410,7 @@ ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cord
                                         infowindow.close();
                                     }
                                     var title = "";
-                                    title += "<div style='font-weight:bold'>" + marker.title + "</div>";
-                                    // title += "<div>" + marker.desc + "</div>";
+                                    title += "<div style='font-weight:bold'>" + marker.title + "</div>";                                    
                                     title += "<div class='text=center'><a href='#/tab/nearme/commercedetail/" + marker.entityID + "' class='button button-small button-calm profile-btn' style='width:110px;'>Ver Comercio</a></div>"
                                     infoWindow.setContent(
                                         "<div class='map-info-window'>" +
@@ -424,9 +423,13 @@ ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cord
                         }
                     })
                     .catch(function(err){
+                        loadingBox.hide();
+
+                        // Pulls all the stores without location
                         commerceFactory.stores.general(0,0).
                             then(function(data){
-                                console.log(data);
+                                loadingBox.hide();
+
                                 var infoWindow = new google.maps.InfoWindow();
                                 var j=data.length;
                                 for (var i=0;i<j;i++){
@@ -449,8 +452,7 @@ ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cord
                                                 infowindow.close();
                                             }
                                             var title = "";
-                                            title += "<div style='font-weight:bold'>" + marker.title + "</div>";
-                                            // title += "<div>" + marker.desc + "</div>";
+                                            title += "<div style='font-weight:bold'>" + marker.title + "</div>";                                            
                                             title += "<div class='text=center'><a href='#/tab/nearme/commercedetail/" + marker.entityID + "' class='button button-small button-calm profile-btn' style='width:110px;'>Ver Comercio</a></div>"
                                             infoWindow.setContent(
                                                 "<div class='map-info-window'>" +
@@ -462,18 +464,18 @@ ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cord
                                     })(marker));
                                 }
 
-                                $scope.centerOnMe();
-                                loadingBox.hide();
+                                $scope.centerOnMe();                                
                             })
                             .catch(function(err){
-                                console.log(err);
                                 loadingBox.hide();
+                                console.log(err);                                
                             });
                     });
             },function(err){});
                 commerceFactory.stores.general(0,0).
                     then(function(data){
-                        console.log(data);
+                        loadingBox.hide();
+
                         var infoWindow = new google.maps.InfoWindow();
                         var j=data.length;
                         for (var i=0;i<j;i++){
@@ -510,11 +512,10 @@ ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cord
                         }
 
                         $scope.centerOnMe();
-                        loadingBox.hide();
                     })
                     .catch(function(err){
-                        console.log(err);
                         loadingBox.hide();
+                        console.log(err);                        
                     });
     };
 }]);
@@ -1761,8 +1762,12 @@ ctrl.controller('KenuuPwdChangeCtrl', ['$scope', '$timeout', 'userFactory', '$st
         classie.remove( document.querySelector('#modal-msgbox-signup-ok'), 'md-show' );
     };
 
-    $scope.SaveProfile = function() {
-        if (($scope.viewdata.user.password === "") || ($scope.viewdata.user.passwordconfirmation === ""))
+    $scope.SaveProfile = function() {       
+
+        ShowModalMsg("Oops!", "Te falta ingresar tus contraseñas.", "Ok");
+            return false;
+
+        if (($scope.viewdata.user.password == "") || ($scope.viewdata.user.passwordconfirmation == ""))
         {
             ShowModalMsg("Oops!", "Te falta ingresar tus contraseñas.", "Ok");
             return false;
