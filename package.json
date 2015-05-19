@@ -28,7 +28,5 @@
     "org.apache.cordova.splashscreen",
     "com.ionic.keyboard"
   ],
-  "cordovaPlatforms": [
-    "android"
-  ]
+  "cordovaPlatforms": []
 }

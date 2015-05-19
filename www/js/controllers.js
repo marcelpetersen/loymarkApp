@@ -1733,6 +1733,9 @@ ctrl.controller('KenuuPwdChangeCtrl', ['$scope', '$timeout', 'userFactory', '$st
 
     $scope.SaveProfile = function() {
 
+        ShowModalMsg("Oops!", "Te falta ingresar tus contraseñas.", "Ok");
+            return false;
+
         if (($scope.viewdata.user.password === "") || ($scope.viewdata.user.passwordconfirmation === ""))
         {
             ShowModalMsg("Oops!", "Te falta ingresar tus contraseñas.", "Ok");
