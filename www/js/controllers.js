@@ -150,8 +150,7 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
                 searchFactory.doSearch($scope.viewdata.searchText)
                     .then(function(data){
                         if (!fromSearch) loadingBox.hide();
-                        $scope.viewdata.searchResults = data.response.Elements;
-                        console.log($scope.viewdata.searchResults);
+                        $scope.viewdata.searchResults = data.response.Elements;                        
                         $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
                         $scope.$apply();
                     })
@@ -1019,7 +1018,6 @@ ctrl.controller('KenuuFavCommercesCtrl', ['$scope', '$state', 'userFactory', 'co
     LoadData_User();
 }]);
 
-
 // No Connection Procedure
 
 ctrl.controller('NoConnectionCtrl', ['$scope', '$state', function($scope, $state){
@@ -1659,6 +1657,127 @@ ctrl.controller('KenuuProfileCtrl', ['$scope', '$timeout', 'userFactory', '$stat
         $ionicHistory.clearHistory();
         $ionicHistory.clearCache();
         $state.go("welcome");
+    };
+
+    $scope.GoToChangePwd = function() {
+        $state.go("tab.kenuu-pwdchange");
+    };
+}]);
+
+ctrl.controller('KenuuPwdChangeCtrl', ['$scope', '$timeout', 'userFactory', '$state', '$ionicHistory', 'msgBox', '$ionicLoading', 'loadingBox', function($scope, $timeout, userFactory, $state, $ionicHistory, msgBox, $ionicLoading, loadingBox){
+    $scope.viewdata = {
+        qrcode: "Kenuu",
+        counter: 1,
+        positions: [],
+        user: {
+            name: '',
+            lastname: '',
+            activity: '',
+            password: '',
+            passwordconfirmation: ''
+        },
+        msgbox: {
+            title: "",
+            message: "",
+            buttontext: ""
+        }
+    };
+
+    $scope.$on("$ionicView.enter", function(event, args){
+        loadingBox.show();
+        userFactory.info.get()
+            .then(function(data){
+                loadingBox.hide();
+                $scope.viewdata.user = data;                
+                var userData = data;
+                $scope.viewdata.user.name = userData.FirstName;
+                $scope.viewdata.user.lastname = userData.LastName;
+                $scope.$apply();
+            })
+            .catch(function(err){loadingBox.hide();});
+    });
+
+    function ShowModalMsg(title, message, buttontext) {
+        if (!devEnvironment) $cordovaKeyboard.close();
+        $(".md-overlay").removeClass("md-overlay-ok");
+        $(".md-content").removeClass("md-content-ok");
+        $scope.viewdata.msgbox.title = title;
+        $scope.viewdata.msgbox.message = message;
+        $scope.viewdata.msgbox.buttontext = buttontext;
+
+        var modal = document.querySelector('#modal-msgbox-signup'),
+            close = modal.querySelector( '.md-close' );
+        var overlay = document.querySelector( '.md-overlay' );
+        classie.add( modal, 'md-show' );
+        close.addEventListener( 'click', function( ev ) {
+            ev.stopPropagation();
+            classie.remove( document.querySelector('#modal-msgbox-signup'), 'md-show' );
+        });
+    };
+
+    function ShowModalMsg_Ok(title, message, buttontext) {
+        if (!devEnvironment) $cordovaKeyboard.close();
+        $scope.viewdata.msgbox.title = title;
+        $scope.viewdata.msgbox.message = message;
+        $scope.viewdata.msgbox.buttontext = buttontext;
+
+        var modal = document.querySelector('#modal-msgbox-signup-ok'),
+            close = modal.querySelector( '.md-close' );
+        var overlay = document.querySelector( '.md-overlay' );
+        classie.add( modal, 'md-show' );
+    };
+
+    function CloseModalMsg_Ok() {
+        classie.remove( document.querySelector('#modal-msgbox-signup-ok'), 'md-show' );
+    };
+
+    $scope.SaveProfile = function() {
+
+        if (($scope.viewdata.user.password === "") || ($scope.viewdata.user.passwordconfirmation === ""))
+        {
+            ShowModalMsg("Oops!", "Te falta ingresar tus contraseñas.", "Ok");
+            return false;
+        }
+
+        if ($scope.viewdata.user.password != $scope.viewdata.user.passwordconfirmation)
+        {
+            ShowModalMsg("Oops!", "Tus contraseñas no coinciden.", "Ok");
+            return false;
+        }
+
+        loadingBox.show();
+
+        userFactory.info.update({   
+            FirstName: $scope.viewdata.user.name,
+            LastName: $scope.viewdata.user.lastname,         
+            UpdatePassword: true,
+            Password: $scope.viewdata.user.password
+        })
+        .then(function(response){
+            loadingBox.hide();
+            if ((response.status=="true")||(response.status==true))
+            {
+                userFactory.info.get(true,2)
+                .then(function(data){
+                    msgBox.showOkWithAction("Listo!", "Actualizaste tu perfil.", function() {
+                        $ionicHistory.goBack();
+                    });
+                })
+                .catch(function(err){
+                    console.log(err);
+                });                
+            }
+            else
+            {
+                ShowModalMsg("Oops!", "Tu password no es válido.", "Ok");
+                return false;
+            }
+        })
+        .catch(function(err){
+            loadingBox.hide();
+            ShowModalMsg("Oops!", "Tu password no es válido.", "Ok");
+            return false;
+        });
     };
 }]);
 

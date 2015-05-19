@@ -207,6 +207,19 @@ angular.module('kenuu.services', [])
             }
         );
 	};
+
+	this.showOkWithAction = function(title, msg, callbackfx) {
+		swal(
+            {   
+                title: title,   
+                text: msg,                       
+                confirmButtonText: "Ok",
+                customClass: "modal-bg",
+                confirmButtonColor: "#8f04a9"
+            },
+            callbackfx
+        );
+	}
 }])
 
 .service('loadingBox', ['$ionicLoading', function($ionicLoading){

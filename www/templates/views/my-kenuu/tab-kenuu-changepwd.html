@@ -1,0 +1,44 @@
+<ion-view class="qrcode-view">
+	<ion-nav-title>
+        <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
+    </ion-nav-title>	
+  	<ion-content class="profile-content profileedit-content" id="viewcontent-QR" overflow-scroll="true">
+  		<!-- <form novalidate ng-submit="SaveProfile()"> -->
+	  		<div class="text-left" style="padding-left:30px; padding-right:30px;">					
+				<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
+					<span class="input-label profileedit-label">Password</span>
+					<input class="profileedit-input" ng-model="viewdata.user.password" type="password" placeholder="">
+				</label>
+				<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
+					<span class="input-label profileedit-label">Confirme su Password</span>
+					<input class="profileedit-input" ng-model="viewdata.user.passwordconfirmation" type="password" placeholder="">
+				</label>
+			</div>
+			<div class="item welcome-item" style="top:20px;">
+				<button ng-click="SaveProfile()" type="button" class="button button-block button-light welcome-btn profileedit-button">Cambiar!</button>
+			</div> 
+		<!-- </form> -->
+		<div class="profile-bottomspacer"></div>
+
+			<div class="md-modal md-effect-7" id="modal-msgbox-signup">
+			<div class="md-content">
+				<h3>{{viewdata.msgbox.title}}</h3>
+				<div>
+					<p>{{viewdata.msgbox.message}}</p>
+					<button class="md-close">{{viewdata.msgbox.buttontext}}</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="md-modal md-effect-7" id="modal-msgbox-signup-ok">
+			<div class="md-content">
+				<h3>{{viewdata.msgbox.title}}</h3>
+				<div>
+					<p>{{viewdata.msgbox.message}}</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="md-overlay"></div><!-- the overlay element -->
+  	</ion-content>  	
+</ion-view>

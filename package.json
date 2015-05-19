@@ -17,7 +17,6 @@
   "cordovaPlugins": [
     "org.apache.cordova.device",
     "org.apache.cordova.console",
-    "com.ionic.keyboard",
     "com.unarin.cordova.beacon",
     "de.appplant.cordova.plugin.badge",
     "de.appplant.cordova.plugin.email-composer",
@@ -26,10 +25,10 @@
     "org.apache.cordova.geolocation",
     "org.apache.cordova.inappbrowser",
     "org.apache.cordova.network-information",
-    "org.apache.cordova.splashscreen"
+    "org.apache.cordova.splashscreen",
+    "com.ionic.keyboard"
   ],
   "cordovaPlatforms": [
-    "ios",
     "android"
   ]
 }

@@ -18,6 +18,7 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 
 .run(function($rootScope, $state, $ionicPlatform, networkFactory, $cordovaNetwork, deviceFactory, $cordovaPush, $ionicTabsDelegate, navigationFactory, commerceFactory, $ionicHistory, loadingBox) {
   	$ionicPlatform.ready(function() {
+
 	    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
 	    // for form inputs)
 	    if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
@@ -253,6 +254,16 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 				'tab-kenuu': {
 					templateUrl: 'templates/views/my-kenuu/tab-kenuu-profile.html',
 					controller: 'KenuuProfileCtrl'
+				}
+			}
+		})
+
+		.state('tab.kenuu-pwdchange', {
+			url: '/kenuu/pwdchange',
+			views: {
+				'tab-kenuu': {
+					templateUrl: 'templates/views/my-kenuu/tab-kenuu-changepwd.html',
+					controller: 'KenuuPwdChangeCtrl'
 				}
 			}
 		})
