@@ -661,13 +661,14 @@ ion-nav-view[nav-view-transition="ios"] {
 		background-color: $qrcode-bg-color;
 		border: none !important;
 		height: 100vh;
-		background-image: url('../img/buildingbg.png') !important;
+		background-image: url('../img/fondo.png') !important;
 		background-repeat: no-repeat;
-		background-position: bottom 0px right 0px; 
+		background-position: bottom -120px right 0px;
 		-webkit-transition: all 0.1s ease-in-out;
 		-moz-transition: all 0.1s ease-in-out;
 		-o-transition: all 0.1s ease-in-out;
 		transition: all 0.1s ease-in-out;
+		background-attachment: fixed;
 	}
 
 	.welcome-content {

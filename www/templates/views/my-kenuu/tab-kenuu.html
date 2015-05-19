@@ -18,21 +18,22 @@
 			</div>
 		</div>
 		
-		<div class="list profile_btn_div">
-			<a class="item item-icon-left profile_item item-text-wrap" href="#/tab/kenuu/activity">
-				<i class="icon icon-history profile-item-icon"></i>
-				<div class="profile-item-title">mi actividad</div>
-				<div>consulte sus últimos movimientos</div>
-			</a>
-			<!-- <a class="item item-icon-left profile_item item-text-wrap" href="#/tab/kenuu/favCommerces">
-				<i class="icon icon-location profile-item-icon"></i>
-				<div class="profile-item-title">comercios visitados</div>
-				<div>consulte sus comercios favoritos</div>
-			</a> -->
-		</div>
+		<!-- <div class="list profile_btn_div">
+			<a class="item item-icon-left profile_item item-text-wrap" >
+				
+			</a>			
+		</div> -->
+
+		<a class="item item-icon-left item-icon-right item-text-wrap" href="#/tab/kenuu/activity">
+			<i class="icon icon-history profile-item-icon"></i>
+			<div class="profile-item-title">mi actividad</div>
+			<div>consulte sus últimos movimientos</div>
+			<i class="icon ion-android-arrow-forward back-btn"></i>
+		</a>
+
 		<div id="favcommerces-list" class="list">
             <div class="item item-divider">
-                <p><strong>Mis comercios</strong></p>
+                <p><strong>Mis comercios recientes</strong></p>
             </div>
             <div class="item item-text-wrap item-icon-right activity-activityitem" ng-repeat="commerce in viewdata.commerces | orderBy:'TotalVisits'" ng-click="GoToCommerce(commerce)">
                 <p>Hace: <strong>{{calcLapse(commerce.LastVisit)}}</strong></p>

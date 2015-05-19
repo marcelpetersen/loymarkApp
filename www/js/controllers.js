@@ -14,11 +14,14 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
     };
 
     $scope.$on("$ionicView.enter", function(event, args){
-        //loadingBox.hide();
-        // loadingBox.show();
+        
     });
 
-    userFactory.info.get()
+    $timeout(function(){
+        $("#nearme-list").show();
+        $("#nearme-list").addClass("animated fadeIn");
+
+        userFactory.info.get()
         .then(function(data){
             $scope.viewdata.user = data;
             $scope.$apply();
@@ -27,61 +30,32 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
 
             if (!devEnvironment)
             {
-                var iosConfig = {
-                    "badge": true,
-                    "sound": true,
-                    "alert": true,
-                };
+                // Gets the User's location
+                var posOptions = {timeout: 10000, enableHighAccuracy: false};
+                setTimeout(function(){
+                    $cordovaGeolocation
+                        .getCurrentPosition(posOptions)
+                        .then(function (position) {
+                            var _lat  = position.coords.latitude;
+                            var _long = position.coords.longitude;
+                            locationFactory.location.set(_lat, _long);
 
-                $cordovaPush.register(iosConfig).then(
-                    function(deviceToken)
-                    {
-                        deviceFactory.device.registerdevice(deviceToken, data.Email)
-                        .then(function(response){
-                            console.log("Device Register Ok!")
-                            console.log(response)
+                            doSearch(false);
                         })
                         .catch(function(err){
-                            console.log("Device Register Error!")
-                            console.log(err)
-                        })
-                    },
-                    function(err) {
-                        console.log("Error!");
-                    }
-                );
+                            doSearch(false);               
+                        });
+                }, 2500);
+            }
+            else
+            {
+                doSearch(false);
             }
         })
         .catch(function(err){
             // TODO
+            console.log(err);
         });
-
-    $timeout(function(){
-        $("#nearme-list").show();
-        $("#nearme-list").addClass("animated fadeIn");
-
-        loadingBox.show();
-
-        // Gets the User's location
-        var posOptions = {timeout: 10000, enableHighAccuracy: false};
-        setTimeout(function(){
-            $cordovaGeolocation
-                .getCurrentPosition(posOptions)
-                .then(function (position) {
-                    var _lat  = position.coords.latitude;
-                    var _long = position.coords.longitude;
-                    locationFactory.location.set(_lat, _long);
-
-                    doSearch(false);
-                })
-                .catch(function(err){
-                    searchFactory.doSearch($scope.viewdata.searchText)
-                        .then(function(data){
-                        })
-                        .catch(function(data){                        
-                        });
-                });
-        }, 2500);
     });
 
     $scope.GetAvatarImage = function(img) {
@@ -94,7 +68,6 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
 
     $scope.ClearSearch = function() {
         $scope.viewdata.searchText = "";
-        // $(".reward-searchpanel").addClass("reward-searchpanel-hidden");
     };
 
     $scope.OpenCommerce = function(commerce) {
@@ -151,8 +124,8 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
             commerceFactory.stores.nearby(0, long, lat, 0)
                 .then(function(data){
                     if (!fromSearch) loadingBox.hide();
-                    $scope.viewdata.searchResults = data.response.Elements;
-                    console.log($scope.viewdata.searchResults);
+
+                    $scope.viewdata.searchResults = data.response.Elements;                    
                     $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
                     $scope.$apply();
                 })
@@ -160,12 +133,13 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
                     searchFactory.doSearch($scope.viewdata.searchText)
                         .then(function(data){
                             if (!fromSearch) loadingBox.hide();
+
                             $scope.viewdata.searchResults = data.response.Elements;                                
                             $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
                             $scope.$apply();
                         })
                         .catch(function(data){
-                            // loadingBox.hide();
+                            if (!fromSearch) loadingBox.hide();
                             console.log(data);
                         });
                 });
@@ -180,15 +154,11 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
                     $scope.$apply();
                 })
                 .catch(function(data){
-                    if (!fromSearch) lloadingBox.hide();
+                    if (!fromSearch) loadingBox.hide();
+                    console.log("Error while searching commerces without location:")
                     console.log(data);
                 });
         }
-
-        // })
-        // .catch(function(err){
-        
-        // });
     };
 }]);
 
@@ -1789,16 +1759,16 @@ ctrl.controller('KenuuPwdChangeCtrl', ['$scope', '$timeout', 'userFactory', '$st
             {
                 userFactory.info.get(true,2)
                 .then(function(data){
-                    msgBox.showOkWithAction("Listo!", "Actualizaste tu perfil.", function() {
+                    msgBox.showOkWithAction("Listo!", "Actualizaste tu perfil.", function() {                        
                         $ionicHistory.goBack();
                     });
                 })
-                .catch(function(err){
+                .catch(function(err){                    
                     console.log(err);
                 });                
             }
             else
-            {
+            {                
                 ShowModalMsg("Oops!", "Tu password no es válido.", "Ok");
                 return false;
             }
