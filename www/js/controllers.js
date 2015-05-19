@@ -675,7 +675,7 @@ ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'userFactory', '$ionicLoadi
     };
 }]);
 
-ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', 'navigationFactory', function($scope, $timeout, loadingBox, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService, navigationFactory){
+ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', 'navigationFactory', '$cordovaActionSheet', '$cordovaCamera', '$cordovaImagePicker', function($scope, $timeout, loadingBox, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService, navigationFactory, $cordovaActionSheet, $cordovaCamera, $cordovaImagePicker){
     $scope.$on("$ionicView.enter", function(event, args){
         navigationFactory.setDefaults();
         LoadData();
@@ -799,6 +799,63 @@ ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory',
         navigationFactory.commerce.setTab("tab.kenuu-commerce");
         navigationFactory.stores.setTab("tab.kenuu-commercestores");
         $state.go(navigationFactory.commerce.get());
+    };
+
+    $scope.ChangeProfilePic = function() {
+        var actionsheetoptions = {
+            buttonLabels: ['Escogerla...', 'Tomar Foto'],
+            addCancelButtonWithLabel: 'Cancel',
+            androidEnableCancelButton : true,
+            winphoneEnableCancelButton : true
+        };
+
+        $cordovaActionSheet.show(actionsheetoptions)
+            .then(function(btnIndex) {
+                var index = btnIndex;
+                if (index == 1) TakePicture();
+            });
+    };
+
+    function TakePicture() {
+        var options = {
+            quality: 50,
+            destinationType: Camera.DestinationType.DATA_URL,
+            sourceType: Camera.PictureSourceType.CAMERA,
+            allowEdit: true,
+            encodingType: Camera.EncodingType.JPEG,
+            targetWidth: 100,
+            targetHeight: 100,
+            popoverOptions: CameraPopoverOptions,
+            saveToPhotoAlbum: false
+        };
+
+        $cordovaCamera.getPicture(options).then(function(imageData) {
+            //var image = document.getElementById('myImage');
+            //image.src = "data:image/jpeg;base64," + imageData;
+            $scope.viewdata.user.Avatar = "data:image/jpeg;base64," + imageData;
+        }, function(err) {
+            // error
+        });
+    };
+
+    function PickImage() {
+        var options = {
+            maximumImagesCount: 1,
+            width: 800,
+            height: 800,
+            quality: 80
+        };
+
+        $cordovaImagePicker.getPictures(options)
+            .then(function (results) {
+                for (var i = 0; i < results.length; i++) {
+                    console.log('Image URI: ' + results[i]);
+                }
+            }, 
+            function(error) {
+                // error getting photos
+            }
+        );
     };
 
     // Required to Show the Top Bar Setup View
