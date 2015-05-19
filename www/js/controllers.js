@@ -4,7 +4,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
 // Near Me Tab
 
-ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', '$cordovaPush', '$cordovaGeolocation', 'loadingBox', 'searchFactory', 'commerceFactory', 'navigationFactory', 'deviceFactory', 'userFactory', 'navigationFactory', function($scope, $state, $ionicLoading, $timeout, $cordovaPush, $cordovaGeolocation, loadingBox, searchFactory, commerceFactory, navigationFactory, deviceFactory, userFactory, navigationFactory){
+ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', '$cordovaPush', '$cordovaGeolocation', 'loadingBox', 'searchFactory', 'commerceFactory', 'navigationFactory', 'deviceFactory', 'userFactory', 'navigationFactory', 'locationFactory', function($scope, $state, $ionicLoading, $timeout, $cordovaPush, $cordovaGeolocation, loadingBox, searchFactory, commerceFactory, navigationFactory, deviceFactory, userFactory, navigationFactory, locationFactory){
     $scope.viewdata = {
         doingSearch: false,
         searchResults: [],
@@ -59,6 +59,27 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
     $timeout(function(){
         $("#nearme-list").show();
         $("#nearme-list").addClass("animated fadeIn");
+
+        // Gets the User's location
+        var posOptions = {timeout: 10000, enableHighAccuracy: false};
+        // setTimeout(function(){
+            $cordovaGeolocation
+                .getCurrentPosition(posOptions)
+                .then(function (position) {
+                    var _lat  = position.coords.latitude;
+                    var _long = position.coords.longitude;
+                    locationFactory.location.set(_lat, _long);
+
+                    doSearch(false);
+                })
+                .catch(function(err){
+                    searchFactory.doSearch($scope.viewdata.searchText)
+                        .then(function(data){
+                        })
+                        .catch(function(data){                        
+                        });
+                });
+        // }, 1500);
     });
 
     $scope.GetAvatarImage = function(img) {
@@ -118,50 +139,55 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
         
         if (!fromSearch) loadingBox.show();
 
-        $cordovaGeolocation
-            .getCurrentPosition(posOptions)
-            .then(function (position) {
-                var lat  = position.coords.latitude;
-                var long = position.coords.longitude;
+        var _location = locationFactory.location.get()
 
-                commerceFactory.stores.nearby(0,long,lat,0)
-                    .then(function(data){
-                        if (!fromSearch) loadingBox.hide();
-                        $scope.viewdata.searchResults = data.response.Elements;
-                        console.log($scope.viewdata.searchResults);
-                        $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
-                        $scope.$apply();
-                    })
-                    .catch(function(err){
-                        searchFactory.doSearch($scope.viewdata.searchText)
-                            .then(function(data){
-                                if (!fromSearch) loadingBox.hide();
-                                $scope.viewdata.searchResults = data.response.Elements;                                
-                                $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
-                                $scope.$apply();
-                            })
-                            .catch(function(data){
-                                // loadingBox.hide();
-                                console.log(data);
-                            });
-                    });
-            })
-            .catch(function(err){
-                searchFactory.doSearch($scope.viewdata.searchText)
-                    .then(function(data){
-                        if (!fromSearch) loadingBox.hide();
-                        $scope.viewdata.searchResults = data.response.Elements;                        
-                        $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
-                        $scope.$apply();
-                    })
-                    .catch(function(data){
-                        // loadingBox.hide();
-                        console.log(data);
-                    });
-            });
+        if (_location.isSet)
+        {
+            var lat  = _location.lat;
+            var long = _location.long;
+
+            commerceFactory.stores.nearby(0, long, lat, 0)
+                .then(function(data){
+                    if (!fromSearch) loadingBox.hide();
+                    $scope.viewdata.searchResults = data.response.Elements;
+                    console.log($scope.viewdata.searchResults);
+                    $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
+                    $scope.$apply();
+                })
+                .catch(function(err){
+                    searchFactory.doSearch($scope.viewdata.searchText)
+                        .then(function(data){
+                            if (!fromSearch) loadingBox.hide();
+                            $scope.viewdata.searchResults = data.response.Elements;                                
+                            $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
+                            $scope.$apply();
+                        })
+                        .catch(function(data){
+                            // loadingBox.hide();
+                            console.log(data);
+                        });
+                });
+        }
+        else
+        {
+            searchFactory.doSearch($scope.viewdata.searchText)
+                .then(function(data){
+                    if (!fromSearch) loadingBox.hide();
+                    $scope.viewdata.searchResults = data.response.Elements;                        
+                    $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
+                    $scope.$apply();
+                })
+                .catch(function(data){
+                    if (!fromSearch) lloadingBox.hide();
+                    console.log(data);
+                });
+        }
+
+        // })
+        // .catch(function(err){
+        
+        // });
     };
-
-    doSearch(false);
 }]);
 
 ctrl.controller('CommerceWithRewardsCtrl', ['$scope', '$state', '$stateParams', '$ionicLoading', '$timeout', 'loadingBox', 'commerceFactory', 'rewardFactory', 'deviceFactory', 'rewardDetailModal', 'navigationFactory', function($scope, $state, $stateParams, $ionicLoading, $timeout, loadingBox, commerceFactory, rewardFactory, deviceFactory, rewardDetailModal, navigationFactory){
@@ -298,12 +324,12 @@ ctrl.controller('CommerceWithRewardsCtrl', ['$scope', '$state', '$stateParams', 
     };
 }]);
 
-ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cordovaGeolocation', '$stateParams', 'loadingBox', function($scope, commerceFactory, $ionicLoading, $cordovaGeolocation, $stateParams, loadingBox){
+ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cordovaGeolocation', '$stateParams', 'loadingBox', 'locationFactory', function($scope, commerceFactory, $ionicLoading, $cordovaGeolocation, $stateParams, loadingBox, locationFactory){
     $scope.settings = {
         enableFriends: true
     };
 
-    $scope.$on("$ionicView.enter", function(event, args){
+    $scope.$on("$ionicView.enter", function(event, args){        
     });
 
     var _map = false;
@@ -320,11 +346,13 @@ ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cord
         if (!_map) return;
         var posOptions = {timeout: 100000, enableHighAccuracy: false};
         loadingBox.show();
-        $cordovaGeolocation
-            .getCurrentPosition(posOptions)
-            .then(function (position) {
-                var lat = position.coords.latitude;
-                var lon = position.coords.longitude;
+        // $cordovaGeolocation
+        //     .getCurrentPosition(posOptions)
+        //     .then(function (position) {
+                var _postition = locationFactory.location.get();
+                var lat = _postition.lat;
+                var lon = _postition.long;
+
                 var myLatlng = new google.maps.LatLng(lat, lon);
                 if (!_locationMarkerCreated) {
                     var marker = new google.maps.Marker({
@@ -336,12 +364,12 @@ ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cord
                 }
                 _map.setCenter(myLatlng);
                 loadingBox.hide();
-            }, function(err) {
-                // error
-                console.log(err);
-                loadingBox.hide();
-            }
-        );
+        //     }, function(err) {
+        //         // error
+        //         console.log(err);
+        //         loadingBox.hide();
+        //     }
+        // );
     };
 
     $scope.mapCreated = function(map) {
@@ -1699,8 +1727,10 @@ ctrl.controller('KenuuPwdChangeCtrl', ['$scope', '$timeout', 'userFactory', '$st
 
     function ShowModalMsg(title, message, buttontext) {
         if (!devEnvironment) $cordovaKeyboard.close();
+
         $(".md-overlay").removeClass("md-overlay-ok");
         $(".md-content").removeClass("md-content-ok");
+        
         $scope.viewdata.msgbox.title = title;
         $scope.viewdata.msgbox.message = message;
         $scope.viewdata.msgbox.buttontext = buttontext;
@@ -1732,10 +1762,6 @@ ctrl.controller('KenuuPwdChangeCtrl', ['$scope', '$timeout', 'userFactory', '$st
     };
 
     $scope.SaveProfile = function() {
-
-        ShowModalMsg("Oops!", "Te falta ingresar tus contraseñas.", "Ok");
-            return false;
-
         if (($scope.viewdata.user.password === "") || ($scope.viewdata.user.passwordconfirmation === ""))
         {
             ShowModalMsg("Oops!", "Te falta ingresar tus contraseñas.", "Ok");
@@ -2339,3 +2365,5 @@ ctrl.controller('KenuuPwdChangeCtrl', ['$scope', '$timeout', 'userFactory', '$st
                 });
         };
     }]);
+
+

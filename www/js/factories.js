@@ -1202,3 +1202,24 @@ fact.factory('codeScannerFactory', ['$cordovaBarcodeScanner', function($cordovaB
         }
     };
 }]);
+
+fact.factory('locationFactory', [function(){
+    var _location = {
+        lat: 0,
+        long: 0,
+        isSet: false
+    };
+
+    return {
+        location: {
+            set: function(lat, long) {
+                _location.lat = lat;
+                _location.long = long;
+                _location.isSet = true;
+            },
+            get: function() {
+                return _location;
+            }
+        }
+    };
+}])
