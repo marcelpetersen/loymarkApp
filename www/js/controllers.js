@@ -1762,11 +1762,7 @@ ctrl.controller('KenuuPwdChangeCtrl', ['$scope', '$timeout', 'userFactory', '$st
         classie.remove( document.querySelector('#modal-msgbox-signup-ok'), 'md-show' );
     };
 
-    $scope.SaveProfile = function() {       
-
-        ShowModalMsg("Oops!", "Te falta ingresar tus contraseñas.", "Ok");
-            return false;
-
+    $scope.SaveProfile = function() {  
         if (($scope.viewdata.user.password == "") || ($scope.viewdata.user.passwordconfirmation == ""))
         {
             ShowModalMsg("Oops!", "Te falta ingresar tus contraseñas.", "Ok");
