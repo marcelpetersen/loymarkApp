@@ -26,7 +26,8 @@
     "org.apache.cordova.inappbrowser",
     "org.apache.cordova.network-information",
     "org.apache.cordova.splashscreen",
-    "com.ionic.keyboard"
+    "com.ionic.keyboard",
+    "cordova-plugin-camera"
   ],
   "cordovaPlatforms": [
     "ios"

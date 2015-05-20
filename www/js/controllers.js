@@ -11,7 +11,8 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
         searchResults: [],
         searchText: "",
         user: {},
-        CardNumber: ""
+        CardNumber: "",
+        storePage: 1
     };
 
     $scope.$on("$ionicView.enter", function(event, args){
@@ -47,7 +48,7 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
                             doSearch(false);
                         })
                         .catch(function(err){
-                            doSearch(false);               
+                            doSearch(false);
                         });
                 // }, 2500);
             }
@@ -77,9 +78,9 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
     $scope.OpenCommerce = function(commerce) {
         loadingBox.show();
         commerceFactory.get(commerce.EntityID)
-            .then(function(response){                
+            .then(function(response){
                 commerceFactory.selectedCommerce.set(response[0]);
-                loadingBox.hide();                
+                loadingBox.hide();
                 var _state = navigationFactory.commerce.get();
                 console.log(_state);
                 $state.go(_state);
@@ -88,7 +89,7 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
                 loadingBox.hide();
                 console.log("Error when getting the commerce.")
                 console.log(response);
-            });        
+            });
     };
 
     $scope.OpenMap = function() {
@@ -100,12 +101,12 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
 
         if ($scope.viewdata.searchText == "")
         {
-            doSearch(false);    
+            doSearch(false);
         }
         else
         {
             doSearch(true);
-        }        
+        }
     });
 
     function sortByKey(array, key) {
@@ -113,6 +114,30 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
             var x = a[key]; var y = b[key];
             return ((x < y) ? -1 : ((x > y) ? 1 : 0));
         });
+    }
+
+    $scope.getMoreStores = function(pageNum){
+        console.log('PAGE COUNT:',pageNum);
+        loadingBox.show();
+        $scope.viewdata.storePage++;
+        var posOptions = {timeout: 10000, enableHighAccuracy: false};
+        var _location = locationFactory.location.get();
+        var lat  = _location.lat;
+        var long = _location.long;
+        commerceFactory.stores.nearby(0, long, lat, pageNum)
+            .then(function(data){
+                console.log('OVER HERE!!!');
+                console.log(data);
+
+                for(var i=0;i<data.length;i++){
+                    console.log(data[i]);
+                    $scope.viewdata.searchResults.push(data[i]);
+                }
+                console.log('ALLLLLLLLL');
+                console.log($scope.viewdata.searchResults);
+                $scope.$apply();
+                loadingBox.hide();
+            });
     };
 
     $scope.formatDistance = function(distance) {
@@ -126,7 +151,6 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
     // Pulls the commerces
     function doSearch(fromSearch) {
         var posOptions = {timeout: 10000, enableHighAccuracy: false};
-        
         if (!fromSearch) loadingBox.show();
 
         var _location = locationFactory.location.get();
@@ -143,7 +167,12 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
 
                     if (!fromSearch) loadingBox.hide();
 
+<<<<<<< HEAD
                     $scope.viewdata.searchResults = data;
+=======
+                    $scope.viewdata.searchResults = data.response.Elements;
+                    $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
+>>>>>>> origin/master
                     $scope.$apply();
                 })
                 .catch(function(err){
@@ -151,7 +180,7 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
                         .then(function(data){
                             if (!fromSearch) loadingBox.hide();
 
-                            $scope.viewdata.searchResults = data.response.Elements;                                
+                            $scope.viewdata.searchResults = data.response.Elements;
                             $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
                             $scope.$apply();
                         })
@@ -166,7 +195,7 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
             searchFactory.doSearch($scope.viewdata.searchText)
                 .then(function(data){
                     if (!fromSearch) loadingBox.hide();
-                    $scope.viewdata.searchResults = data.response.Elements;                        
+                    $scope.viewdata.searchResults = data.response.Elements;
                     $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
                     $scope.$apply();
                 })
@@ -176,7 +205,7 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
                     console.log(data);
                 });
         }
-    };
+    }
 }]);
 
 ctrl.controller('CommerceWithRewardsCtrl', ['$scope', '$state', '$stateParams', '$ionicLoading', '$timeout', 'loadingBox', 'commerceFactory', 'rewardFactory', 'deviceFactory', 'rewardDetailModal', 'navigationFactory', function($scope, $state, $stateParams, $ionicLoading, $timeout, loadingBox, commerceFactory, rewardFactory, deviceFactory, rewardDetailModal, navigationFactory){
