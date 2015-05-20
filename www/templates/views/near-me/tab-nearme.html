@@ -17,7 +17,7 @@
 			</button>
 		</div>
 		<ul class="list" id="nearme-list">
-		    <li class="item item-icon-left nearme-commerce-item" ng-repeat="item in viewdata.searchResults | filter:{Type:'C'} | orderBy:'Name'" ng-click="OpenCommerce(item)">
+		    <li class="item item-icon-left nearme-commerce-item" ng-repeat="item in viewdata.searchResults | orderBy:'Name'" ng-click="OpenCommerce(item)">
 		    	<i class="icon">
 		    		<img class="nearme-commerce-avatar" src="{{GetAvatarImage(item.Image)}}">
 		    	</i>
@@ -29,7 +29,7 @@
 		    		</div>
 		    	</div>		    	
 		    	<div class="row">		    		
-		    		<div class="col text-left nearme-commerce-sublabel"><i class="icon-location"></i> 0 Km</div>
+		    		<div class="col text-left nearme-commerce-sublabel"><i class="icon-location"></i> <span ng-bind="formatDistance(item.Distance)"></span> Km</div>
 		    	</div>
 		    </li>
 		</ul>

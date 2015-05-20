@@ -6,6 +6,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
 ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', '$cordovaPush', '$cordovaGeolocation', 'loadingBox', 'searchFactory', 'commerceFactory', 'navigationFactory', 'deviceFactory', 'userFactory', 'navigationFactory', 'locationFactory', function($scope, $state, $ionicLoading, $timeout, $cordovaPush, $cordovaGeolocation, loadingBox, searchFactory, commerceFactory, navigationFactory, deviceFactory, userFactory, navigationFactory, locationFactory){
     $scope.viewdata = {
+        startingView: true,
         doingSearch: false,
         searchResults: [],
         searchText: "",
@@ -14,13 +15,16 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
     };
 
     $scope.$on("$ionicView.enter", function(event, args){
-        
     });
 
+    // Executed when the view is loaded
     $timeout(function(){
         $("#nearme-list").show();
         $("#nearme-list").addClass("animated fadeIn");
 
+        loadingBox.show();
+
+        // Pulls the member information
         userFactory.info.get()
         .then(function(data){
             $scope.viewdata.user = data;
@@ -32,7 +36,7 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
             {
                 // Gets the User's location
                 var posOptions = {timeout: 10000, enableHighAccuracy: false};
-                setTimeout(function(){
+                // setTimeout(function(){
                     $cordovaGeolocation
                         .getCurrentPosition(posOptions)
                         .then(function (position) {
@@ -45,7 +49,7 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
                         .catch(function(err){
                             doSearch(false);               
                         });
-                }, 2500);
+                // }, 2500);
             }
             else
             {
@@ -92,6 +96,8 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
     };
 
     $scope.$watch('viewdata.searchText', function() {
+        if ($scope.viewdata.startingView) return;
+
         if ($scope.viewdata.searchText == "")
         {
             doSearch(false);    
@@ -109,12 +115,21 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
         });
     };
 
+    $scope.formatDistance = function(distance) {
+        if (distance == null) return 0;
+        if (distance == undefined) return 0;
+        if (distance == '') return 0;
+        distance = Math.round(distance * 100) / 100;
+        return distance;
+    };
+
+    // Pulls the commerces
     function doSearch(fromSearch) {
         var posOptions = {timeout: 10000, enableHighAccuracy: false};
         
         if (!fromSearch) loadingBox.show();
 
-        var _location = locationFactory.location.get()
+        var _location = locationFactory.location.get();
 
         if (_location.isSet)
         {
@@ -128,8 +143,7 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
 
                     if (!fromSearch) loadingBox.hide();
 
-                    $scope.viewdata.searchResults = data.response.Elements;                    
-                    $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
+                    $scope.viewdata.searchResults = data;
                     $scope.$apply();
                 })
                 .catch(function(err){
@@ -1180,7 +1194,7 @@ ctrl.controller('LoginCtrl', ['$scope', '$cordovaKeyboard', 'loginSignUpFactory'
                 password: $scope.viewdata.login.password                
             }
         )
-        .then(function(data){            
+        .then(function(data){
             // Sets the flags indicating the user has already logged.
             localStorage.setItem('animationShown', false);
             referenceIDFactory.setReferenceID(data.ReferenceID);
@@ -1901,7 +1915,26 @@ ctrl.controller('ProfilePicGenderDoBCtrl', ['$scope', '$timeout', 'loadingBox', 
             message: "",
             buttontext: ""
         }
-    };    
+    };
+
+    function LoadUserData() {
+        loadingBox.show();
+        userFactory.info.get()
+            .then(function(data){
+                loadingBox.hide();
+                console.log("Avatar: ", data.Avatar);
+                if (data.Avatar != null)
+                {
+                    $scope.viewdata.profileimage = data.Avatar;
+                }                
+            })
+            .catch(function(err){
+                loadingBox.hide();
+                console.log(data);
+            });
+    };
+
+    LoadUserData()
 
     $scope.Skip = function() {
         localStorage.removeItem('profile_picture');
@@ -1911,7 +1944,7 @@ ctrl.controller('ProfilePicGenderDoBCtrl', ['$scope', '$timeout', 'loadingBox', 
         $state.go("tab.nearme");
     };
 
-    $scope.SaveAndContinue = function() {
+    $scope.SaveAndContinue = function() {        
         if ($scope.viewdata.profileimage == '') 
         {
             ShowModalMsg('Oops!', 'Selecciona tu foto del perfil.', 'Ok');
@@ -1922,6 +1955,8 @@ ctrl.controller('ProfilePicGenderDoBCtrl', ['$scope', '$timeout', 'loadingBox', 
             ShowModalMsg('Oops!', 'Selecciona tu género.', 'Ok');
             return;
         }
+
+        loadingBox.show();
 
         localStorage.setItem('profile_picture', $scope.viewdata.profileimage);
         localStorage.setItem('profile_gender', $scope.viewdata.profilegender);
@@ -1934,14 +1969,17 @@ ctrl.controller('ProfilePicGenderDoBCtrl', ['$scope', '$timeout', 'loadingBox', 
                         localStorage.setItem('profile_picture_urlfilename', response.data);    
                         $ionicHistory.clearHistory();
                         $ionicHistory.clearCache();
+                        loadingBox.hide();
                         $state.go("tab.nearme");  
                     }
                     else
                     {
+                        loadingBox.hide();
                         ShowModalMsg('Oops!', 'No se pudo guardar tu foto de perfil.', 'Ok');
                     }
                 })
                 .catch(function(err){
+                    loadingBox.hide();
                     ShowModalMsg('Oops!', 'No se pudo guardar tu foto de perfil.', 'Ok');
                 })
         });
@@ -1953,13 +1991,13 @@ ctrl.controller('ProfilePicGenderDoBCtrl', ['$scope', '$timeout', 'loadingBox', 
         $scope.viewdata.msgbox.message = message;
         $scope.viewdata.msgbox.buttontext = buttontext;
 
-        var modal = document.querySelector('#modal-msgbox-login'),
+        var modal = document.querySelector('#modal-msgbox-sugdob'),
             close = modal.querySelector( '.md-close' );
         var overlay = document.querySelector( '.md-overlay' );
         classie.add( modal, 'md-show' );
         close.addEventListener( 'click', function( ev ) {
             ev.stopPropagation();
-            classie.remove( document.querySelector('#modal-msgbox-login'), 'md-show' );
+            classie.remove( document.querySelector('#modal-msgbox-sugdob'), 'md-show' );
         });
     };
 
@@ -1970,6 +2008,8 @@ ctrl.controller('ProfilePicGenderDoBCtrl', ['$scope', '$timeout', 'loadingBox', 
             return 'img/default.png';
         }
     };
+
+    // Picture Methods
 
     $scope.ChangeProfilePic = function() {
         var actionsheetoptions = {

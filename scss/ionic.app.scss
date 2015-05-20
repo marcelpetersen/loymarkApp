@@ -1325,10 +1325,12 @@ ion-nav-view[nav-view-transition="ios"] {
 		background-color: transparent !important;
 	}
 	.sugdob-photo {
-		font-size: 110px;
+		
 	}
 	.sugdob-photo-frame {
 		border: 1px dashed #acacac !important;
+		height: 100px !important;
+		width: 100px !important;
 	}
 	.sugdob-btn {
 		background-color: $kenuu-purple !important;
