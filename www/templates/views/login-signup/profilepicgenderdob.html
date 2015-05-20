@@ -19,17 +19,17 @@
 				<div class="item item-clear sugdob-item">
 					<div class="row">
 						<div class="col">
-							<ion-radio ng-model="choice" ng-value="'H'">Hombre</ion-radio>
+							<ion-radio ng-model="viewdata.profilegender" ng-value="'H'">Hombre</ion-radio>
 						</div>
 						<div class="col">
-							<ion-radio ng-model="choice" ng-value="'M'">Mujer</ion-radio>
+							<ion-radio ng-model="viewdata.profilegender" ng-value="'M'">Mujer</ion-radio>
 						</div>
 					</div>
 				</div>
 				<div class="item item-clear sugdob-item">
-					<button class="button button-block sugdob-btn" ng-click="SaveAndContinue()">
+					<div class="button button-block sugdob-btn" ng-click="SaveAndContinue()">
 						Ok, continuar
-					</button>
+					</div>
 				</div>
 			</div>
 		</ion-slide-box>

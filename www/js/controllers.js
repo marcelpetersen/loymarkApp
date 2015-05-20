@@ -675,7 +675,7 @@ ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'userFactory', '$ionicLoadi
     };
 }]);
 
-ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', 'navigationFactory', '$cordovaActionSheet', '$cordovaCamera', '$cordovaImagePicker', '$cordovaFile', function($scope, $timeout, loadingBox, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService, navigationFactory, $cordovaActionSheet, $cordovaCamera, $cordovaImagePicker, $cordovaFile){
+ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', 'navigationFactory', '$cordovaActionSheet', '$cordovaCamera', '$cordovaImagePicker', '$cordovaFile', 'imageFunctions', function($scope, $timeout, loadingBox, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService, navigationFactory, $cordovaActionSheet, $cordovaCamera, $cordovaImagePicker, $cordovaFile, imageFunctions){
     $scope.$on("$ionicView.enter", function(event, args){
         navigationFactory.setDefaults();
         LoadData();
@@ -838,8 +838,27 @@ ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory',
             $scope.profileimage = entry.nativeURL;
             localStorage.setItem('profile_picture', entry.nativeURL);
             $scope.viewdata.user.Avatar = $scope.profileimage;
+
+            localStorage.setItem('profile_picture', $scope.profileimage);            
+
+            imageFunctions.ConvertImgToBase64URL($scope.profileimage, function(imagedata) {
+                userFactory.info.updateAvatar(imagedata)
+                    .then(function(response){
+                        if ((response.status == 'true')||(response.status == true))
+                        {
+                            localStorage.setItem('profile_picture_urlfilename', response.data);                                
+                        }
+                        else
+                        {
+                            // ShowModalMsg('Oops!', 'No se pudo guardar tu foto de perfil.', 'Ok');
+                        }
+                    })
+                    .catch(function(err){
+                        // ShowModalMsg('Oops!', 'No se pudo guardar tu foto de perfil.', 'Ok');
+                    })
+            });
         });
-    }
+    };
 
     function copyFile(fileEntry) {
         var name = fileEntry.fullPath.substr(fileEntry.fullPath.lastIndexOf('/') + 1);
@@ -1746,7 +1765,7 @@ ctrl.controller('KenuuProfileCtrl', ['$scope', '$timeout', 'userFactory', '$stat
     };
 }]);
 
-ctrl.controller('KenuuPwdChangeCtrl', ['$scope', '$timeout', 'userFactory', '$state', '$ionicHistory', 'msgBox', '$ionicLoading', 'loadingBox', '$cordovaKeyboard', function($scope, $timeout, userFactory, $state, $ionicHistory, msgBox, $ionicLoading, loadingBox, $cordovaKeyboard){
+ctrl.controller('KenuuPwdChangeCtrl', ['$scope', '$timeout', 'userFactory', '$state', '$ionicHistory', 'msgBox', '$ionicLoading', 'loadingBox', '$cordovaKeyboard', 'referenceIDFactory', function($scope, $timeout, userFactory, $state, $ionicHistory, msgBox, $ionicLoading, loadingBox, $cordovaKeyboard, referenceIDFactory){
     $scope.viewdata = {
         qrcode: "Kenuu",
         counter: 1,
@@ -1774,6 +1793,10 @@ ctrl.controller('KenuuPwdChangeCtrl', ['$scope', '$timeout', 'userFactory', '$st
                 var userData = data;
                 $scope.viewdata.user.name = userData.FirstName;
                 $scope.viewdata.user.lastname = userData.LastName;
+
+                $scope.viewdata.user.password = '';
+                $scope.viewdata.user.passwordconfirmation = '';
+
                 $scope.$apply();
             })
             .catch(function(err){loadingBox.hide();});
@@ -1840,7 +1863,9 @@ ctrl.controller('KenuuPwdChangeCtrl', ['$scope', '$timeout', 'userFactory', '$st
             loadingBox.hide();
             if ((response.status=="true")||(response.status==true))
             {
-                userFactory.info.get(true,2)
+                referenceIDFactory.setReferenceID(response.data.referenceID);
+
+                userFactory.info.get()
                 .then(function(data){
                     msgBox.showOkWithAction("Listo!", "Actualizaste tu perfil.", function() {                        
                         $ionicHistory.goBack();
@@ -1864,25 +1889,82 @@ ctrl.controller('KenuuPwdChangeCtrl', ['$scope', '$timeout', 'userFactory', '$st
     };
 }]);
 
-ctrl.controller('ProfilePicGenderDoBCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', 'navigationFactory', '$cordovaActionSheet', '$cordovaCamera', '$cordovaImagePicker', '$cordovaFile', '$ionicHistory', function($scope, $timeout, loadingBox, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService, navigationFactory, $cordovaActionSheet, $cordovaCamera, $cordovaImagePicker, $cordovaFile, $ionicHistory){
+ctrl.controller('ProfilePicGenderDoBCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', 'navigationFactory', '$cordovaActionSheet', '$cordovaCamera', '$cordovaImagePicker', '$cordovaFile', '$ionicHistory', 'imageFunctions', '$cordovaKeyboard', function($scope, $timeout, loadingBox, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService, navigationFactory, $cordovaActionSheet, $cordovaCamera, $cordovaImagePicker, $cordovaFile, $ionicHistory, imageFunctions, $cordovaKeyboard){
     localStorage.removeItem('profile_picture');
-    $scope.profileimage = '';
+    localStorage.removeItem('profile_gender');
+    $scope.viewdata = {
+        profileimage: '',
+        profilegender: '',
+        msgbox: {
+            title: "",
+            message: "",
+            buttontext: ""
+        }
+    };    
 
     $scope.Skip = function() {
+        localStorage.removeItem('profile_picture');
+        localStorage.removeItem('profile_gender');
         $ionicHistory.clearHistory();
         $ionicHistory.clearCache();
         $state.go("tab.nearme");
     };
 
     $scope.SaveAndContinue = function() {
-        $ionicHistory.clearHistory();
-        $ionicHistory.clearCache();
-        $state.go("tab.nearme");  
+        if ($scope.viewdata.profileimage == '') 
+        {
+            ShowModalMsg('Oops!', 'Selecciona tu foto del perfil.', 'Ok');
+            return;
+        }
+        if ($scope.viewdata.profilegender == '') 
+        {
+            ShowModalMsg('Oops!', 'Selecciona tu género.', 'Ok');
+            return;
+        }
+
+        localStorage.setItem('profile_picture', $scope.viewdata.profileimage);
+        localStorage.setItem('profile_gender', $scope.viewdata.profilegender);
+
+        imageFunctions.ConvertImgToBase64URL($scope.viewdata.profileimage, function(imagedata) {
+            userFactory.info.updateAvatar(imagedata)
+                .then(function(response){
+                    if ((response.status == 'true')||(response.status == true))
+                    {
+                        localStorage.setItem('profile_picture_urlfilename', response.data);    
+                        $ionicHistory.clearHistory();
+                        $ionicHistory.clearCache();
+                        $state.go("tab.nearme");  
+                    }
+                    else
+                    {
+                        ShowModalMsg('Oops!', 'No se pudo guardar tu foto de perfil.', 'Ok');
+                    }
+                })
+                .catch(function(err){
+                    ShowModalMsg('Oops!', 'No se pudo guardar tu foto de perfil.', 'Ok');
+                })
+        });
+    };
+
+    function ShowModalMsg(title, message, buttontext) {
+        if (!devEnvironment) $cordovaKeyboard.close();
+        $scope.viewdata.msgbox.title = title;
+        $scope.viewdata.msgbox.message = message;
+        $scope.viewdata.msgbox.buttontext = buttontext;
+
+        var modal = document.querySelector('#modal-msgbox-login'),
+            close = modal.querySelector( '.md-close' );
+        var overlay = document.querySelector( '.md-overlay' );
+        classie.add( modal, 'md-show' );
+        close.addEventListener( 'click', function( ev ) {
+            ev.stopPropagation();
+            classie.remove( document.querySelector('#modal-msgbox-login'), 'md-show' );
+        });
     };
 
     $scope.getUserImage = function(){
-        if(($scope.profileimage)&&($scope.profileimage !='')){
-            return $scope.profileimage;
+        if(($scope.viewdata.profileimage)&&($scope.viewdata.profileimage !='')){
+            return $scope.viewdata.profileimage;
         } else {
             return 'img/ionitron.png';
         }
@@ -1916,8 +1998,7 @@ ctrl.controller('ProfilePicGenderDoBCtrl', ['$scope', '$timeout', 'loadingBox', 
 
     function onCopySuccess(entry) {
         $scope.$apply(function () {
-            $scope.profileimage = entry.nativeURL;
-            localStorage.setItem('profile_picture', entry.nativeURL);
+            $scope.viewdata.profileimage = entry.nativeURL;            
         });
     }
 

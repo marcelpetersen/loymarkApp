@@ -195,6 +195,36 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                             reject(data);
                         });
                     }); 
+                },
+                updateAvatar: function(_imagedata) {
+                    var url = "http://192.168.71.91:8001/userProfile/updateAvatar";
+                    // var url = serverURL + '/userprofile/updateAvatar';
+                    return new Promise(function(resolve,reject){
+                        var _jdata = 
+                        {
+                            jsonData: JSON.stringify({image: _imagedata})
+                        };
+
+                        $http({
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                                'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
+                            },
+                            method: 'POST',
+                            url: url,
+                            data: $.param(_jdata) 
+                        })
+                        .success(function(data,status,headers,config){                                                  
+                            if(data.status==true){
+                                resolve(data);
+                            } else {
+                                reject(data);
+                            }
+                        })
+                        .error(function(data,status,headers,cofig){
+                            reject(data);
+                        });
+                    }); 
                 }
             },
             activity:{
@@ -737,6 +767,17 @@ fact.factory('userFactory',['restFactory', function(restFactory){
             update: function(_data) {
                 return new Promise(function(resolve, reject){
                     restFactory.user.info.update(_data)
+                        .then(function(response){
+                            resolve(response);
+                        })
+                        .catch(function(err){
+                            reject(err);
+                        });     
+                });
+            },
+            updateAvatar: function(_imagedata) {
+                return new Promise(function(resolve, reject){
+                    restFactory.user.info.updateAvatar(_imagedata)
                         .then(function(response){
                             resolve(response);
                         })
