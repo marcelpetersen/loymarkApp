@@ -1319,7 +1319,25 @@ ion-nav-view[nav-view-transition="ios"] {
 		font-size: 15px;
 	}
 
+/* ******** Sign Up and Gernder And DOB ******** */
 
+	.sugdob-item {
+		background-color: transparent !important;
+	}
+	.sugdob-photo {
+		font-size: 110px;
+	}
+	.sugdob-photo-frame {
+		border: 1px dashed #acacac !important;
+	}
+	.sugdob-btn {
+		background-color: $kenuu-purple !important;
+		color: white;
+	}
+	.sugdob-top-btn {
+		font-size: 20px !important;
+		color: #acacac !important;
+	}
 
 
 

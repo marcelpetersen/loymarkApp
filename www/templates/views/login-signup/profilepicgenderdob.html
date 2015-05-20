@@ -1,0 +1,48 @@
+<ion-view id="viewWelcome" class="">
+	<ion-nav-title>
+        <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
+    </ion-nav-title>
+    <ion-nav-buttons side="right">
+		<button class="button button-clear icon-right ion-android-arrow-forward sugdob-top-btn" ng-click="Skip()">
+			Saltar
+		</button>
+	</ion-nav-buttons>	
+	<ion-content id="" scroll="false" class="" overflow-scroll="true">
+		<ion-slide-box show-pager="false" on-slide-changed="slideHasChanged($index)">
+			<div class="list">
+				<div class="item item-clear sugdob-item text-center">
+					<div>Elije la foto para tu perfil</div>
+					<div style="margin-top:20px;">
+						<img class="profile-avatar sugdob-photo-frame" ng-src="{{getUserImage()}}" ng-click="ChangeProfilePic()">
+					</div>
+				</div>
+				<div class="item item-clear sugdob-item">
+					<div class="row">
+						<div class="col">
+							<ion-radio ng-model="choice" ng-value="'H'">Hombre</ion-radio>
+						</div>
+						<div class="col">
+							<ion-radio ng-model="choice" ng-value="'M'">Mujer</ion-radio>
+						</div>
+					</div>
+				</div>
+				<div class="item item-clear sugdob-item">
+					<button class="button button-block sugdob-btn" ng-click="SaveAndContinue()">
+						Ok, continuar
+					</button>
+				</div>
+			</div>
+		</ion-slide-box>
+
+		<div class="md-modal md-effect-7" id="modal-msgbox-login">
+			<div class="md-content">
+				<h3>{{viewdata.msgbox.title}}</h3>
+				<div>
+					<p>{{viewdata.msgbox.message}}</p>
+					<button class="md-close">{{viewdata.msgbox.buttontext}}</button>
+				</div>
+			</div>
+		</div>
+		<div class="md-overlay"></div><!-- the overlay element -->
+	</ion-content>		
+</ion-view>

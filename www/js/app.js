@@ -11,9 +11,9 @@ var devEnvironment = false; // To use the app through "ionic serve --lab"
 angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.factory', 'ngCordova'])
 
 .constant('ApiEndpoint', {
-	url: 'http://192.168.71.98:8100/api' // CIS Network Development (Tavo)
+	// url: 'http://192.168.71.98:8100/api' // CIS Network Development (Tavo)
 	// url: 'http://192.168.71.91:8100/api' // CIS Network Development (Alex)
-	// url: 'http://192.168.1.9:8100/api' // Home Development Environment
+	url: 'http://192.168.1.12:8100/api' // Home Development Environment
 })
 
 .run(function($rootScope, $state, $ionicPlatform, networkFactory, $cordovaNetwork, deviceFactory, $cordovaPush, $ionicTabsDelegate, navigationFactory, commerceFactory, $ionicHistory, loadingBox, $cordovaGeolocation, locationFactory) {
@@ -149,6 +149,13 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 			url: '/signup',
 			templateUrl: 'templates/views/login-signup/welcome-signup.html',
 			controller: 'SignUpCtrl'
+		})
+
+		// Welcome screen of the app once the user is logged
+		.state('profilepicgenderdob', {
+			url: '/profilepicgenderdob',
+			templateUrl: 'templates/views/login-signup/profilepicgenderdob.html',
+			controller: 'ProfilePicGenderDoBCtrl'
 		})
 
 	// **** Main Tab Section ****
@@ -481,6 +488,7 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	else
 	{
 		_url = '/welcome';
+		// _url = '/profilepicgenderdob';
 	}	
 
 	$urlRouterProvider.otherwise(_url);

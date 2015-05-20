@@ -675,12 +675,15 @@ ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'userFactory', '$ionicLoadi
     };
 }]);
 
-ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', 'navigationFactory', '$cordovaActionSheet', '$cordovaCamera', '$cordovaImagePicker', function($scope, $timeout, loadingBox, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService, navigationFactory, $cordovaActionSheet, $cordovaCamera, $cordovaImagePicker){
+ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', 'navigationFactory', '$cordovaActionSheet', '$cordovaCamera', '$cordovaImagePicker', '$cordovaFile', function($scope, $timeout, loadingBox, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService, navigationFactory, $cordovaActionSheet, $cordovaCamera, $cordovaImagePicker, $cordovaFile){
     $scope.$on("$ionicView.enter", function(event, args){
         navigationFactory.setDefaults();
         LoadData();
         LoadCommerceData();
     });
+
+    $scope.profileimage = localStorage.getItem('profile_picture');
+    if ($scope.profileimage == undefined) $scope.profileimage = '';
 
     $scope.viewdata = {
         qrcode: "",
@@ -728,6 +731,9 @@ ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory',
             .then(function(data){  
                 loadingBox.hide();              
                 $scope.viewdata.user = data;
+
+                $scope.viewdata.user.Avatar = $scope.profileimage;
+
                 $scope.$apply();
                 
                 var userData = data;
@@ -754,7 +760,7 @@ ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory',
     };
 
     $scope.getUserImage = function(){
-        if($scope.viewdata.user.Avatar){
+        if(($scope.viewdata.user.Avatar)&&($scope.viewdata.Avatar !='')){
             return $scope.viewdata.user.Avatar;
         } else {
             return 'img/ionitron.png';
@@ -812,27 +818,66 @@ ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory',
         $cordovaActionSheet.show(actionsheetoptions)
             .then(function(btnIndex) {
                 var index = btnIndex;
-                if (index == 1) TakePicture();
+                if (index == 1) PickImage();
+                if (index == 2) TakePicture();
             });
+    };
+
+    function makeid() {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for (var i=0; i < 5; i++) {
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+        }
+        return text;
+    };
+
+    function onCopySuccess(entry) {
+        $scope.$apply(function () {
+            $scope.profileimage = entry.nativeURL;
+            localStorage.setItem('profile_picture', entry.nativeURL);
+            $scope.viewdata.user.Avatar = $scope.profileimage;
+        });
+    }
+
+    function copyFile(fileEntry) {
+        var name = fileEntry.fullPath.substr(fileEntry.fullPath.lastIndexOf('/') + 1);
+        var newName = makeid() + name;
+
+        window.resolveLocalFileSystemURL(cordova.file.dataDirectory, 
+            function(fileSystem2) {
+                fileEntry.copyTo(fileSystem2, newName, onCopySuccess, fail);
+            },
+            fail
+        );
+    };
+
+    function fail(err) {
+        alert(JSON.stringify(err));
+    };
+
+    function SavePicture(picturedata) {                
+        window.resolveLocalFileSystemURL(picturedata, copyFile, fail);
     };
 
     function TakePicture() {
         var options = {
             quality: 50,
-            destinationType: Camera.DestinationType.DATA_URL,
+            destinationType: Camera.DestinationType.FILE_URI, // Camera.DestinationType.DATA_URL,
             sourceType: Camera.PictureSourceType.CAMERA,
             allowEdit: true,
             encodingType: Camera.EncodingType.JPEG,
             targetWidth: 100,
             targetHeight: 100,
             popoverOptions: CameraPopoverOptions,
-            saveToPhotoAlbum: false
+            saveToPhotoAlbum: false,
+            cameraDirection: 1
         };
 
         $cordovaCamera.getPicture(options).then(function(imageData) {
-            //var image = document.getElementById('myImage');
-            //image.src = "data:image/jpeg;base64," + imageData;
-            $scope.viewdata.user.Avatar = "data:image/jpeg;base64," + imageData;
+            // $scope.viewdata.user.Avatar = "data:image/jpeg;base64," + imageData;
+            SavePicture(imageData);
         }, function(err) {
             // error
         });
@@ -840,22 +885,23 @@ ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory',
 
     function PickImage() {
         var options = {
-            maximumImagesCount: 1,
-            width: 800,
-            height: 800,
-            quality: 80
+            quality: 50,
+            destinationType: Camera.DestinationType.FILE_URI,
+            sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+            allowEdit: true,
+            encodingType: Camera.EncodingType.JPEG,
+            targetWidth: 100,
+            targetHeight: 100,
+            popoverOptions: CameraPopoverOptions,
+            saveToPhotoAlbum: false,
+            cameraDirection: 1
         };
 
-        $cordovaImagePicker.getPictures(options)
-            .then(function (results) {
-                for (var i = 0; i < results.length; i++) {
-                    console.log('Image URI: ' + results[i]);
-                }
-            }, 
-            function(error) {
-                // error getting photos
-            }
-        );
+        $cordovaCamera.getPicture(options).then(function(imageData) {
+            SavePicture(imageData);
+        }, function(err) {
+            // error
+        });
     };
 
     // Required to Show the Top Bar Setup View
@@ -1118,38 +1164,18 @@ ctrl.controller('LoginCtrl', ['$scope', '$cordovaKeyboard', 'loginSignUpFactory'
             // Sets the flags indicating the user has already logged.
             localStorage.setItem('animationShown', false);
             referenceIDFactory.setReferenceID(data.ReferenceID);
+            
+            if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(false);
+            loadingBox.hide();
+            $ionicHistory.clearHistory();
+            $ionicHistory.clearCache();
+            $ionicHistory.nextViewOptions({
+                disableAnimate: true,
+                disableBack: true,
+                historyRoot: true
+            });
 
-            // $cordovaPush.register(iosConfig).then(
-            //     function(deviceToken) 
-            //     {
-            //         console.log(deviceToken);
-            //         // Device Token ID
-            //         deviceFactory.device.registerdevice(deviceToken, $scope.viewdata.login.email)
-            //             .then(function(response){
-            //                 setTimeout(function(){
-                                if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(false);
-                                loadingBox.hide();
-                                $ionicHistory.clearHistory();
-                                $ionicHistory.clearCache();
-                                $ionicHistory.nextViewOptions({
-                                    disableAnimate: true,
-                                    disableBack: true,
-                                    historyRoot: true
-                                });
-                                $state.go('tab.qrcode');
-            //                 },800);              
-            //             })
-            //             .catch(function(response){
-                            
-            //             }); 
-            //     }, 
-            //     function(err) 
-            //     {
-            //         alert("Registration error: " + err)
-            //     }
-            // );
-
-            console.log(data);
+            $state.go('profilepicgenderdob');
         })
         .catch(function(err){
             loadingBox.hide();
@@ -1245,7 +1271,7 @@ ctrl.controller('PasswordCreateCtrl', ['$scope', '$cordovaKeyboard', 'loginSignU
                 disableBack: true,
                 historyRoot: true
             });
-            $state.go('tab.qrcode');
+            $state.go('profilepicgenderdob');
         })
         .catch(function(err){
             loadingBox.hide();
@@ -1342,7 +1368,7 @@ ctrl.controller('SignUpCtrl', ['$scope', '$cordovaKeyboard', 'loginSignUpFactory
                     ShowModalMsg_Ok("Listo!", "Ya quedaste registrado! Empieza a disfrutar de Kenuu.", "Ok");
 
                     setTimeout(function(){
-                        $state.go('tab.qrcode');   
+                        $state.go('profilepicgenderdob');  
                     }, 3000);
                 }
                 else
@@ -1834,6 +1860,127 @@ ctrl.controller('KenuuPwdChangeCtrl', ['$scope', '$timeout', 'userFactory', '$st
             loadingBox.hide();
             ShowModalMsg("Oops!", "Tu password no es válido.", "Ok");
             return false;
+        });
+    };
+}]);
+
+ctrl.controller('ProfilePicGenderDoBCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', 'navigationFactory', '$cordovaActionSheet', '$cordovaCamera', '$cordovaImagePicker', '$cordovaFile', '$ionicHistory', function($scope, $timeout, loadingBox, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService, navigationFactory, $cordovaActionSheet, $cordovaCamera, $cordovaImagePicker, $cordovaFile, $ionicHistory){
+    localStorage.removeItem('profile_picture');
+    $scope.profileimage = '';
+
+    $scope.Skip = function() {
+        $ionicHistory.clearHistory();
+        $ionicHistory.clearCache();
+        $state.go("tab.nearme");
+    };
+
+    $scope.SaveAndContinue = function() {
+        $ionicHistory.clearHistory();
+        $ionicHistory.clearCache();
+        $state.go("tab.nearme");  
+    };
+
+    $scope.getUserImage = function(){
+        if(($scope.profileimage)&&($scope.profileimage !='')){
+            return $scope.profileimage;
+        } else {
+            return 'img/ionitron.png';
+        }
+    };
+
+    $scope.ChangeProfilePic = function() {
+        var actionsheetoptions = {
+            buttonLabels: ['Escogerla...', 'Tomar Foto'],
+            addCancelButtonWithLabel: 'Cancel',
+            androidEnableCancelButton : true,
+            winphoneEnableCancelButton : true
+        };
+
+        $cordovaActionSheet.show(actionsheetoptions)
+            .then(function(btnIndex) {
+                var index = btnIndex;
+                if (index == 1) PickImage();
+                if (index == 2) TakePicture();
+            });
+    };
+
+    function makeid() {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for (var i=0; i < 5; i++) {
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+        }
+        return text;
+    };
+
+    function onCopySuccess(entry) {
+        $scope.$apply(function () {
+            $scope.profileimage = entry.nativeURL;
+            localStorage.setItem('profile_picture', entry.nativeURL);
+        });
+    }
+
+    function copyFile(fileEntry) {
+        var name = fileEntry.fullPath.substr(fileEntry.fullPath.lastIndexOf('/') + 1);
+        var newName = makeid() + name;
+
+        window.resolveLocalFileSystemURL(cordova.file.dataDirectory, 
+            function(fileSystem2) {
+                fileEntry.copyTo(fileSystem2, newName, onCopySuccess, fail);
+            },
+            fail
+        );
+    };
+
+    function fail(err) {
+        alert(JSON.stringify(err));
+    };
+
+    function SavePicture(picturedata) {
+        window.resolveLocalFileSystemURL(picturedata, copyFile, fail);
+    };
+
+    function TakePicture() {
+        var options = {
+            quality: 50,
+            destinationType: Camera.DestinationType.FILE_URI, // Camera.DestinationType.DATA_URL,
+            sourceType: Camera.PictureSourceType.CAMERA,
+            allowEdit: true,
+            encodingType: Camera.EncodingType.JPEG,
+            targetWidth: 100,
+            targetHeight: 100,
+            popoverOptions: CameraPopoverOptions,
+            saveToPhotoAlbum: false,
+            cameraDirection: 1
+        };
+
+        $cordovaCamera.getPicture(options).then(function(imageData) {
+            // $scope.viewdata.user.Avatar = "data:image/jpeg;base64," + imageData;
+            SavePicture(imageData);
+        }, function(err) {
+            // error
+        });
+    };
+
+    function PickImage() {
+        var options = {
+            quality: 50,
+            destinationType: Camera.DestinationType.FILE_URI,
+            sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+            allowEdit: true,
+            encodingType: Camera.EncodingType.JPEG,
+            targetWidth: 100,
+            targetHeight: 100,
+            popoverOptions: CameraPopoverOptions,
+            saveToPhotoAlbum: false,
+            cameraDirection: 1
+        };
+
+        $cordovaCamera.getPicture(options).then(function(imageData) {
+            SavePicture(imageData);
+        }, function(err) {
+            // error
         });
     };
 }]);
