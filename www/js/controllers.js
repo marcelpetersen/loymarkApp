@@ -123,6 +123,9 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
 
             commerceFactory.stores.nearby(0, long, lat, 0)
                 .then(function(data){
+
+                    console.log(data)
+
                     if (!fromSearch) loadingBox.hide();
 
                     $scope.viewdata.searchResults = data.response.Elements;                    
@@ -728,12 +731,10 @@ ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory',
 
     function LoadData() {
         userFactory.info.get()
-            .then(function(data){  
+            .then(function(data){
                 loadingBox.hide();              
                 $scope.viewdata.user = data;
-
                 $scope.viewdata.user.Avatar = $scope.profileimage;
-
                 $scope.$apply();
                 
                 var userData = data;
@@ -763,7 +764,7 @@ ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory',
         if(($scope.viewdata.user.Avatar)&&($scope.viewdata.Avatar !='')){
             return $scope.viewdata.user.Avatar;
         } else {
-            return 'img/ionitron.png';
+            return 'img/default.png';
         }
     };
 
@@ -1966,7 +1967,7 @@ ctrl.controller('ProfilePicGenderDoBCtrl', ['$scope', '$timeout', 'loadingBox', 
         if(($scope.viewdata.profileimage)&&($scope.viewdata.profileimage !='')){
             return $scope.viewdata.profileimage;
         } else {
-            return 'img/ionitron.png';
+            return 'img/default.png';
         }
     };
 

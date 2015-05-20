@@ -197,8 +197,8 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                     }); 
                 },
                 updateAvatar: function(_imagedata) {
-                    var url = "http://192.168.71.91:8001/userProfile/updateAvatar";
-                    // var url = serverURL + '/userprofile/updateAvatar';
+                    // var url = "http://192.168.71.91:8001/userProfile/updateAvatar";
+                    var url = serverURL + '/userprofile/updateAvatar';
                     return new Promise(function(resolve,reject){
                         var _jdata = 
                         {
