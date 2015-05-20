@@ -498,6 +498,8 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                 },
                 nearby: function(entityID,long,lat,page){
                     var url = serverURL + "/commerce/nearby/stores";
+                    console.log('PAAAAAAAGEEEEEEEE NUUUUUMBEEEERRRR');
+                    console.log(page);
                     return new Promise(function(resolve,reject){
                         $http({
                             headers: {
@@ -512,7 +514,7 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                                 kilometers: '10',
                                 paging: true,
                                 pagesize: '10',
-                                pagenum: '0'
+                                pagenum: page
                             }
                         })
                         .success(function(data,status,headers,config){

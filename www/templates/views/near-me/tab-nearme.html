@@ -5,7 +5,7 @@
 	<ion-nav-buttons side="right">
 		<button class="button button-clear ion-map topbar-setupicon" style="font-size:25px;" ng-click="OpenMap()">
 		</button>
-	</ion-nav-buttons>	
+	</ion-nav-buttons>
 	<ion-content class="nearme-content" overflow-scroll="true">
 		<div class="item-input-inset nearme-search-item">
 			<label class="item-input-wrapper">
@@ -16,7 +16,30 @@
 				<i class="icon ion-ios-close-outline"></i>
 			</button>
 		</div>
-		<ul class="list" id="nearme-list">
+
+
+		<ion-list id="nearme-list">
+        	<ion-item class="item-icon-left nearme-commerce-item" ng-repeat="item in viewdata.searchResults | orderBy:'Name'" item="item" ng-click="OpenCommerce(item)">
+        		<i class="icon">
+		    		<img class="nearme-commerce-avatar" src="{{GetAvatarImage(item.Image)}}">
+		    	</i>
+          		<div class="row">
+		    		<div class="col">
+		    			<p class="nearme-commerce-name" ng-bind="item.Name">
+		    			</p>
+		    		</div>
+		    	</div>
+		    	<div class="row">
+		    		<div class="col text-left nearme-commerce-sublabel"><i class="icon-location"></i> 0 Km</div>
+		    	</div>
+        	</ion-item>
+      	</ion-list>
+      	<ion-infinite-scroll immediate-check="false" on-infinite="getMoreStores(viewdata.storePage)" distance="20%">
+      	</ion-infinite-scroll>
+
+
+
+		<!-- <ul class="list" id="nearme-list">
 		    <li class="item item-icon-left nearme-commerce-item" ng-repeat="item in viewdata.searchResults | filter:{Type:'C'} | orderBy:'Name'" ng-click="OpenCommerce(item)">
 		    	<i class="icon">
 		    		<img class="nearme-commerce-avatar" src="{{GetAvatarImage(item.Image)}}">
@@ -24,14 +47,15 @@
 		    	<div class="row">
 		    		<div class="col">
 		    			<p class="nearme-commerce-name" ng-bind="item.Name">
-		    			
 		    			</p>
 		    		</div>
-		    	</div>		    	
-		    	<div class="row">		    		
+		    	</div>
+		    	<div class="row">
 		    		<div class="col text-left nearme-commerce-sublabel"><i class="icon-location"></i> 0 Km</div>
 		    	</div>
 		    </li>
 		</ul>
-	</ion-content>		
+		<ion-infinite-scroll on-infinite="getMoreStores(viewdata.storePage)" distance="1%">
+		</ion-infinite-scroll> -->
+	</ion-content>
 </ion-view>
