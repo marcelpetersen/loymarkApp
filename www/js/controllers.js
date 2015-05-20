@@ -155,9 +155,6 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
 
             commerceFactory.stores.nearby(0, long, lat, 0)
                 .then(function(data){
-
-                    console.log(data)
-
                     if (!fromSearch) loadingBox.hide();
                     $scope.viewdata.searchResults = data;
 
