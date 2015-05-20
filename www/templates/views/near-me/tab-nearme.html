@@ -16,6 +16,24 @@
 				<i class="icon ion-ios-close-outline"></i>
 			</button>
 		</div>
+		<div class="item-input-inset nearme-search-item">
+			<div class="row">
+				<style type="text/css" media="screen">
+					.borderKilometer {
+						border-bottom: 2px solid #FFFFFF !important;
+					}
+				</style>
+				<div class="col-33 text-center">
+					<button class="button button-clear" ng-click="changeKilometers(5)" ng-class="{borderKilometer:viewdata.kilometers==5}">5Km</button>
+				</div>
+				<div class="col-33 text-center">
+					<button class="button button-clear" ng-click="changeKilometers(10)" ng-class="{borderKilometer:viewdata.kilometers==10}">10Km</button>
+				</div>
+				<div class="col-33 text-center">
+					<button class="button button-clear" ng-click="changeKilometers(25)"  ng-class="{borderKilometer:viewdata.kilometers==25}">25Km</button>
+				</div>
+			</div>
+		</div>
 		<ion-list id="nearme-list">
         	<ion-item class="item-icon-left nearme-commerce-item" ng-repeat="item in viewdata.searchResults | orderBy:'Distance'" item="item" ng-click="OpenCommerce(item)">
         		<i class="icon">

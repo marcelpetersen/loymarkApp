@@ -496,7 +496,7 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                             });
                     });
                 },
-                nearby: function(entityID,long,lat,page){
+                nearby: function(entityID,long,lat,page,kilometers){
                     var url = serverURL + "/commerce/nearby/stores";
                     return new Promise(function(resolve,reject){
                         $http({
@@ -509,7 +509,7 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                                 entityID: entityID,
                                 locationlongitude: long,
                                 locationlatitude: lat,
-                                kilometers: '10',
+                                kilometers: kilometers,
                                 paging: true,
                                 pagesize: '10',
                                 pagenum: page
@@ -989,9 +989,9 @@ fact.factory('commerceFactory', ['restFactory', function(restFactory){
                         });
                 });
             },
-            nearby: function(entityID,long,lat,page){
+            nearby: function(entityID,long,lat,page,kilometers){
                 return new Promise(function(resolve,reject){
-                    restFactory.commerce.stores.nearby(entityID,long,lat,page)
+                    restFactory.commerce.stores.nearby(entityID,long,lat,page,kilometers)
                         .then(function(response){
                             resolve(response);
                         })

@@ -6,13 +6,14 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
 ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', '$cordovaPush', '$cordovaGeolocation', 'loadingBox', 'searchFactory', 'commerceFactory', 'navigationFactory', 'deviceFactory', 'userFactory', 'navigationFactory', 'locationFactory', function($scope, $state, $ionicLoading, $timeout, $cordovaPush, $cordovaGeolocation, loadingBox, searchFactory, commerceFactory, navigationFactory, deviceFactory, userFactory, navigationFactory, locationFactory){
     $scope.viewdata = {
-        startingView: true,
+        // startingView: true,
         doingSearch: false,
         searchResults: [],
         searchText: "",
         user: {},
         CardNumber: "",
-        storePage: 1
+        storePage: 1,
+        kilometers: 10
     };
 
     $scope.$on("$ionicView.enter", function(event, args){
@@ -97,14 +98,16 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
     };
 
     $scope.$watch('viewdata.searchText', function() {
+        console.log('HERE OUT!!!!!!');
         if ($scope.viewdata.startingView) return;
 
-        if ($scope.viewdata.searchText == "")
+        if ($scope.viewdata.searchText === "")
         {
             doSearch(false);
         }
         else
         {
+            console.log('HERE!!!!!!');
             doSearch(true);
         }
     });
@@ -116,21 +119,76 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
         });
     }
 
-    $scope.getMoreStores = function(pageNum){        
+    $scope.getMoreStores = function(pageNum){
         loadingBox.show();
         $scope.viewdata.storePage++;
         var posOptions = {timeout: 10000, enableHighAccuracy: false};
         var _location = locationFactory.location.get();
         var lat  = _location.lat;
         var long = _location.long;
-        commerceFactory.stores.nearby(0, long, lat, pageNum)
+        commerceFactory.stores.nearby(0, long, lat, pageNum, $scope.viewdata.kilometers)
             .then(function(data){
-                for(var i=0;i<data.length;i++){                    
+                for(var i=0;i<data.length;i++){
                     $scope.viewdata.searchResults.push(data[i]);
-                }                
+                }
                 $scope.$apply();
                 loadingBox.hide();
             });
+    };
+
+    $scope.changeKilometers = function(kilometers){
+        loadingBox.show();
+        $scope.viewdata.kilometers = kilometers;
+        $scope.viewdata.storePage = 0;
+        var posOptions = {timeout: 10000, enableHighAccuracy: false};
+        var _location = locationFactory.location.get();
+        if (_location.isSet)
+        {
+            var lat  = _location.lat;
+            var long = _location.long;
+            $scope.viewdata.searchResults = [];
+            commerceFactory.stores.nearby(0, long, lat, 0, kilometers)
+                .then(function(data){
+                    // console.log('DATA LENGTH!!!!');
+                    // console.log(kilometers,data.length,pageNum);
+                    for(var i=0; i<data.length; i++){
+                        $scope.viewdata.searchResults.push(data[i]);
+                    }
+                    // $scope.viewdata.searchResults = data;
+                    $scope.$apply();
+                    loadingBox.hide();
+                })
+                .catch(function(err){
+                    searchFactory.doSearch($scope.viewdata.searchText)
+                        .then(function(data){
+                            for(var i=0; i<data.response.Elements.length; i++){
+                                $scope.viewdata.searchResults.push(data.response.Elements[i]);
+                            }
+                            // $scope.viewdata.searchResults = data.response.Elements;
+                            $scope.$apply();
+                            loadingBox.hide();
+                        })
+                        .catch(function(data){
+                            console.log(data);
+                            loadingBox.hide();
+                        });
+                });
+        }
+        else
+        {
+            searchFactory.doSearch($scope.viewdata.searchText)
+                .then(function(data){
+                    $scope.viewdata.searchResults = data.response.Elements;
+                    $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
+                    loadingBox.hide();
+                    $scope.$apply();
+                })
+                .catch(function(data){
+                    console.log("Error while searching commerces without location:")
+                    console.log(data);
+                    loadingBox.hide();
+                });
+        }
     };
 
     $scope.formatDistance = function(distance) {
@@ -147,48 +205,61 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
         if (!fromSearch) loadingBox.show();
 
         var _location = locationFactory.location.get();
+        if(!fromSearch){
+            if (_location.isSet)
+            {
+                var lat  = _location.lat;
+                var long = _location.long;
 
-        if (_location.isSet)
-        {
-            var lat  = _location.lat;
-            var long = _location.long;
-
-            commerceFactory.stores.nearby(0, long, lat, 0)
-                .then(function(data){
-                    if (!fromSearch) loadingBox.hide();
-                    $scope.viewdata.searchResults = data;
-
-                    $scope.$apply();
-                })
-                .catch(function(err){
-                    searchFactory.doSearch($scope.viewdata.searchText)
-                        .then(function(data){
-                            if (!fromSearch) loadingBox.hide();
-
-                            $scope.viewdata.searchResults = data.response.Elements;
-                            $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
-                            $scope.$apply();
-                        })
-                        .catch(function(data){
-                            if (!fromSearch) loadingBox.hide();
-                            console.log(data);
-                        });
-                });
-        }
-        else
-        {
+                commerceFactory.stores.nearby(0, long, lat, 0)
+                    .then(function(data){
+                        if (!fromSearch) loadingBox.hide();
+                        $scope.viewdata.searchResults = data;
+                        $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
+                        $scope.$apply();
+                    })
+                    .catch(function(err){
+                        searchFactory.doSearch($scope.viewdata.searchText)
+                            .then(function(data){
+                                if (!fromSearch) loadingBox.hide();
+                                $scope.viewdata.searchResults = data.response.Elements;
+                                $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
+                                $scope.$apply();
+                            })
+                            .catch(function(data){
+                                if (!fromSearch) loadingBox.hide();
+                                console.log(data);
+                            });
+                    });
+            }
+            else
+            {
+                searchFactory.doSearch($scope.viewdata.searchText)
+                    .then(function(data){
+                        if (!fromSearch) loadingBox.hide();
+                        $scope.viewdata.searchResults = data.response.Elements;
+                        $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
+                        $scope.$apply();
+                    })
+                    .catch(function(data){
+                        if (!fromSearch) loadingBox.hide();
+                        console.log("Error while searching commerces without location:")
+                        console.log(data);
+                    });
+            }
+        } else {
             searchFactory.doSearch($scope.viewdata.searchText)
-                .then(function(data){
-                    if (!fromSearch) loadingBox.hide();
-                    $scope.viewdata.searchResults = data.response.Elements;
-                    $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
-                    $scope.$apply();
-                })
-                .catch(function(data){
-                    if (!fromSearch) loadingBox.hide();
-                    console.log("Error while searching commerces without location:")
-                    console.log(data);
-                });
+                    .then(function(data){
+                        if (!fromSearch) loadingBox.hide();
+                        $scope.viewdata.searchResults = data.response.Elements;
+                        $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
+                        $scope.$apply();
+                    })
+                    .catch(function(data){
+                        if (!fromSearch) loadingBox.hide();
+                        console.log("Error while searching commerces without location:")
+                        console.log(data);
+                    });
         }
     }
 }]);
