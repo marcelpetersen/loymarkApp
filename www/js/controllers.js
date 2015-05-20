@@ -116,8 +116,7 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
         });
     }
 
-    $scope.getMoreStores = function(pageNum){
-        console.log('PAGE COUNT:',pageNum);
+    $scope.getMoreStores = function(pageNum){        
         loadingBox.show();
         $scope.viewdata.storePage++;
         var posOptions = {timeout: 10000, enableHighAccuracy: false};
@@ -126,15 +125,9 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
         var long = _location.long;
         commerceFactory.stores.nearby(0, long, lat, pageNum)
             .then(function(data){
-                console.log('OVER HERE!!!');
-                console.log(data);
-
-                for(var i=0;i<data.length;i++){
-                    console.log(data[i]);
+                for(var i=0;i<data.length;i++){                    
                     $scope.viewdata.searchResults.push(data[i]);
-                }
-                console.log('ALLLLLLLLL');
-                console.log($scope.viewdata.searchResults);
+                }                
                 $scope.$apply();
                 loadingBox.hide();
             });
@@ -166,13 +159,8 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
                     console.log(data)
 
                     if (!fromSearch) loadingBox.hide();
-
-<<<<<<< HEAD
                     $scope.viewdata.searchResults = data;
-=======
-                    $scope.viewdata.searchResults = data.response.Elements;
-                    $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
->>>>>>> origin/master
+
                     $scope.$apply();
                 })
                 .catch(function(err){
