@@ -182,7 +182,7 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                             },
                             method: 'PATCH',
                             url: url,
-                            data: $.param(_jdata) 
+                            data: $.param(_jdata)
                         })
                         .success(function(data,status,headers,config){
                             if(data.status===true){
@@ -194,13 +194,13 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                         .error(function(data,status,headers,cofig){
                             reject(data);
                         });
-                    }); 
+                    });
                 },
                 updateAvatar: function(_imagedata) {
                     // var url = "http://192.168.71.91:8001/userProfile/updateAvatar";
-                    var url = serverURL + '/userprofile/updateAvatar';
+                    var url = serverURL + '/member/userprofile/updateAvatar';
                     return new Promise(function(resolve,reject){
-                        var _jdata = 
+                        var _jdata =
                         {
                             jsonData: JSON.stringify({image: _imagedata})
                         };
@@ -212,9 +212,9 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                             },
                             method: 'POST',
                             url: url,
-                            data: $.param(_jdata) 
+                            data: $.param(_jdata)
                         })
-                        .success(function(data,status,headers,config){                                                  
+                        .success(function(data,status,headers,config){
                             if(data.status==true){
                                 resolve(data);
                             } else {
