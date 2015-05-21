@@ -7,6 +7,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', '$cordovaPush', '$cordovaGeolocation', 'loadingBox', 'searchFactory', 'commerceFactory', 'navigationFactory', 'deviceFactory', 'userFactory', 'navigationFactory', 'locationFactory', function($scope, $state, $ionicLoading, $timeout, $cordovaPush, $cordovaGeolocation, loadingBox, searchFactory, commerceFactory, navigationFactory, deviceFactory, userFactory, navigationFactory, locationFactory){
     $scope.viewdata = {
         // startingView: true,
+        locationSet: true,
         doingSearch: false,
         searchResults: [],
         searchText: "",
@@ -42,6 +43,7 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
                     $cordovaGeolocation
                         .getCurrentPosition(posOptions)
                         .then(function (position) {
+                            $scope.viewdata.locationSet = true;
                             var _lat  = position.coords.latitude;
                             var _long = position.coords.longitude;
                             locationFactory.location.set(_lat, _long);
@@ -49,12 +51,14 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
                             doSearch(false);
                         })
                         .catch(function(err){
+                            $scope.viewdata.locationSet = false;
                             doSearch(false);
                         });
                 // }, 2500);
             }
             else
             {
+                $scope.viewdata.locationSet = false;
                 doSearch(false);
             }
         })
@@ -88,7 +92,7 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
             })
             .catch(function(response){
                 loadingBox.hide();
-                console.log("Error when getting the commerce.")
+                console.log("Error when getting the commerce.");
                 console.log(response);
             });
     };
@@ -208,6 +212,7 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
         if(!fromSearch){
             if (_location.isSet)
             {
+                $scope.viewdata.locationSet = true;
                 var lat  = _location.lat;
                 var long = _location.long;
 
@@ -234,10 +239,19 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
             }
             else
             {
+                $scope.viewdata.locationSet = false;
                 searchFactory.doSearch($scope.viewdata.searchText)
                     .then(function(data){
+                        var commerceElements = [];
+                        console.log(data.response.Elements.length);
+                        for(var i=0; i<data.response.Elements.length; i++){
+                            if(data.response.Elements[i].Type=='C'){
+                                commerceElements.push(data.response.Elements[i]);
+                            }
+                        }
+                        console.log(commerceElements);
                         if (!fromSearch) loadingBox.hide();
-                        $scope.viewdata.searchResults = data.response.Elements;
+                        $scope.viewdata.searchResults = commerceElements;
                         $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
                         $scope.$apply();
                     })
@@ -248,6 +262,7 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
                     });
             }
         } else {
+            $scope.viewdata.locationSet = false;
             searchFactory.doSearch($scope.viewdata.searchText)
                     .then(function(data){
                         if (!fromSearch) loadingBox.hide();
