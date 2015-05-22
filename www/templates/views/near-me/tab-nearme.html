@@ -42,15 +42,19 @@
           		<div class="row">
 		    		<div class="col">
 		    			<p class="nearme-commerce-name" ng-bind="item.Name">
-		    			</p>
+		    			</p>		    			
 		    		</div>
-		    	</div>
+		    	</div>		
 		    	<div class="row" ng-show="viewdata.locationSet">
 		    		<div class="col text-left nearme-commerce-sublabel"><i class="icon-location"></i> <span ng-bind="formatDistance(item.Distance)"></span>	 Km</div>
-		    	</div>
-        	</ion-item>
-      	</ion-list>
+		    	</div>    	
+        	</ion-item>        	
+      	</ion-list>      	
+      	
       	<ion-infinite-scroll immediate-check="false" on-infinite="getMoreStores(viewdata.storePage)" distance="20%">
       	</ion-infinite-scroll>
 	</ion-content>
+	<a class="nearme-button roundButton text-center" ng-click="DoSearch()">
+		<i class="ion-android-sync nearme-icon"></i>
+	</a>
 </ion-view>

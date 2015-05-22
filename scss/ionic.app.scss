@@ -1167,6 +1167,46 @@ ion-nav-view[nav-view-transition="ios"] {
 		border: 1px solid #efefef !important;
 	}
 
+	ion-nav-view[nav-view-transition="android"] {
+		.nearme-button {
+			height: 80px;
+			width: 80px;
+			background-color: $kenuu-purple;
+			opacity: 0.7;
+			z-index: 100;
+			position: fixed;		
+			right: 25px;		
+			bottom: 40px;
+			border-radius: 50%;
+		}
+		.nearme-icon {
+			font-size: 50px;
+			color: white;
+			position: relative;
+			top:15px;
+		}
+	}
+
+	ion-nav-view[nav-view-transition="ios"] {
+		.nearme-button {
+			height: 80px;
+			width: 80px;
+			background-color: $kenuu-purple;
+			opacity: 0.7;
+			z-index: 100;
+			position: fixed;		
+			right: 25px;		
+			bottom: 80px;
+			border-radius: 50%;
+		}
+		.nearme-icon {
+			font-size: 50px;
+			color: white;
+			position: relative;
+			top:15px;
+		}
+	}
+
 /* ******** Commerce With Rewards ******* */
 	.commercewr-content {
 		border: none !important;

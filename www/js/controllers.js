@@ -206,6 +206,10 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             return distance;
         };
 
+        $scope.DoSearch = function() {
+            doSearch(false);
+        };
+
         // Pulls the commerces
         function doSearch(fromSearch) {
             var posOptions = {timeout: 10000, enableHighAccuracy: false};
@@ -261,7 +265,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                             if (!fromSearch) loadingBox.hide();
                             console.log("Error while searching commerces without location:")
                             console.log(data);
-                        });
+                        });                    
                 }
             } else {
                 $scope.viewdata.locationSet = false;
