@@ -123,6 +123,13 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 
 	// **** Welcome and Login ****
 
+		// Welcome cover
+		.state('welcomecover', {
+			url: '/welcomecover',
+			templateUrl: 'templates/views/login-signup/welcome-cover.html',
+			controller: 'WelcomeCoverCtrl'
+		})
+
 		// Welcome screen of the app once the user is logged
 		.state('welcome', {
 			url: '/welcome',
@@ -488,7 +495,7 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	}
 	else
 	{
-		_url = '/welcome';
+		_url = '/welcomecover';
 		// _url = '/profilepicgenderdob';
 	}	
 

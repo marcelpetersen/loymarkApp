@@ -1621,6 +1621,24 @@ ctrl.controller('SignUpCtrl', ['$scope', '$cordovaKeyboard', 'loginSignUpFactory
     };
 }]);
 
+ctrl.controller('WelcomeCoverCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', '$ionicLoading', '$cordovaKeyboard', '$cordovaPush', 'deviceFactory', '$cordovaBarcodeScanner', 'signUpLoginView', 'loginSignUpFactory', 'loadingBox', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory, $ionicLoading, $cordovaKeyboard, $cordovaPush, deviceFactory, $cordovaBarcodeScanner, signUpLoginView, loginSignUpFactory, loadingBox){
+    localStorage.setItem('animationShown', false);
+    
+    if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(true);
+
+    $scope.GoToLogin = function() {
+        $state.go("welcome");
+    };
+
+    $timeout(function(){
+        $("#welcome-content").addClass("animated slideInUp");
+        setTimeout(function(){
+            $("#welcomeimg1").addClass("animated zoomIn");
+            loadingBox.hide();
+        }, 1100);        
+    });
+}]);
+
 ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', '$ionicLoading', '$cordovaKeyboard', '$cordovaPush', 'deviceFactory', '$cordovaBarcodeScanner', 'signUpLoginView', 'loginSignUpFactory', 'loadingBox', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory, $ionicLoading, $cordovaKeyboard, $cordovaPush, deviceFactory, $cordovaBarcodeScanner, signUpLoginView, loginSignUpFactory, loadingBox){
     localStorage.setItem('animationShown', false);
     
