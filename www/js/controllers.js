@@ -565,10 +565,6 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                                 });
                         });
                 },function(err){});
-
-                    loadingBox.hide();
-                    alert("No tienes location services!");
-                    return;
         
                     commerceFactory.stores.general(0,0).
                         then(function(data){

@@ -7879,6 +7879,7 @@ a[href^="http://maps.google.com/maps"] {
 
 .profile-avatar {
   height: 100px !important;
+  width: 100px !important;
   border-radius: 50%;
   border: 1px solid #eeeeee; }
 
