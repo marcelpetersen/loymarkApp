@@ -6,7 +6,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
 ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', '$cordovaPush', '$cordovaGeolocation', 'loadingBox', 'searchFactory', 'commerceFactory', 'navigationFactory', 'deviceFactory', 'userFactory', 'navigationFactory', 'locationFactory', function($scope, $state, $ionicLoading, $timeout, $cordovaPush, $cordovaGeolocation, loadingBox, searchFactory, commerceFactory, navigationFactory, deviceFactory, userFactory, navigationFactory, locationFactory){
     $scope.viewdata = {
-        // startingView: true,
+        startingView: true, // Variable that is used to control de Variable Watch for SearchText
         locationSet: true,
         doingSearch: false,
         searchResults: [],
@@ -18,52 +18,62 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
     };
 
     $scope.$on("$ionicView.enter", function(event, args){
+
     });
 
     // Executed when the view is loaded
     $timeout(function(){
+        $scope.viewdata.startingView = true;
         $("#nearme-list").show();
         $("#nearme-list").addClass("animated fadeIn");
 
         loadingBox.show();
 
+        alert(0)
+
         // Pulls the member information
         userFactory.info.get()
         .then(function(data){
+            alert(1)
+            
             $scope.viewdata.user = data;
-            $scope.$apply();
-
-            $scope.viewdata.CardNumber = data.CardNumber; // data.AccountID;
+            $scope.viewdata.CardNumber = data.CardNumber;
 
             if (!devEnvironment)
             {
+                alert("Getting Position!")
                 // Gets the User's location
                 var posOptions = {timeout: 10000, enableHighAccuracy: false};
-                // setTimeout(function(){
-                    $cordovaGeolocation
-                        .getCurrentPosition(posOptions)
-                        .then(function (position) {
-                            $scope.viewdata.locationSet = true;
-                            var _lat  = position.coords.latitude;
-                            var _long = position.coords.longitude;
-                            locationFactory.location.set(_lat, _long);
+                
+                $cordovaGeolocation
+                    .getCurrentPosition(posOptions)
+                    .then(function (position) {
+                        $scope.viewdata.locationSet = true;
+                        var _lat  = position.coords.latitude;
+                        var _long = position.coords.longitude;
+                        locationFactory.location.set(_lat, _long);
+                        $scope.viewdata.startingView = false;
+                        
+                        doSearch(false);
+                    })
+                    .catch(function(err){
+                        loadingBox.hide();
+                        $scope.viewdata.locationSet = false;
+                        $scope.viewdata.startingView = false;
 
-                            doSearch(false);
-                        })
-                        .catch(function(err){
-                            $scope.viewdata.locationSet = false;
-                            doSearch(false);
-                        });
-                // }, 2500);
+                        doSearch(false);
+                    });
             }
             else
             {
+                $scope.viewdata.startingView = false;
                 $scope.viewdata.locationSet = false;
+                
                 doSearch(false);
             }
         })
-        .catch(function(err){
-            // TODO
+        .catch(function(err) {
+            loadingBox.hide();
             console.log(err);
         });
     });
@@ -102,18 +112,16 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
     };
 
     $scope.$watch('viewdata.searchText', function() {
-        console.log('HERE OUT!!!!!!');
-        if ($scope.viewdata.startingView) return;
+        // if ($scope.viewdata.startingView) return;
 
-        if ($scope.viewdata.searchText === "")
-        {
-            doSearch(false);
-        }
-        else
-        {
-            console.log('HERE!!!!!!');
-            doSearch(true);
-        }
+        // if ($scope.viewdata.searchText === "")
+        // {
+        //     doSearch(false);
+        // }
+        // else
+        // {
+        //     doSearch(true);
+        // }
     });
 
     function sortByKey(array, key) {
@@ -435,26 +443,30 @@ ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cord
         loadingBox.show();
         $cordovaGeolocation
             .getCurrentPosition(posOptions)
-            .then(function (position) {
-                var lat  = position.coords.latitude;
-                var long = position.coords.longitude;
+            .then(
+                function (position) 
+                {
+                    var lat  = position.coords.latitude;
+                    var long = position.coords.longitude;
 
-                var myLatlng = new google.maps.LatLng(lat, long);
-                if (!_locationMarkerCreated) {
-                    var marker = new google.maps.Marker({
-                        position: myLatlng,
-                        title: "YO!",
-                        map: _map
-                    });
-                    _locationMarkerCreated = true;
+                    var myLatlng = new google.maps.LatLng(lat, long);
+                    if (!_locationMarkerCreated) {
+                        var marker = new google.maps.Marker({
+                            position: myLatlng,
+                            title: "YO!",
+                            map: _map
+                        });
+                        _locationMarkerCreated = true;
+                    }
+                    _map.setCenter(myLatlng);
+                    loadingBox.hide();
+                },
+                function(err) 
+                {
+                    loadingBox.hide();
+                    alert("No tienes location services!");
                 }
-                _map.setCenter(myLatlng);
-                loadingBox.hide();
-            }, function(err) {
-                console.log(err);
-                loadingBox.hide();
-            }
-        );
+            );
     };
 
     $scope.mapCreated = function(map) {
@@ -559,6 +571,11 @@ ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cord
                             });
                     });
             },function(err){});
+
+                loadingBox.hide();
+                alert("No tienes location services!");
+                return;
+    
                 commerceFactory.stores.general(0,0).
                     then(function(data){
                         loadingBox.hide();
