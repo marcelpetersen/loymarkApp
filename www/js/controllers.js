@@ -107,16 +107,16 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
     };
 
     $scope.$watch('viewdata.searchText', function() {
-        // if ($scope.viewdata.startingView) return;
+        if ($scope.viewdata.startingView) return;
 
-        // if ($scope.viewdata.searchText === "")
-        // {
-        //     doSearch(false);
-        // }
-        // else
-        // {
-        //     doSearch(true);
-        // }
+        if ($scope.viewdata.searchText === "")
+        {
+            doSearch(false);
+        }
+        else
+        {
+            doSearch(true);
+        }
     });
 
     function sortByKey(array, key) {
