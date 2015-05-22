@@ -808,7 +808,9 @@ ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory',
         positions: [],
         user: {
             activity: ''
-        }
+        },
+        defaultAvatarImg_male: 'img/default.png',
+        defaultAvatarImg_female: 'img/default_female.png'
     };
 
     $scope.gDate = function(date) {
@@ -849,6 +851,24 @@ ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory',
                 loadingBox.hide();              
                 $scope.viewdata.user = data;
                 $scope.viewdata.user.Avatar = $scope.profileimage;
+
+                // Sets the Avatar Image when there is no image defined
+                var _gender = localStorage.getItem('profile_gender');
+                if ($scope.viewdata.user.Avatar != '')
+                {
+                    if (_gender != undefined) {  
+                        $scope.viewdata.user.Avatar = $scope.viewdata.defaultAvatarImg_female;
+                    }
+                    else {
+                        if (_gender == "M") {
+                            $scope.viewdata.user.Avatar = $scope.viewdata.defaultAvatarImg_female;
+                        }
+                        else {
+                            $scope.viewdata.user.Avatar = $scope.viewdata.defaultAvatarImg_male;
+                        }
+                    }
+                }
+
                 $scope.$apply();
                 
                 var userData = data;
@@ -1834,6 +1854,7 @@ ctrl.controller('KenuuProfileCtrl', ['$scope', '$timeout', 'userFactory', '$stat
                 var userData = data;
                 $scope.viewdata.user.name = userData.FirstName;
                 $scope.viewdata.user.lastname = userData.LastName;
+
                 $scope.$apply();
             })
             .catch(function(err){loadingBox.hide();});
@@ -2009,12 +2030,14 @@ ctrl.controller('ProfilePicGenderDoBCtrl', ['$scope', '$timeout', 'loadingBox', 
     localStorage.removeItem('profile_gender');
     $scope.viewdata = {
         profileimage: '',
-        profilegender: '',
+        profilegender: 'H',
         msgbox: {
             title: "",
             message: "",
             buttontext: ""
-        }
+        },
+        defaultAvatarImg_male: 'img/default.png',
+        defaultAvatarImg_female: 'img/default_female.png'
     };
 
     function LoadUserData() {
@@ -2030,9 +2053,21 @@ ctrl.controller('ProfilePicGenderDoBCtrl', ['$scope', '$timeout', 'loadingBox', 
             })
             .catch(function(err){
                 loadingBox.hide();
-                console.log(data);
+                console.log(err);
+                $scope.viewdata.profilegender = "M";
             });
     };
+
+    $scope.$watch('viewdata.profilegender', function() {
+        if ($scope.viewdata.profilegender == "M")
+        {
+            $scope.viewdata.profileimage =  $scope.viewdata.defaultAvatarImg_female;    
+        }
+        if ($scope.viewdata.profilegender == "H")
+        {
+            $scope.viewdata.profileimage =  $scope.viewdata.defaultAvatarImg_male;    
+        }
+    });
 
     LoadUserData()
 
@@ -2044,12 +2079,12 @@ ctrl.controller('ProfilePicGenderDoBCtrl', ['$scope', '$timeout', 'loadingBox', 
         $state.go("tab.nearme");
     };
 
-    $scope.SaveAndContinue = function() {        
-        if ($scope.viewdata.profileimage == '') 
-        {
-            ShowModalMsg('Oops!', 'Selecciona tu foto del perfil.', 'Ok');
-            return;
-        }
+    $scope.SaveAndContinue = function() {
+        // if ($scope.viewdata.profileimage == '') 
+        // {
+        //     ShowModalMsg('Oops!', 'Selecciona tu foto del perfil.', 'Ok');
+        //     return;
+        // }
         if ($scope.viewdata.profilegender == '') 
         {
             ShowModalMsg('Oops!', 'Selecciona tu género.', 'Ok');
@@ -2099,14 +2134,6 @@ ctrl.controller('ProfilePicGenderDoBCtrl', ['$scope', '$timeout', 'loadingBox', 
             ev.stopPropagation();
             classie.remove( document.querySelector('#modal-msgbox-sugdob'), 'md-show' );
         });
-    };
-
-    $scope.getUserImage = function(){
-        if(($scope.viewdata.profileimage)&&($scope.viewdata.profileimage !='')){
-            return $scope.viewdata.profileimage;
-        } else {
-            return 'img/default.png';
-        }
     };
 
     // Picture Methods
@@ -2178,7 +2205,6 @@ ctrl.controller('ProfilePicGenderDoBCtrl', ['$scope', '$timeout', 'loadingBox', 
         };
 
         $cordovaCamera.getPicture(options).then(function(imageData) {
-            // $scope.viewdata.user.Avatar = "data:image/jpeg;base64," + imageData;
             SavePicture(imageData);
         }, function(err) {
             // error

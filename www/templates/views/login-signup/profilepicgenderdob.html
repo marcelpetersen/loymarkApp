@@ -10,13 +10,18 @@
 	<ion-content id="" scroll="false" class="" overflow-scroll="true">
 		<!-- <ion-slide-box show-pager="false" on-slide-changed="slideHasChanged($index)"> -->
 			<div class="list">
+				<div class="item item-clear item-text-wrap sugdob-item text-center">
+					<h2>Personaliza tu cuenta</h2>
+					<p>Escoge tu fotografía y tu género para que podamos personalizar aún más tu experiencia!</p>
+				</div>
 				<div class="item item-clear sugdob-item text-center">
 					<div>Elije la foto para tu perfil</div>
 					<div style="margin-top:20px;">
-						<img class="profile-avatar sugdob-photo-frame" ng-src="{{getUserImage()}}" ng-click="ChangeProfilePic()">
+						<img class="profile-avatar sugdob-photo-frame" ng-src="{{viewdata.profileimage}}" ng-click="ChangeProfilePic()">
 					</div>
 				</div>
 				<div class="item item-clear sugdob-item">
+					<div><strong>Género</strong></div>
 					<div class="row">
 						<div class="col">
 							<ion-radio ng-model="viewdata.profilegender" ng-value="'H'">Hombre</ion-radio>
