@@ -8180,6 +8180,11 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
   color: white !important;
   font-size: 22px !important; }
 
+.welcome-login-pwdmessage {
+  margin-top: 20px;
+  color: white !important;
+  font-size: 18px; }
+
 /* ******** Reward Detail ******** */
 /* ******** Commerce ******** */
 .commerce-commerceheader {
