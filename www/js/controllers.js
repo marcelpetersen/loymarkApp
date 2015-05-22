@@ -246,13 +246,12 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     searchFactory.doSearch($scope.viewdata.searchText)
                         .then(function(data){
                             var commerceElements = [];
-                            console.log(data.response.Elements.length);
+                            
                             for(var i=0; i<data.response.Elements.length; i++){
                                 if(data.response.Elements[i].Type=='C'){
                                     commerceElements.push(data.response.Elements[i]);
                                 }
                             }
-                            console.log(commerceElements);
                             if (!fromSearch) loadingBox.hide();
                             $scope.viewdata.searchResults = commerceElements;
                             $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
@@ -1142,9 +1141,32 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             }, 200);        
         };
 
+        function GetMonthName(month) {
+            switch(month)
+            {
+                case 0: return "Enero";
+                case 1: return "Febrero";
+                case 2: return "Marzo";
+                case 3: return "Abril";
+                case 4: return "Mayo";
+                case 5: return "Junio";
+                case 6: return "Julio";
+                case 7: return "Agosto";
+                case 8: return "Setiembre";
+                case 9: return "Octubre";
+                case 10: return "Noviembre";
+                case 11: return "Diciembre";
+            }
+        };
+
         $scope.gDate = function(date) {
-            var _date = new Date(parseInt(date.substr(6)));
-            return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
+            console.log(date.substr(0, 10));
+            var year    = date.substr(0, 4);
+            var month   = date.substr(5, 2);
+            var day     = date.substr(8, 2);
+            var _date = new Date(year, month, day);
+            // console.log(_date);
+            return _date.getDate() + "/" + (GetMonthName(_date.getMonth())) + "/" + _date.getFullYear();
         };
 
         $scope.GetActivityIcon = function(activityType) {
