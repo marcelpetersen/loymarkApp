@@ -1144,28 +1144,28 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         function GetMonthName(month) {
             switch(month)
             {
-                case 0: return "Enero";
-                case 1: return "Febrero";
-                case 2: return "Marzo";
-                case 3: return "Abril";
-                case 4: return "Mayo";
-                case 5: return "Junio";
-                case 6: return "Julio";
-                case 7: return "Agosto";
-                case 8: return "Setiembre";
-                case 9: return "Octubre";
-                case 10: return "Noviembre";
-                case 11: return "Diciembre";
+                case 1: return "Enero";
+                case 2: return "Febrero";
+                case 3: return "Marzo";
+                case 4: return "Abril";
+                case 5: return "Mayo";
+                case 6: return "Junio";
+                case 7: return "Julio";
+                case 8: return "Agosto";
+                case 9: return "Setiembre";
+                case 10: return "Octubre";
+                case 11: return "Noviembre";
+                case 12: return "Diciembre";
             }
         };
 
         $scope.gDate = function(date) {
-            console.log(date.substr(0, 10));
+            
             var year    = date.substr(0, 4);
-            var month   = date.substr(5, 2);
-            var day     = date.substr(8, 2);
+            var day   = date.substr(5, 2);
+            var month     = date.substr(8, 2);
             var _date = new Date(year, month, day);
-            // console.log(_date);
+            
             return _date.getDate() + "/" + (GetMonthName(_date.getMonth())) + "/" + _date.getFullYear();
         };
 
