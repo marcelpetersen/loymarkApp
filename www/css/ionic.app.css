@@ -8375,7 +8375,8 @@ on-nav-view[nav-view-transition="ios"] .map-centeronme-button {
 
 /* ******** Setup View ******** */
 .setupview-content {
-  background-color: white; }
+  background-color: white;
+  background-image: url('../img/food.png'); }
 
 .setupview-closebtn {
   color: #800080 !important;
@@ -8476,12 +8477,12 @@ on-nav-view[nav-view-transition="ios"] .map-centeronme-button {
   border: 1px #eeeeee; }
 
 .commercewr-detail-header-item {
-  background-color: #222222;
-  color: #cccccc;
+  background-color: white;
+  color: black;
   border: none; }
 
 .commercewr-detail-pops-item {
-  background-color: #333333;
+  background-color: #eeeeee;
   border: none; }
 
 .commercewr-detail-title {
@@ -8498,7 +8499,7 @@ on-nav-view[nav-view-transition="ios"] .map-centeronme-button {
   border: 1px solid #efefef !important; }
 
 .commercewr-points {
-  color: white; }
+  color: #800080; }
 
 .commercewr-points-list {
   color: #800080;
@@ -8567,6 +8568,9 @@ on-nav-view[nav-view-transition="ios"] .map-centeronme-button {
 .reward-detail-baseitem {
   border: none; }
 
+.reward-detail-baseitem p {
+  font-size: 20px !important; }
+
 .reward-detail-points {
   color: #800080; }
 
@@ -8576,7 +8580,7 @@ on-nav-view[nav-view-transition="ios"] .map-centeronme-button {
   border-bottom: 1px solid #eeeeee; }
 
 .reward-detail-title {
-  font-size: 10px;
+  font-size: 17px;
   color: #800080; }
 
 .commercewr-detail-subtitle {

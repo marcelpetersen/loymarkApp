@@ -1080,6 +1080,7 @@ ion-nav-view[nav-view-transition="ios"] {
 
 	.setupview-content {
 		background-color: white;
+		background-image: url('../img/food.png');
 	}
 	.setupview-closebtn {
 		color: $kenuu-purple !important;font-size: 20px !important;
@@ -1195,12 +1196,12 @@ ion-nav-view[nav-view-transition="ios"] {
 		border: 1px #eeeeee;
 	}
 	.commercewr-detail-header-item {
-		background-color: #222222;
-		color: #cccccc;
+		background-color: white; // #222222;
+		color: black;
 		border: none;
 	}
 	.commercewr-detail-pops-item {
-		background-color: #333333;
+		background-color: #eeeeee;
 		border: none;
 	}
 	.commercewr-detail-title {
@@ -1217,7 +1218,7 @@ ion-nav-view[nav-view-transition="ios"] {
 		border: 1px solid #efefef !important;
 	}
 	.commercewr-points {
-		color: white;
+		color: $kenuu-purple;
 	}
 	.commercewr-points-list {
 		color: $kenuu-purple;
@@ -1301,6 +1302,11 @@ ion-nav-view[nav-view-transition="ios"] {
 	.reward-detail-baseitem {
 		border: none;
 	}
+
+	.reward-detail-baseitem p {
+		font-size: 20px !important;
+	}
+
 	.reward-detail-points {
 		color: $kenuu-purple;
 	}
@@ -1312,7 +1318,7 @@ ion-nav-view[nav-view-transition="ios"] {
 		border-bottom: 1px solid #eeeeee;
 	}
 	.reward-detail-title {
-		font-size: 10px;
+		font-size: 17px;
 		color: $kenuu-purple;
 	}
 	.commercewr-detail-subtitle {

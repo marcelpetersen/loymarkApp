@@ -17,12 +17,6 @@
 				<button class="button button-small button-calm profile-btn" ng-click="GoToProfile()">Mi Info</button>	
 			</div>
 		</div>
-		
-		<!-- <div class="list profile_btn_div">
-			<a class="item item-icon-left profile_item item-text-wrap" >
-				
-			</a>			
-		</div> -->
 
 		<a class="item item-icon-left item-icon-right item-text-wrap" href="#/tab/kenuu/activity">
 			<i class="icon icon-history profile-item-icon"></i>
@@ -35,17 +29,13 @@
             <div class="item item-divider">
                 <p><strong>Mis comercios recientes</strong></p>
             </div>
-            <div class="item item-text-wrap item-icon-right activity-activityitem" ng-repeat="commerce in viewdata.commerces | orderBy:'TotalVisits'" ng-click="GoToCommerce(commerce)">
-                <p>Hace: <strong>{{calcLapse(commerce.LastVisit)}}</strong></p>
+            <div class="item item-text-wrap item-icon-right activity-activityitem" ng-repeat="commerce in viewdata.commerces | orderBy:'TotalVisits'" ng-click="GoToCommerce(commerce)">                
                 <p><strong class="activity-commerce-name">{{commerce.Name}}</strong></p>                
                 <i class="icon icon-location activity-checkin"></i>
-
                 <p>
                     <h3 class="favcommerce-lastvisit-label">
-                        <small class="textgrey-text">visitas:</small> 
-                    </h3>
-                    <h3 class="favcommerce-lastvisit-label">
-                        <strong class="favcommerce-visits">{{commerce.TotalVisits}}</strong>
+                        <small class="textgrey-text">visitas:</small>
+                        <strong class="favcommerce-visits">{{commerce.TotalVisits}}</strong> 
                     </h3>
                 </p>
             </div>            

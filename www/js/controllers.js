@@ -29,19 +29,14 @@ ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', 
 
         loadingBox.show();
 
-        alert(0)
-
         // Pulls the member information
         userFactory.info.get()
         .then(function(data){
-            alert(1)
-            
             $scope.viewdata.user = data;
             $scope.viewdata.CardNumber = data.CardNumber;
 
             if (!devEnvironment)
             {
-                alert("Getting Position!")
                 // Gets the User's location
                 var posOptions = {timeout: 10000, enableHighAccuracy: false};
                 
