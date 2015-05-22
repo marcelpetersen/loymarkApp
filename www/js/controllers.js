@@ -866,18 +866,19 @@ ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory',
 
                 // Sets the Avatar Image when there is no image defined
                 var _gender = localStorage.getItem('profile_gender');
+                $scope.viewdata["gender"] = _gender;
                 if ($scope.viewdata.user.Avatar != '')
                 {
                     if (_gender != undefined) {  
-                        $scope.viewdata.user.Avatar = $scope.viewdata.defaultAvatarImg_female;
-                    }
-                    else {
                         if (_gender == "M") {
                             $scope.viewdata.user.Avatar = $scope.viewdata.defaultAvatarImg_female;
                         }
                         else {
                             $scope.viewdata.user.Avatar = $scope.viewdata.defaultAvatarImg_male;
                         }
+                    }
+                    else {
+                        $scope.viewdata.user.Avatar = $scope.viewdata.defaultAvatarImg_female;   
                     }
                 }
 

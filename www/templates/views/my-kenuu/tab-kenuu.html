@@ -9,11 +9,13 @@
 	<ion-content scroll=true>  		
 		<div class="row profile-avatar-container">
 			<div class="col-20 text-center profile-avatar-div">
-				<img ng-src="{{viewdata.profileimage}}" class="profile-avatar" ng-click="ChangeProfilePic()">
+				<img ng-src="{{viewdata.user.Avatar}}" class="profile-avatar" ng-click="ChangeProfilePic()">
 			</div>
 			<div class="col-70">
 				<h4>{{viewdata.user.FirstName}} {{viewdata.user.LastName}}</h4>					
 				<p ng-bind="viewdata.user.Email"></p>
+				<!-- <p>Avatar -> "{{viewdata.user.Avatar}}"</p>
+				<p>Genero -> "{{viewdata.gender}}"</p> -->
 				<button class="button button-small button-calm profile-btn" ng-click="GoToProfile()">Mi Info</button>	
 			</div>
 		</div>
