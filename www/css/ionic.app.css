@@ -8206,6 +8206,12 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
 .commerce-noactivity {
   color: #800080; }
 
+.commerce-social-fb-font {
+  color: #2D5C98 !important; }
+
+.commerce-social-twitter-font {
+  color: #2FAEEE !important; }
+
 /* ******** Stores ******** */
 .stores-content {
   height: 100vh;

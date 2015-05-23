@@ -285,7 +285,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         }
     }]);
 
-    ctrl.controller('CommerceWithRewardsCtrl', ['$scope', '$state', '$stateParams', '$ionicLoading', '$timeout', 'loadingBox', 'commerceFactory', 'rewardFactory', 'deviceFactory', 'rewardDetailModal', 'navigationFactory', function($scope, $state, $stateParams, $ionicLoading, $timeout, loadingBox, commerceFactory, rewardFactory, deviceFactory, rewardDetailModal, navigationFactory){
+    ctrl.controller('CommerceWithRewardsCtrl', ['$scope', '$state', '$stateParams', '$ionicLoading', '$timeout', 'loadingBox', 'commerceFactory', 'rewardFactory', 'deviceFactory', 'rewardDetailModal', 'navigationFactory', '$cordovaSocialSharing', function($scope, $state, $stateParams, $ionicLoading, $timeout, loadingBox, commerceFactory, rewardFactory, deviceFactory, rewardDetailModal, navigationFactory, $cordovaSocialSharing){
         $scope.viewdata = {
             commerce: commerceFactory.selectedCommerce.get(),
             rewards: [],
@@ -416,6 +416,28 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         $scope.GetAvailablePoints = function(availablepoints) {        
             if (availablepoints == null) return 0;
             return availablepoints;
+        };
+
+        $scope.ShareViaTwitter = function(commerce) {
+            var message = "";
+            $cordovaSocialSharing
+                .shareViaTwitter(message)
+                .then(function(result) {
+                    // Success!
+                }, function(err) {
+                    // An error occurred. Show a message to the user
+                });
+        };
+
+        $scope.ShareViaFacebook = function(commerce) {
+            var message = "";
+            $cordovaSocialSharing
+                .shareViaFacebook(message)
+                .then(function(result) {
+                    // Success!
+                }, function(err) {
+                    // An error occurred. Show a message to the user
+                });
         };
     }]);
 
