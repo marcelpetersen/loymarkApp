@@ -15,8 +15,9 @@
         	<div class="item item-divider">
         		<p><strong>Tu actividad</strong></p>
         	</div>
-        	<div class="item item-text-wrap item-icon-right activity-activityitem" ng-repeat="activity in viewdata.user.activity" ng-click="OpenCommerce(activity.EntityID)">
-        		<p><strong>{{gDate(activity.ActivityDate)}}</strong></p>
+        	<div class="item item-avatar item-text-wrap item-icon-right activity-activityitem" ng-repeat="activity in viewdata.user.activity" ng-click="OpenCommerce(activity.EntityID)">
+        		<img ng-src="{{GetCommerceImage(activity.Image)}}">
+                <p><strong>{{gDate(activity.ActivityDate)}}</strong></p>
         		<p><strong class="activity-commerce-name">{{activity.SubEntityName}}</strong></p>
         		<i class="icon icon-gift activity-redemption" ng-show="activity.ActivityType == 'R'"></i>
         		<i class="icon icon-location activity-checkin" ng-show="activity.ActivityType == 'V'"></i>

@@ -8640,3 +8640,6 @@ ion-nav-view[nav-view-transition="ios"] .nearme-icon {
 .sugdob-top-btn {
   font-size: 20px !important;
   color: #acacac !important; }
+
+.sugdob-profile-label {
+  color: #800080 !important; }

@@ -918,6 +918,14 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             }
         };
 
+        $scope.GetCommerceImage = function(image) {
+            if (image == null) return '';
+            if (image == undefined) return '';
+            if (image == '') return '';
+
+            return imageserverurl + image;
+        };
+
         $scope.GoToProfile = function() {
 
             $state.go("tab.kenuu-profile");
@@ -1105,11 +1113,21 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 });
         };
 
+        $scope.GetCommerceImage = function(image) {
+            if (image == null) return '';
+            if (image == undefined) return '';
+            if (image == '') return '';
+            
+            return imageserverurl + image;
+        };
+
         function LoadData_Activity(userID) {
             loadingBox.show();
             userFactory.activity.all(userID)
-                .then(function(data){
+                .then(function(data){     
+                    console.log("Activity:");
                     console.log(data)
+
                     setTimeout(function() {
                         $scope.viewdata.user.activity = data.Elements;
                         $scope.$apply();
