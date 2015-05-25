@@ -58,6 +58,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     $cordovaPush.register(config).then(
                         function(deviceToken)
                         {
+                            alert("Token: ", deviceToken);
                             deviceFactory.device.registerdevice(deviceToken, data.Email)
                             .then(function(response){
                                 console.log("Device Register Ok!")
