@@ -40,6 +40,31 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     // Gets the User's location
                     var posOptions = {timeout: 10000, enableHighAccuracy: false};
                     
+                    var iosConfig = {
+                        "badge": true,
+                        "sound": true,
+                        "alert": true,
+                    };
+
+                    $cordovaPush.register(iosConfig).then(
+                        function(deviceToken) 
+                        {
+                            deviceFactory.device.registerdevice(deviceToken, data.Email)
+                            .then(function(response){
+                                console.log("Device Register Ok!")
+                                console.log(response)
+                            })
+                            .catch(function(err){
+                                console.log("Device Register Error!")
+                                console.log(err)
+                            })
+                        },
+                        function(err) {
+                            // alert("Error!");
+                            // alert(err);
+                        }
+                    );
+
                     $cordovaGeolocation
                         .getCurrentPosition(posOptions)
                         .then(function (position) {
@@ -699,34 +724,6 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 $scope.$apply();
 
                 $scope.viewdata.CardNumber = data.CardNumber; // data.AccountID;
-
-                // if (!devEnvironment)
-                // { 
-                //     var iosConfig = {
-                //         "badge": true,
-                //         "sound": true,
-                //         "alert": true,
-                //     };
-
-                //     $cordovaPush.register(iosConfig).then(
-                //         function(deviceToken) 
-                //         {
-                //             deviceFactory.device.registerdevice(deviceToken, data.Email)
-                //             .then(function(response){
-                //                 console.log("Device Register Ok!")
-                //                 console.log(response)
-                //             })
-                //             .catch(function(err){
-                //                 console.log("Device Register Error!")
-                //                 console.log(err)
-                //             })
-                //         },
-                //         function(err) {
-                //             // alert("Error!");
-                //             // alert(err);
-                //         }
-                //     );
-                // }
             })
             .catch(function(err){
                 // TODO
