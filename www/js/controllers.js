@@ -46,7 +46,18 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         "alert": true,
                     };
 
-                    $cordovaPush.register(iosConfig).then(
+                    var androidConfig = {
+                        "senderID": "AIzaSyDZtfviDYSR9lgWgWB2KY_xasm5nsgotrc",
+                    };
+
+                    var config= androidConfig;
+
+                    if (deviceFactory.device.platform() == "iOS")
+                    {
+                        config = iosConfig;
+                    }
+
+                    $cordovaPush.register(config).then(
                         function(deviceToken) 
                         {
                             deviceFactory.device.registerdevice(deviceToken, data.Email)
