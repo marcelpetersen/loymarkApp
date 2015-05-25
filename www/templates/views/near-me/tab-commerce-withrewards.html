@@ -15,34 +15,6 @@
 				<p class="commercewr-storesbtn-text">Tiendas</p>
 			</div>		
 		</div>
-		<div class="item commercewr-detail-header-item ">
-			<div class="row">
-				<div class="col commercewr-detail-title">
-					<strong style="margin-left:-5px">Dirección</strong>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-100 item-text-wrap">
-					{{viewdata.commerce.Address}}
-				</div>
-			</div>
-			<div class="row" style="margin-top:10px;">
-				<div class="col-50 commercewr-detail-title">
-					<strong>Teléfono</strong>
-				</div>
-				<div class="col-50 commercewr-detail-title">
-					<strong>Contacto</strong>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-50">
-					{{viewdata.commerce.Phone}}
-				</div>
-				<div class="col-50 item-text-wrap">
-					{{viewdata.commerce.Email}}
-				</div>
-			</div>
-		</div>
 		<div class="item commercewr-detail-pops-item" style="padding:0">
 			<div class="row">
 				<div class="col">
@@ -83,19 +55,46 @@
 			</div>			
 		</div>
 
-		<div class="item item-clear">
-			<p><strong class="commercewr-detail-title">Compártelo...</strong></p>
-			<div class="row">
-				<div class="col text-center commerce-social-fb-font" ng-click="ShareViaFacebook(viewdata.commerce)">
-					<i class="ion-social-facebook"></i> facebook
-				</div>
-				<div class="col text-center commerce-social-twitter-font" ng-click="ShareViaTwitter(viewdata.commerce)">
-					<i class="ion-social-twitter"></i> twitter
-				</div>
+		<div class="list">
+			<div class="item item-text-wrap item-icon-left">
+				<i class="icon icon-location"></i>
+				<p>{{viewdata.commerce.Address}}</p>
+			</div>
+			<div class="item item-text-wrap item-icon-left">
+				<i class="icon icon-mail"></i>
+				<p>{{viewdata.commerce.Email}}</p>
+			</div>
+			<div class="item item-text-wrap item-icon-left">
+				<i class="icon ion-ios-telephone-outline"></i>
+				<p>{{viewdata.commerce.Phone}}</p>
+			</div>
+			<div class="item item-text-wrap item-icon-left">
+				<i class="icon ion-social-facebook-outline"></i>
+				<p>{{viewdata.commerce.FacebookPage}}</p>
+			</div>
+			<div class="item item-text-wrap item-icon-left">
+				<i class="icon ion-social-twitter-outline"></i>
+				<p>{{viewdata.commerce.TwitterPage}}</p>
 			</div>
 		</div>
+		
+		<ul class="list" style="margin-top:-21px; background-color:#eeeeee !important;">
+		    <div class="item item-divider commercewr-detail-title">
+				<strong style="margin-left:5px">Compártelo:</strong>
+			</div>		
+			<div class="item">
+				<div class="row">
+					<div class="col text-center commerce-social-fb-font" ng-click="ShareViaFacebook(viewdata.commerce)">
+						<i class="ion-social-facebook"></i> facebook
+					</div>
+					<div class="col text-center commerce-social-twitter-font" ng-click="ShareViaTwitter(viewdata.commerce)">
+						<i class="ion-social-twitter"></i> twitter
+					</div>
+				</div>
+			</div>
+		</ul>
 
-		<ul class="list">
+		<ul class="list" style="margin-top:-21px; background-color:#eeeeee !important;">
 		    <div class="item item-divider commercewr-detail-title">
 				<strong style="margin-left:5px">Premios</strong>
 			</div>
