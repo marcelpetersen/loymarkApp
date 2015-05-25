@@ -56,6 +56,7 @@ fact.factory('deviceFactory', ['$cordovaDevice', 'restFactory', '$cordovaPush', 
     var _errormessage = "";
     var _uuid = "";
     var _debugdata = "";
+    var _userid = ""; // User's email
 
     function FormatToken(platform, token) {
         if (platform === "iOS") 
@@ -80,6 +81,14 @@ fact.factory('deviceFactory', ['$cordovaDevice', 'restFactory', '$cordovaPush', 
 
     return {
         device: {
+            registeredUser: {
+                get: function() {
+                    return _userid;
+                },
+                set: function(userid){
+                    _userid = userid;
+                }
+            },
             platform: function() {
                 // Device Recognition
                 _errormessage = "";

@@ -65,24 +65,65 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	    });
 
 		$rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
-			if (notification.alert) {				
-				swal(notification.message);
-			}
+						
+			if (deviceFactory.device.platform() == 'iOS')
+			{
+				// iOS
+				if (notification.alert) {				
+					swal(notification.message);
+				}
 
-			if (notification.sound) {
-				var snd = new Media(event.sound);
-				snd.play();
-			}
+				if (notification.sound) {
+					var snd = new Media(event.sound);
+					snd.play();
+				}
 
-			if (notification.badge) {
-				$cordovaPush.setBadgeNumber(notification.badge).then(
-					function(result) {
-						// Success!
-					}, 
-					function(err) {
-						// An error occurred. Show a message to the user
-					}
-				);
+				if (notification.badge) {
+					$cordovaPush.setBadgeNumber(notification.badge).then(
+						function(result) {
+							// Success!
+						}, 
+						function(err) {
+							// An error occurred. Show a message to the user
+						}
+					);
+				}
+			}
+			else
+			{
+				// Android
+				switch(notification.event) {
+			        case 'registered':
+			          if (notification.regid.length > 0 ) {
+			            alert('registration ID = ' + notification.regid);
+
+			            var tokenId = notification.regid;
+			            var email = deviceFactory.device.registeredUser.get();
+
+			            deviceFactory.device.registerdevice(tokenId, email)
+                            .then(function(response){
+                                // OK
+                            })
+                            .catch(function(err){
+                                // Error
+                            });
+			          }
+			          break;
+
+			        case 'message':
+			          // this is the actual push notification. its format depends on the data model from the push server
+			          // alert('message = ' + notification.message + ' msgCount = ' + notification.msgcnt);
+			          swal(notification.message);
+			          break;
+
+			        case 'error':
+			          alert('GCM error = ' + notification.msg);
+			          break;
+
+			        default:
+			          alert('An unknown GCM event has occurred');
+			          break;
+			    };
 			}
 		});
 

@@ -48,32 +48,38 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         "senderID": "AIzaSyDZtfviDYSR9lgWgWB2KY_xasm5nsgotrc",
                     };
 
-                    var config= androidConfig;
+                    deviceFactory.device.registeredUser.set(data.Email);
 
                     if (deviceFactory.device.platform() == "iOS")
                     {
-                        config = iosConfig;
-                    }
+                        $cordovaPush.register(iosConfig).then(
+                            function(deviceToken)
+                            {
+                                deviceFactory.device.registerdevice(deviceToken, data.Email)
+                                .then(function(response){
+                                    console.log("Device Register Ok!")
+                                    console.log(response)
+                                })
+                                .catch(function(err){
+                                    console.log("Device Register Error!")
+                                    console.log(err)
+                                });
+                            },
+                            function(err) {
+                                // alert("Error!");
+                                // alert(err);
+                            }
+                        );
+                    };
 
-                    $cordovaPush.register(config).then(
-                        function(deviceToken)
-                        {
-                            alert("Token: ", deviceToken);
-                            deviceFactory.device.registerdevice(deviceToken, data.Email)
-                            .then(function(response){
-                                console.log("Device Register Ok!")
-                                console.log(response)
-                            })
-                            .catch(function(err){
-                                console.log("Device Register Error!")
-                                console.log(err)
-                            });
-                        },
-                        function(err) {
-                            // alert("Error!");
-                            // alert(err);
-                        }
-                    );
+                    if (deviceFactory.device.platform() == "Android")
+                    {
+                        $cordovaPush.register(androidConfig).then(function(result) {
+                            // Success
+                        }, function(err) {
+                            // Error
+                        })
+                    };
 
                     $cordovaGeolocation
                         .getCurrentPosition(posOptions)
