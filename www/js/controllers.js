@@ -734,6 +734,10 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             url = "waze://?ll=" + lat + "," + long + "&navigate=yes";        
             window.open(url, "_system");
         };
+
+        $scope.ClearSearch = function() {
+            $scope.viewdata.searchtext = "";
+        };
     }]);
 
 // QR Tab
@@ -1334,6 +1338,10 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             if (item.SubEntityName.indexOf($scope.viewdata.searchtext) >= 0) return true;
             if (item.RewardName.indexOf($scope.viewdata.searchtext) >= 0) return true;
             return false;
+        };
+
+        $scope.ClearSearch = function() {
+            $scope.viewdata.searchtext = "";
         };
 
         LoadData();

@@ -9,8 +9,8 @@
 					<i class="icon ion-ios-search placeholder-icon"></i>
 					<input type="search" ng-model="viewdata.searchtext" placeholder="Buscar">
 				</label>
-				<button class="button button-clear" ng-show="viewdata.searchtext.length > 0" style="font-size:25px; width:40px; min-width:40px !important;">
-					<i class="ion-ios-close-outline"></i>
+				<button class="button button-clear" ng-show="viewdata.searchtext.length > 0" style="font-size:25px; width:40px; min-width:40px !important;" ng-click="ClearSearch()">
+					<i class="ion-ios-close-empty"></i>
 				</button>
 			</div>
         	<div class="item item-text-wrap commercewrstores-store-item" collection-repeat="item in viewdata.stores | filter:{Name:viewdata.searchtext}">
