@@ -39,13 +39,11 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 {
                     // Gets the User's location
                     var posOptions = {timeout: 10000, enableHighAccuracy: false};
-                    
                     var iosConfig = {
                         "badge": true,
                         "sound": true,
                         "alert": true,
                     };
-
                     var androidConfig = {
                         "senderID": "AIzaSyDZtfviDYSR9lgWgWB2KY_xasm5nsgotrc",
                     };
@@ -58,7 +56,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     }
 
                     $cordovaPush.register(config).then(
-                        function(deviceToken) 
+                        function(deviceToken)
                         {
                             deviceFactory.device.registerdevice(deviceToken, data.Email)
                             .then(function(response){
@@ -68,7 +66,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                             .catch(function(err){
                                 console.log("Device Register Error!")
                                 console.log(err)
-                            })
+                            });
                         },
                         function(err) {
                             // alert("Error!");
@@ -84,7 +82,6 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                             var _long = position.coords.longitude;
                             locationFactory.location.set(_lat, _long);
                             $scope.viewdata.startingView = false;
-                            
                             doSearch(false);
                         })
                         .catch(function(err){
@@ -99,7 +96,6 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 {
                     $scope.viewdata.startingView = false;
                     $scope.viewdata.locationSet = false;
-                    
                     doSearch(false);
                 }
             })
