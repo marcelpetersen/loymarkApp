@@ -115,7 +115,9 @@
 			    		<strong ng-bind="GetAvailablePoints(viewdata.commerce.PointsAvailable)"></strong> de <strong ng-bind="item.Points"></strong> 
 			    	</p>
 			    	<p ng-show="!item.AvailableAllStores">Exclusivo para: <strong ng-bind="item.SubEntityName" class="commercewr-store-label"></strong></p>
+			    	<p>Progress: <span ng-bind="GetRewardProgress(viewdata.commerce.PointsAvailable, item.Points)"></span></p>
 			    	<p>&nbsp;</p>
+			    	<div class="commercewr-progressoverlay"></div>
 		    	</div>
 
 		    	<i class="icon" ng-class="GetPointsClass(viewdata.commerce.PointsAvailable, item.Points)" style="margin-right:5px;" ng-bind="item.Points"></i>		    	

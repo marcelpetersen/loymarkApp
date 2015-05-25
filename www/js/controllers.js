@@ -357,7 +357,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         if ($stateParams.entityID != undefined)
-        {     
+        {
             commerceFactory.get($stateParams.entityID)
             .then(function(response){            
                 $scope.viewdata.commerce = response[0];
@@ -459,7 +459,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             return {background:img};
         };
 
-        $scope.GetAvailablePoints = function(availablepoints) {        
+        $scope.GetAvailablePoints = function(availablepoints) {
             if (availablepoints == null) return 0;
             return availablepoints;
         };
@@ -484,6 +484,14 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 }, function(err) {
                     // An error occurred. Show a message to the user
                 });
+        };
+
+        $scope.GetRewardProgress = function(availablepoints, itempoints) {
+            if (availablepoints == null) return 0;            
+
+            var progress = (availablepoints * 100) / itempoints;
+            if (progress > 100) return 100;
+            else return progress;
         };
     }]);
 

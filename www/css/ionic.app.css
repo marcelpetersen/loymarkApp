@@ -8586,6 +8586,14 @@ ion-nav-view[nav-view-transition="ios"] .nearme-icon {
 .commercewr-store-label {
   color: #800080; }
 
+.commercewr-progressoverlay {
+  background-color: #800080;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  top: 0;
+  left: 0; }
+
 /* ******** Commerce Stores ********* */
 .commercewrstores-search-item {
   height: 50px; }

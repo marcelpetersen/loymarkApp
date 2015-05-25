@@ -1321,6 +1321,14 @@ ion-nav-view[nav-view-transition="ios"] {
 	.commercewr-store-label {
 		color: $kenuu-purple;
 	}
+	.commercewr-progressoverlay {
+		background-color: $kenuu-purple;
+		height: 100%;
+		width: 100%;
+		position: relative;
+		top: 0;
+		left: 0;
+	}
 
 /* ******** Commerce Stores ********* */
 
