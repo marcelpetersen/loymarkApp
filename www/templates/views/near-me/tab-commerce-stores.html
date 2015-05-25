@@ -9,7 +9,7 @@
 					<i class="icon ion-ios-search placeholder-icon"></i>
 					<input type="search" ng-model="viewdata.searchtext" placeholder="Buscar">
 				</label>
-				<button class="button button-clear">
+				<button class="button button-clear" ng-show="viewdata.searchtext.length > 0" style="font-size:25px; width:40px; min-width:40px !important;">
 					<i class="ion-ios-close-outline"></i>
 				</button>
 			</div>

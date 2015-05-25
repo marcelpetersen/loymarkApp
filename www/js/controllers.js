@@ -1165,7 +1165,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             user: {
                 activity: []            
             },
-            commerces: []
+            commerces: [],
+            searchtext: ''
         };
 
         function LoadData() {
@@ -1327,6 +1328,12 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     console.log("Error when getting the commerce.")
                     console.log(response);
                 });        
+        };
+
+        $scope.search = function(item) {
+            if (item.SubEntityName.indexOf($scope.viewdata.searchtext) >= 0) return true;
+            if (item.RewardName.indexOf($scope.viewdata.searchtext) >= 0) return true;
+            return false;
         };
 
         LoadData();

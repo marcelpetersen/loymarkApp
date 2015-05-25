@@ -12,10 +12,19 @@
             </div>                
         </div>
         <div id="activityListDiv" class="list" style="display:none">
+            <div class="item item-input-inset commercewrstores-search-item">
+                <label class="item-input-wrapper">
+                    <i class="icon ion-ios-search placeholder-icon"></i>
+                    <input type="search" ng-model="viewdata.searchtext" placeholder="Buscar">
+                </label>
+                <button class="button button-clear" ng-show="viewdata.searchtext.length > 0" style="font-size:25px; width:40px; min-width:40px !important;">
+                    <i class="ion-ios-close-empty"></i>
+                </button>
+            </div>
         	<div class="item item-divider">
         		<p><strong>Tu actividad</strong></p>
         	</div>
-        	<div class="item item-avatar item-text-wrap item-icon-right activity-activityitem" ng-repeat="activity in viewdata.user.activity" ng-click="OpenCommerce(activity.EntityID)">
+        	<div class="item item-avatar item-text-wrap item-icon-right activity-activityitem" ng-repeat="activity in viewdata.user.activity | filter:search" ng-click="OpenCommerce(activity.EntityID)">
         		<img ng-src="{{GetCommerceImage(activity.Image)}}">
                 <p><strong>{{gDate(activity.ActivityDate)}}</strong></p>
         		<p><strong class="activity-commerce-name">{{activity.SubEntityName}}</strong></p>
