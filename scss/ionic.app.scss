@@ -1322,12 +1322,24 @@ ion-nav-view[nav-view-transition="ios"] {
 		color: $kenuu-purple;
 	}
 	.commercewr-progressoverlay {
-		background-color: $kenuu-purple;
+		background-color: $kenuu-purple !important;
 		height: 100%;
-		width: 100%;
-		position: relative;
+		width: 0%;
+		position: absolute;
 		top: 0;
 		left: 0;
+		z-index: 10;
+		opacity: 0.1;
+	}
+	.commercewr-progressoverlay-completed {
+		background-color: $kenuu-green !important;
+		height: 100%;
+		width: 0%;
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 10;
+		opacity: 0.1;
 	}
 
 /* ******** Commerce Stores ********* */

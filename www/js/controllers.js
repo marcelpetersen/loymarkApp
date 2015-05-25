@@ -493,6 +493,23 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             if (progress > 100) return 100;
             else return progress;
         };
+
+        $scope.GetRewardsProgressClass = function(availablepoints, itempoints) {
+            var progress = $scope.GetRewardProgress(availablepoints, itempoints);            
+            if (progress == 100)
+            {
+                return "commercewr-progressoverlay-completed";
+            }
+            else
+            {
+                return "commercewr-progressoverlay";   
+            }
+        };
+
+        $scope.GetRewardProcessStyle = function(availablepoints, itempoints) {
+            var progress = $scope.GetRewardProgress(availablepoints, itempoints);            
+            return {"width":progress + "%"};
+        };
     }]);
 
     ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cordovaGeolocation', '$stateParams', 'loadingBox', 'locationFactory', function($scope, commerceFactory, $ionicLoading, $cordovaGeolocation, $stateParams, loadingBox, locationFactory){

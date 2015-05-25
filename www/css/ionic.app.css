@@ -8587,12 +8587,24 @@ ion-nav-view[nav-view-transition="ios"] .nearme-icon {
   color: #800080; }
 
 .commercewr-progressoverlay {
-  background-color: #800080;
+  background-color: #800080 !important;
   height: 100%;
-  width: 100%;
-  position: relative;
+  width: 0%;
+  position: absolute;
   top: 0;
-  left: 0; }
+  left: 0;
+  z-index: 10;
+  opacity: 0.1; }
+
+.commercewr-progressoverlay-completed {
+  background-color: #A5CD38 !important;
+  height: 100%;
+  width: 0%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  opacity: 0.1; }
 
 /* ******** Commerce Stores ********* */
 .commercewrstores-search-item {
