@@ -5,10 +5,16 @@
 	</ion-header-bar>
 	<ion-content class="setupview-content">		
 		<div class="list">
-			<div class="item item-icon-left item-text-wrap item-clear" ng-click="ContactUs()">
+			<div class="item item-icon-left item-text-wrap item-clear">
+				<i class="icon ion-ios-information setupview-icon"></i>
+				<p><strong>Kenuu</strong></p>
+				<p>Version: <strong>{{viewdata.appVersion}}</strong></p>
+			</div>
+			<div class="item item-icon-left item-icon-right item-text-wrap item-clear" ng-click="ContactUs()">
 				<i class="icon icon-mail setupview-icon"></i>
 				<p>Necesitas ayuda?</p>
 				<strong>Envíanos un E-Mail!</strong>
+				<i class="icon ion-android-more-horizontal"></i>
 			</div>
 		</div>
 	</ion-content>

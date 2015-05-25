@@ -34,6 +34,7 @@
 				</div>
 			</div>
 		</div>
+		<ion-refresher pulling-text="" on-refresh="doRefresh()"></ion-refresher>
 		<ion-list id="nearme-list">
         	<ion-item class="item-icon-left nearme-commerce-item" ng-repeat="item in viewdata.searchResults | orderBy:'Distance'" item="item" ng-click="OpenCommerce(item)">
         		<i class="icon">
@@ -54,7 +55,7 @@
       	<ion-infinite-scroll immediate-check="false" on-infinite="getMoreStores(viewdata.storePage)" distance="20%">
       	</ion-infinite-scroll>
 	</ion-content>
-	<a class="nearme-button roundButton text-center" ng-click="DoSearch()">
+	<a class="nearme-button roundButton text-center" style="display:none" ng-click="DoSearch()">
 		<i class="ion-android-sync nearme-icon"></i>
 	</a>
 </ion-view>

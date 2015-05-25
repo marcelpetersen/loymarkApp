@@ -11,12 +11,12 @@ var devEnvironment = false; // To use the app through "ionic serve --lab"
 angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.factory', 'ngCordova'])
 
 .constant('ApiEndpoint', {
-	url: 'http://192.168.71.98:8100/api' // CIS Network Development (Tavo)
+	// url: 'http://192.168.71.98:8100/api' // CIS Network Development (Tavo)
 	// url: 'http://192.168.71.91:8100/api' // CIS Network Development (Alex)
-	// url: 'http://192.168.1.12:8100/api' // Home Development Environment
+	url: 'http://192.168.1.8:8100/api' // Home Development Environment
 })
 
-.run(function($rootScope, $state, $ionicPlatform, networkFactory, $cordovaNetwork, deviceFactory, $cordovaPush, $ionicTabsDelegate, navigationFactory, commerceFactory, $ionicHistory, loadingBox, $cordovaGeolocation, locationFactory) {
+.run(function($rootScope, $state, $ionicPlatform, networkFactory, $cordovaNetwork, deviceFactory, $cordovaPush, $ionicTabsDelegate, navigationFactory, commerceFactory, $ionicHistory, loadingBox, $cordovaGeolocation, locationFactory, appVersionFactory) {
   	$ionicPlatform.ready(function() {
 	    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
 	    // for form inputs)
@@ -27,6 +27,9 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	      	// org.apache.cordova.statusbar required
 		    StatusBar.styleLightContent();
 	    }
+
+	    // Invokes the NGCordova Plugin to Get the App Version
+	    appVersionFactory.appVersion.set();
 
 	    // listen for Online event
 	    $rootScope.$on('$cordovaNetwork:online', function(event, networkState){

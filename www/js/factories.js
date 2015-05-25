@@ -1263,4 +1263,23 @@ fact.factory('locationFactory', [function(){
             }
         }
     };
+}]);
+
+fact.factory('appVersionFactory', ['$cordovaAppVersion', function($cordovaAppVersion) {
+    var _appVersion = 'N/A';
+    return {
+        appVersion: {
+            set: function() {
+                $cordovaAppVersion.getAppVersion().then(
+                    function (version) 
+                    {
+                        _appVersion = version;
+                    }
+                );
+            },
+            get: function() {
+                return _appVersion;
+            }
+        }
+    };
 }])

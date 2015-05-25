@@ -210,10 +210,17 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             doSearch(false);
         };
 
+        $scope.doRefresh = function() {
+            doSearch(false);
+        };
+
         // Pulls the commerces
         function doSearch(fromSearch) {
             var posOptions = {timeout: 10000, enableHighAccuracy: false};
-            if (!fromSearch) loadingBox.show();
+            if (!fromSearch) {                
+                loadingBox.show();                
+                $scope.$broadcast('scroll.refreshComplete');
+            }
 
             var _location = locationFactory.location.get();
             if(!fromSearch){
@@ -224,7 +231,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     var long = _location.long;
 
                     commerceFactory.stores.nearby(0, long, lat, 0)
-                        .then(function(data){
+                        .then(function(data){                            
                             if (!fromSearch) loadingBox.hide();
                             $scope.viewdata.searchResults = data;
                             $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
@@ -232,13 +239,13 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         })
                         .catch(function(err){
                             searchFactory.doSearch($scope.viewdata.searchText)
-                                .then(function(data){
+                                .then(function(data){                                    
                                     if (!fromSearch) loadingBox.hide();
                                     $scope.viewdata.searchResults = data.response.Elements;
                                     $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
                                     $scope.$apply();
                                 })
-                                .catch(function(data){
+                                .catch(function(data){                                    
                                     if (!fromSearch) loadingBox.hide();
                                     console.log(data);
                                 });
@@ -829,7 +836,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
 // My Kenuu
 
-    ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', 'navigationFactory', '$cordovaActionSheet', '$cordovaCamera', '$cordovaImagePicker', '$cordovaFile', 'imageFunctions', function($scope, $timeout, loadingBox, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService, navigationFactory, $cordovaActionSheet, $cordovaCamera, $cordovaImagePicker, $cordovaFile, imageFunctions){
+    ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', 'navigationFactory', '$cordovaActionSheet', '$cordovaCamera', '$cordovaImagePicker', '$cordovaFile', 'imageFunctions', 'appVersionFactory', function($scope, $timeout, loadingBox, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService, navigationFactory, $cordovaActionSheet, $cordovaCamera, $cordovaImagePicker, $cordovaFile, imageFunctions, appVersionFactory){
         $scope.$on("$ionicView.enter", function(event, args){
             navigationFactory.setDefaults();
             LoadData();
@@ -847,7 +854,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 activity: ''
             },
             defaultAvatarImg_male: 'img/default.png',
-            defaultAvatarImg_female: 'img/default_female.png'
+            defaultAvatarImg_female: 'img/default_female.png',
+            appVersion: ''
         };
 
         $scope.gDate = function(date) {
@@ -922,6 +930,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         $timeout(function(){
             LoadData();
             LoadCommerceData();
+            $scope.GetAppVersion();
         });
         
         $scope.ReloadData = function() {
@@ -1057,7 +1066,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             alert(JSON.stringify(err));
         };
 
-        function SavePicture(picturedata) {                
+        function SavePicture(picturedata) {
             window.resolveLocalFileSystemURL(picturedata, copyFile, fail);
         };
 
@@ -1102,6 +1111,10 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             }, function(err) {
                 // error
             });
+        };
+
+        $scope.GetAppVersion = function() {            
+            $scope.viewdata.appVersion = appVersionFactory.appVersion.get();
         };
 
         // Required to Show the Top Bar Setup View
