@@ -743,6 +743,7 @@ fact.factory('userFactory',['restFactory', function(restFactory){
 	var _user = {};
 	var _login = {};
 	var _data ={};
+    var _signupstatus = 0; // 1= Already signed up, 0= New Sign Up, -1= Email exists, but no user created (sign up via plastic card)
 
 	return {
         info: {
@@ -794,6 +795,14 @@ fact.factory('userFactory',['restFactory', function(restFactory){
                             reject(err);
                         });     
                 });
+            },
+            signupstatus: {
+                set: function(statusCode) {
+                    _signupstatus = statusCode;
+                },
+                get: function() {
+                    return _signupstatus;
+                }
             }
         },
         activity: {

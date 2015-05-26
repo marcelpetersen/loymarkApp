@@ -2019,6 +2019,9 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     {
                         loginSignUpFactory.login.email.set($scope.viewdata.login.email);
 
+                        // Sets the Signup Status for future use
+                        userFactory.info.signupstatus.set(response.data.responseCode);
+
                         // Email already exists and user is also created
                         if (response.data.responseCode == 1)
                         {                           
