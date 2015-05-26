@@ -1667,7 +1667,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     historyRoot: true
                 });
 
-                $state.go('profilepicgenderdob');
+                $state.go('tab.nearme'); // profilepicgenderdob
             })
             .catch(function(err){
                 loadingBox.hide();
