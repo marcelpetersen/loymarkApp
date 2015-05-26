@@ -1887,8 +1887,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         $scope.viewdata = {
             signup: {
                 email: loginSignUpFactory.login.email.get(),
-                password: "Password.01",
-                password_confirm: "Password.01",
+                password: "",
+                password_confirm: "",
                 email_invalid: false,
                 password_invalid: false,
                 password_confirm_invalid: false
