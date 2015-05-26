@@ -70,11 +70,14 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	    });
 
 		$rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
-						
+
+			alert('NOTIFICATION RECEIVED');
+			console.log(notification);
+
 			if (deviceFactory.device.platform() == 'iOS')
 			{
 				// iOS
-				if (notification.alert) {				
+				if (notification.alert) {
 					swal(notification.message);
 				}
 
@@ -87,7 +90,7 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 					$cordovaPush.setBadgeNumber(notification.badge).then(
 						function(result) {
 							// Success!
-						}, 
+						},
 						function(err) {
 							// An error occurred. Show a message to the user
 						}
@@ -96,23 +99,25 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 			}
 			else
 			{
+				alert('ANDROID NOTIFICATION RECEIVED');
+				console.log(notification);
 				// Android
 				switch(notification.event) {
 			        case 'registered':
-			          if (notification.regid.length > 0 ) {
-			            alert('registration ID = ' + notification.regid);
+			          	if (notification.regid.length > 0 ) {
+				            alert('registration ID = ' + notification.regid);
 
-			            var tokenId = notification.regid;
-			            var email = deviceFactory.device.registeredUser.get();
+				            var tokenId = notification.regid;
+				            var email = deviceFactory.device.registeredUser.get();
 
-			            deviceFactory.device.registerdevice(tokenId, email)
-                            .then(function(response){
-                                // OK
-                            })
-                            .catch(function(err){
-                                // Error
-                            });
-			          }
+				            deviceFactory.device.registerdevice(tokenId, email)
+	                            .then(function(response){
+	                                // OK
+	                            })
+	                            .catch(function(err){
+	                                // Error
+	                            });
+				         }
 			          break;
 
 			        case 'message':

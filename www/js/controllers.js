@@ -45,7 +45,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         "alert": true,
                     };
                     var androidConfig = {
-                        "senderID": "AIzaSyDZtfviDYSR9lgWgWB2KY_xasm5nsgotrc",
+                        "senderID": "AIzaSyDNjV6WWsPUXWKNctSYo19MhPpSMwgZKqw",
                     };
 
                     deviceFactory.device.registeredUser.set(data.Email);
@@ -57,12 +57,12 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                             {
                                 deviceFactory.device.registerdevice(deviceToken, data.Email)
                                 .then(function(response){
-                                    console.log("Device Register Ok!")
-                                    console.log(response)
+                                    console.log("Device Register Ok!");
+                                    console.log(response);
                                 })
                                 .catch(function(err){
-                                    console.log("Device Register Error!")
-                                    console.log(err)
+                                    console.log("Device Register Error!");
+                                    console.log(err);
                                 });
                             },
                             function(err) {
@@ -70,16 +70,18 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                                 // alert(err);
                             }
                         );
-                    };
+                    }
 
                     if (deviceFactory.device.platform() == "Android")
                     {
                         $cordovaPush.register(androidConfig).then(function(result) {
+                            console.log('IN HERE!!!! ANDROID PUSH!');
+                            console.log(result);
                             // Success
                         }, function(err) {
                             // Error
-                        })
-                    };
+                        });
+                    }
 
                     $cordovaGeolocation
                         .getCurrentPosition(posOptions)
@@ -110,6 +112,74 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 loadingBox.hide();
                 console.log(err);
             });
+        });
+
+        $scope.$on('$cordovaPush:notificationReceived', function(event, notification) {
+
+            alert('NOTIFICATION RECEIVED');
+            console.log(notification);
+
+            if (deviceFactory.device.platform() == 'iOS')
+            {
+                // iOS
+                if (notification.alert) {
+                    swal(notification.message);
+                }
+
+                if (notification.sound) {
+                    var snd = new Media(event.sound);
+                    snd.play();
+                }
+
+                if (notification.badge) {
+                    $cordovaPush.setBadgeNumber(notification.badge).then(
+                        function(result) {
+                            // Success!
+                        },
+                        function(err) {
+                            // An error occurred. Show a message to the user
+                        }
+                    );
+                }
+            }
+            else
+            {
+                alert('ANDROID NOTIFICATION RECEIVED');
+                console.log(notification);
+                // Android
+                switch(notification.event) {
+                    case 'registered':
+                        if (notification.regid.length > 0 ) {
+                            alert('registration ID = ' + notification.regid);
+
+                            var tokenId = notification.regid;
+                            var email = deviceFactory.device.registeredUser.get();
+
+                            deviceFactory.device.registerdevice(tokenId, email)
+                                .then(function(response){
+                                    // OK
+                                })
+                                .catch(function(err){
+                                    // Error
+                                });
+                         }
+                      break;
+
+                    case 'message':
+                      // this is the actual push notification. its format depends on the data model from the push server
+                      // alert('message = ' + notification.message + ' msgCount = ' + notification.msgcnt);
+                      swal(notification.message);
+                      break;
+
+                    case 'error':
+                      alert('GCM error = ' + notification.msg);
+                      break;
+
+                    default:
+                      alert('An unknown GCM event has occurred');
+                      break;
+                };
+            }
         });
 
         $scope.GetAvatarImage = function(img) {
@@ -935,7 +1005,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     $scope.viewdata.user = data;
 
                     // TODO: pending to implement the pull image from the profile that comes from the service
-                    $scope.profileimage = localStorage.getItem('profile_picture');                    
+                    $scope.profileimage = localStorage.getItem('profile_picture');
                     if ($scope.profileimage == undefined) $scope.profileimage = '';
 
                     $scope.viewdata.user.Avatar = $scope.profileimage;
@@ -1079,7 +1149,27 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         .then(function(response){
                             if ((response.status == 'true')||(response.status == true))
                             {
-                                localStorage.setItem('profile_picture_urlfilename', response.data);                                
+                                var updateData = {
+                                    FirstName: $scope.viewdata.user.name, // data.FirstName,
+                                    LastName: $scope.viewdata.user.lastname, // data.LastName,
+                                    UpdatePassword: $scope.viewdata.user.UpdatePassword,
+                                    Password: $scope.viewdata.user.Password,
+                                    AvatarMobile: "http://201.201.150.159/avatar/" + response.data
+                                }
+                                console.log('UPDATE DATA');
+                                console.log(updateData);
+                                userFactory.info.update(updateData)
+                                    .then(function(updateResponse){
+                                        console.log('UPDATE RESPONSE!!!');
+                                        console.log(updateResponse);
+                                        localStorage.setItem('profile_picture_urlfilename', response.data);
+                                    })
+                                    .catch(function(err){
+                                        console.log("ERRRRROOOOORRRR!!! 2");
+                                        console.log(JSON.stringify(err));
+                                        loadingBox.hide();
+                                        ShowModalMsg('Oops!', 'No se pudo guardar tu foto de perfil.', 'Ok');
+                                    });
                             }
                             else
                             {
@@ -1439,7 +1529,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             userFactory.info.get()
                 .then(function(data){
                     loadingBox.hide();
-                    $scope.viewdata.user = data;                
+                    $scope.viewdata.user = data;
                     var userData = data;
                     $scope.viewdata.user.name = userData.FirstName;
                     $scope.viewdata.user.lastname = userData.LastName;
@@ -1641,7 +1731,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         $scope.DoLogin = function() {
             if (!devEnvironment) $cordovaKeyboard.close();
             if (($scope.viewdata.login.password === undefined)||($scope.viewdata.login.password === ""))
-            {            
+            {
                 ShowModalMsg('Oops!', 'Te hace falta ingresar tu password.', 'Ok');
                 return;
             }
@@ -1651,14 +1741,13 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             userFactory.session.login(
                 {
                     email: $scope.viewdata.login.email,
-                    password: $scope.viewdata.login.password                
+                    password: $scope.viewdata.login.password
                 }
             )
             .then(function(data){
                 // Sets the flags indicating the user has already logged.
                 localStorage.setItem('animationShown', false);
                 referenceIDFactory.setReferenceID(data.ReferenceID);
-                
                 if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(false);
                 loadingBox.hide();
                 $ionicHistory.clearHistory();
@@ -1670,6 +1759,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 });
 
                 $state.go('tab.nearme'); // profilepicgenderdob
+                // $state.go('tab.profilepicgenderdob');
             })
             .catch(function(err){
                 loadingBox.hide();
@@ -1797,8 +1887,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         $scope.viewdata = {
             signup: {
                 email: loginSignUpFactory.login.email.get(),
-                password: "",
-                password_confirm: "",
+                password: "Password.01",
+                password_confirm: "Password.01",
                 email_invalid: false,
                 password_invalid: false,
                 password_confirm_invalid: false
@@ -1862,6 +1952,13 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         ShowModalMsg_Ok("Listo!", "Ya quedaste registrado! Empieza a disfrutar de Kenuu.", "Ok");
 
                         setTimeout(function(){
+                            $ionicHistory.clearHistory();
+                            $ionicHistory.clearCache();
+                            $ionicHistory.nextViewOptions({
+                                disableAnimate: true,
+                                disableBack: true,
+                                historyRoot: true
+                            });
                             $state.go('profilepicgenderdob');  
                         }, 3000);
                     }
@@ -1967,7 +2064,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
     ctrl.controller('WelcomeCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', '$ionicLoading', '$cordovaKeyboard', '$cordovaPush', 'deviceFactory', '$cordovaBarcodeScanner', 'signUpLoginView', 'loginSignUpFactory', 'loadingBox', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory, $ionicLoading, $cordovaKeyboard, $cordovaPush, deviceFactory, $cordovaBarcodeScanner, signUpLoginView, loginSignUpFactory, loadingBox){
         localStorage.setItem('animationShown', false);
-        
+
         if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(true);
 
         $scope.viewdata = {
@@ -2016,7 +2113,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             loadingBox.show();
 
             userFactory.datavalidation.emailvalidation($scope.viewdata.login.email)
-                .then(function(response){                
+                .then(function(response){
                     if (response.status)
                     {
                         loginSignUpFactory.login.email.set($scope.viewdata.login.email);
@@ -2026,23 +2123,23 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
                         // Email already exists and user is also created
                         if (response.data.responseCode == 1)
-                        {                           
+                        {
                             loadingBox.hide();
                             $state.go("login");
                         }
 
                         // Email does not exists
                         if (response.data.responseCode == 0)
-                        {   
+                        {
                             loadingBox.hide();
                             $state.go("signup");
                         }
 
                         // Email exists but the user hasn't been created
                         if (response.data.responseCode == -1)
-                        {   
-                            loadingBox.hide(); 
-                            $state.go("signup");                       
+                        {
+                            loadingBox.hide();
+                            $state.go("signup");
                         }
                     }
                     else
@@ -2202,6 +2299,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         localStorage.removeItem('profile_picture');
         localStorage.removeItem('profile_gender');
         $scope.viewdata = {
+            imageHasChange: false,
             profileimage: '',
             profilegender: 'H',
             msgbox: {
@@ -2222,7 +2320,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     if (data.Avatar != null)
                     {
                         $scope.viewdata.profileimage = data.Avatar;
-                    }                
+                    }
                 })
                 .catch(function(err){
                     loadingBox.hide();
@@ -2232,13 +2330,13 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         $scope.$watch('viewdata.profilegender', function() {
-            if ($scope.viewdata.profilegender == "M")
+            if ($scope.viewdata.profilegender == "M" && $scope.viewdata.imageHasChange === false)
             {
-                $scope.viewdata.profileimage =  $scope.viewdata.defaultAvatarImg_female;    
+                $scope.viewdata.profileimage =  $scope.viewdata.defaultAvatarImg_female;
             }
-            if ($scope.viewdata.profilegender == "H")
+            if ($scope.viewdata.profilegender == "H" && $scope.viewdata.imageHasChange === false)
             {
-                $scope.viewdata.profileimage =  $scope.viewdata.defaultAvatarImg_male;    
+                $scope.viewdata.profileimage =  $scope.viewdata.defaultAvatarImg_male;
             }
         });
 
@@ -2274,11 +2372,50 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     .then(function(response){
                         if ((response.status == 'true')||(response.status == true))
                         {
-                            localStorage.setItem('profile_picture_urlfilename', response.data);    
-                            $ionicHistory.clearHistory();
-                            $ionicHistory.clearCache();
-                            loadingBox.hide();
-                            $state.go("tab.nearme");  
+                            if($scope.viewdata.imageHasChange === true){
+                                userFactory.info.get()
+                                    .then(function(data){
+                                        console.log(JSON.stringify(data));
+                                        // CAMBIAR LOS VALORES DE FIRSTNAME Y LASTNAME UNA VEZ QUE VILLEGAS CAMBIE EL SERVICIO!!!
+                                        var updateData = {
+                                            FirstName: "A", // data.FirstName,
+                                            LastName: "B", // data.LastName,
+                                            UpdatePassword: data.UpdatePassword,
+                                            Password: data.Password,
+                                            AvatarMobile: "http://201.201.150.159/avatar/" + response.data
+                                        }
+                                        console.log('UPDATE DATA');
+                                        console.log(updateData);
+                                        userFactory.info.update(updateData)
+                                            .then(function(updateResponse){
+                                                console.log('UPDATE RESPONSE!!!');
+                                                console.log(updateResponse);
+                                                localStorage.setItem('profile_picture_urlfilename', response.data);
+                                                $ionicHistory.clearHistory();
+                                                $ionicHistory.clearCache();
+                                                loadingBox.hide();
+                                                $state.go("tab.nearme");
+                                            })
+                                            .catch(function(err){
+                                                console.log("ERRRRROOOOORRRR!!! 2");
+                                                console.log(JSON.stringify(err));
+                                                loadingBox.hide();
+                                                ShowModalMsg('Oops!', 'No se pudo guardar tu foto de perfil.', 'Ok');
+                                            });
+                                    })
+                                    .catch(function(err){
+                                        console.log("ERRRRROOOOORRRR!!!");
+                                        console.log(err);
+                                        loadingBox.hide();
+                                        ShowModalMsg('Oops!', 'No se pudo guardar tu foto de perfil.', 'Ok');
+                                    });
+                            } else {
+                                localStorage.setItem('profile_picture_urlfilename', response.data);
+                                $ionicHistory.clearHistory();
+                                $ionicHistory.clearCache();
+                                loadingBox.hide();
+                                $state.go("tab.nearme");
+                            }
                         }
                         else
                         {
@@ -2339,7 +2476,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
         function onCopySuccess(entry) {
             $scope.$apply(function () {
-                $scope.viewdata.profileimage = entry.nativeURL;            
+                $scope.viewdata.imageHasChange = true;
+                $scope.viewdata.profileimage = entry.nativeURL;
             });
         }
 

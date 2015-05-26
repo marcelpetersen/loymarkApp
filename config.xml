@@ -2,19 +2,18 @@
 <widget id="com.cis.kenuu" version="2.0.7" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>Kenuu</name>
   <description>
-        
   </description>
   <author email="hi@ionicframework" href="http://ionicframework.com/">
     CIS
   </author>
   <content src="index.html"/>
   <access origin="*"/>
-  <access origin="http://201.201.150.159" />  
+  <access origin="http://201.201.150.159"/>
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="true"/>
   <preference name="fullscreen" value="true"/>
-  <preference name="orientation" value="portrait" />
+  <preference name="orientation" value="portrait"/>
   <preference name="BackupWebStorage" value="none"/>
   <preference name="SplashScreen" value="screen"/>
   <preference name="SplashScreenDelay" value="3800"/>

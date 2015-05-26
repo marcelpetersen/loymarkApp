@@ -7,7 +7,7 @@ fact.factory('referenceIDFactory', [function(){
         if (id === undefined) return _userReferenceId;
         else
         {
-            _userReferenceId = id;            
+            _userReferenceId = id;
             return _userReferenceId;
         }
     };
@@ -17,7 +17,7 @@ fact.factory('referenceIDFactory', [function(){
         _userReferenceId = id;
     };
 
-    return {        
+    return {
         setReferenceID: function(id) {
             SetRefID(id);
         },
@@ -179,7 +179,7 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                 update: function(_data){
                     var url = serverURL + '/member/userProfile';
                     return new Promise(function(resolve,reject){
-                        var _jdata = 
+                        var _jdata =
                         {
                             jsonData: JSON.stringify(_data)
                         };
@@ -782,7 +782,7 @@ fact.factory('userFactory',['restFactory', function(restFactory){
                         })
                         .catch(function(err){
                             reject(err);
-                        });     
+                        });
                 });
             },
             updateAvatar: function(_imagedata) {
