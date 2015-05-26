@@ -1947,8 +1947,6 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
     ctrl.controller('WelcomeCoverCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', '$ionicLoading', '$cordovaKeyboard', '$cordovaPush', 'deviceFactory', '$cordovaBarcodeScanner', 'signUpLoginView', 'loginSignUpFactory', 'loadingBox', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory, $ionicLoading, $cordovaKeyboard, $cordovaPush, deviceFactory, $cordovaBarcodeScanner, signUpLoginView, loginSignUpFactory, loadingBox){
         localStorage.setItem('animationShown', false);
         
-        if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(true);
-
         $scope.GoToLogin = function() {
             $state.go("welcome");
         };
