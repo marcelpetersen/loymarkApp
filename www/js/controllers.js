@@ -1946,7 +1946,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
     ctrl.controller('WelcomeCoverCtrl', ['$scope', '$timeout', '$state', '$ionicSlideBoxDelegate', 'userFactory', 'referenceIDFactory', '$ionicLoading', '$cordovaKeyboard', '$cordovaPush', 'deviceFactory', '$cordovaBarcodeScanner', 'signUpLoginView', 'loginSignUpFactory', 'loadingBox', function($scope, $timeout, $state, $ionicSlideBoxDelegate, userFactory, referenceIDFactory, $ionicLoading, $cordovaKeyboard, $cordovaPush, deviceFactory, $cordovaBarcodeScanner, signUpLoginView, loginSignUpFactory, loadingBox){
         localStorage.setItem('animationShown', false);
-        
+
         $scope.GoToLogin = function() {
             $state.go("welcome");
         };
@@ -2039,10 +2039,12 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     }
                     else
                     {
+                        loadingBox.hide();
                         ShowModalMsg('Oops!', "No pudimos verificar tu correo, por favor inténtanlo de nuevo.", "Ok");
                     }
                 })
                 .catch(function(err){
+                    loadingBox.hide();
                     ShowModalMsg('Oops!', "No pudimos verificar tu correo, por favor inténtanlo de nuevo.", "Ok");
                 }); 
         };
