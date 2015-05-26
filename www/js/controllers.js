@@ -1258,6 +1258,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
         $scope.gDate = function(date) {
             
+            return date.substr(0,10) + " " + date.substr(11,5);
+
             var year    = date.substr(0, 4);
             var day   = date.substr(5, 2);
             var month     = date.substr(8, 2);
