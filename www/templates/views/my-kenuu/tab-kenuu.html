@@ -23,7 +23,7 @@
 		<a class="item item-icon-left item-icon-right item-text-wrap" href="#/tab/kenuu/activity">
 			<i class="icon icon-history profile-item-icon"></i>
 			<div class="profile-item-title">mi actividad reciente</div>
-			<div>consulte sus últimos movimientos</div>
+			<div>consulta tus últimos movimientos</div>
 			<!-- <i class="icon ion-android-arrow-forward back-btn"></i> -->
 			<i class="icon ion-android-more-horizontal back-btn"></i>			
 		</a>
@@ -35,7 +35,7 @@
             <div class="item item-avatar item-text-wrap item-icon-right activity-activityitem" ng-repeat="commerce in viewdata.commerces | orderBy:'TotalVisits'" ng-click="GoToCommerce(commerce)">                
                 <img ng-src="{{GetCommerceImage(commerce.Image)}}">
                 <p><strong class="activity-commerce-name">{{commerce.Name}}</strong></p>                
-                <i class="icon icon-location activity-checkin"></i>
+                <i class="icon ion-android-more-horizontal activity-checkin"></i>
                 <h3 class="favcommerce-lastvisit-label" style="margin-left:-10px;">
                     <small class="textgrey-text">visitas:</small>
                     <strong class="favcommerce-visits">{{commerce.TotalVisits}}</strong> 
