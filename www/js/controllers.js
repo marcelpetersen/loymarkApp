@@ -465,7 +465,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         $scope.ShareViaTwitter = function(commerce) {
-            var message = "";
+            var message = commerce.Name;
             $cordovaSocialSharing
                 .shareViaTwitter(message)
                 .then(function(result) {
@@ -476,7 +476,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         $scope.ShareViaFacebook = function(commerce) {
-            var message = "";
+            var message = commerce.Name;
             $cordovaSocialSharing
                 .shareViaFacebook(message)
                 .then(function(result) {
