@@ -883,15 +883,13 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             LoadCommerceData();
         });
 
-        $scope.profileimage = localStorage.getItem('profile_picture');
-        if ($scope.profileimage == undefined) $scope.profileimage = '';
-
         $scope.viewdata = {
             qrcode: "",
             counter: 1,
             positions: [],
             user: {
-                activity: ''
+                activity: '',
+                Avatar: ''
             },
             defaultAvatarImg_male: 'img/default.png',
             defaultAvatarImg_female: 'img/default_female.png',
@@ -935,12 +933,17 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 .then(function(data){
                     loadingBox.hide();              
                     $scope.viewdata.user = data;
+
+                    // TODO: pending to implement the pull image from the profile that comes from the service
+                    $scope.profileimage = localStorage.getItem('profile_picture');                    
+                    if ($scope.profileimage == undefined) $scope.profileimage = '';
+
                     $scope.viewdata.user.Avatar = $scope.profileimage;
 
                     // Sets the Avatar Image when there is no image defined
                     var _gender = localStorage.getItem('profile_gender');
                     $scope.viewdata["gender"] = _gender;
-                    if ($scope.viewdata.user.Avatar != '')
+                    if ($scope.viewdata.user.Avatar == '')
                     {
                         if (_gender != undefined) {  
                             if (_gender == "M") {
@@ -1153,7 +1156,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             });
         };
 
-        $scope.GetAppVersion = function() {            
+        $scope.GetAppVersion = function() {
             $scope.viewdata.appVersion = appVersionFactory.appVersion.get();
         };
 
