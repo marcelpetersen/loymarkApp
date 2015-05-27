@@ -70,10 +70,6 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	    });
 
 		$rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
-
-			alert('NOTIFICATION RECEIVED');
-			console.log(notification);
-
 			if (deviceFactory.device.platform() == 'iOS')
 			{
 				// iOS
@@ -99,14 +95,11 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 			}
 			else
 			{
-				alert('ANDROID NOTIFICATION RECEIVED');
 				console.log(notification);
 				// Android
 				switch(notification.event) {
 			        case 'registered':
 			          	if (notification.regid.length > 0 ) {
-				            alert('registration ID = ' + notification.regid);
-
 				            var tokenId = notification.regid;
 				            var email = deviceFactory.device.registeredUser.get();
 

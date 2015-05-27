@@ -115,9 +115,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         });
 
         $scope.$on('$cordovaPush:notificationReceived', function(event, notification) {
-
-            alert('NOTIFICATION RECEIVED');
-            console.log(notification);
+             console.log(notification);
 
             if (deviceFactory.device.platform() == 'iOS')
             {
@@ -144,7 +142,6 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             }
             else
             {
-                alert('ANDROID NOTIFICATION RECEIVED');
                 console.log(notification);
                 // Android
                 switch(notification.event) {
