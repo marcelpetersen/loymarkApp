@@ -57,12 +57,12 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                             {
                                 deviceFactory.device.registerdevice(deviceToken, data.Email)
                                 .then(function(response){
-                                    console.log("Device Register Ok!");
-                                    console.log(response);
+                                    // console.log("Device Register Ok!");
+                                    // console.log(response);
                                 })
                                 .catch(function(err){
-                                    console.log("Device Register Error!");
-                                    console.log(err);
+                                    // console.log("Device Register Error!");
+                                    // console.log(err);
                                 });
                             },
                             function(err) {
@@ -75,8 +75,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     if (deviceFactory.device.platform() == "Android")
                     {
                         $cordovaPush.register(androidConfig).then(function(result) {
-                            console.log('IN HERE!!!! ANDROID PUSH!');
-                            console.log(result);
+                            // console.log('IN HERE!!!! ANDROID PUSH!');
+                            // console.log(result);
                             // Success
                         }, function(err) {
                             // Error
@@ -110,12 +110,12 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             })
             .catch(function(err) {
                 loadingBox.hide();
-                console.log(err);
+                // console.log(err);
             });
         });
 
         $scope.$on('$cordovaPush:notificationReceived', function(event, notification) {
-             console.log(notification);
+             // console.log(notification);
 
             if (deviceFactory.device.platform() == 'iOS')
             {
@@ -142,7 +142,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             }
             else
             {
-                console.log(notification);
+                // console.log(notification);
                 // Android
                 switch(notification.event) {
                     case 'registered':
@@ -198,13 +198,13 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     commerceFactory.selectedCommerce.set(response[0]);
                     loadingBox.hide();
                     var _state = navigationFactory.commerce.get();
-                    console.log(_state);
+                    // console.log(_state);
                     $state.go(_state);
                 })
                 .catch(function(response){
                     loadingBox.hide();
-                    console.log("Error when getting the commerce.");
-                    console.log(response);
+                    // console.log("Error when getting the commerce.");
+                    // console.log(response);
                 });
         };
 
@@ -262,8 +262,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 $scope.viewdata.searchResults = [];
                 commerceFactory.stores.nearby(0, long, lat, 0, kilometers)
                     .then(function(data){
-                        // console.log('DATA LENGTH!!!!');
-                        // console.log(kilometers,data.length,pageNum);
+                        // // console.log('DATA LENGTH!!!!');
+                        // // console.log(kilometers,data.length,pageNum);
                         for(var i=0; i<data.length; i++){
                             $scope.viewdata.searchResults.push(data[i]);
                         }
@@ -282,7 +282,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                                 loadingBox.hide();
                             })
                             .catch(function(data){
-                                console.log(data);
+                                // console.log(data);
                                 loadingBox.hide();
                             });
                     });
@@ -297,8 +297,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         $scope.$apply();
                     })
                     .catch(function(data){
-                        console.log("Error while searching commerces without location:")
-                        console.log(data);
+                        // console.log("Error while searching commerces without location:")
+                        // console.log(data);
                         loadingBox.hide();
                     });
             }
@@ -353,7 +353,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                                 })
                                 .catch(function(data){                                    
                                     if (!fromSearch) loadingBox.hide();
-                                    console.log(data);
+                                    // console.log(data);
                                 });
                         });
                 }
@@ -376,8 +376,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         })
                         .catch(function(data){
                             if (!fromSearch) loadingBox.hide();
-                            console.log("Error while searching commerces without location:")
-                            console.log(data);
+                            // console.log("Error while searching commerces without location:")
+                            // console.log(data);
                         });                    
                 }
             } else {
@@ -391,8 +391,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         })
                         .catch(function(data){
                             if (!fromSearch) loadingBox.hide();
-                            console.log("Error while searching commerces without location:")
-                            console.log(data);
+                            // console.log("Error while searching commerces without location:")
+                            // console.log(data);
                         });
             }
         }
@@ -406,7 +406,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             selectedreward: {}
         };
 
-        console.log($scope.viewdata.commerce)
+        // console.log($scope.viewdata.commerce)
 
         $timeout(function(){loadingBox.hide();});
 
@@ -419,7 +419,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 })
                 .catch(function(err){
                     loadingBox.hide();
-                    console.log(err);
+                    // console.log(err);
                 });
         };
 
@@ -433,7 +433,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             })
             .catch(function(err){
                 loadingBox.hide();
-                console.log("Error")
+                // console.log("Error")
             })
         }
         else
@@ -511,7 +511,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         $scope.OpenRewardDetail = function(reward) {
-            console.log(reward);
+            // console.log(reward);
             $scope.viewdata["availablepoints"] = $scope.viewdata.commerce.PointsAvailable;
             $scope.viewdata.selectedreward = reward;
             rewardDetailModal.Show($scope);
@@ -725,7 +725,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                                 })
                                 .catch(function(err){
                                     loadingBox.hide();
-                                    console.log(err);                                
+                                    // console.log(err);                                
                                 });
                         });
                 },function(err){});
@@ -773,7 +773,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         })
                         .catch(function(err){
                             loadingBox.hide();
-                            console.log(err);                        
+                            // console.log(err);                        
                         });
         };
     }]);
@@ -788,13 +788,13 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         loadingBox.show();
         commerceFactory.stores.general($scope.viewdata.commerce.EntityID)
             .then(function(response){
-                console.log(response)
+                // console.log(response)
                 loadingBox.hide();
                 $scope.viewdata.stores = response;
             })
             .catch(function(err){
                 loadingBox.hide();
-                console.log(err)
+                // console.log(err)
             });
 
         $scope.GoToAddress = function(lat, long) {
@@ -965,7 +965,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
         $scope.gDate = function(date) {
             var _date = new Date(parseInt(date.substr(6)));
-            console.log(_date);
+            // console.log(_date);
             return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
         };
 
@@ -1100,7 +1100,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         $scope.GoToCommerce = function(commerce) {
-            console.log(commerce);
+            // console.log(commerce);
             commerceFactory.selectedCommerce.set(commerce);
             navigationFactory.commerce.setTab("tab.kenuu-commerce");
             navigationFactory.stores.setTab("tab.kenuu-commercestores");
@@ -1153,17 +1153,17 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                                     Password: $scope.viewdata.user.Password,
                                     AvatarMobile: "http://201.201.150.159/avatar/" + response.data
                                 }
-                                console.log('UPDATE DATA');
-                                console.log(updateData);
+                                // console.log('UPDATE DATA');
+                                // console.log(updateData);
                                 userFactory.info.update(updateData)
                                     .then(function(updateResponse){
-                                        console.log('UPDATE RESPONSE!!!');
-                                        console.log(updateResponse);
+                                        // console.log('UPDATE RESPONSE!!!');
+                                        // console.log(updateResponse);
                                         localStorage.setItem('profile_picture_urlfilename', response.data);
                                     })
                                     .catch(function(err){
-                                        console.log("ERRRRROOOOORRRR!!! 2");
-                                        console.log(JSON.stringify(err));
+                                        // console.log("ERRRRROOOOORRRR!!! 2");
+                                        // console.log(JSON.stringify(err));
                                         loadingBox.hide();
                                         ShowModalMsg('Oops!', 'No se pudo guardar tu foto de perfil.', 'Ok');
                                     });
@@ -1275,7 +1275,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     LoadData_Activity($scope.viewdata.user.AccountID)
                 })
                 .catch(function(err){ 
-                    console.log(err)               
+                    // console.log(err)               
                 });
         };
 
@@ -1291,8 +1291,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             loadingBox.show();
             userFactory.activity.all(userID)
                 .then(function(data){     
-                    console.log("Activity:");
-                    console.log(data)
+                    // console.log("Activity:");
+                    // console.log(data)
 
                     setTimeout(function() {
                         $scope.viewdata.user.activity = data.Elements;
@@ -1304,7 +1304,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     }, 150);            
                 })
                 .catch(function(err){ 
-                    console.log(err);           
+                    // console.log(err);           
                     setTimeout(function() { 
                         // $("#errorWhenLoadingDiv").removeClass("animated slideOutUp");
                         setTimeout(function(){
@@ -1421,8 +1421,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 })
                 .catch(function(response){
                     loadingBox.hide();
-                    console.log("Error when getting the commerce.")
-                    console.log(response);
+                    // console.log("Error when getting the commerce.")
+                    // console.log(response);
                 });        
         };
 
@@ -1453,7 +1453,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     LoadData($scope.viewdata.user.AccountID)
                 })
                 .catch(function(err){ 
-                    console.log(err)               
+                    // console.log(err)               
                 });
         };
 
@@ -1492,7 +1492,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         $scope.GoToCommerce = function(commerce) {
-            console.log(commerce);
+            // console.log(commerce);
             commerceFactory.selectedCommerce.set(commerce);
             $state.go('tab.kenuu-commerce');
         };
@@ -1684,7 +1684,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         });
                     })
                     .catch(function(err){                    
-                        console.log(err);
+                        // console.log(err);
                     });                
                 }
                 else
@@ -1760,7 +1760,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             })
             .catch(function(err){
                 loadingBox.hide();
-                console.log(err);
+                // console.log(err);
                 ShowModalMsg("Oops!", "No puedes ingresar, inténtanlo de nuevo.", "Ok");
             });
         };
@@ -1856,7 +1856,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             })
             .catch(function(err){
                 loadingBox.hide();
-                console.log(err);
+                // console.log(err);
                 ShowModalMsg("Oops!", "No puedes ingresar, inténtanlo de nuevo.", "Ok");
             });
         };
@@ -1967,8 +1967,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 .catch(function(err){
                     loadingBox.hide();
 
-                    console.log("Error!");
-                    console.log(err);
+                    // console.log("Error!");
+                    // console.log(err);
 
                     if (err == null) {
                         ShowModalMsg("Oops!", "Ocurrió un problema, intenta de nuevo.", "Ok");
@@ -2313,7 +2313,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             userFactory.info.get()
                 .then(function(data){
                     loadingBox.hide();
-                    console.log("Avatar: ", data.Avatar);
+                    // console.log("Avatar: ", data.Avatar);
                     if (data.Avatar != null)
                     {
                         $scope.viewdata.profileimage = data.Avatar;
@@ -2321,7 +2321,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 })
                 .catch(function(err){
                     loadingBox.hide();
-                    console.log(err);
+                    // console.log(err);
                     $scope.viewdata.profilegender = "M";
                 });
         };
@@ -2372,7 +2372,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                             if($scope.viewdata.imageHasChange === true){
                                 userFactory.info.get()
                                     .then(function(data){
-                                        console.log(JSON.stringify(data));
+                                        // console.log(JSON.stringify(data));
                                         // CAMBIAR LOS VALORES DE FIRSTNAME Y LASTNAME UNA VEZ QUE VILLEGAS CAMBIE EL SERVICIO!!!
                                         var updateData = {
                                             FirstName: "A", // data.FirstName,
@@ -2381,12 +2381,12 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                                             Password: data.Password,
                                             AvatarMobile: "http://201.201.150.159/avatar/" + response.data
                                         }
-                                        console.log('UPDATE DATA');
-                                        console.log(updateData);
+                                        // console.log('UPDATE DATA');
+                                        // console.log(updateData);
                                         userFactory.info.update(updateData)
                                             .then(function(updateResponse){
-                                                console.log('UPDATE RESPONSE!!!');
-                                                console.log(updateResponse);
+                                                // console.log('UPDATE RESPONSE!!!');
+                                                // console.log(updateResponse);
                                                 localStorage.setItem('profile_picture_urlfilename', response.data);
                                                 $ionicHistory.clearHistory();
                                                 $ionicHistory.clearCache();
@@ -2394,15 +2394,15 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                                                 $state.go("tab.nearme");
                                             })
                                             .catch(function(err){
-                                                console.log("ERRRRROOOOORRRR!!! 2");
-                                                console.log(JSON.stringify(err));
+                                                // console.log("ERRRRROOOOORRRR!!! 2");
+                                                // console.log(JSON.stringify(err));
                                                 loadingBox.hide();
                                                 ShowModalMsg('Oops!', 'No se pudo guardar tu foto de perfil.', 'Ok');
                                             });
                                     })
                                     .catch(function(err){
-                                        console.log("ERRRRROOOOORRRR!!!");
-                                        console.log(err);
+                                        // console.log("ERRRRROOOOORRRR!!!");
+                                        // console.log(err);
                                         loadingBox.hide();
                                         ShowModalMsg('Oops!', 'No se pudo guardar tu foto de perfil.', 'Ok');
                                     });
@@ -2718,7 +2718,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 commerceFactory.selectedCommerce.set(response[0]);
             })
             .catch(function(err){
-                console.log("Error")
+                // console.log("Error")
             })
         }
         
@@ -2920,7 +2920,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     });
             })
             .catch(function(err){
-                console.log(err);
+                // console.log(err);
             });
 
         $scope.viewdata.rewardId = $scope.viewdata.selectedReward.SRewardID.toString();
@@ -3045,8 +3045,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     $state.go("tab.search-commerce");
                 })
                 .catch(function(response){
-                    console.log("Error when getting the commerce.")
-                    console.log(response);
+                    // console.log("Error when getting the commerce.")
+                    // console.log(response);
                 })
             
         };

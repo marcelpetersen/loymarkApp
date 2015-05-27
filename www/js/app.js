@@ -95,7 +95,7 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 			}
 			else
 			{
-				console.log(notification);
+				// console.log(notification);
 				// Android
 				switch(notification.event) {
 			        case 'registered':
