@@ -1146,12 +1146,13 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         .then(function(response){
                             if ((response.status == 'true')||(response.status == true))
                             {
+                                var imageUrl = "http://201.201.150.159/avatar/"
                                 var updateData = {
-                                    FirstName: $scope.viewdata.user.name, // data.FirstName,
-                                    LastName: $scope.viewdata.user.lastname, // data.LastName,
+                                    FirstName: $scope.viewdata.user.FirstName, // data.FirstName,
+                                    LastName: $scope.viewdata.user.LastName, // data.LastName,
                                     UpdatePassword: $scope.viewdata.user.UpdatePassword,
                                     Password: $scope.viewdata.user.Password,
-                                    AvatarMobile: "http://201.201.150.159/avatar/" + response.data
+                                    AvatarMobile: imageUrl + response.data
                                 }
                                 // console.log('UPDATE DATA');
                                 // console.log(updateData);
@@ -1160,6 +1161,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                                         // console.log('UPDATE RESPONSE!!!');
                                         // console.log(updateResponse);
                                         localStorage.setItem('profile_picture_urlfilename', response.data);
+                                        $scope.viewdata.user.AvatarMobile = imageUrl + response.data;
+                                        $scope.$apply();
                                     })
                                     .catch(function(err){
                                         // console.log("ERRRRROOOOORRRR!!! 2");
