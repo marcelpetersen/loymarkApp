@@ -2378,8 +2378,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                                         // console.log(JSON.stringify(data));
                                         // CAMBIAR LOS VALORES DE FIRSTNAME Y LASTNAME UNA VEZ QUE VILLEGAS CAMBIE EL SERVICIO!!!
                                         var updateData = {
-                                            FirstName: "A", // data.FirstName,
-                                            LastName: "B", // data.LastName,
+                                            FirstName: "", // data.FirstName,
+                                            LastName: "", // data.LastName,
                                             UpdatePassword: data.UpdatePassword,
                                             Password: data.Password,
                                             AvatarMobile: "http://201.201.150.159/avatar/" + response.data
