@@ -1,0 +1,20 @@
+Kenuu: 
+
+-- Primero se genera la llave para el APP
+keytool -genkey -v -keystore kenuu-release-key.keystore -alias kenuu -keyalg RSA -keysize 2048 -validity 10000
+
+Pwd: Password.01
+What is your first and last name? CIS
+What is the name of your organizational unit? CIS
+What is the name of your organization? CIS
+What is the name of your City or Locality? SAN JOSE
+What is the name of your State or Province? SAN JOSE
+What is the two-letter country code for this unit? CR
+
+-- Segundo, se firma el APK con el Key generado
+
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore kenuu-release-key.keystore Kenuu-release-unsigned.apk kenuu
+
+-- Ejemplo: zipalign -v 4 Kenuu-release-unsigned.apk Kenuu.apk
+
+/usr/local/Cellar/android-sdk/23.0.2/build-tools/22.0.1/zipalign -v 4 Kenuu-release-unsigned.apk Kenuu.apk
