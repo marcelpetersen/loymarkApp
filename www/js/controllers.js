@@ -745,6 +745,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                                             telefono: data[i].Phone,
                                             map: map,
                                             entityID: data[i].EntityID,
+                                            subEntityID: data[i].SubEntityID,
                                             icon: "./img/popmap.png"
                                         });
                                         var infowindow = new google.maps.InfoWindow({});
@@ -753,14 +754,13 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                                                 if (infowindow) {
                                                     infowindow.close();
                                                 }
-                                                var title = "";
-                                                title += "<div style='font-weight:bold'>" + marker.title + "</div>";                                            
-                                                title += "<div class='text=center'><a href='#/tab/nearme/commercedetail/" + marker.entityID + "' class='button button-small button-calm profile-btn' style='width:110px;'>Ver Comercio</a></div>"
-                                                infoWindow.setContent(
-                                                    "<div class='map-info-window'>" +
-                                                    title +
-                                                    "</div>"
-                                                );
+                                                var contentString   =  "<div class='map-info-window'>"; 
+                                                contentString       += "<div style='font-weight:bold'>" + marker.title + "</div>"; 
+                                                contentString       += "<button class='button button-clear button-positive' ng-click='InfoWindowTapped(" + marker.subEntityID + ")'>Detalle</button>";
+                                                contentString       += "</div>";
+                                                var compiled = $compile(contentString)($scope);
+
+                                                infoWindow.setContent(compiled[0]);
                                                 infoWindow.open(map, marker);
                                             };
                                         })(marker));
@@ -792,6 +792,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                                     telefono: data[i].Phone,
                                     map: map,
                                     entityID: data[i].EntityID,
+                                    subEntityID: data[i].SubEntityID,
                                     icon: "./img/popmap.png"
                                 });
                                 var infowindow = new google.maps.InfoWindow({});
@@ -800,15 +801,13 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                                         if (infowindow) {
                                             infowindow.close();
                                         }
-                                        var title = "";
-                                        title += "<div style='font-weight:bold'>" + marker.title + "</div>";
-                                        // title += "<div>" + marker.desc + "</div>";
-                                        title += "<div class='text=center'><a href='#/tab/nearme/commercedetail/" + marker.entityID + "' class='button button-small button-calm profile-btn' style='width:110px;'>Ver Comercio</a></div>"
-                                        infoWindow.setContent(
-                                            "<div class='map-info-window'>" +
-                                            title +
-                                            "</div>"
-                                        );
+                                        var contentString   =  "<div class='map-info-window'>"; 
+                                        contentString       += "<div style='font-weight:bold'>" + marker.title + "</div>"; 
+                                        contentString       += "<button class='button button-clear button-positive' ng-click='InfoWindowTapped(" + marker.subEntityID + ")'>Detalle</button>";
+                                        contentString       += "</div>";
+                                        var compiled = $compile(contentString)($scope);
+
+                                        infoWindow.setContent(compiled[0]);
                                         infoWindow.open(map, marker);
                                     };
                                 })(marker));
