@@ -1237,6 +1237,7 @@ fact.factory('searchFactory', ['restFactory', function(restFactory){
 fact.factory('navigationFactory', [function(){
     var storesState         = "tab.nearme-commercestores"; 
     var commerceState       = "tab.nearme-commerce";
+    var storeState         = "tab.nearme-storedetail";
 
     return {
         setDefaults: function() {
@@ -1258,6 +1259,14 @@ fact.factory('navigationFactory', [function(){
             get: function() {
                 return storesState;
             }
+        },
+        store: {
+            setTab: function(stateName) {
+                storeState = stateName;
+            },
+            get: function() {
+                return storeState;
+            }  
         }
     }
 }]);

@@ -179,6 +179,20 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             }
         });
 
+        $scope.SearchFocus = function() {
+            $("#btnClearSearch").show();            
+        };
+
+        $scope.SearchBlur = function() {
+            $("#searchText").blur();
+            $("#btnClearSearch").hide();
+            if (!devEnvironment) $cordovaKeyboard.close(); 
+        };
+
+        $scope.ClearSearch = function() {
+            if ($scope.viewdata.searchText != '') $scope.viewdata.searchText = "";            
+        };
+
         $scope.GetAvatarImage = function(img) {
             if (img == undefined) return "";
             if (img == null) return "";
@@ -187,37 +201,12 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             return imageserverurl + img;
         };
 
-        $scope.ClearSearch = function() {
-            $scope.viewdata.searchText = "";
-        };
-
-        $scope.OpenCommerce = function(commerce) {
-            // console.log(commerce);
-            // commerceFactory.store.get(commerce.SubEntityID)
-            //     .then(function(response){
-            //         console.log(response);
-            //         storeFactory.selectedStore.set(response);
-            //         // $state.go('tab.nearme-storedetail');
-            //     })
-            //     .catch(function(err){
-            //         console.log(err);
-            //     });
-            // return;
-
-            loadingBox.show();
-            commerceFactory.get(commerce.EntityID)
-                .then(function(response){
-                    commerceFactory.selectedCommerce.set(response[0]);
-                    loadingBox.hide();
-                    var _state = navigationFactory.commerce.get();
-                    // console.log(_state);
-                    $state.go(_state);
-                })
-                .catch(function(response){
-                    loadingBox.hide();
-                    // console.log("Error when getting the commerce.");
-                    // console.log(response);
-                });
+        $scope.OpenStore = function(store) {
+            // Opens the selected Store
+            storeFactory.selectedStore.set(store);
+            loadingBox.hide();
+            var _state = navigationFactory.store.get();                    
+            $state.go(_state);
         };
 
         $scope.OpenMap = function() {
@@ -351,46 +340,35 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     commerceFactory.stores.nearby(0, long, lat, 0)
                         .then(function(data){                            
                             if (!fromSearch) loadingBox.hide();
-                            $scope.viewdata.searchResults = data;
-                            $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
+                            $scope.viewdata.searchResults = data;                            
                             $scope.$apply();
                         })
                         .catch(function(err){
-                            searchFactory.doSearch($scope.viewdata.searchText)
+                            commerceFactory.stores.general(0)
                                 .then(function(data){                                    
                                     if (!fromSearch) loadingBox.hide();
-                                    $scope.viewdata.searchResults = data.response.Elements;
-                                    $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
+                                    $scope.viewdata.searchResults = data; // data.response.Elements;                                    
                                     $scope.$apply();
                                 })
                                 .catch(function(data){                                    
-                                    if (!fromSearch) loadingBox.hide();
-                                    // console.log(data);
+                                    if (!fromSearch) loadingBox.hide();                                    
                                 });
                         });
                 }
                 else
                 {
                     $scope.viewdata.locationSet = false;
-                    searchFactory.doSearch($scope.viewdata.searchText)
-                        .then(function(data){
-                            var commerceElements = [];
-                            
-                            for(var i=0; i<data.response.Elements.length; i++){
-                                if(data.response.Elements[i].Type=='C'){
-                                    commerceElements.push(data.response.Elements[i]);
-                                }
-                            }
-                            if (!fromSearch) loadingBox.hide();
-                            $scope.viewdata.searchResults = commerceElements;
-                            $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
+
+                    commerceFactory.stores.general(0)
+                        .then(function(response){
+                            loadingBox.hide();
+                            $scope.viewdata.searchResults = response;                            
                             $scope.$apply();
                         })
-                        .catch(function(data){
-                            if (!fromSearch) loadingBox.hide();
-                            // console.log("Error while searching commerces without location:")
-                            // console.log(data);
-                        });                    
+                        .catch(function(err){
+                            loadingBox.hide();
+                            console.log(err)
+                        });             
                 }
             } else {
                 $scope.viewdata.locationSet = false;
@@ -403,8 +381,6 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         })
                         .catch(function(data){
                             if (!fromSearch) loadingBox.hide();
-                            // console.log("Error while searching commerces without location:")
-                            // console.log(data);
                         });
             }
         }
@@ -508,6 +484,11 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             return imageserverurl + img;
         };
 
+        $scope.GetRewardImage = function(img) {
+            if (img == null) return "img/defaultgift.png";
+            else return $scope.viewdata.imageserverurl + img;
+        };
+
         $scope.GetPointsClass = function(availablepoints, rewardpoints) {
             if (availablepoints > rewardpoints)
             {
@@ -561,10 +542,10 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             rewardDetailModal.Close();
         };
 
-        $scope.GetRewardImage = function(reward) {
-            var img = $scope.viewdata.imageserverurl + reward.Image;        
-            return {background:img};
-        };
+        // $scope.GetRewardImage = function(reward) {
+        //     var img = $scope.viewdata.imageserverurl + reward.Image;        
+        //     return {background:img};
+        // };
 
         $scope.GetAvailablePoints = function(availablepoints) {
             if (availablepoints == null) return 0;
@@ -619,13 +600,17 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
     }]);
 
-    ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cordovaGeolocation', '$stateParams', 'loadingBox', 'locationFactory', function($scope, commerceFactory, $ionicLoading, $cordovaGeolocation, $stateParams, loadingBox, locationFactory){
+    ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cordovaGeolocation', '$stateParams', '$compile', 'loadingBox', 'locationFactory', 'storeFactory', 'navigationFactory', '$state', function($scope, commerceFactory, $ionicLoading, $cordovaGeolocation, $stateParams, $compile, loadingBox, locationFactory, storeFactory, navigationFactory, $state){
         $scope.settings = {
             enableFriends: true
         };
 
         $scope.$on("$ionicView.enter", function(event, args){        
         });
+
+        $scope.viewdata = {
+            stores: []
+        };
 
         var _map = false;
         var _locationMarkerCreated = false;
@@ -667,6 +652,22 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 );
         };
 
+        function GetStoreFromList(SubEntityID) {
+            var j=$scope.viewdata.stores.length;
+            for (var i=0;i<j;i++)
+            {
+                if ($scope.viewdata.stores[i]["SubEntityID"] == SubEntityID) return $scope.viewdata.stores[i];
+            }
+            return undefined;
+        };
+
+        $scope.InfoWindowTapped = function(subEntityID) {
+            var store = GetStoreFromList(subEntityID);
+            storeFactory.selectedStore.set(store);
+            var _state = navigationFactory.store.get();            
+            $state.go(_state);
+        };
+
         $scope.mapCreated = function(map) {
             loadingBox.show();
 
@@ -687,7 +688,10 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                             var infoWindow = new google.maps.InfoWindow();
                             var j=data.length;
                             
-                            for (var i=0;i<j;i++){
+                            $scope.viewdata.stores = data;
+                            console.log(data);
+
+                            for (var i=0;i<j;i++){                                
                                 var myLatlng = new google.maps.LatLng(data[i].LocationLatitude, data[i].LocationLongitude);
                                 var marker = new google.maps.Marker({
                                     position: myLatlng,
@@ -698,7 +702,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                                     telefono: data[i].Phone,
                                     map: map,
                                     entityID: data[i].EntityID,
-                                    icon: "./img/mapicon.png"
+                                    subEntityID: data[i].SubEntityID,                                    
+                                    icon: "./img/popmap.png"
                                 });
                                 var infowindow = new google.maps.InfoWindow({});
                                 google.maps.event.addListener(marker, 'click', (function(marker, i) {
@@ -706,14 +711,14 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                                         if (infowindow) {
                                             infowindow.close();
                                         }
-                                        var title = "";
-                                        title += "<div style='font-weight:bold'>" + marker.title + "</div>";                                    
-                                        title += "<div class='text=center'><a href='#/tab/nearme/commercedetail/" + marker.entityID + "' class='button button-small button-calm profile-btn' style='width:110px;'>Ver Comercio</a></div>"
-                                        infoWindow.setContent(
-                                            "<div class='map-info-window'>" +
-                                            title +
-                                            "</div>"
-                                        );
+                                        
+                                        var contentString   =  "<div class='map-info-window'>"; 
+                                        contentString       += "<div style='font-weight:bold'>" + marker.title + "</div>"; 
+                                        contentString       += "<button class='button button-clear button-positive' ng-click='InfoWindowTapped(" + marker.subEntityID + ")'>Detalle</button>";
+                                        contentString       += "</div>";
+                                        var compiled = $compile(contentString)($scope);
+
+                                        infoWindow.setContent(compiled[0]);
                                         infoWindow.open(map, marker);
                                     };
                                 })(marker));
@@ -740,7 +745,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                                             telefono: data[i].Phone,
                                             map: map,
                                             entityID: data[i].EntityID,
-                                            icon: "./img/mapicon.png"
+                                            icon: "./img/popmap.png"
                                         });
                                         var infowindow = new google.maps.InfoWindow({});
                                         google.maps.event.addListener(marker, 'click', (function(marker, i) {
@@ -787,7 +792,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                                     telefono: data[i].Phone,
                                     map: map,
                                     entityID: data[i].EntityID,
-                                    icon: "./img/mapicon.png"
+                                    icon: "./img/popmap.png"
                                 });
                                 var infowindow = new google.maps.InfoWindow({});
                                 google.maps.event.addListener(marker, 'click', (function(marker, i) {
@@ -818,7 +823,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
     }]);
 
-    ctrl.controller('CommerceWithRewardsStoresCtrl', ['$scope', '$ionicLoading', 'loadingBox', 'commerceFactory', function($scope, $ionicLoading, loadingBox, commerceFactory){
+    ctrl.controller('CommerceWithRewardsStoresCtrl', ['$scope', '$state', '$ionicLoading', 'loadingBox', 'commerceFactory', 'storeFactory', 'navigationFactory', function($scope, $state, $ionicLoading, loadingBox, commerceFactory, storeFactory, navigationFactory){
         $scope.viewdata = {
             commerce: commerceFactory.selectedCommerce.get(),
             stores: [],
@@ -845,17 +850,122 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         $scope.ClearSearch = function() {
             $scope.viewdata.searchtext = "";
         };
+
+        $scope.OpenStore = function(store) {
+            storeFactory.selectedStore.set(store);
+            var _state = navigationFactory.store.get();
+            $state.go(_state);
+        };
     }]);
 
-    ctrl.controller('StoreDetailCtrl', ['storeFactory', 'loadingBox', function(storeFactory, loadingBox){
+    ctrl.controller('StoreDetailCtrl', ['$scope', '$timeout', '$state', '$stateParams', 'storeFactory', 'loadingBox', 'commerceFactory', 'rewardFactory', 'navigationFactory', 'deviceFactory', function($scope, $timeout, $state, $stateParams, storeFactory, loadingBox, commerceFactory, rewardFactory, navigationFactory, deviceFactory){
+        
         loadingBox.show();
         $scope.viewdata = {
             store: storeFactory.selectedStore.get()
-        };
+        };      
 
         $timeout(function(){
             loadingBox.hide();
+            // LoadData($scope.viewdata.store.subEntityID);
         });
+
+        $scope.OpenMaps = function(lat, long) {
+            var url = "";
+            if (deviceFactory.device.platform == "iOS")
+            {
+                url = "maps://maps.apple.com/?q=" + lat + "," + long;
+            }
+            else
+            {
+                url = "maps://maps.google.com/?q=" + lat + "," + long;;
+            }
+
+            url = "waze://?ll=" + lat + "," + long + "&navigate=yes"
+            
+            window.open(url, "_system");
+        };
+
+        $scope.OpenCommerce = function(entityID) {
+            commerceFactory.get(entityID)
+                .then(function(response){
+                    commerceFactory.selectedCommerce.set(response[0]);
+                    var _state = navigationFactory.commerce.get();                    
+                    $state.go(_state);
+                })
+                .catch(function(response){
+                    // console.log("Error when getting the commerce.")
+                    // console.log(response);
+                })
+        };
+
+        $scope.GetAvatarImage = function(img) {
+            if (img == undefined) return "";
+            if (img == null) return "";
+            if (img == "") return ""
+
+            return imageserverurl + img;
+        };
+
+        $scope.GetVal = function(val) {
+            if (val == undefined) return 0;
+            if (val == null) return 0;
+            if (val == "") return 0;
+            return val;
+        };
+
+        $scope.GetVisitCount = function(commerce) {
+            if (commerce.TotalVisits != undefined) return $scope.GetVal(commerce.TotalVisits);
+            if (commerce.TotalVisitsEntity != undefined) return $scope.GetVal(commerce.TotalVisitsEntity);
+            return 0;
+        };
+
+        function GetMonthName(month) {
+            switch(month)
+            {
+                case 1: return "Enero";
+                case 2: return "Febrero";
+                case 3: return "Marzo";
+                case 4: return "Abril";
+                case 5: return "Mayo";
+                case 6: return "Junio";
+                case 7: return "Julio";
+                case 8: return "Agosto";
+                case 9: return "Setiembre";
+                case 10: return "Octubre";
+                case 11: return "Noviembre";
+                case 12: return "Diciembre";
+            }
+        };
+
+        $scope.GetLastVisitDate = function(commerce) {
+            if (commerce.LastVisit != undefined) 
+            {
+                var _date = commerce.LastVisit.substr(0,10);
+                var _dateFormated = new Date(_date.substr(0,10));
+                return _dateFormated.getDate() + " " + (GetMonthName(_dateFormated.getMonth()+1)) + " " + _dateFormated.getFullYear();
+            }
+            if (commerce.LastVisitDateEntity != undefined) 
+            {
+                var _date = commerce.LastVisitDateEntity.substr(0,10);
+                var _dateFormated = new Date(_date.substr(0,10));
+                return _dateFormated.getDate() + " " + (GetMonthName(_dateFormated.getMonth()+1)) + " " + _dateFormated.getFullYear();
+            }
+            return "N/A";
+        };
+
+        function LoadData(subEntityID) {
+            // Pulls the rewards for the Commerce      
+            rewardFactory.active.general(true, subEntityID)
+                .then(function(data){                
+                    loadingBox.hide();
+                    $scope.viewdata.rewards = data.Elements;
+                })
+                .catch(function(err){
+                    loadingBox.hide();
+                    // console.log(err);
+                });
+        };
     }]);
 
 // QR Tab
@@ -1133,6 +1243,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             userFactory.activity.visits.commerce()
             .then(function(data){
                 setTimeout(function() { 
+                    console.log(data.VisitedCommerces);
                     $scope.viewdata.commerces = data.VisitedCommerces;
                     $scope.$apply();
                     loadingBox.hide();                
@@ -1140,11 +1251,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             })
             .catch(function(err){
                 setTimeout(function() { 
-                    // $("#errorWhenLoadingDiv").removeClass("animated slideOutUp");
                     setTimeout(function(){
                         loadingBox.hide();
-                        // $("#errorWhenLoadingDiv").show();                    
-                        // $("#errorWhenLoadingDiv").addClass("animated slideInDown");    
                     }, 150);                    
                 }, 220);
             });;    
@@ -1479,8 +1587,23 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             return false;
         };
 
-        $scope.ClearSearch = function() {
-            $scope.viewdata.searchtext = "";
+        $scope.SearchFocus = function() {
+            $("#btnClearSearchActivity").show(); 
+            console.log("Focus!")           
+        };
+
+        $scope.SearchBlur = function() {     
+            console.log("Blur")       
+            $("#btnClearSearchActivity").hide();
+            if (!devEnvironment) $cordovaKeyboard.close(); 
+        };
+
+        $scope.ClearSearch = function() {   
+            $("#searchTextActivity").blur();
+            // $("#btnClearSearchActivity").hide();
+            // if ($scope.viewdata.searchtext != '') {
+            //     $scope.viewdata.searchtext = "";
+            // }
         };
 
         LoadData();
@@ -1802,13 +1925,31 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     historyRoot: true
                 });
 
-                $state.go('tab.nearme'); // profilepicgenderdob
-                // $state.go('tab.profilepicgenderdob');
+                $state.go('tab.nearme'); // profilepicgenderdob                
             })
             .catch(function(err){
                 loadingBox.hide();
-                // console.log(err);
-                ShowModalMsg("Oops!", "No se puede ingresar, inténtelo de nuevo.", "Ok");
+                console.log(err.data.ErrorCode);
+
+                var _errMessage = "No se pudo ingresar, inténtelo de nuevo.";
+
+                switch(err.data.ErrorCode)
+                {
+                    case 'MO0005': // Usuario o contraseña inválido.
+                        _errMessage = "Usuario o contraseña inválido";
+                        break;
+                    case 'MO0012': // Error acceso denegado, el usuario se encuentra inactivo.
+                        _errMessage = "Su usuario se encuentra inactivo";
+                        break; 
+                    case 'USR003': // Error usuario bloqueado
+                        _errMessage = "Su cuenta se encuentra bloqueada";
+                        break;
+                    case 'USR005': // La contraseña ha expirado, por favor solicite una nueva contraseña
+                        _errMessage = "Su contraseña ha expirado, solicite un cambio haciendo TAP en el botón que dice 'Olvide mi contraseña'";
+                        break;
+                }
+
+                ShowModalMsg("Oops!", _errMessage, "Ok");
             });
         };
 

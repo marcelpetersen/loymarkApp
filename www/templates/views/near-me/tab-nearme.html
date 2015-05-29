@@ -10,9 +10,9 @@
 		<div class="item-input-inset nearme-search-item">
 			<label class="item-input-wrapper">
 				<i class="icon ion-ios-search placeholder-icon"></i>
-				<input type="search" ng-model="viewdata.searchText" placeholder="Buscar">
+				<input id="searchText" type="search" ng-blur="SearchBlur()" ng-focus="SearchFocus()" ng-model="viewdata.searchText" placeholder="Buscar">
 			</label>
-			<button class="button button-clear" ng-click="ClearSearch()" ng-show="viewdata.searchText.length > 0" style="font-size:25px; width:40px; min-width:40px !important;">
+			<button id="btnClearSearch" class="button button-clear" ng-click="ClearSearch()" style="font-size:25px; width:40px; min-width:40px !important; display:none">
 				<i class="icon ion-ios-close-empty"></i>
 			</button>
 		</div>
@@ -36,7 +36,7 @@
 		</div>
 		<ion-refresher pulling-text="" on-refresh="doRefresh()"></ion-refresher>
 		<ion-list id="nearme-list">
-        	<ion-item class="item-icon-left nearme-commerce-item" ng-repeat="item in viewdata.searchResults | orderBy:'Distance'" item="item" ng-click="OpenCommerce(item)">
+        	<ion-item class="item-icon-left nearme-commerce-item" ng-repeat="item in viewdata.searchResults | orderBy:'Distance'" item="item" ng-click="OpenStore(item)">
         		<i class="icon">
 		    		<img class="nearme-commerce-avatar" src="{{GetAvatarImage(item.Image)}}">
 		    	</i>

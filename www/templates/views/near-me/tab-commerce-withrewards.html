@@ -19,7 +19,7 @@
 			<div class="row">
 				<div class="col">
 					<div class="row">
-						<div class="col commercewr-detail-title text-center"><strong>Tu Balance</strong></div>
+						<div class="col commercewr-detail-title text-center"><strong>Mi Balance</strong></div>
 					</div>
 					<div class="row">
 						<div class="col text-center">
@@ -80,14 +80,30 @@
 
 		<ul class="list" style="margin-top:-21px; background-color:#eeeeee !important;">
 		    <div class="item item-divider commercewr-detail-title">
+				<strong style="margin-left:5px">Compartir:</strong>
+			</div>		
+			<div class="item">
+				<div class="row">
+					<div class="col text-center commerce-social-fb-font" ng-click="ShareViaFacebook(viewdata.commerce)">
+						<i class="ion-social-facebook"></i> facebook
+					</div>
+					<div class="col text-center commerce-social-twitter-font" ng-click="ShareViaTwitter(viewdata.commerce)">
+						<i class="ion-social-twitter"></i> twitter
+					</div>
+				</div>
+			</div>
+		</ul>
+
+		<ul class="list" style="margin-top:-21px; background-color:#eeeeee !important;">
+		    <div class="item item-divider commercewr-detail-title">
 				<strong style="margin-left:5px">Premios</strong>
 			</div>
 			<li class="item" ng-show="viewdata.rewards.length == 0">
 				No hay premios disponibles
 			</li>
 		    <li ng-show="viewdata.rewards.length > 0" class="item item-avatar item-icon-right item-text-wrap commercewr-detail-item" collection-repeat="item in viewdata.rewards | orderBy:'Points'" ng-click="OpenRewardDetail(item)">		    	
-		    	<img ng-show="item.Image != null" src="{{viewdata.imageserverurl + item.Image}}">		    	
-		    	
+		    	<img ng-src="{{GetRewardImage(item.Image)}}">
+
 		    	<div>
 			    	<strong><h2 ng-bind="item.Name"></h2></strong>
 
@@ -107,22 +123,6 @@
 
 		    	<i class="icon" ng-class="GetPointsClass(viewdata.commerce.PointsAvailable, item.Points)" style="margin-right:5px;" ng-bind="item.Points"></i>		    	
 		    </li>
-		</ul>
-
-		<ul class="list" style="margin-top:-21px; background-color:#eeeeee !important;">
-		    <div class="item item-divider commercewr-detail-title">
-				<strong style="margin-left:5px">Compartir:</strong>
-			</div>		
-			<div class="item">
-				<div class="row">
-					<div class="col text-center commerce-social-fb-font" ng-click="ShareViaFacebook(viewdata.commerce)">
-						<i class="ion-social-facebook"></i> facebook
-					</div>
-					<div class="col text-center commerce-social-twitter-font" ng-click="ShareViaTwitter(viewdata.commerce)">
-						<i class="ion-social-twitter"></i> twitter
-					</div>
-				</div>
-			</div>
 		</ul>
 	</ion-content>		
 </ion-view>

@@ -36,10 +36,20 @@
                 <img ng-src="{{GetCommerceImage(commerce.Image)}}">
                 <p><strong class="activity-commerce-name">{{commerce.Name}}</strong></p>                
                 <i class="icon ion-android-more-horizontal activity-checkin"></i>
-                <h3 class="favcommerce-lastvisit-label" style="margin-left:-10px;">
-                    <small class="textgrey-text">visitas:</small>
-                    <strong class="favcommerce-visits">{{commerce.TotalVisits}}</strong> 
-                </h3>
+                <div class="row">
+                	<div class="col">
+                		<h3 class="favcommerce-lastvisit-label" style="margin-left:-10px;">
+                			<small class="textgrey-text">visitas:</small>
+                    		<strong class="favcommerce-visits">{{commerce.TotalVisits}}</strong> 
+                    	</h3>
+                	</div>
+                	<div class="col">
+                		<h3 class="favcommerce-lastvisit-label" style="margin-left:-10px;">
+                			<small class="textgrey-text">pops:</small>
+                    		<strong class="favcommerce-visits">{{commerce.PointsAvailable}}</strong> 
+                    	</h3>
+                	</div>
+                </div>
             </div>            
         </div>
 		<div class="bottomspacer"></div>
@@ -48,7 +58,7 @@
 
 <ion-view id="viewKenuuError" style="display:none">
 	<ion-nav-title>
-			<img src="img/kenuulogo.png" alt="" class="top-bar-logo">
+		<img src="img/kenuulogo.png" alt="" class="top-bar-logo">
 	</ion-nav-title>	
 	<ion-content class="search-content" scroll=false>
 		<div class="item item-wrap-text item-clear text-center" style="background-color:transparent;">

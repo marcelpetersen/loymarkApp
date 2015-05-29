@@ -12,15 +12,17 @@
             </div>                
         </div>
         <div id="activityListDiv" class="list" style="display:none">
-            <div class="item item-input-inset commercewrstores-search-item">
+            <form>
+            <div class="item item-input-inset commercewrstores-search-item">                                    
                 <label class="item-input-wrapper">
                     <i class="icon ion-ios-search placeholder-icon"></i>
-                    <input type="search" ng-model="viewdata.searchtext" placeholder="Buscar">
+                    <input id="searchTextActivity" type="search" ng-blur="SearchBlur()" ng-click="SearchFocus()" ng-model="viewdata.searchtext" placeholder="Buscar">
                 </label>
-                <button class="button button-clear" ng-show="viewdata.searchtext.length > 0" style="font-size:25px; width:40px; min-width:40px !important;" ng-click="ClearSearch()">
+                <button id="btnClearSearchActivity" class="button button-clear" style="font-size:25px; width:40px; min-width:40px !important; display:none;" ng-click="ClearSearch()">
                     <i class="ion-ios-close-empty"></i>
-                </button>
+                </button>                
             </div>
+            </form>
         	<div class="item item-divider">
         		<p><strong>Mi Actividad</strong></p>
         	</div>

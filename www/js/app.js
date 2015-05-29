@@ -1,7 +1,7 @@
 // Ionic Starter App
 var beaconFound = false;
 
-var devEnvironment = false; // To use the app through "ionic serve --lab"
+var devEnvironment = true; // To use the app through "ionic serve --lab"
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
@@ -284,6 +284,16 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 				}
 			}
 		})
+
+		// .state('tab.nearme-storedetailwithid', {
+		// 	url: '/nearme/storedetail/:entityID',
+		// 	views: {
+		// 		'tab-nearme': {
+		// 			templateUrl: 'templates/views/near-me/tab-store-detail.html',
+		// 			controller: 'StoreDetailCtrl'
+		// 		}
+		// 	}
+		// })
 
 	// **** QR Code ****
 

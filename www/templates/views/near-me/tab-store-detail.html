@@ -4,15 +4,15 @@
 	</ion-nav-title>
 	<ion-content class="commercewr-content" overflow-scroll="true">
 		<div class="item text-center commercewr-header">			
-			<h2><strong>{{viewdata.commerce.Name}}</strong></h2>	
+			<h2><strong>{{viewdata.store.Name}}</strong></h2>	
 			<div>
-				<img class="commercewr-avatar" src="{{GetAvatarImage(viewdata.commerce.Image)}}">
+				<img class="commercewr-avatar" src="{{GetAvatarImage(viewdata.store.Image)}}">
 			</div>
-			<div class="commercewr-gobtn" ng-click="OpenMaps(viewdata.commerce.LocationLatitude,viewdata.commerce.LocationLongitude)">
+			<div class="commercewr-gobtn" ng-click="OpenMaps(viewdata.store.LocationLatitude,viewdata.store.LocationLongitude)">
 				<p class="commercewr-gobtn-text"><i class="icon-location" style="font-size:20px;"></i></p>
 			</div>
-			<div class="commercewr-storesbtn" ng-click="OpenStores()">
-				<p class="commercewr-storesbtn-text">Tiendas</p>
+			<div class="commercewr-storesbtn" ng-click="OpenCommerce(viewdata.store.EntityID)">
+				<p class="commercewr-storesbtn-text">Comercio</p>
 			</div>		
 		</div>
 		<div class="item commercewr-detail-pops-item" style="padding:0">
@@ -24,7 +24,7 @@
 					<div class="row">
 						<div class="col text-center">
 							<strong class="commercewr-detail-balance commercewr-points">
-								{{GetVal(viewdata.commerce.PointsAvailable)}}
+								{{GetVal(viewdata.store.PointsAvailable)}}
 							</strong>
 						</div>
 					</div>
@@ -36,7 +36,7 @@
 					<div class="row">
 						<div class="col text-center">
 							<strong class="commercewr-detail-balance commercewr-points">
-								{{GetVisitCount(viewdata.commerce)}}
+								{{GetVisitCount(viewdata.store)}}
 							</strong>
 						</div>
 					</div>
@@ -47,7 +47,7 @@
 					</div>
 					<div class="row">
 						<div class="col text-center">
-							<strong class="commercewr-detail-balance commercewr-points item-text-wrap" ng-bind="GetLastVisitDate(viewdata.commerce)" style="font-size:16px;">								
+							<strong class="commercewr-detail-balance commercewr-points item-text-wrap" ng-bind="GetLastVisitDate(viewdata.store)" style="font-size:16px;">								
 							</strong>
 						</div>
 					</div>
@@ -58,23 +58,23 @@
 		<div class="list">
 			<div class="item item-text-wrap item-icon-left">
 				<i class="icon icon-location"></i>
-				<p>{{viewdata.commerce.Address}}</p>
+				<p>{{viewdata.store.Address}}</p>
 			</div>
 			<div class="item item-text-wrap item-icon-left">
 				<i class="icon icon-mail"></i>
-				<p>{{viewdata.commerce.Email}}</p>
+				<p>{{viewdata.store.Email}}</p>
 			</div>
 			<div class="item item-text-wrap item-icon-left">
 				<i class="icon ion-ios-telephone-outline"></i>
-				<p>{{viewdata.commerce.Phone}}</p>
+				<p>{{viewdata.store.Phone}}</p>
 			</div>
 			<div class="item item-text-wrap item-icon-left">
 				<i class="icon ion-social-facebook-outline"></i>
-				<p>{{viewdata.commerce.FacebookPage}}</p>
+				<p>{{viewdata.store.FacebookPage}}</p>
 			</div>
 			<div class="item item-text-wrap item-icon-left">
 				<i class="icon ion-social-twitter-outline"></i>
-				<p>{{viewdata.commerce.TwitterPage}}</p>
+				<p>{{viewdata.store.TwitterPage}}</p>
 			</div>
 		</div>
 		
