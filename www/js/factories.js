@@ -538,6 +538,37 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                 }
             }
         },
+        store: {
+            get: function(subEntityID) {
+                var url = serverURL + '/commerce/details/store';
+                var params = {};
+
+                if (subEntityID != undefined) {
+                    params["subEntityID"] = subEntityID;
+                }
+
+                return new Promise(function(resolve,reject){
+                    $http({
+                        headers: {
+                            'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
+                        },
+                        method: 'GET',
+                        url: url,
+                        params: params
+                    })
+                        .success(function(data,status,headers,config){
+                            if(data.status===true){
+                                resolve(data.data);
+                            } else {
+                                reject(data);
+                            }
+                        })
+                        .error(function(data,status,headers,cofig){
+                            reject(data);
+                        });
+                });
+            }
+        },
         reward:{
             active: {
                 get: function(entityID){
@@ -1018,8 +1049,38 @@ fact.factory('commerceFactory', ['restFactory', function(restFactory){
                         });
                 });
             }
+        },
+        store: {
+            get: function(subEntityID) {
+                return new Promise(function(resolve,reject){
+                    restFactory.store.get(subEntityID)
+                        .then(function(response){
+                            resolve(response);
+                        })
+                        .catch(function(err){
+                            reject(err);
+                        });
+                });
+            }
         }
     };
+}]);
+
+fact.factory('storeFactory', [function(){
+    var _selectedStore = {};
+    return {
+        selectedStore: {
+            set: function(store) {
+                _selectedStore = store;
+            },
+            get: function() {
+                return _selectedStore;
+            },
+            clearSelection: function() {
+                _selectedStore = {};
+            }
+        }
+    }
 }]);
 
 fact.factory('rewardFactory', ['restFactory', function(restFactory){

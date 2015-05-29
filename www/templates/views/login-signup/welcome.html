@@ -5,7 +5,7 @@
 	<ion-content id="welcome-content" scroll="false" class="welcome-content" overflow-scroll="true">
 
 		<div class="item clear-item text-center welcome-main-title" style="margin-top:10px;">
-			<p class="welcome-title">Empecemos es <strong>fácil!!</strong></p>
+			<p class="welcome-title">¡¡Empecemos, es <strong>fácil</strong>!!</p>
 		</div>
 		<form name="loginForm" novalidate ng-submit="DoEmailSignUp()">
 			<div class="text-center">
@@ -13,12 +13,14 @@
 			</div>
 			<div class="text-left" style="padding-left:30px; padding-right:30px;">											
 				<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
-					<span class="input-label" style="font-size:20px;">
-						Ingresa tu Email 
-						<span ng-show="loginForm.emailInput.$error.required"><i class="ion-ios-medical" style="font-size:20px; color: red;"></i></span>
-						<span class="error" ng-show="loginForm.emailInput.$error.email"><span class="ion-alert" style="font-size:10px; color: red;"> incorrecto</span></span>
+					<span class="input-label" style="font-size:18px;">
+						Ingrese su correo electrónico
+						<span ng-show="loginForm.emailInput.$error.required"><i class="ion-ios-medical" style="font-size:20px; color: red;"></i></span>						
 					</span>
-					<input class="kenuu-input" name="emailInput" type="email" placeholder="su.nombre@email.com" ng-model="viewdata.login.email" required>
+					<div>
+						<span class="error" ng-show="loginForm.emailInput.$error.email"><span class="ion-alert" style="font-size:10px; color: red;"> incorrecto</span></span>
+					</div>
+					<input class="kenuu-input" name="emailInput" type="email" placeholder="su.nombre@correo.com" validate-email ng-model="viewdata.login.email" required>
 				</label>
 			</div>
 			<div class="item welcome-item text-center">
