@@ -13,7 +13,7 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 .constant('ApiEndpoint', {
 	url: 'http://192.168.71.98:8100/api' // CIS Network Development (Tavo)
 	// url: 'http://192.168.71.91:8100/api' // CIS Network Development (Alex)
-	// url: 'http://192.168.1.8:8100/api' // Home Development Environment
+	// url: 'http://192.168.1.5:8100/api' // Home Development Environment
 })
 
 .run(function($rootScope, $state, $ionicPlatform, networkFactory, $cordovaNetwork, deviceFactory, $cordovaPush, $ionicTabsDelegate, navigationFactory, commerceFactory, $ionicHistory, loadingBox, $cordovaGeolocation, locationFactory, appVersionFactory) {
@@ -375,6 +375,16 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 				'tab-kenuu': {
 					templateUrl: 'templates/views/near-me/tab-commerce-stores.html',
 					controller: 'CommerceWithRewardsStoresCtrl'
+				}
+			}
+		})
+
+		.state('tab.kenuu-storedetail', {
+			url: '/nearme/storedetail/:subEntityID',
+			views: {
+				'tab-kenuu': {
+					templateUrl: 'templates/views/near-me/tab-store-detail.html',
+					controller: 'StoreDetailCtrl'
 				}
 			}
 		})

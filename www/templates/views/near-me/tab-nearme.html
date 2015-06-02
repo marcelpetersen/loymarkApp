@@ -7,15 +7,17 @@
 		</button>
 	</ion-nav-buttons>
 	<ion-content class="nearme-content" overflow-scroll="true">
-		<div class="item-input-inset nearme-search-item">
-			<label class="item-input-wrapper">
-				<i class="icon ion-ios-search placeholder-icon"></i>
-				<input id="searchText" type="search" ng-blur="SearchBlur()" ng-focus="SearchFocus()" ng-model="viewdata.searchText" placeholder="Buscar">
-			</label>
-			<button id="btnClearSearch" class="button button-clear" ng-click="ClearSearch()" style="font-size:25px; width:40px; min-width:40px !important; display:none">
-				<i class="icon ion-ios-close-empty"></i>
-			</button>
-		</div>
+		<form ng-submit="SubmitSearch()" novalidate>
+			<div class="item-input-inset nearme-search-item">
+				<label class="item-input-wrapper">
+					<i class="icon ion-ios-search placeholder-icon"></i>
+					<input id="searchText" type="search" ng-blur="SearchBlur()" ng-model="viewdata.searchText" placeholder="Buscar">
+				</label>
+				<button id="btnClearSearch" class="button button-clear" ng-click="ClearSearch()" style="font-size:25px; width:40px; min-width:40px !important; display:none">
+					<i class="icon ion-ios-close-empty"></i>
+				</button>
+			</div>
+		</form>
 		<div class="item-input-inset nearme-search-item" ng-show="viewdata.locationSet">
 			<div class="row">
 				<style type="text/css" media="screen">
@@ -34,7 +36,7 @@
 				</div>
 			</div>
 		</div>
-		<ion-refresher pulling-text="" on-refresh="doRefresh()"></ion-refresher>
+		
 		<ion-list id="nearme-list">
         	<ion-item class="item-icon-left nearme-commerce-item" ng-repeat="item in viewdata.searchResults | orderBy:'Distance'" item="item" ng-click="OpenStore(item)">
         		<i class="icon">
