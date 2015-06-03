@@ -7,17 +7,17 @@
 		</button>
 	</ion-nav-buttons>
 	<ion-content class="nearme-content" overflow-scroll="true">
-		<form ng-submit="SubmitSearch()" novalidate>
+		<!-- <form novalidate> -->
 			<div class="item-input-inset nearme-search-item">
 				<label class="item-input-wrapper">
 					<i class="icon ion-ios-search placeholder-icon"></i>
-					<input id="searchText" type="search" ng-blur="SearchBlur()" ng-model="viewdata.searchText" placeholder="Buscar">
+					<input id="searchText" ng-enter="SearchFieldEnterPressed()" type="search" ng-blur="SearchBlur()" ng-model="viewdata.searchText" placeholder="Buscar">
 				</label>
 				<button id="btnClearSearch" class="button button-clear" ng-click="ClearSearch()" style="font-size:25px; width:40px; min-width:40px !important; display:none">
 					<i class="icon ion-ios-close-empty"></i>
 				</button>
 			</div>
-		</form>
+		<!-- </form> -->
 		<div class="item-input-inset nearme-search-item" ng-show="viewdata.locationSet">
 			<div class="row">
 				<style type="text/css" media="screen">
@@ -26,13 +26,13 @@
 					}
 				</style>
 				<div class="col-33 text-center">
-					<button class="button button-clear" ng-click="changeKilometers(5)" ng-class="{borderKilometer:viewdata.kilometers==5}">5Km</button>
+					<button class="button button-clear" ng-click="ChangeKilometers(5)" ng-class="{borderKilometer:viewdata.kilometers==5}">5Km</button>
 				</div>
 				<div class="col-33 text-center">
-					<button class="button button-clear" ng-click="changeKilometers(10)" ng-class="{borderKilometer:viewdata.kilometers==10}">10Km</button>
+					<button class="button button-clear" ng-click="ChangeKilometers(10)" ng-class="{borderKilometer:viewdata.kilometers==10}">10Km</button>
 				</div>
 				<div class="col-33 text-center">
-					<button class="button button-clear" ng-click="changeKilometers(25)"  ng-class="{borderKilometer:viewdata.kilometers==25}">25Km</button>
+					<button class="button button-clear" ng-click="ChangeKilometers(25)"  ng-class="{borderKilometer:viewdata.kilometers==25}">25Km</button>
 				</div>
 			</div>
 		</div>
@@ -54,7 +54,7 @@
         	</ion-item>        	
       	</ion-list>      	
       	
-      	<ion-infinite-scroll immediate-check="false" on-infinite="getMoreStores(viewdata.storePage)" distance="20%">
+      	<ion-infinite-scroll immediate-check="false" on-infinite="GetMoreStores()" distance="20%">
       	</ion-infinite-scroll>
 	</ion-content>
 	<a class="nearme-button roundButton text-center" style="display:none" ng-click="DoSearch()">

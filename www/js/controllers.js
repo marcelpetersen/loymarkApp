@@ -4,18 +4,16 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
 // Near Me Tab
 
-    ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', '$cordovaPush', '$cordovaGeolocation', 'loadingBox', 'searchFactory', 'commerceFactory', 'navigationFactory', 'deviceFactory', 'userFactory', 'navigationFactory', 'locationFactory', 'storeFactory', function($scope, $state, $ionicLoading, $timeout, $cordovaPush, $cordovaGeolocation, loadingBox, searchFactory, commerceFactory, navigationFactory, deviceFactory, userFactory, navigationFactory, locationFactory, storeFactory){
+    ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', '$cordovaPush', '$cordovaGeolocation', '$cordovaKeyboard', 'loadingBox', 'searchFactory', 'commerceFactory', 'navigationFactory', 'deviceFactory', 'userFactory', 'navigationFactory', 'locationFactory', 'storeFactory', function($scope, $state, $ionicLoading, $timeout, $cordovaPush, $cordovaGeolocation, $cordovaKeyboard, loadingBox, searchFactory, commerceFactory, navigationFactory, deviceFactory, userFactory, navigationFactory, locationFactory, storeFactory){
     
         $scope.viewdata = {
             locationSet: true,
-            doingSearch: false,
             searchResults: [],
             searchText: "",
             user: {},
             CardNumber: "",
-            storePage: 1,
-            kilometers: 10,
-            searchCleared: false
+            storePage: 0,
+            kilometers: 10
         };
 
         $scope.$on("$ionicView.enter", function(event, args){
@@ -111,10 +109,18 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 var lat  = _location.lat;
                 var long = _location.long;
 
-                commerceFactory.stores.nearby(0, long, lat, 0)
+                commerceFactory.stores.nearby(0, long, lat, $scope.viewdata.storePage, $scope.viewdata.kilometers)
                     .then(function(data){                                                    
                         loadingBox.hide();
-                        $scope.viewdata.searchResults = data;                            
+                        if ($scope.viewdata.storePage == 0) $scope.viewdata.searchResults = data;                            
+                        else
+                        {
+                            var j = data.length;
+                            for (var i=0; i<j; i++)
+                            {
+                                $scope.viewdata.searchResults.push(data[i]);
+                            }
+                        }
                         $scope.$apply();
                         resolve();
                     })
@@ -148,8 +154,17 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 searchFactory.doSearch($scope.viewdata.searchText)
                     .then(function(data){                        
                         loadingBox.hide();
-                        $scope.viewdata.searchResults = data.response.Elements;
-                        $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
+                        $scope.viewdata.searchResults = [];
+                        var j=data.response.Elements.length;
+                        for (var i=0;i<j;i++)
+                        {
+                            if (data.response.Elements[i].Type == "T")
+                            {
+                                $scope.viewdata.searchResults.push(data.response.Elements[i]);
+                            }
+                        }                       
+
+                        // $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
                         $scope.$apply();
                         resolve();
                     })
@@ -160,13 +175,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             });
         };
 
-
-        // Executed when the view is loaded
-        $timeout(function(){
-            $("#nearme-list").show();
-            $("#nearme-list").addClass("animated fadeIn");
-            $scope.viewdata.locationSet = false;
-
+        function ViewInitialization() {
             GetMemberData()
                 .then(function(response){
                     if (!devEnvironment)
@@ -206,18 +215,117 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
                             })
                             .catch(function(err){
-                                
+
                             })
                     }
                 })
                 .catch(function(err){
 
                 });
+        };
+
+        function ResetSearch() {
+            $scope.viewdata.storePage = 0;
+
+            if ($scope.viewdata.locationSet) 
+            {
+                if ($scope.viewdata.searchText === "")
+                {
+                    GetNearbyStores()
+                        .then(function(response){
+                            if (!devEnvironment) $cordovaKeyboard.close();
+                        })
+                        .catch(function(err){
+                            if (!devEnvironment) $cordovaKeyboard.close();
+                        });
+                }
+                else
+                {
+                    GetStoresByTextSearch()
+                        .then(function(response){
+                            if (!devEnvironment) $cordovaKeyboard.close();
+                        })
+                        .catch(function(err){
+                            if (!devEnvironment) $cordovaKeyboard.close();
+                        });
+                }
+            }
+            else
+            {
+                if ($scope.viewdata.searchText === "")
+                {
+                    GetAllStores()
+                        .then(function(response){
+                            if (!devEnvironment) $cordovaKeyboard.close();
+                        })
+                        .catch(function(err){
+                            if (!devEnvironment) $cordovaKeyboard.close();
+                        });
+                }
+                else
+                {
+                    GetStoresByTextSearch()
+                        .then(function(response){
+                            if (!devEnvironment) $cordovaKeyboard.close();
+                        })
+                        .catch(function(err){
+                            if (!devEnvironment) $cordovaKeyboard.close();
+                        });
+                }
+            }
+        };
+
+        $scope.GetMoreStores = function(){
+            if (!$scope.viewdata.locationSet) return;     // If location services is disabled, do not search for more stores. 
+            if ($scope.viewdata.searchText != "") return; // The infinite scroll does not apply to the search by text.
+
+            $scope.viewdata.storePage++;
+            
+            GetNearbyStores()
+                .then(function(){                    
+                })
+                .catch(function(response){
+                });        
+        };
+
+        $scope.SearchFieldEnterPressed = function() {
+            if (!devEnvironment) $cordovaKeyboard.close();
+
+            if ($scope.viewdata.searchText != "")
+            {
+                GetStoresByTextSearch()
+                    .then(function(response){                    
+                    })
+                    .catch(function(err){                    
+                    });
+            }
+        };
+
+        $scope.ChangeKilometers = function(kilometers){
+            $scope.viewdata.kilometers = kilometers;
+            $scope.viewdata.storePage = 0;
+            
+            GetNearbyStores()
+                .then(function(response){
+                    // for(var i=0;i<data.length;i++){
+                    //     $scope.viewdata.searchResults.push(data[i]);
+                    // }
+                })
+                .catch(function(response){
+
+                });
+        };
+
+        // Executed when the view is loaded
+        $timeout(function(){
+            $("#nearme-list").show();
+            $("#nearme-list").addClass("animated fadeIn");
+            $scope.viewdata.locationSet = false;
+
+            ViewInitialization();
         });
 
         $scope.$on('$cordovaPush:notificationReceived', function(event, notification) {
-             // console.log(notification);
-
             if (deviceFactory.device.platform() == 'iOS')
             {
                 // iOS
@@ -243,7 +351,6 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             }
             else
             {
-                // console.log(notification);
                 // Android
                 switch(notification.event) {
                     case 'registered':
@@ -280,16 +387,15 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             }
         });
 
-        $scope.SearchFocus = function() {           
-        };
-
         $scope.SearchBlur = function() {
             if (!devEnvironment) $cordovaKeyboard.close();
         };
 
-        $scope.ClearSearch = function() {
+        $scope.ClearSearch = function() {            
             $("#btnClearSearch").hide();
-            $scope.viewdata.searchText = "";
+            $("#searchText").blur();
+            $scope.viewdata.searchText = "";            
+            ResetSearch();
         };
 
         $scope.$watch('viewdata.searchText', function() {
@@ -324,78 +430,6 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 var x = a[key]; var y = b[key];
                 return ((x < y) ? -1 : ((x > y) ? 1 : 0));
             });
-        }
-
-        $scope.getMoreStores = function(pageNum){
-            loadingBox.show();
-            $scope.viewdata.storePage++;
-            var posOptions = {timeout: 10000, enableHighAccuracy: false};
-            var _location = locationFactory.location.get();
-            var lat  = _location.lat;
-            var long = _location.long;
-            commerceFactory.stores.nearby(0, long, lat, pageNum, $scope.viewdata.kilometers)
-                .then(function(data){
-                    for(var i=0;i<data.length;i++){
-                        $scope.viewdata.searchResults.push(data[i]);
-                    }
-                    $scope.$apply();
-                    loadingBox.hide();
-                });
-        };
-
-        $scope.changeKilometers = function(kilometers){
-            loadingBox.show();
-            $scope.viewdata.kilometers = kilometers;
-            $scope.viewdata.storePage = 0;
-            var posOptions = {timeout: 10000, enableHighAccuracy: false};
-            var _location = locationFactory.location.get();
-            if (_location.isSet)
-            {
-                var lat  = _location.lat;
-                var long = _location.long;
-                $scope.viewdata.searchResults = [];
-                commerceFactory.stores.nearby(0, long, lat, 0, kilometers)
-                    .then(function(data){
-                        // // console.log('DATA LENGTH!!!!');
-                        // // console.log(kilometers,data.length,pageNum);
-                        for(var i=0; i<data.length; i++){
-                            $scope.viewdata.searchResults.push(data[i]);
-                        }
-                        // $scope.viewdata.searchResults = data;
-                        $scope.$apply();
-                        loadingBox.hide();
-                    })
-                    .catch(function(err){
-                        searchFactory.doSearch($scope.viewdata.searchText)
-                            .then(function(data){
-                                for(var i=0; i<data.response.Elements.length; i++){
-                                    $scope.viewdata.searchResults.push(data.response.Elements[i]);
-                                }
-                                // $scope.viewdata.searchResults = data.response.Elements;
-                                $scope.$apply();
-                                loadingBox.hide();
-                            })
-                            .catch(function(data){
-                                // console.log(data);
-                                loadingBox.hide();
-                            });
-                    });
-            }
-            else
-            {
-                searchFactory.doSearch($scope.viewdata.searchText)
-                    .then(function(data){
-                        $scope.viewdata.searchResults = data.response.Elements;
-                        $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
-                        loadingBox.hide();
-                        $scope.$apply();
-                    })
-                    .catch(function(data){
-                        // console.log("Error while searching commerces without location:")
-                        // console.log(data);
-                        loadingBox.hide();
-                    });
-            }
         };
 
         $scope.formatDistance = function(distance) {
@@ -405,28 +439,6 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             distance = Math.round(distance * 100) / 100;
             return distance;
         };
-
-        $scope.DoSearch = function() {
-            doSearch(false);
-        };
-
-        $scope.SubmitSearch = function() {
-            doSearch(true);
-        };
-
-        $scope.doRefresh = function() {
-            doSearch(false);
-        };
-
-        // Pulls the commerces
-        function doSearch(fromSearch) {
-            if (!devEnvironment) $cordovaKeyboard.close();            
-            if (!fromSearch) loadingBox.show();
-
-            
-
-            
-        }
     }]);
 
     ctrl.controller('CommerceWithRewardsCtrl', ['$scope', '$state', '$stateParams', '$ionicLoading', '$timeout', 'loadingBox', 'commerceFactory', 'rewardFactory', 'deviceFactory', 'rewardDetailModal', 'navigationFactory', '$cordovaSocialSharing', function($scope, $state, $stateParams, $ionicLoading, $timeout, loadingBox, commerceFactory, rewardFactory, deviceFactory, rewardDetailModal, navigationFactory, $cordovaSocialSharing){
