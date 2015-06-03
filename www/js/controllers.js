@@ -27,7 +27,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 .then(function(data){
                     $scope.viewdata.user = data;
                     $scope.viewdata.CardNumber = data.CardNumber;
-                    resolve();
+                    resolve(data);
                 })
                 .catch(function(err) {                    
                     reject(err);
@@ -35,7 +35,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             });
         };
 
-        function RegisterDevice() {
+        function RegisterDevice(email) {
             return new Promise(function(resolve,reject){
                 var iosConfig = {
                     "badge": true,
@@ -46,7 +46,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     "senderID": "AIzaSyDNjV6WWsPUXWKNctSYo19MhPpSMwgZKqw",
                 };
 
-                deviceFactory.device.registeredUser.set(data.Email);
+                deviceFactory.device.registeredUser.set(email);
 
                 if (deviceFactory.device.platform() == "iOS")
                 {
@@ -180,7 +180,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 .then(function(response){
                     if (!devEnvironment)
                     {
-                        RegisterDevice()
+                        RegisterDevice(response.Email)
                             .then(function(response){
 
                             })
