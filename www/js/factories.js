@@ -206,7 +206,6 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                     });
                 },
                 updateAvatar: function(_imagedata) {
-                    // var url = "http://192.168.71.91:8001/userProfile/updateAvatar";
                     var url = serverURL + '/member/userprofile/updateAvatar';
                     return new Promise(function(resolve,reject){
                         var _jdata =
@@ -520,7 +519,7 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                                 locationlatitude: lat,
                                 kilometers: kilometers,
                                 paging: true,
-                                pagesize: '10',
+                                pagesize: '250',
                                 pagenum: page
                             }
                         })
@@ -571,7 +570,7 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
         },
         reward:{
             active: {
-                get: function(entityID){
+                get: function(entityID, subEntityID){
                     var url = serverURL + '/reward/active';
 
                     var _http = 
@@ -588,6 +587,11 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                         _http["params"] = {
                             "entityID": entityID
                         }
+                    }
+
+                    if (subEntityID != undefined)
+                    {
+                        _http["params"]["subEntityID"] = subEntityID;                            
                     }
 
                     return new Promise(function(resolve,reject){
@@ -1116,10 +1120,10 @@ fact.factory('rewardFactory', ['restFactory', function(restFactory){
             }
         },
         active: {
-            general: function(newData, entityID){
+            general: function(newData, entityID, subEntityID){
                 return new Promise(function(resolve,reject){
                     if(newData===true){
-                        restFactory.reward.active.get(entityID)
+                        restFactory.reward.active.get(entityID, subEntityID)
                             .then(function(response){
                                 _rewards = response;
                                 resolve(response);
@@ -1243,6 +1247,7 @@ fact.factory('navigationFactory', [function(){
         setDefaults: function() {
             storesState         = "tab.nearme-commercestores"; 
             commerceState       = "tab.nearme-commerce";
+            storeState          = "tab.nearme-storedetail";
         },
         commerce: {
             setTab: function(stateName) {

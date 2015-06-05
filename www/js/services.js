@@ -223,8 +223,15 @@ angular.module('kenuu.services', [])
 }])
 
 .service('loadingBox', ['$ionicLoading', function($ionicLoading){
-	this.show = function() {
-		$ionicLoading.show({template: '<ion-spinner icon="android" class="spinner"></ion-spinner>'});
+	this.show = function(message) {
+		if (message == undefined)
+		{
+			$ionicLoading.show({template: '<ion-spinner icon="android" class="spinner"></ion-spinner>'});
+		}
+		else
+		{
+			$ionicLoading.show({template: '<p>' + message + '</p><ion-spinner icon="android" class="spinner"></ion-spinner>'});
+		}		
 	};
 
 	this.hide = function() {

@@ -1,18 +1,25 @@
 {
-	"name": "tabsNew",
-	"app_id": "",
-	"gulpStartupTasks": [
-		"sass",
-		"watch"
-	],
-	"watchPatterns": [
-		"www/**/*",
-		"!www/lib/**/*"
-	],
-	"proxies": [
-		{
-			"path": "/api",
-			"proxyUrl": "http://201.201.150.159"
-		}
-	]
+  "name": "tabsNew",
+  "app_id": "",
+  "gulpStartupTasks": [
+    "sass",
+    "watch"
+  ],
+  "watchPatterns": [
+    "www/**/*",
+    "!www/lib/**/*"
+  ],
+  "proxies": [
+    {
+      "path": "/api",
+      "proxyUrl": "http://201.201.150.159"
+    }
+  ],
+  "browsers": [
+    {
+      "platform": "android",
+      "browser": "crosswalk",
+      "version": "12.41.296.5"
+    }
+  ]
 }

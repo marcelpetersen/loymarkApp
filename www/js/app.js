@@ -132,12 +132,15 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 
 		navigationFactory.setDefaults();
 
-		$rootScope.MyKenuuTabClicked = function() {								
+		$rootScope.MyKenuuTabClicked = function() {
+			navigationFactory.store.setTab("tab.kenuu-storedetail");
+			navigationFactory.stores.setTab("tab.kenuu-commercestores");
+			navigationFactory.commerce.setTab("tab.kenuu-commerce");
 			$state.go("tab.kenuu");
 		};
 
 		$rootScope.NearMeTabClicked = function() {
-			navigationFactory.setDefaults();			
+			navigationFactory.setDefaults();
 			$state.go("tab.nearme");
 		};
 	});

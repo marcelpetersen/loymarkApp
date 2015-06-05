@@ -102,8 +102,7 @@
 				No hay premios disponibles
 			</li>
 		    <li ng-show="viewdata.rewards.length > 0" class="item item-avatar item-icon-right item-text-wrap commercewr-detail-item" collection-repeat="item in viewdata.rewards | orderBy:'Points'" ng-click="OpenRewardDetail(item)">		    	
-		    	<img ng-show="item.Image != null" src="{{viewdata.imageserverurl + item.Image}}">		    	
-		    	
+		    	<img ng-src="{{GetRewardImage(item.Image)}}">
 		    	<div>
 			    	<strong><h2 ng-bind="item.Name"></h2></strong>
 

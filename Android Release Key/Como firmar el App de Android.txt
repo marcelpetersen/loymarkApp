@@ -13,8 +13,8 @@ What is the two-letter country code for this unit? CR
 
 -- Segundo, se firma el APK con el Key generado
 
-jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore kenuu-release-key.keystore Kenuu-release-unsigned.apk kenuu
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore kenuu-release-key.keystore android-armv7-release-unsigned.apk kenuu
 
 -- Ejemplo: zipalign -v 4 Kenuu-release-unsigned.apk Kenuu.apk
 
-/usr/local/Cellar/android-sdk/23.0.2/build-tools/22.0.1/zipalign -v 4 Kenuu-release-unsigned.apk Kenuu.apk
+/usr/local/Cellar/android-sdk/23.0.2/build-tools/22.0.1/zipalign -v 4 android-armv7-release-unsigned.apk Kenuu.apk

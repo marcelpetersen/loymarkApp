@@ -17,10 +17,10 @@
 						Ingrese su correo electrónico
 						<span ng-show="loginForm.emailInput.$error.required"><i class="ion-ios-medical" style="font-size:20px; color: red;"></i></span>						
 					</span>
+					<input class="kenuu-input kenuu-input-email" name="emailInput" type="email" placeholder="su.nombre@correo.com" validate-email ng-model="viewdata.login.email" required>
 					<div>
 						<span class="error" ng-show="loginForm.emailInput.$error.email"><span class="ion-alert" style="font-size:10px; color: red;"> incorrecto</span></span>
 					</div>
-					<input class="kenuu-input" name="emailInput" type="email" placeholder="su.nombre@correo.com" validate-email ng-model="viewdata.login.email" required>
 				</label>
 			</div>
 			<div class="item welcome-item text-center">

@@ -7753,6 +7753,9 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
   border-bottom: 1px solid white !important;
   color: white !important; }
 
+.kenuu-input-email {
+  font-size: 25px !important; }
+
 .card, .list-inset {
   margin: 7px !important; }
 
