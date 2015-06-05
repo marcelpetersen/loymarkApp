@@ -1610,7 +1610,12 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         $scope.gDate = function(date) {
-            var _dateFormated = new Date(date.substr(0,10));
+            var _y = date.substr(0,4);
+            var _m = date.substr(5,2);
+            var _d = date.substr(8,2);
+
+            var _dateFormated = new Date(_y, _m, _d);
+
             return _dateFormated.getDate() + " " + (GetMonthName(_dateFormated.getMonth()+1)) + " " + _dateFormated.getFullYear() + " " + date.substr(11,5);;
         };
 
@@ -1673,8 +1678,9 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             commerceFactory.get(entityID)
                 .then(function(response){                
                     commerceFactory.selectedCommerce.set(response[0]);
-                    navigationFactory.commerce.setTab("tab.kenuu-commerce");
+                    navigationFactory.store.setTab("tab.kenuu-storedetail");
                     navigationFactory.stores.setTab("tab.kenuu-commercestores");
+                    navigationFactory.commerce.setTab("tab.kenuu-commerce");
                     loadingBox.hide();
                     $state.go(navigationFactory.commerce.get());
                 })
@@ -1799,13 +1805,12 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             loadingBox.show($scope.viewdata.pleaseWaitMessage);
             userFactory.info.get()
                 .then(function(data){
-                    loadingBox.hide();
                     $scope.viewdata.user = data;
                     var userData = data;
                     $scope.viewdata.user.name = userData.FirstName;
                     $scope.viewdata.user.lastname = userData.LastName;
-
                     $scope.$apply();
+                    loadingBox.hide();
                 })
                 .catch(function(err){loadingBox.hide();});
         });
@@ -1840,6 +1845,9 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         $scope.DoLogout = function() {
+            // Forcing the Reference ID clear
+            localStorage.removeItem("userReferenceID");
+
             userFactory.session.logout();
             $ionicHistory.clearHistory();
             $ionicHistory.clearCache();

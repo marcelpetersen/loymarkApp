@@ -1,31 +1,4 @@
 var fact = angular.module('kenuu.factory', []);
-fact.factory('referenceIDFactory', [function(){
-    var _userReferenceId = "";
-
-    function GetRefID() {
-        var id = localStorage.getItem("userReferenceID");
-        if (id === undefined) return _userReferenceId;
-        else
-        {
-            _userReferenceId = id;
-            return _userReferenceId;
-        }
-    };
-
-    function SetRefID(id) {
-        localStorage.setItem("userReferenceID", id);
-        _userReferenceId = id;
-    };
-
-    return {
-        setReferenceID: function(id) {
-            SetRefID(id);
-        },
-        getReferenceID: function() {
-            return GetRefID();
-        }
-    }
-}]);
 
 fact.factory('networkFactory', ['$cordovaNetwork', function($cordovaNetwork){
     return {
@@ -1375,4 +1348,77 @@ fact.factory('appVersionFactory', ['$cordovaAppVersion', function($cordovaAppVer
             }
         }
     };
-}])
+}]);
+
+fact.factory('SQLiteFactory', ['$cordovaSQLite', function($cordovaSQLite){
+    return {
+        db: {
+            userReferenceID: {
+                save: function(_userReferenceID) {
+                    return new Promise(function(resolve,reject){
+                        // for opening a background db:
+                        var db = $cordovaSQLite.openDB({ name: "profile.db", bgType: 1 });
+
+                        $scope.execute = function() {
+                            var query = "INSERT INTO profile_data (key, value) VALUES (?, ?)";
+                            $cordovaSQLite.execute(db, query, ['userReferenceID', _userReferenceID]).then(function(res) {
+                                // console.log("insertId: " + res.insertId);
+                                resolve();
+                            }, function (err) {
+                                // console.error(err);
+                                reject();
+                            });
+                        }
+                    });
+                },
+                get: function() {
+                    return new Promise(function(resolve,reject){
+                        // for opening a background db:
+                        var db = $cordovaSQLite.openDB({ name: "profile.db", bgType: 1 });
+
+                        $scope.execute = function() {
+                            var query = "SELECT FROM profile_data WHERE key = 'userReferenceID'";
+                            $cordovaSQLite.execute(db, query).then(function(res){
+                                console.log(res);
+                                resolve();
+                            }, function(err) {
+                                console.log(err);
+                                reject();
+                            });
+                        }
+                    });
+                }
+            }
+        }
+    };
+}]);
+
+fact.factory('referenceIDFactory', ['SQLiteFactory', function(SQLiteFactory){
+    var _userReferenceId = "";
+
+    function GetRefID() {
+        var id = localStorage.getItem("userReferenceID");
+        if (id === undefined) return _userReferenceId;
+        else
+        {
+            _userReferenceId = id;
+            return _userReferenceId;
+        }
+    };
+
+    function SetRefID(id) {
+        localStorage.setItem("userReferenceID", id);
+        _userReferenceId = id;
+    };
+
+    return {
+        setReferenceID: function(id) {
+            SetRefID(id);
+        },
+        getReferenceID: function() {
+            return GetRefID();
+        }
+    }
+}]);
+
+
