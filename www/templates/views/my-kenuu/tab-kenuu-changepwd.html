@@ -9,10 +9,13 @@
 				<input class="profileedit-input" ng-model="viewdata.user.password" type="password" placeholder="">
 			</label>
 			<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
-				<span class="input-label profileedit-label">Confirme su Contraseña</span>
+				<span class="input-label profileedit-label">Confirmar Contraseña</span>
 				<input class="profileedit-input" ng-model="viewdata.user.passwordconfirmation" type="password" placeholder="">
 			</label>
-		</div>
+			<p class="pwdchange-login-pwdmessage">
+				Debe contener como mínimo 8 caracteres. Al menos una mayúscula, una minúscula, carácter especial y un número. Sin espacios. Ejm: Kenuu.15
+			</p>
+		</div>		
 		<div class="item welcome-item" style="top:20px;">
 			<button ng-click="SaveProfile()" type="button" class="button button-block button-light welcome-btn profileedit-button">¡Cambiar!</button>
 		</div> 

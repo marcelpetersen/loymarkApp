@@ -6,7 +6,11 @@
 		<button class="button button-clear icon-params topbar-setupicon" ng-click="ShowSetupView()">
 		</button>
 	</ion-nav-buttons>	
-	<ion-content scroll=true>  		
+	<ion-content scroll=true> 
+		<ion-refresher
+			pulling-text="Hale para refrescar..."
+			on-refresh="doRefresh()">
+		</ion-refresher> 		
 		<div class="row profile-avatar-container">
 			<div class="col-20 text-center profile-avatar-div">
 				<img ng-src="{{viewdata.user.AvatarMobile}}" class="profile-avatar" ng-click="ChangeProfilePic()">

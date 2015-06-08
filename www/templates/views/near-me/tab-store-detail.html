@@ -19,7 +19,7 @@
 			<div class="row">
 				<div class="col">
 					<div class="row">
-						<div class="col commercewr-detail-title text-center"><strong>Tu Balance</strong></div>
+						<div class="col commercewr-detail-title text-center"><strong>Mi Balance</strong></div>
 					</div>
 					<div class="row">
 						<div class="col text-center">
@@ -43,7 +43,7 @@
 				</div>
 				<div class="col">
 					<div class="row">
-						<div class="col commercewr-detail-title text-center"><strong>Ultima Visita</strong></div>
+						<div class="col commercewr-detail-title text-center"><strong>Última Visita</strong></div>
 					</div>
 					<div class="row">
 						<div class="col text-center">
@@ -80,7 +80,7 @@
 		
 		<ul class="list" style="margin-top:-21px; background-color:#eeeeee !important;">
 		    <div class="item item-divider commercewr-detail-title">
-				<strong style="margin-left:5px">Compártelo:</strong>
+				<strong style="margin-left:5px">Compartir:</strong>
 			</div>		
 			<div class="item">
 				<div class="row">
@@ -106,21 +106,21 @@
 		    	<div>
 			    	<strong><h2 ng-bind="item.Name"></h2></strong>
 
-			    	<p ng-show="viewdata.commerce.PointsAvailable >= item.Points">		    		
-			    		<strong ng-bind="item.Points"></strong> de <strong ng-bind="item.Points"></strong> <i class="ion-ios-checkmark commercewr-reward-available"></i>
+			    	<p ng-show="GetAvailablePoints(viewdata.store) >= item.Points">		    		
+			    		¡¡Cuento con los suficientes <strong class="commercewr-popslabel">POPS</strong> para canjear!!
 			    	</p>		    	
-			    	<p ng-show="viewdata.commerce.PointsAvailable < item.Points">
-			    		<strong ng-bind="GetAvailablePoints(viewdata.commerce.PointsAvailable)"></strong> de <strong ng-bind="item.Points"></strong> 
+			    	<p ng-show="GetAvailablePoints(viewdata.store) < item.Points">
+			    		<strong ng-bind="GetAvailablePoints(viewdata.store)"></strong> de <strong ng-bind="item.Points"></strong> 
 			    	</p>
 			    	<p ng-show="!item.AvailableAllStores">
 			    		Exclusivo para: <strong ng-bind="item.SubEntityName" class="commercewr-store-label"></strong>
 			    	</p>
 			    	<p>&nbsp;</p>
 			    	
-			    	<div ng-class="GetRewardsProgressClass(viewdata.commerce.PointsAvailable, item.Points)" ng-style="GetRewardProcessStyle(viewdata.commerce.PointsAvailable, item.Points)"></div>
+			    	<div ng-class="GetRewardsProgressClass(GetAvailablePoints(viewdata.store), item.Points)" ng-style="GetRewardProcessStyle(GetAvailablePoints(viewdata.store), item.Points)"></div>
 		    	</div>
 
-		    	<i class="icon" ng-class="GetPointsClass(viewdata.commerce.PointsAvailable, item.Points)" style="margin-right:5px;" ng-bind="item.Points"></i>		    	
+		    	<i class="icon" ng-class="GetPointsClass(GetAvailablePoints(viewdata.store), item.Points)" style="margin-right:5px;" ng-bind="item.Points"></i>		    	
 		    </li>
 		</ul>
 	</ion-content>		

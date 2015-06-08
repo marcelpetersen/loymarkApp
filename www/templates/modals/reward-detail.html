@@ -20,10 +20,10 @@
 			</div>
 			<div class="item item-text-wrap reward-detail-baseitem">
 				<strong class="reward-detail-title">Validez</strong>
-				<p>
-				<strong><span ng-bind="viewdata.selectedreward.ValidFrom.substr(0,10)"></span></strong>
+				<p class="reward-detail-validity">
+				<strong><span ng-bind="gDate(viewdata.selectedreward.ValidFrom)"></span></strong>
 				<span> hasta </span>
-				<strong><span ng-bind="viewdata.selectedreward.ValidUntil.substr(0,10)"></span></strong>
+				<strong><span ng-bind="gDate(viewdata.selectedreward.ValidUntil)"></span></strong>
 				</p>
 			</div>
 			<div class="item item-text-wrap reward-detail-baseitem">

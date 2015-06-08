@@ -1068,6 +1068,34 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         $scope.CloseRewardDetailModal = function() {
             rewardDetailModal.Close();
         };
+
+        $scope.gDate = function(date) {
+            var _y = date.substr(0,4);
+            var _m = date.substr(5,2);
+            var _d = date.substr(8,2);
+
+            var _dateFormated = new Date(_y, _m, _d);
+
+            return _dateFormated.getDate() + " " + (GetMonthName(_dateFormated.getMonth()+1)) + " " + _dateFormated.getFullYear();
+        };
+
+        $scope.GetAvailablePoints = function(store) {
+            if (store.PointsAvailable != undefined) 
+            {
+                return store.PointsAvailable;
+            }
+            else
+            {
+                if (store.Points != undefined)
+                {
+                    return store.Points;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        };
     }]);
 
 // QR Tab
@@ -1224,7 +1252,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             defaultAvatarImg_male: 'img/default.png',
             defaultAvatarImg_female: 'img/default_female.png',
             appVersion: '',
-            pleaseWaitMessage: 'Buscando su información...'
+            pleaseWaitMessage: 'Buscando su información...',
+            pullMemberFromServer: true
         };
 
         $scope.gDate = function(date) {
@@ -1259,33 +1288,45 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             $("#viewKenuuError").addClass("animated slideInUp");
         };
 
-        function LoadData() {
-            userFactory.info.get()
+        $scope.doRefresh = function() {
+            loadingBox.show('Actualizando la información del perfil...');
+            userFactory.info.get(true)
                 .then(function(data){
+                    $scope.viewdata.pullMemberFromServer = false;
+                    loadingBox.hide();              
+                    $scope.viewdata.user = data;
+                    $scope.$broadcast('scroll.refreshComplete');
+                });
+        };
+
+        function LoadData() {
+            userFactory.info.get($scope.viewdata.pullMemberFromServer)
+                .then(function(data){
+                    $scope.viewdata.pullMemberFromServer = false;
                     loadingBox.hide();              
                     $scope.viewdata.user = data;
 
                     // TODO: pending to implement the pull image from the profile that comes from the service
-                    $scope.profileimage = localStorage.getItem('profile_picture');
-                    if ($scope.profileimage == undefined) $scope.profileimage = '';
-
-                    $scope.viewdata.user.Avatar = $scope.profileimage;
+                    // $scope.profileimage = localStorage.getItem('profile_picture');
+                    // if ($scope.profileimage == undefined) $scope.profileimage = '';
 
                     // Sets the Avatar Image when there is no image defined
-                    var _gender = localStorage.getItem('profile_gender');
+                    var _gender = localStorage.getItem('profile_gender');                    
                     $scope.viewdata["gender"] = _gender;
-                    if ($scope.viewdata.user.Avatar == '')
+
+
+                    if (($scope.viewdata.user.AvatarMobile == '')||($scope.viewdata.user.AvatarMobile == undefined))
                     {
                         if (_gender != undefined) {  
                             if (_gender == "M") {
-                                $scope.viewdata.user.Avatar = $scope.viewdata.defaultAvatarImg_female;
+                                $scope.viewdata.user.AvatarMobile = $scope.viewdata.defaultAvatarImg_female;
                             }
                             else {
-                                $scope.viewdata.user.Avatar = $scope.viewdata.defaultAvatarImg_male;
+                                $scope.viewdata.user.AvatarMobile = $scope.viewdata.defaultAvatarImg_male;
                             }
                         }
                         else {
-                            $scope.viewdata.user.Avatar = $scope.viewdata.defaultAvatarImg_female;   
+                            $scope.viewdata.user.AvatarMobile = $scope.viewdata.defaultAvatarImg_female;   
                         }
                     }
 
@@ -1466,7 +1507,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
         function TakePicture() {
             var options = {
-                quality: 50,
+                quality: 100,
                 destinationType: Camera.DestinationType.FILE_URI, // Camera.DestinationType.DATA_URL,
                 sourceType: Camera.PictureSourceType.CAMERA,
                 allowEdit: true,
@@ -1475,7 +1516,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 targetHeight: 100,
                 popoverOptions: CameraPopoverOptions,
                 saveToPhotoAlbum: false,
-                cameraDirection: 1
+                cameraDirection: 1,
+                correctOrientation: true
             };
 
             $cordovaCamera.getPicture(options).then(function(imageData) {
@@ -1935,7 +1977,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         $scope.SaveProfile = function() {  
             if (($scope.viewdata.user.password == "") || ($scope.viewdata.user.passwordconfirmation == ""))
             {
-                ShowModalMsg("Oops!", "Por favor ingrese sus contraseñas.", "Ok");
+                ShowModalMsg("Oops!", "Por favor ingresar su contraseña y la confirmación.", "Ok");
                 return false;
             }
 
@@ -1961,7 +2003,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
                     userFactory.info.get()
                     .then(function(data){
-                        msgBox.showOkWithAction("¡Listo!", "Actualizó su perfil.", function() {                        
+                        msgBox.showOkWithAction("¡Listo!", "Información actualizada.", function() {                        
                             $ionicHistory.goBack();
                         });
                     })
@@ -1971,13 +2013,23 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 }
                 else
                 {                
-                    ShowModalMsg("Oops!", "Su contraseña no es válido.", "Ok");
+                    ShowModalMsg("Oops!", "Su contraseña no es válida.", "Ok");
                     return false;
                 }
             })
             .catch(function(err){
                 loadingBox.hide();
-                ShowModalMsg("Oops!", "Su contraseña no es válido.", "Ok");
+
+                var _errMessage = "Ocurrió un error, por favor inténtelo de nuevo.";
+
+                switch(err.data.responseCode)
+                {
+                    case 'EV0000': // Password Inválido
+                        _errMessage = "Contraseña tiene un formato inválido, por favor revísela e intente de nuevo";
+                        break;
+                }
+
+                ShowModalMsg("Oops!", _errMessage, "Ok");
                 return false;
             });
         };
@@ -2157,7 +2209,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             .catch(function(err){
                 loadingBox.hide();
                 // console.log(err);
-                ShowModalMsg("Oops!", "No se puede ingresar, inténtelo de nuevo.", "Ok");
+                ShowModalMsg("Oops!", "Ocurrió un error .", "Ok");
             });
         };
 
@@ -2214,7 +2266,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             if (($scope.viewdata.signup.password_confirm === undefined)||($scope.viewdata.signup.password_confirm === ""))
             {
                 $scope.viewdata.signup.password_confirm_invalid = true;
-                ShowModalMsg('Oops!', 'Por favor ingrese su contraseña.', 'Ok');
+                ShowModalMsg('Oops!', 'Por favor confirme su contraseña.', 'Ok');
                 return;
             }
             else
@@ -2261,7 +2313,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     }
                     else
                     {
-                        ShowModalMsg("Oops!" ,"No se pudo terminar el registro.", "Ok");
+                        ShowModalMsg("Oops!" ,"No se pudo terminar el registro, por favor inténtelo de nuevo", "Ok");
                     }
                 })
                 .catch(function(err){
@@ -2648,18 +2700,13 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         $scope.SaveAndContinue = function() {
-            // if ($scope.viewdata.profileimage == '') 
-            // {
-            //     ShowModalMsg('Oops!', 'Selecciona tu foto del perfil.', 'Ok');
-            //     return;
-            // }
             if ($scope.viewdata.profilegender == '') 
             {
                 ShowModalMsg('Oops!', 'Seleccione su género.', 'Ok');
                 return;
             }
 
-            loadingBox.show();
+            loadingBox.show('Actualizando su perfil...');
 
             localStorage.setItem('profile_picture', $scope.viewdata.profileimage);
             localStorage.setItem('profile_gender', $scope.viewdata.profilegender);
@@ -2669,7 +2716,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     .then(function(response){
                         if ((response.status == 'true')||(response.status == true))
                         {
-                            if($scope.viewdata.imageHasChange === true){
+                            // if($scope.viewdata.imageHasChange === true){
                                 userFactory.info.get()
                                     .then(function(data){
                                         // console.log(JSON.stringify(data));
@@ -2706,13 +2753,13 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                                         loadingBox.hide();
                                         ShowModalMsg('Oops!', 'No se pudo guardar su foto de perfil.', 'Ok');
                                     });
-                            } else {
-                                localStorage.setItem('profile_picture_urlfilename', response.data);
-                                $ionicHistory.clearHistory();
-                                $ionicHistory.clearCache();
-                                loadingBox.hide();
-                                $state.go("tab.nearme");
-                            }
+                            // } else {
+                            //     localStorage.setItem('profile_picture_urlfilename', "http://201.201.150.159/avatar/" + response.data);
+                            //     $ionicHistory.clearHistory();
+                            //     $ionicHistory.clearCache();
+                            //     loadingBox.hide();
+                            //     $state.go("tab.nearme");
+                            // }
                         }
                         else
                         {
@@ -2809,7 +2856,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 targetHeight: 100,
                 popoverOptions: CameraPopoverOptions,
                 saveToPhotoAlbum: false,
-                cameraDirection: 1
+                cameraDirection: 1,
+                correctOrientation: true
             };
 
             $cordovaCamera.getPicture(options).then(function(imageData) {
@@ -2830,7 +2878,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 targetHeight: 100,
                 popoverOptions: CameraPopoverOptions,
                 saveToPhotoAlbum: false,
-                cameraDirection: 1
+                cameraDirection: 1,
+                correctOrientation: true
             };
 
             $cordovaCamera.getPicture(options).then(function(imageData) {

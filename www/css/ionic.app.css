@@ -8186,7 +8186,6 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
   color: white !important;
   font-size: 18px; }
 
-/* ******** Reward Detail ******** */
 /* ******** Commerce ******** */
 .commerce-commerceheader {
   background-image: url('../img/qrcodebg.png');
@@ -8290,6 +8289,9 @@ ion-nav-view[nav-view-transition="ios"] .stores-bottomseparator {
 
 .profileedit-button {
   background-color: #800080 !important; }
+
+.pwdchange-login-pwdmessage {
+  color: black; }
 
 /* ******** Activity ******** */
 .activity-content {
@@ -8530,7 +8532,7 @@ ion-nav-view[nav-view-transition="ios"] .nearme-icon {
   border: none; }
 
 .commercewr-detail-title {
-  font-size: 10px;
+  font-size: 15px;
   color: #757575; }
 
 .commercewr-detail-subtitle {
@@ -8606,6 +8608,9 @@ ion-nav-view[nav-view-transition="ios"] .nearme-icon {
   z-index: 10;
   opacity: 0.1; }
 
+.commercewr-popslabel {
+  color: #800080 !important; }
+
 /* ******** Commerce Stores ********* */
 .commercewrstores-search-item {
   height: 50px; }
@@ -8669,3 +8674,7 @@ ion-nav-view[nav-view-transition="ios"] .nearme-icon {
 
 .sugdob-profile-label {
   color: #800080 !important; }
+
+/* ******** Reward Detail ******** */
+.reward-detail-validity strong, p {
+  font-size: 15px; }
