@@ -135,7 +135,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         function GetAllStores() {
             return new Promise(function(resolve, reject){
                 loadingBox.show($scope.viewdata.pleaseWaitMessage);
-                commerceFactory.stores.general(0)
+                commerceFactory.stores.general(0, '')
                     .then(function(data){
                         loadingBox.hide();
                         $scope.viewdata.searchResults = data;                                   
@@ -143,6 +143,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         resolve();
                     })
                     .catch(function(err){
+                        console.log(err);
                         loadingBox.hide();
                         reject(err);
                     });
@@ -152,24 +153,15 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         function GetStoresByTextSearch() {
             return new Promise(function(resolve, reject){
                 loadingBox.show($scope.viewdata.pleaseWaitMessage);
-                searchFactory.doSearch($scope.viewdata.searchText)
-                    .then(function(data){                        
+                commerceFactory.stores.general(0, $scope.viewdata.searchText)
+                    .then(function(data){
                         loadingBox.hide();
-                        $scope.viewdata.searchResults = [];
-                        var j=data.response.Elements.length;
-                        for (var i=0;i<j;i++)
-                        {
-                            if (data.response.Elements[i].Type == "T")
-                            {
-                                $scope.viewdata.searchResults.push(data.response.Elements[i]);
-                            }
-                        }                       
-
-                        // $scope.viewdata.searchResults = sortByKey($scope.viewdata.searchResults, "Type");
+                        $scope.viewdata.searchResults = data;                                   
                         $scope.$apply();
                         resolve();
                     })
                     .catch(function(err){
+                        console.log(err);
                         loadingBox.hide();
                         reject(err);
                     });
@@ -674,7 +666,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         $scope.centerOnMe = function() {
             if (!_map) return;
             var posOptions = {timeout: 100000, enableHighAccuracy: false};
-            loadingBox.show();
+            loadingBox.show('Buscando tiendas cerca suyo...');
             $cordovaGeolocation
                 .getCurrentPosition(posOptions)
                 .then(
@@ -947,7 +939,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
         $scope.OpenCommerce = function(entityID) {
             loadingBox.show($scope.viewdata.loadingCommerceMessage);
-            commerceFactory.get(entityID)
+            commerceFactory.get(entityID, "")
                 .then(function(response){
                     commerceFactory.selectedCommerce.set(response[0]);
                     var _state = navigationFactory.commerce.get();
@@ -955,6 +947,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     $state.go(_state);
                 })
                 .catch(function(response){
+                    console.log(response)
                     alert("Error!")
                     loadingBox.hide();
                 })

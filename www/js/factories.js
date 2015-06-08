@@ -422,13 +422,16 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
             }
         },
         commerce:{
-            get: function(entityID){
+            get: function(entityID, searchText){
                 var url = serverURL + '/commerce/list';
                 var params = {};
 
                 if (entityID != undefined) {
                     params["entityID"] = entityID;
                 }
+
+                if (searchText == undefined) searchText = "";
+                params["valueFilter"] = searchText;
 
                 return new Promise(function(resolve,reject){
                     $http({
@@ -452,7 +455,7 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                 });
             },
             stores: {
-                get: function(entityID){
+                get: function(entityID, searchText){
                     var url = serverURL + '/commerce/stores';
                     return new Promise(function(resolve,reject){
                         $http({
@@ -462,7 +465,8 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                             method: 'GET',
                             url: url,
                             params: {
-                                entityID: entityID
+                                entityID: entityID,
+                                valueFilter: searchText
                             }
                         })
                             .success(function(data,status,headers,config){
@@ -992,9 +996,9 @@ fact.factory('commerceFactory', ['restFactory', function(restFactory){
                     });
             });
         },
-        get: function(entityID) {
+        get: function(entityID, searchText) {
             return new Promise(function(resolve, reject){
-                restFactory.commerce.get(entityID)
+                restFactory.commerce.get(entityID, searchText)
                     .then(function(response){
                         resolve(response);
                     })
@@ -1004,9 +1008,9 @@ fact.factory('commerceFactory', ['restFactory', function(restFactory){
             });
         },
         stores: {
-            general: function(entityID){
+            general: function(entityID, searchText){
                 return new Promise(function(resolve,reject){
-                    restFactory.commerce.stores.get(entityID)
+                    restFactory.commerce.stores.get(entityID, searchText)
                         .then(function(response){
                             resolve(response);
                         })
