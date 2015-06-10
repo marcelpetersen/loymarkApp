@@ -143,6 +143,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         resolve();
                     })
                     .catch(function(err){
+                        console.log("GetAllStores - Error:");
                         console.log(err);
                         loadingBox.hide();
                         reject(err);
@@ -436,17 +437,25 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
     }]);
 
     // Commerce Detail
-    ctrl.controller('CommerceWithRewardsCtrl', ['$scope', '$state', '$stateParams', '$ionicLoading', '$timeout', 'loadingBox', 'commerceFactory', 'rewardFactory', 'deviceFactory', 'rewardDetailModal', 'navigationFactory', '$cordovaSocialSharing', function($scope, $state, $stateParams, $ionicLoading, $timeout, loadingBox, commerceFactory, rewardFactory, deviceFactory, rewardDetailModal, navigationFactory, $cordovaSocialSharing){
+    ctrl.controller('CommerceWithRewardsCtrl', ['$scope', '$state', '$stateParams', '$ionicLoading', '$timeout', 'loadingBox', 'commerceFactory', 'rewardFactory', 'deviceFactory', 'rewardDetailModal', 'navigationFactory', '$cordovaSocialSharing', '$cordovaKeyboard', '$cordovaAppAvailability', function($scope, $state, $stateParams, $ionicLoading, $timeout, loadingBox, commerceFactory, rewardFactory, deviceFactory, rewardDetailModal, navigationFactory, $cordovaSocialSharing, $cordovaKeyboard, $cordovaAppAvailability){
         $scope.viewdata = {
             commerce: commerceFactory.selectedCommerce.get(),
             rewards: [],
             imageserverurl: imageserverurl,
-            selectedreward: {}
+            selectedreward: {},
+            socialmediaapps: {
+                twitter: false,
+                facebook: false
+            }
         };
 
         // console.log($scope.viewdata.commerce)
 
-        $timeout(function(){loadingBox.hide();});
+        $timeout(function(){
+            loadingBox.hide();
+            IsTwitterInstalled();
+            IsFacebookInstalled();
+        });
 
         function LoadData(entityID) {
             // Pulls the rewards for the Commerce      
@@ -595,6 +604,36 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             return availablepoints;
         };
 
+        function IsTwitterInstalled() {
+            var URI = "com.twitter.android";
+            if (deviceFactory.device.platform() == "iOS") URI = "twitter://";
+            $cordovaAppAvailability.check(URI)
+                .then(function() {
+                    // is available
+                     $scope.viewdata.socialmediaapps.twitter = true;
+                     $scope.$apply();
+                }, function () {
+                    // not available
+                    $scope.viewdata.socialmediaapps.twitter = false;
+                    $scope.$apply();
+                });
+        };
+
+        function IsFacebookInstalled() {
+            var URI = "com.facebook.katana";
+            if (deviceFactory.device.platform() == "iOS") URI = "fb://";
+            $cordovaAppAvailability.check(URI)
+                .then(function() {
+                    // is available
+                     $scope.viewdata.socialmediaapps.facebook = true;
+                     $scope.$apply();
+                }, function () {
+                    // not available
+                    $scope.viewdata.socialmediaapps.facebook = false;
+                    $scope.$apply();
+                });
+        };
+
         $scope.ShareViaTwitter = function(commerce) {
             var message = commerce.Name;
             $cordovaSocialSharing
@@ -603,6 +642,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     // Success!
                 }, function(err) {
                     // An error occurred. Show a message to the user
+                    ShowModalMsg('Oops!', 'No se puede compartir en Twitter, por favor verifique que tenga instalada el App.', 'Ok');
                 });
         };
 
@@ -641,6 +681,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             var progress = $scope.GetRewardProgress(availablepoints, itempoints);            
             return {"width":progress + "%"};
         };
+        
     }]);
 
     ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cordovaGeolocation', '$stateParams', '$compile', 'loadingBox', 'locationFactory', 'storeFactory', 'navigationFactory', '$state', function($scope, commerceFactory, $ionicLoading, $cordovaGeolocation, $stateParams, $compile, loadingBox, locationFactory, storeFactory, navigationFactory, $state){
@@ -903,7 +944,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
     }]);
 
-    ctrl.controller('StoreDetailCtrl', ['$scope', '$timeout', '$state', '$stateParams', 'storeFactory', 'loadingBox', 'commerceFactory', 'rewardFactory', 'navigationFactory', 'deviceFactory', 'rewardDetailModal', function($scope, $timeout, $state, $stateParams, storeFactory, loadingBox, commerceFactory, rewardFactory, navigationFactory, deviceFactory, rewardDetailModal){
+    ctrl.controller('StoreDetailCtrl', ['$scope', '$timeout', '$state', '$stateParams', 'storeFactory', 'loadingBox', 'commerceFactory', 'rewardFactory', 'navigationFactory', 'deviceFactory', 'rewardDetailModal', '$cordovaAppAvailability', '$cordovaSocialSharing', function($scope, $timeout, $state, $stateParams, storeFactory, loadingBox, commerceFactory, rewardFactory, navigationFactory, deviceFactory, rewardDetailModal, $cordovaAppAvailability, $cordovaSocialSharing){
         
         loadingBox.show();
         $scope.viewdata = {
@@ -911,7 +952,11 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             rewards: [],
             imageserverurl: imageserverurl,
             selectedreward: {},
-            loadingCommerceMessage: 'Buscando el comercio...'
+            loadingCommerceMessage: 'Buscando el comercio...',
+            socialmediaapps: {
+                twitter: false,
+                facebook: false
+            }
         };      
 
         console.log($scope.viewdata.store);
@@ -919,6 +964,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         $timeout(function(){
             loadingBox.hide();
             LoadData($scope.viewdata.store.EntityID, $scope.viewdata.store.SubEntityID);
+            IsTwitterInstalled();
+            IsFacebookInstalled();
         });
 
         $scope.OpenMaps = function(lat, long) {
@@ -1088,6 +1135,58 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     return 0;
                 }
             }
+        };
+
+        function IsTwitterInstalled() {
+            var URI = "com.twitter.android";
+            if (deviceFactory.device.platform() == "iOS") URI = "twitter://";
+            $cordovaAppAvailability.check(URI)
+                .then(function() {
+                    // is available
+                     $scope.viewdata.socialmediaapps.twitter = true;
+                     $scope.$apply();
+                }, function () {
+                    // not available
+                    $scope.viewdata.socialmediaapps.twitter = false;
+                    $scope.$apply();
+                });
+        };
+
+        function IsFacebookInstalled() {
+            var URI = "com.facebook.katana";
+            if (deviceFactory.device.platform() == "iOS") URI = "fb://";
+            $cordovaAppAvailability.check(URI)
+                .then(function() {
+                    // is available
+                     $scope.viewdata.socialmediaapps.facebook = true;
+                     $scope.$apply();
+                }, function () {
+                    // not available
+                    $scope.viewdata.socialmediaapps.facebook = false;
+                    $scope.$apply();
+                });
+        };
+
+        $scope.ShareViaTwitter = function(store) {
+            var message = store.Name;
+            $cordovaSocialSharing
+                .shareViaTwitter(message)
+                .then(function(result) {
+                    // Success!
+                }, function(err) {
+                    // An error occurred. Show a message to the user                    
+                });
+        };
+
+        $scope.ShareViaFacebook = function(store) {
+            var message = store.Name;
+            $cordovaSocialSharing
+                .shareViaFacebook(message)
+                .then(function(result) {
+                    // Success!
+                }, function(err) {
+                    // An error occurred. Show a message to the user
+                });
         };
     }]);
 
@@ -1836,7 +1935,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             sainvgInfoMessage: 'Se está guardando su información...'
         };
 
-        $scope.$on("$ionicView.enter", function(event, args){
+        function LoadProfileData() {
             loadingBox.show($scope.viewdata.pleaseWaitMessage);
             userFactory.info.get()
                 .then(function(data){
@@ -1846,8 +1945,16 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     $scope.viewdata.user.lastname = userData.LastName;
                     $scope.$apply();
                     loadingBox.hide();
+                    $scope.$broadcast('scroll.refreshComplete');
                 })
-                .catch(function(err){loadingBox.hide();});
+                .catch(function(err){
+                    loadingBox.hide();
+                    $scope.$broadcast('scroll.refreshComplete');
+                });
+        };
+
+        $scope.$on("$ionicView.enter", function(event, args){
+            LoadProfileData();
         });
 
         $scope.SaveProfile = function() {
@@ -1891,6 +1998,10 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
         $scope.GoToChangePwd = function() {
             $state.go("tab.kenuu-pwdchange");
+        };
+
+        $scope.doRefresh = function() {
+            LoadProfileData();
         };
     }]);
 
@@ -2273,7 +2384,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 return;
             }
 
-            loadingBox.show();
+            loadingBox.show('Creando su cuenta...');
 
             userFactory.session.signup({email:$scope.viewdata.signup.email, password:$scope.viewdata.signup.password})
                 .then(function(data){
@@ -2328,7 +2439,12 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         }
                         else
                         {
-                            ShowModalMsg("Oops!", "No se pudo terminar el registro.", "Ok");
+                            if (err.data.responseCode == "EV0000") {
+                                ShowModalMsg("Oops!", "Contraseña tiene un formato inválido, por favor revísela e intente de nuevo.", "Ok");    
+                            }
+                            else {
+                                ShowModalMsg("Oops!", "No se pudo terminar el registro.", "Ok");
+                            }
                         }
                     } 
                     else
@@ -2452,7 +2568,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 $scope.viewdata.login.email_invalid = false;
             }
 
-            loadingBox.show();
+            loadingBox.show('Validando su correo...');
 
             userFactory.datavalidation.emailvalidation($scope.viewdata.login.email)
                 .then(function(response){

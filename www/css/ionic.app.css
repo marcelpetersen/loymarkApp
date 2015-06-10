@@ -8675,6 +8675,9 @@ ion-nav-view[nav-view-transition="ios"] .nearme-icon {
 .sugdob-profile-label {
   color: #800080 !important; }
 
+.sugdob-gender-button {
+  font-size: 12px; }
+
 /* ******** Reward Detail ******** */
 .reward-detail-validity strong, p {
   font-size: 15px; }

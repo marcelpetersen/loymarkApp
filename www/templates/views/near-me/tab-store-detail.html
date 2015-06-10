@@ -78,16 +78,16 @@
 			</div>
 		</div>
 		
-		<ul class="list" style="margin-top:-21px; background-color:#eeeeee !important;">
+		<ul class="list" style="margin-top:-21px; background-color:#eeeeee !important;" ng-show="viewdata.socialmediaapps.facebook || viewdata.socialmediaapps.twitter">
 		    <div class="item item-divider commercewr-detail-title">
 				<strong style="margin-left:5px">Compartir:</strong>
 			</div>		
 			<div class="item">
 				<div class="row">
-					<div class="col text-center commerce-social-fb-font" ng-click="ShareViaFacebook(viewdata.commerce)">
+					<div ng-show="viewdata.socialmediaapps.facebook" class="col text-center commerce-social-fb-font" ng-click="ShareViaFacebook(viewdata.store)">
 						<i class="ion-social-facebook"></i> facebook
 					</div>
-					<div class="col text-center commerce-social-twitter-font" ng-click="ShareViaTwitter(viewdata.commerce)">
+					<div ng-show="viewdata.socialmediaapps.twitter" class="col text-center commerce-social-twitter-font" ng-click="ShareViaTwitter(viewdata.store)">
 						<i class="ion-social-twitter"></i> twitter
 					</div>
 				</div>
