@@ -1,16 +1,23 @@
 <ion-view>
-    <ion-nav-title>
+    <!-- <ion-nav-title>
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
-    </ion-nav-title>
-    <ion-content class="activity-content" overflow-scroll="true">
-    	
-        <div id="errorWhenLoadingDiv" class="pleaseWaitSpinner" style="display:none">
+    </ion-nav-title> -->
+    <!--  overflow-scroll="true" // No se puede usar cuando se quiere implementar pull to refresh -->
+    <ion-content class="activity-content">
+        
+        <!-- <div id="errorWhenLoadingDiv" class="pleaseWaitSpinner" style="display:none">
             <div class="item item-clear item-icon-right" ng-click="Reload()">
                 <p><strong>Oops, no hay actividad!</strong></p>
                 <p>Haga tap aquí para recargar</p>
                 <i class="icon ion-ios-refresh-empty"></i>
             </div>                
-        </div>
+        </div> -->
+
+        <ion-refresher
+            pulling-text="Hale para refrescar..."
+            on-refresh="doRefresh()">
+        </ion-refresher> 
+
         <div id="activityListDiv" class="list" style="display:none">
             <form>
             <div class="item item-input-inset commercewrstores-search-item">                                    
@@ -26,6 +33,7 @@
         	<div class="item item-divider">
         		<p><strong>Mi Actividad</strong></p>
         	</div>
+
         	<div class="item item-avatar item-text-wrap item-icon-right activity-activityitem" ng-repeat="activity in viewdata.user.activity | filter:search" ng-click="OpenCommerce(activity.EntityID)">
         		<img ng-src="{{GetCommerceImage(activity.Image)}}">
                 <p><strong>{{gDate(activity.ActivityDate)}}</strong></p>

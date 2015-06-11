@@ -1,7 +1,7 @@
 <ion-view class="qrcode-view">
-	<ion-nav-title>
+	<!-- <ion-nav-title>
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
-    </ion-nav-title>	
+    </ion-nav-title>-->
   	<ion-content class="profile-content profileedit-content" id="viewcontent-QR">
   		<ion-refresher
 			pulling-text="Hale para refrescar..."
@@ -24,6 +24,21 @@
 					<p>{{viewdata.user.Email}}</p>
 				</label>
 			</div>
+
+			<div class="text-left" style="padding-left:30px; padding-right:30px;">	
+				<div class="item item-clear sugdob-item text-left">
+					<span class="input-label profileedit-label">Género</span>					
+				</div>
+			</div>
+			<div class="row" style="margin-top:-20px; padding-left:10px; padding-right:10px;">
+				<div class="col">
+					<ion-radio ng-model="viewdata.profilegender" class="sugdob-gender-button" ng-value="'H'">Hombre</ion-radio>
+				</div>
+				<div class="col">
+					<ion-radio ng-model="viewdata.profilegender" class="sugdob-gender-button" ng-value="'M'">Mujer</ion-radio>
+				</div>
+			</div>
+
 			<div class="item welcome-item" style="top:20px;">
 				<button type="submit" class="button button-block button-light welcome-btn profileedit-button">¡Guardar!</button>
 			</div>
@@ -32,13 +47,13 @@
 				<button type="button" class="button button-block button-light welcome-btn profileedit-button" ng-click="GoToChangePwd()">Cambiar Contraseña</button>
 			</div>
 
-			<div class="item item-clear item-text-wrap" style="background-color:transparent">
+			<!-- <div class="item item-clear item-text-wrap" style="background-color:transparent">
 				<p class="profile-label">O bien... si desea usar otra cuenta diferente, haga tap en este botón...</p>
 			</div>
 
 			<div class="item welcome-item">
 				<button ng-click="DoLogout()" class="button button-block button-light welcome-btn profileedit-button">Cambiar de Usuario</button>
-			</div>
+			</div> -->
 		</form>
 		<div class="profile-bottomspacer"></div>
   	</ion-content>

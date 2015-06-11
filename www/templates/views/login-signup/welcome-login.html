@@ -13,15 +13,12 @@
 						</span>
 						<input name="signUpPassword" class="kenuu-input" type="password" placeholder="contraseña" ng-model="viewdata.login.password">
 					</label>
-					<!-- <p class="welcome-login-pwdmessage">
-						Debe contener como mínimo 8 caracteres. Al menos una mayúscula, una minúscula, carácter especial y un número. Sin espacios. Ejm: Kenuu.15
-					</p> -->
-				</div>
-				<div class="item welcome-item text-center" ng-click="recoverPassword()">
-					<p class="login-pwd-recovery-btn">¿Olvidó su contraseña?</p>
-				</div>
+				</div>				
 				<div class="item welcome-item text-center">
 					<button class="button button-block button-light welcome-btn">Ingresar</button>
+				</div>
+				<div class="item welcome-item text-center" ng-click="recoverPassword()" style="margin-top:10px;">
+					<p class="login-pwd-recovery-btn">¿Olvidó su contraseña?</p>
 				</div>
 			</form>
 		</ion-slide-box>

@@ -7675,6 +7675,9 @@ a.button {
   -webkit-transition-duration: 0s;
   transition-duration: 0s; }
 
+* {
+  box-shadow: none !important; }
+
 body, h1, h2, h3, h4, h5, p, div, span, input, button, strong {
   font-family: 'Roboto', sans-serif; }
 

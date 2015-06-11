@@ -1,7 +1,7 @@
 <ion-view id="viewKenuu" style="display:none">	
-	<ion-nav-title>
-		<img src="img/kenuulogo.png" alt="" class="top-bar-logo">
-	</ion-nav-title>
+	<!-- <ion-nav-title>
+        <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
+    </ion-nav-title> -->
 	<ion-nav-buttons side="right">
 		<button class="button button-clear icon-params topbar-setupicon" ng-click="ShowSetupView()">
 		</button>
@@ -20,8 +20,12 @@
 				<p ng-bind="viewdata.user.Email"></p>
 				<!-- <p>Avatar -> "{{viewdata.user.Avatar}}"</p>
 				<p>Genero -> "{{viewdata.gender}}"</p> -->
-				<button class="button button-small button-calm profile-btn" ng-click="GoToProfile()">Mi Info</button>	
+				<button class="button button-small button-calm profile-btn" ng-click="GoToProfile()">Mi Info</button>					
 			</div>
+		</div>
+
+		<div class="item welcome-item">			
+			<button ng-click="DoLogout()" class="button button-block button-light welcome-btn profileedit-button">Cambiar de Usuario</button>		
 		</div>
 
 		<a class="item item-icon-left item-icon-right item-text-wrap" href="#/tab/kenuu/activity">
