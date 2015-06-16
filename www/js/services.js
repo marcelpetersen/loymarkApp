@@ -25,6 +25,19 @@ angular.module('kenuu.services', [])
             // TODO...
         });
 	};
+
+	this.EmatilTo = function(to, subject) {
+		var email = {
+            to: to,
+            subject: subject,
+            body: '',
+            isHtml: true
+        };
+
+        $cordovaEmailComposer.open(email).then(null, function () {
+            // TODO...
+        });
+	};
 }])
 
 .service('dateFxService', [function(){

@@ -11,8 +11,15 @@
 							Ingrese su Contraseña
 							<span ng-show="signUpPwdForm.signUpPassword.$error.required"><i class="ion-ios-medical" style="font-size:20px; color: red;"></i></span>
 						</span>
-						<input name="signUpPassword" class="kenuu-input" type="password" placeholder="contraseña" ng-model="viewdata.login.password">
+						<input name="signUpPassword" class="kenuu-input" type="{{inputType}}" placeholder="contraseña" ng-model="viewdata.login.password">
 					</label>
+					<li class="item item-checkbox item-clear" style="background-color:transparent; margin-top:8px;">
+						<label class="checkbox">
+						<input ng-model="passwordCheckbox" ng-click="hideShowPassword()" type="checkbox">
+						</label>
+						<label class="login-showhidepassword-label" for="checkbox" ng-if="passwordCheckbox">Ocultar Contraseña</label>
+						<label class="login-showhidepassword-label" for="checkbox" ng-if="!passwordCheckbox">Mostrar Contraseña</label> 
+					</li>
 				</div>				
 				<div class="item welcome-item text-center">
 					<button class="button button-block button-light welcome-btn">Ingresar</button>

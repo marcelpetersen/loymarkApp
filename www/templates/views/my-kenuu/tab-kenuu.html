@@ -3,7 +3,7 @@
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
     </ion-nav-title> -->
 	<ion-nav-buttons side="right">
-		<button class="button button-clear icon-params topbar-setupicon" ng-click="ShowSetupView()">
+		<button class="button button-clear ion-grid topbar-setupicon" ng-click="ShowSetupView()">
 		</button>
 	</ion-nav-buttons>	
 	<ion-content scroll=true> 
@@ -24,9 +24,9 @@
 			</div>
 		</div>
 
-		<div class="item welcome-item">			
+		<!-- <div class="item welcome-item">			
 			<button ng-click="DoLogout()" class="button button-block button-light welcome-btn profileedit-button">Cambiar de Usuario</button>		
-		</div>
+		</div> -->
 
 		<a class="item item-icon-left item-icon-right item-text-wrap" href="#/tab/kenuu/activity">
 			<i class="icon icon-history profile-item-icon"></i>
@@ -40,11 +40,25 @@
             <div class="item item-divider">
                 <p><strong>Mis Comercios:</strong></p>
             </div>
-            <div class="item item-avatar item-text-wrap item-icon-right activity-activityitem" ng-repeat="commerce in viewdata.commerces | orderBy:'TotalVisits'" ng-click="GoToCommerce(commerce)">                
+            <div class="item item-avatar item-text-wrap activity-activityitem" ng-repeat="commerce in viewdata.commerces | orderBy:'TotalVisits'" ng-click="GoToCommerce(commerce)">                
                 <img ng-src="{{GetCommerceImage(commerce.Image)}}">
-                <p><strong class="activity-commerce-name">{{commerce.Name}}</strong></p>                
-                <i class="icon ion-android-more-horizontal activity-checkin"></i>
-                <div class="row">
+                <p><strong class="activity-commerce-name">{{commerce.Name}}</strong></p>  
+
+                <div class="row favcommerce-balancerow">
+                	<div class="col favcommerce-balancecell">
+                		<h3 class="favcommerce-lastvisit-label" style="margin-left:-10px; margin-top:5px;">
+                			<small class="textgrey-text">visitas:</small>
+                    		<strong class="favcommerce-visits">{{commerce.TotalVisits}}</strong> 
+                    	</h3>
+                	</div>
+                	<div class="col favcommerce-balancecell">
+                		<i class="icon-pop-full favcommerce-pop"></i>
+                		<strong class="favcommerce-visits" style="position:relative; top:-5px; margin-left: 8px;">{{commerce.PointsAvailable}}</strong> 
+                	</div>
+                </div>
+
+                <!-- <i class="icon ion-android-more-horizontal activity-checkin"></i> -->
+                <!-- <div class="row">
                 	<div class="col">
                 		<h3 class="favcommerce-lastvisit-label" style="margin-left:-10px;">
                 			<small class="textgrey-text">visitas:</small>
@@ -52,12 +66,18 @@
                     	</h3>
                 	</div>
                 	<div class="col">
-                		<h3 class="favcommerce-lastvisit-label" style="margin-left:-10px;">
-                			<small class="textgrey-text">pops:</small>
-                    		<strong class="favcommerce-visits">{{commerce.PointsAvailable}}</strong> 
-                    	</h3>
+                		<div class="row">
+                			<div class="col text-right">
+                				<small class="textgrey-text"><i class="icon-pop-full favcommerce-pop"></i></small>		
+                			</div>
+                			<div class="col text-left">
+                				<h3 class="favcommerce-lastvisit-label" style="margin-left:-10px; margin-top:10px;">                			
+		                    		<strong class="favcommerce-visits">{{commerce.PointsAvailable}}</strong> 
+		                    	</h3>	
+                			</div>
+                		</div>
                 	</div>
-                </div>
+                </div> -->
             </div>            
         </div>
 		<div class="bottomspacer"></div>

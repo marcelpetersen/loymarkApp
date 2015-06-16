@@ -1,6 +1,6 @@
 <ion-modal-view>
 	<ion-header-bar class="bar bar-light">
-		<h1 class="title"><strong>Configuración</strong></h1>
+		<h1 class="title"><img src="img/kenuulogo.png" alt="" class="top-bar-logo"></h1>
 		<button class="button button-clear setupview-closebtn" ng-click="CloseSetup()"><i class="ion-ios-close-outline"></i></button>	
 	</ion-header-bar>
 	<ion-content class="setupview-content">		
@@ -15,6 +15,15 @@
 				<p>¿Necesita ayuda?</p>
 				<strong>Contactar por correo electrónico</strong>
 				<i class="icon ion-android-more-horizontal"></i>
+			</div>
+			<!-- <div class="item item-icon-left item-icon-right item-text-wrap item-clear" ng-click="RegisterDevice()">
+				<strong>Register Device</strong>
+			</div> -->
+			<div class="item item-icon-left item-text-wrap item-clear" ng-click="DoLogout()">
+				<i class="icon ion-ios-close setupview-icon"></i>
+				<p>Cerrar Sesión</p>
+				<strong>Cerrar la sesión actual para cambiar de usuario</strong>
+				
 			</div>
 		</div>
 	</ion-content>

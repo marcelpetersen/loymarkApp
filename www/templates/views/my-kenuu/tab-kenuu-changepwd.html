@@ -3,23 +3,34 @@
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
     </ion-nav-title> -->	
   	<ion-content class="profile-content profileedit-content" id="viewcontent-QR" overflow-scroll="true">  		
-  		<div class="text-left" style="padding-left:30px; padding-right:30px;">					
-			<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
-				<span class="input-label profileedit-label">Contraseña</span>
-				<input class="profileedit-input" ng-model="viewdata.user.password" type="password" placeholder="">
-			</label>
-			<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
-				<span class="input-label profileedit-label">Confirmar Contraseña</span>
-				<input class="profileedit-input" ng-model="viewdata.user.passwordconfirmation" type="password" placeholder="">
-			</label>
-			<p class="pwdchange-login-pwdmessage">
-				Debe contener como mínimo 8 caracteres. Al menos una mayúscula, una minúscula, carácter especial y un número. Sin espacios. Ejm: Kenuu.15
-			</p>
-		</div>		
-		<div class="item welcome-item" style="top:20px;">
-			<button ng-click="SaveProfile()" type="button" class="button button-block button-light welcome-btn profileedit-button">¡Cambiar!</button>
-		</div> 
-		
+  		<form name="signUpPwdForm" novalidate ng-submit="SaveProfile()()">
+	  		<div class="text-left" style="padding-left:30px; padding-right:30px;">					
+				<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
+					<span class="input-label profileedit-label">Contraseña</span>
+					<input class="profileedit-input" ng-model="viewdata.user.password" type="{{inputType}}" placeholder="">
+				</label>
+				<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
+					<span class="input-label profileedit-label">Confirmar Contraseña</span>
+					<input class="profileedit-input" ng-model="viewdata.user.passwordconfirmation" type="{{inputType}}" placeholder="">
+				</label>
+
+				<li class="item item-checkbox item-clear" style="background-color:transparent; margin-top:8px;">
+					<label class="checkbox">
+					<input ng-model="passwordCheckbox" ng-click="hideShowPassword()" type="checkbox">
+					</label>
+					<label class="profile-showhidepassword-label" for="checkbox" ng-if="passwordCheckbox">Ocultar Contraseña</label>
+					<label class="profile-showhidepassword-label" for="checkbox" ng-if="!passwordCheckbox">Mostrar Contraseña</label> 
+				</li>
+
+				<p class="pwdchange-login-pwdmessage" style="margin-top:10px;">
+					Debe contener como mínimo 8 caracteres. Al menos una mayúscula, una minúscula, carácter especial y un número. Sin espacios. Ejm: Kenuu.15
+				</p>
+			</div>		
+			<div class="item welcome-item" style="top:20px;">
+				<button type="submit" class="button button-block button-light welcome-btn profileedit-button">¡Cambiar!</button>
+			</div> 
+		</form>
+
 		<div class="profile-bottomspacer"></div>
 
 		<div class="md-modal md-effect-7" id="modal-msgbox-signup">

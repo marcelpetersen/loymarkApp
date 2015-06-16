@@ -103,6 +103,8 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 				            var tokenId = notification.regid;
 				            var email = deviceFactory.device.registeredUser.get();
 
+				            console.log("Android Token: " + tokenId);
+
 				            deviceFactory.device.registerdevice(tokenId, email)
 	                            .then(function(response){
 	                                // OK
@@ -116,6 +118,7 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 			        case 'message':
 			          // this is the actual push notification. its format depends on the data model from the push server
 			          // alert('message = ' + notification.message + ' msgCount = ' + notification.msgcnt);
+			          //swal(notification.message);
 			          swal(notification.message);
 			          break;
 

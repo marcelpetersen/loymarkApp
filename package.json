@@ -28,10 +28,17 @@
     "org.apache.cordova.splashscreen",
     "com.ionic.keyboard",
     "cordova-plugin-camera",
-    "cordova-plugin-whitelist"
+    "cordova-plugin-whitelist",
+    {
+      "locator": "engine/cordova-crosswalk-engine-c0.7.1",
+      "id": "cordova-plugin-crosswalk-webview"
+    }
   ],
   "cordovaPlatforms": [
     "ios",
-    "android"
+    {
+      "platform": "android",
+      "locator": "./engine/cordova-android-c0.6.1/"
+    }
   ]
 }

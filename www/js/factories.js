@@ -95,17 +95,17 @@ fact.factory('deviceFactory', ['$cordovaDevice', 'restFactory', '$cordovaPush', 
             errmessage: function(){
                 return _errormessage;
             },
-            registerdevice: function(deviceToken, userReferenceID) {
+            registerdevice: function(deviceToken, userReferenceID) {                
                 return new Promise(function(resolve,reject){                    
                     _device = $cordovaDevice.getDevice();
 
                     var token = FormatToken(_device.platform, deviceToken);
 
                     restFactory.device.register(_device, token, userReferenceID)
-                        .then(function(response){                            
+                        .then(function(response){                                
                             resolve(response);
                         })
-                        .catch(function(response){                            
+                        .catch(function(response){                                                        
                             reject(response);
                         });                    
                 });
@@ -756,9 +756,17 @@ fact.factory('userFactory',['restFactory', function(restFactory){
 	var _login = {};
 	var _data ={};
     var _signupstatus = 0; // 1= Already signed up, 0= New Sign Up, -1= Email exists, but no user created (sign up via plastic card)
-
+    var _pullFreshMemberDataFromServer = true;
 	return {
         info: {
+            pullFreshMemberDataFromServer: {
+                set: function(pull) {
+                    _pullFreshMemberDataFromServer = pull;
+                },
+                get: function() {
+                    return _pullFreshMemberDataFromServer;
+                }
+            },
             get: function(newData,userID){
                 return new Promise(function(resolve,reject){
                     if(newData===true){

@@ -3,6 +3,13 @@
 		<img src="img/kenuulogo.png" alt="" class="top-bar-logo">
 	</ion-nav-title> -->
 	<ion-content class="homeTabsContent" scroll="false">
+		<div id="locationMessageMap" style="display:none" class="item nearme-nolocationitem item-icon-left item-text-wrap" ng-show="!viewdata.locationSet && viewdata.showLocationMessage">
+			<i class="icon ion-android-pin"></i>
+			<p><strong>No tiene activados los servicios de ubicación, al activarlos podrá ubicar mejor las tiendas.</strong></p>
+			<div class="text-right" style="margin-top:15px;">
+				<button class="button nearme-nolocationbutton" ng-click="ClearLocationMessage()">Ok!</button>
+			</div>
+		</div>
 		<map on-create="mapCreated(map)" data-tap-disabled="true" style="width: 100%; height: 100%; position: absolute;">
 		</map>
 		</ion-content>

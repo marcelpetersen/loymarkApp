@@ -376,6 +376,10 @@ ion-nav-view[nav-view-transition="ios"] {
 		height: 105px;
 	}
 
+	.profile-showhidepassword-label {
+		color: black !important;
+	}
+
 	/* ******** End of Profile ******** */
 
 /* ******** Rewards ********* */
@@ -847,6 +851,19 @@ ion-nav-view[nav-view-transition="ios"] {
 	{
 		color: $kenuu-purple;
 	}
+	.favcommerce-pop {
+		font-size: 25px;
+		color: $kenuu-purple !important;
+	}
+	.favcommerce-balancerow {		
+	}
+	.favcommerce-balancecell {
+		height: 40px;
+		// border-top: 1px solid #eeeeee;
+		// border-left: 1px solid #eeeeee;
+		// border-right: 1px solid #eeeeee;
+		// border-bottom: 1px solid #eeeeee;	
+	}
 
 /* ******** Profile Edit ********* */
 	
@@ -1033,6 +1050,10 @@ ion-nav-view[nav-view-transition="ios"] {
 		color: white !important;
 	}
 
+	.login-showhidepassword-label {
+		color: white !important;
+	}
+
 /* ******** No connection ******* */
 
 	.noconnection-content {
@@ -1113,6 +1134,22 @@ ion-nav-view[nav-view-transition="ios"] {
 			position: relative;
 			top:15px;
 		}
+	}
+
+	.nearme-nolocationitem {
+		background-color: $kenuu-green;
+		
+	}
+	.nearme-nolocationitem p {
+		color: white !important;
+	}
+	.nearme-nolocationbutton {
+		background-color: #eeeeee;
+		color: black;
+		width: 150px;
+	}
+	.nearme-nolocationbutton:hover {
+		background-color:  #eeeeee;
 	}
 
 /* ******** Commerce With Rewards ******* */
@@ -1245,6 +1282,11 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 
 	.commercewr-popslabel {
+		color: $kenuu-purple !important;
+	}
+
+	.commercewr-pop {
+		font-size: 40px;
 		color: $kenuu-purple !important;
 	}
 

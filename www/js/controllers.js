@@ -4,28 +4,40 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
 // Near Me Tab
 
-    ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', '$cordovaPush', '$cordovaGeolocation', '$cordovaKeyboard', 'loadingBox', 'searchFactory', 'commerceFactory', 'navigationFactory', 'deviceFactory', 'userFactory', 'navigationFactory', 'locationFactory', 'storeFactory', function($scope, $state, $ionicLoading, $timeout, $cordovaPush, $cordovaGeolocation, $cordovaKeyboard, loadingBox, searchFactory, commerceFactory, navigationFactory, deviceFactory, userFactory, navigationFactory, locationFactory, storeFactory){
-
+    ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', '$cordovaPush', '$cordovaGeolocation', '$cordovaKeyboard', 'loadingBox', 'searchFactory', 'commerceFactory', 'navigationFactory', 'deviceFactory', 'userFactory', 'navigationFactory', 'locationFactory', 'storeFactory', '$cordovaInAppBrowser', function($scope, $state, $ionicLoading, $timeout, $cordovaPush, $cordovaGeolocation, $cordovaKeyboard, loadingBox, searchFactory, commerceFactory, navigationFactory, deviceFactory, userFactory, navigationFactory, locationFactory, storeFactory, $cordovaInAppBrowser){
+        
         $scope.viewdata = {
             locationSet: true,
+            showLocationMessage: true,
             searchResults: [],
             searchText: "",
             user: {},
             CardNumber: "",
             storePage: 0,
             kilometers: 10,
-            pleaseWaitMessage: "Buscando tiendas..."
+            pleaseWaitMessage: "Buscando tiendas...",
+            pullFreshMemberDataFromServer: userFactory.info.pullFreshMemberDataFromServer.get()
         };
 
         $scope.$on("$ionicView.enter", function(event, args){
-
         });
+
+        $scope.ReloadList = function() {
+            ViewInitialization();
+        };
+
+        function ShowLocationMessage() {
+            $scope.viewdata.showLocationMessage = true;          
+            $("#locationMessage").show();
+        };
 
         function GetMemberData() {
             return new Promise(function(resolve,reject){
                 // Pulls the member information
-                userFactory.info.get()
+                userFactory.info.get($scope.viewdata.pullFreshMemberDataFromServer)
                     .then(function(data){
+                        userFactory.info.pullFreshMemberDataFromServer.set(false);
+                        $scope.viewdata.pullFreshMemberDataFromServer = false;
                         $scope.viewdata.user = data;
                         $scope.viewdata.CardNumber = data.CardNumber;
                         resolve(data);
@@ -44,7 +56,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     "alert": true,
                 };
                 var androidConfig = {
-                    "senderID": "AIzaSyDNjV6WWsPUXWKNctSYo19MhPpSMwgZKqw",
+                    "senderID": "671633506930"
                 };
 
                 deviceFactory.device.registeredUser.set(email);
@@ -54,14 +66,14 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     $cordovaPush.register(iosConfig)
                         .then(
                             function(deviceToken)
-                            {
-                                deviceFactory.device.registerdevice(deviceToken, data.Email)
-                                .then(function(response){
-                                    resolve(response);
-                                })
-                                .catch(function(err){
-                                    reject(err);
-                                });
+                            {                                
+                                deviceFactory.device.registerdevice(deviceToken, email)
+                                    .then(function(response){                             
+                                        resolve(response);
+                                    })
+                                    .catch(function(err){                                        
+                                        reject(err);
+                                    });
                             },
                             function(err) {
                                 reject(err);
@@ -71,6 +83,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
                 if (deviceFactory.device.platform() == "Android")
                 {
+                    console.log(androidConfig);
+
                     $cordovaPush.register(androidConfig).then(function(result) {
                             // Success
                             resolve(result);
@@ -82,22 +96,29 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             });
         };
 
-        function GetLocation() {
+        $scope.ClearLocationMessage = function() {
+            $("#locationMessage").hide();
+            $scope.viewdata.showLocationMessage = false;
+        };
+
+        function GetLocation() {            
             return new Promise(function(resolve, reject){
                 // Gets the User's location
                 $scope.viewdata.locationSet = false;
                 var posOptions = {timeout: 10000, enableHighAccuracy: false};
                 $cordovaGeolocation
                     .getCurrentPosition(posOptions)
-                    .then(function (position) {                    
+                    .then(function (position) {                        
                         $scope.viewdata.locationSet = true;
+                        $scope.ClearLocationMessage();
                         var _lat  = position.coords.latitude;
                         var _long = position.coords.longitude;
                         locationFactory.location.set(_lat, _long);
                         resolve();
                     })
-                    .catch(function(err){                    
+                    .catch(function(err){   
                         $scope.viewdata.locationSet = false;
+                        ShowLocationMessage();
                         reject(err);
                     });
             });
@@ -111,7 +132,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 var long = _location.long;
 
                 commerceFactory.stores.nearby(0, long, lat, $scope.viewdata.storePage, $scope.viewdata.kilometers)
-                    .then(function(data){                                                    
+                    .then(function(data){   
+                        $scope.$broadcast('scroll.refreshComplete');                                                 
                         loadingBox.hide();
                         if ($scope.viewdata.storePage == 0) $scope.viewdata.searchResults = data;                            
                         else
@@ -126,6 +148,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         resolve();
                     })
                     .catch(function(err){
+                        $scope.$broadcast('scroll.refreshComplete');
                         loadingBox.hide();
                         reject(err);
                     });
@@ -136,8 +159,9 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             return new Promise(function(resolve, reject){
                 loadingBox.show($scope.viewdata.pleaseWaitMessage);
                 commerceFactory.stores.general(0, '')
-                    .then(function(data){
+                    .then(function(data){                        
                         loadingBox.hide();
+                        $scope.$broadcast('scroll.refreshComplete');
                         $scope.viewdata.searchResults = data;                                   
                         $scope.$apply();
                         resolve();
@@ -145,6 +169,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     .catch(function(err){
                         console.log("GetAllStores - Error:");
                         console.log(err);
+                        $scope.$broadcast('scroll.refreshComplete');
                         loadingBox.hide();
                         reject(err);
                     });
@@ -170,17 +195,22 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         function ViewInitialization() {
+            var TAG = "";
+
             loadingBox.show($scope.viewdata.pleaseWaitMessage);
             GetMemberData()
-                .then(function(response){
+                .then(function(response){                    
                     if (!devEnvironment)
                     {
                         RegisterDevice(response.Email)
                             .then(function(response){
-
+                                console.log("RegisterDevice Ok!");
+                                
                             })
                             .catch(function(err){
-
+                                console.log("RegisterDevice:");
+                                console.log(err);                                
+                                loadingBox.hide();
                             });
 
                         GetLocation()
@@ -190,7 +220,9 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
                                     })
                                     .catch(function(err){
-
+                                        console.log("GetNearbyStores:");
+                                        console.log(err);
+                                        loadingBox.hide();
                                     });
                             })
                             .catch(function(err){
@@ -199,7 +231,9 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
                                     })
                                     .catch(function(err){
-
+                                        console.log("GetAllStores:");
+                                        console.log(err);
+                                        loadingBox.hide();
                                     })
                             })
                     }
@@ -210,12 +244,16 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
                             })
                             .catch(function(err){
-
+                                console.log("GetAllStores #2:");
+                                console.log(err);
+                                loadingBox.hide();
                             })
                     }
                 })
                 .catch(function(err){
-
+                    console.log("GetMemberData:");
+                    console.log(err);
+                    loadingBox.hide();
                 });
         };
 
@@ -350,7 +388,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 switch(notification.event) {
                     case 'registered':
                         if (notification.regid.length > 0 ) {
-                            alert('registration ID = ' + notification.regid);
+                            // alert('registration ID = ' + notification.regid);
 
                             var tokenId = notification.regid;
                             var email = deviceFactory.device.registeredUser.get();
@@ -398,8 +436,6 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         });
 
 
-
-
         $scope.GetAvatarImage = function(img) {
             if (img == undefined) return "";
             if (img == null) return "";
@@ -437,7 +473,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
     }]);
 
     // Commerce Detail
-    ctrl.controller('CommerceWithRewardsCtrl', ['$scope', '$state', '$stateParams', '$ionicLoading', '$timeout', 'loadingBox', 'commerceFactory', 'rewardFactory', 'deviceFactory', 'rewardDetailModal', 'navigationFactory', '$cordovaSocialSharing', '$cordovaKeyboard', '$cordovaAppAvailability', function($scope, $state, $stateParams, $ionicLoading, $timeout, loadingBox, commerceFactory, rewardFactory, deviceFactory, rewardDetailModal, navigationFactory, $cordovaSocialSharing, $cordovaKeyboard, $cordovaAppAvailability){
+    ctrl.controller('CommerceWithRewardsCtrl', ['$scope', '$state', '$stateParams', '$ionicLoading', '$timeout', 'loadingBox', 'commerceFactory', 'rewardFactory', 'deviceFactory', 'rewardDetailModal', 'navigationFactory', '$cordovaSocialSharing', '$cordovaKeyboard', '$cordovaAppAvailability', '$cordovaInAppBrowser', 'emailService', '$cordovaActionSheet', function($scope, $state, $stateParams, $ionicLoading, $timeout, loadingBox, commerceFactory, rewardFactory, deviceFactory, rewardDetailModal, navigationFactory, $cordovaSocialSharing, $cordovaKeyboard, $cordovaAppAvailability, $cordovaInAppBrowser, emailService, $cordovaActionSheet){
         $scope.viewdata = {
             commerce: commerceFactory.selectedCommerce.get(),
             rewards: [],
@@ -449,13 +485,30 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             }
         };
 
-        // console.log($scope.viewdata.commerce)
-
         $timeout(function(){
             loadingBox.hide();
             IsTwitterInstalled();
             IsFacebookInstalled();
         });
+
+        $scope.ReloadCommerceInfo = function() {
+            loadingBox.show("Actualizando la información del comercio...");
+            commerceFactory.get($scope.viewdata.commerce.EntityID, "")
+                .then(function(response){                    
+                    loadingBox.hide();
+                    $scope.$broadcast('scroll.refreshComplete');
+
+                    if (response.length > 0)
+                    {
+                        commerceFactory.selectedCommerce.set(response[0]);
+                        $scope.viewdata.commerce = response[0];
+                    }
+                })
+                .catch(function(err){
+                    loadingBox.hide();
+                    $scope.$broadcast('scroll.refreshComplete');
+                });
+        };
 
         function LoadData(entityID) {
             // Pulls the rewards for the Commerce      
@@ -568,20 +621,56 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             }
         };
 
-        $scope.OpenMaps = function(lat, long) {
-            var url = "";
-            if (deviceFactory.device.platform == "iOS")
-            {
-                url = "maps://maps.apple.com/?q=" + lat + "," + long;
-            }
-            else
-            {
-                url = "maps://maps.google.com/?q=" + lat + "," + long;;
-            }
+        function OpenMapsActionSheet(options, lat, long) {
+            $cordovaActionSheet.show(options)
+                .then(function(btnIndex) {
+                    var index = btnIndex;
+                    
+                    switch(index)
+                    {
+                        case 1:
+                            var url = "";
+                            if (deviceFactory.device.platform == "iOS")
+                            {
+                                url = "maps://maps.apple.com/?q=" + lat + "," + long;
+                            }
+                            else
+                            {
+                                url = "maps://maps.google.com/?q=" + lat + "," + long;;
+                            }
 
-            url = "waze://?ll=" + lat + "," + long + "&navigate=yes"
-            
-            window.open(url, "_system");
+                            window.open(url, "_system");
+                            break;
+                        case 2: 
+                            url = "waze://?ll=" + lat + "," + long + "&navigate=yes";
+                            window.open(url, "_system");
+                            break;
+                    }
+                });
+        };
+
+        $scope.OpenMaps = function(lat, long) {
+
+            // Maps options
+            var options = {
+                title: '¿Cómo llegar?',
+                buttonLabels: ['Ir a mapas'],
+                addCancelButtonWithLabel: 'Cancelar',
+                androidEnableCancelButton : true,
+                winphoneEnableCancelButton : true
+            };
+
+            IsWazeInstalled()
+                .then(function(response){
+                    if (response) {                     
+                        options.buttonLabels.push('Usar Waze');    
+                    }
+
+                    OpenMapsActionSheet(options, lat, long);
+                })
+                .catch(function(err){
+
+                })
         };
 
         $scope.OpenStores = function() {
@@ -605,33 +694,57 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         function IsTwitterInstalled() {
-            var URI = "com.twitter.android";
-            if (deviceFactory.device.platform() == "iOS") URI = "twitter://";
-            $cordovaAppAvailability.check(URI)
-                .then(function() {
-                    // is available
-                     $scope.viewdata.socialmediaapps.twitter = true;
-                     $scope.$apply();
-                }, function () {
-                    // not available
-                    $scope.viewdata.socialmediaapps.twitter = false;
-                    $scope.$apply();
-                });
+            if (!devEnvironment) 
+            {
+                var URI = "com.twitter.android";                
+                if (deviceFactory.device.platform() == "iOS") URI = "twitter://";
+                $cordovaAppAvailability.check(URI)
+                    .then(function() {
+                        // is available
+                         $scope.viewdata.socialmediaapps.twitter = true;                     
+                    }, function () {
+                        // not available
+                        $scope.viewdata.socialmediaapps.twitter = false;                    
+                    });
+            }
         };
 
         function IsFacebookInstalled() {
-            var URI = "com.facebook.katana";
-            if (deviceFactory.device.platform() == "iOS") URI = "fb://";
-            $cordovaAppAvailability.check(URI)
-                .then(function() {
-                    // is available
-                     $scope.viewdata.socialmediaapps.facebook = true;
-                     $scope.$apply();
-                }, function () {
-                    // not available
-                    $scope.viewdata.socialmediaapps.facebook = false;
-                    $scope.$apply();
-                });
+            if (!devEnvironment) 
+            {
+                var URI = "com.facebook.katana";
+                if (deviceFactory.device.platform() == "iOS") URI = "fb://";
+                $cordovaAppAvailability.check(URI)
+                    .then(function() {
+                        // is available
+                         $scope.viewdata.socialmediaapps.facebook = true;                     
+                    }, function () {
+                        // not available
+                        $scope.viewdata.socialmediaapps.facebook = false;                    
+                    });
+            }
+        };
+
+        function IsWazeInstalled() {
+            return new Promise(function(resolve,reject){
+                if (!devEnvironment) 
+                {
+                    var URI = "waze://";                
+                    if (deviceFactory.device.platform() == "iOS") URI = "waze://";
+                    $cordovaAppAvailability.check(URI)
+                        .then(function() {
+                            // is available
+                            resolve(true);
+                        }, function () {
+                            // not available
+                            resolve(false);
+                        });
+                }
+                else
+                {
+                    resolve(false);
+                }
+            });
         };
 
         $scope.ShareViaTwitter = function(commerce) {
@@ -681,7 +794,31 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             var progress = $scope.GetRewardProgress(availablepoints, itempoints);            
             return {"width":progress + "%"};
         };
-        
+
+        $scope.OpenPage = function(pageUrl) {
+            var options = {
+                location: 'yes',
+                clearcache: 'yes',
+                toolbar: 'yes'
+            };
+
+            $cordovaInAppBrowser.open(pageUrl, '_blank', options)
+                .then(function(event) {
+                // success
+                })
+                .catch(function(event) {
+                // error
+                });
+        };
+
+        $scope.EmailTo = function(to) {
+            emailService.EmatilTo(to);
+        };
+
+        $scope.DoPhoneCall = function(phonenum) {
+            var call = "tel:" + phonenum;
+            document.location.href = call;
+        }
     }]);
 
     ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cordovaGeolocation', '$stateParams', '$compile', 'loadingBox', 'locationFactory', 'storeFactory', 'navigationFactory', '$state', function($scope, commerceFactory, $ionicLoading, $cordovaGeolocation, $stateParams, $compile, loadingBox, locationFactory, storeFactory, navigationFactory, $state){
@@ -693,7 +830,9 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         });
 
         $scope.viewdata = {
-            stores: []
+            stores: [],
+            locationSet: false,
+            showLocationMessage: true
         };
 
         var _map = false;
@@ -701,18 +840,32 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         var longitude = '';
         var latitude = '';
 
+        $scope.ClearLocationMessage = function() {
+            $("#locationMessageMap").hide();
+            $scope.viewdata.showLocationMessage = false;
+        };
+
+        function ShowLocationMessage() {
+            $scope.viewdata.locationSet = false;
+            $scope.viewdata.showLocationMessage = true;
+            $("#locationMessageMap").show();
+        };
+
         $scope.GoToCommerce = function() {        
         };
 
-        $scope.centerOnMe = function() {
+        $scope.centerOnMe = function() {            
             if (!_map) return;
             var posOptions = {timeout: 100000, enableHighAccuracy: false};
-            loadingBox.show('Buscando tiendas cerca suyo...');
+            // loadingBox.show('Buscando tiendas cerca suyo...');
             $cordovaGeolocation
                 .getCurrentPosition(posOptions)
                 .then(
                     function (position) 
                     {
+                        $scope.viewdata.locationSet = true;
+                        $scope.viewdata.showLocationMessage = false;
+
                         var lat  = position.coords.latitude;
                         var long = position.coords.longitude;
 
@@ -726,14 +879,28 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                             _locationMarkerCreated = true;
                         }
                         _map.setCenter(myLatlng);
-                        loadingBox.hide();
-                    },
-                    function(err) 
-                    {
-                        loadingBox.hide();
-                        alert("No tienes location services!");
-                    }
-                );
+                        // LoadStores();
+                    }, function(err) {
+                        // error
+                        ShowLocationMessage();
+                        $scope.viewdata.locationSet = false;
+                        $scope.viewdata.showLocationMessage = true;
+                        
+                        swal(
+                            {   
+                                title: "Oops!",   
+                                text: "No tiene activados los servicios de ubicación.",   
+                                type: "warning",   
+                                showConfirmButton: true,
+                                showCancelButton: false,                       
+                                confirmButtonText: "Ok",   
+                                closeOnConfirm: true 
+                            }, 
+                            function(){   
+                                
+                            }
+                        );
+                    });
         };
 
         function GetStoreFromList(SubEntityID) {
@@ -752,157 +919,127 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             $state.go(_state);
         };
 
+        function LoadStores() {
+            commerceFactory.stores.general(0,"").
+                then(function(data){
+                    loadingBox.hide();
+
+                    var infoWindow = new google.maps.InfoWindow();
+                    var j=data.length;
+                    for (var i=0;i<j;i++){
+                        var myLatlng = new google.maps.LatLng(data[i].LocationLatitude, data[i].LocationLongitude);
+                        var marker = new google.maps.Marker({
+                            position: myLatlng,
+                            title: data[i].Name,
+                            desc: data[i].Description,
+                            info: data[i].Address,
+                            horario: "Pendiente",
+                            telefono: data[i].Phone,
+                            map: _map,
+                            entityID: data[i].EntityID,
+                            subEntityID: data[i].SubEntityID,
+                            icon: "./img/popmap.png"
+                        });
+                        var infowindow = new google.maps.InfoWindow({});
+                        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                            return function() {
+                                if (infowindow) {
+                                    infowindow.close();
+                                }
+                                var contentString   =  "<div class='map-info-window'>"; 
+                                contentString       += "<div style='font-weight:bold'>" + marker.title + "</div>"; 
+                                contentString       += "<button class='button button-clear button-positive' ng-click='InfoWindowTapped(" + marker.subEntityID + ")'>Detalle</button>";
+                                contentString       += "</div>";
+                                var compiled = $compile(contentString)($scope);
+
+                                infoWindow.setContent(compiled[0]);
+                                infoWindow.open(_map, marker);
+                            };
+                        })(marker));
+                    }
+
+                    if ($scope.viewdata.locationSet)
+                    {
+                        $scope.centerOnMe();    
+                    }
+                    
+                })
+                .catch(function(err){
+                    loadingBox.hide();                       
+                });
+        };
+
+        function LoadStoresNearBy(lat, lon) {
+            commerceFactory.stores.nearby(0,lon,lat,0)
+                .then(function(data){
+                    loadingBox.hide();
+
+                    var infoWindow = new google.maps.InfoWindow();
+                    var j=data.length;
+                    
+                    $scope.viewdata.stores = data;
+
+                    for (var i=0;i<j;i++){
+                        var myLatlng = new google.maps.LatLng(data[i].LocationLatitude, data[i].LocationLongitude);
+                        var marker = new google.maps.Marker({
+                            position: myLatlng,
+                            title: data[i].Name,
+                            desc: data[i].Description,
+                            info: data[i].Address,
+                            horario: "Pendiente",
+                            telefono: data[i].Phone,
+                            map: _map,
+                            entityID: data[i].EntityID,
+                            subEntityID: data[i].SubEntityID,                                    
+                            icon: "./img/popmap.png"
+                        });
+                        var infowindow = new google.maps.InfoWindow({});
+                        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                            return function() {
+                                if (infowindow) {
+                                    infowindow.close();
+                                }
+                                
+                                var contentString   =  "<div class='map-info-window'>"; 
+                                contentString       += "<div style='font-weight:bold'>" + marker.title + "</div>"; 
+                                contentString       += "<button class='button button-clear button-positive' ng-click='InfoWindowTapped(" + marker.subEntityID + ")'>Detalle</button>";
+                                contentString       += "</div>";
+                                var compiled = $compile(contentString)($scope);
+
+                                infoWindow.setContent(compiled[0]);
+                                infoWindow.open(_map, marker);
+                            };
+                        })(marker));
+                    }
+                })
+                .catch(function(err){
+                });
+        };
+
         $scope.mapCreated = function(map) {
-            loadingBox.show();
+            loadingBox.show('Buscando tiendas cercanas...');
 
             // Sets the map into a local variable.
             _map = map;
             var posOptions = {timeout: 10000, enableHighAccuracy: false};
+
             $cordovaGeolocation
                 .getCurrentPosition(posOptions)
                 .then(function (position) {
                     var lat = position.coords.latitude;
                     var lon = position.coords.longitude;
+
+                    $scope.viewdata.locationSet = true;
+                    $scope.viewdata.showLocationMessage = false;
                     
-                    // Pulls stores near the user's location
-                    commerceFactory.stores.nearby(0,lon,lat,0)
-                        .then(function(data){
-                            loadingBox.hide();
-                            
-                            var infoWindow = new google.maps.InfoWindow();
-                            var j=data.length;
-                            
-                            $scope.viewdata.stores = data;
-                            console.log(data);
-
-                            for (var i=0;i<j;i++){                                
-                                var myLatlng = new google.maps.LatLng(data[i].LocationLatitude, data[i].LocationLongitude);
-                                var marker = new google.maps.Marker({
-                                    position: myLatlng,
-                                    title: data[i].Name,
-                                    desc: data[i].Description,
-                                    info: data[i].Address,
-                                    horario: "Pendiente",
-                                    telefono: data[i].Phone,
-                                    map: map,
-                                    entityID: data[i].EntityID,
-                                    subEntityID: data[i].SubEntityID,                                    
-                                    icon: "./img/popmap.png"
-                                });
-                                var infowindow = new google.maps.InfoWindow({});
-                                google.maps.event.addListener(marker, 'click', (function(marker, i) {
-                                    return function() {
-                                        if (infowindow) {
-                                            infowindow.close();
-                                        }
-                                        
-                                        var contentString   =  "<div class='map-info-window'>"; 
-                                        contentString       += "<div style='font-weight:bold'>" + marker.title + "</div>"; 
-                                        contentString       += "<button class='button button-clear button-positive' ng-click='InfoWindowTapped(" + marker.subEntityID + ")'>Detalle</button>";
-                                        contentString       += "</div>";
-                                        var compiled = $compile(contentString)($scope);
-
-                                        infoWindow.setContent(compiled[0]);
-                                        infoWindow.open(map, marker);
-                                    };
-                                })(marker));
-                            }
-                        })
-                        .catch(function(err){
-                            loadingBox.hide();
-
-                            // Pulls all the stores without location
-                            commerceFactory.stores.general(0,0).
-                                then(function(data){
-                                    loadingBox.hide();
-
-                                    var infoWindow = new google.maps.InfoWindow();
-                                    var j=data.length;
-                                    for (var i=0;i<j;i++){
-                                        var myLatlng = new google.maps.LatLng(data[i].LocationLatitude, data[i].LocationLongitude);
-                                        var marker = new google.maps.Marker({
-                                            position: myLatlng,
-                                            title: data[i].Name,
-                                            desc: data[i].Description,
-                                            info: data[i].Address,
-                                            horario: "Pendiente",
-                                            telefono: data[i].Phone,
-                                            map: map,
-                                            entityID: data[i].EntityID,
-                                            subEntityID: data[i].SubEntityID,
-                                            icon: "./img/popmap.png"
-                                        });
-                                        var infowindow = new google.maps.InfoWindow({});
-                                        google.maps.event.addListener(marker, 'click', (function(marker, i) {
-                                            return function() {
-                                                if (infowindow) {
-                                                    infowindow.close();
-                                                }
-                                                var contentString   =  "<div class='map-info-window'>"; 
-                                                contentString       += "<div style='font-weight:bold'>" + marker.title + "</div>"; 
-                                                contentString       += "<button class='button button-clear button-positive' ng-click='InfoWindowTapped(" + marker.subEntityID + ")'>Detalle</button>";
-                                                contentString       += "</div>";
-                                                var compiled = $compile(contentString)($scope);
-
-                                                infoWindow.setContent(compiled[0]);
-                                                infoWindow.open(map, marker);
-                                            };
-                                        })(marker));
-                                    }
-
-                                    $scope.centerOnMe();                                
-                                })
-                                .catch(function(err){
-                                    loadingBox.hide();
-                                    // console.log(err);                                
-                                });
-                        });
-                },function(err){});
-        
-                    commerceFactory.stores.general(0,0).
-                        then(function(data){
-                            loadingBox.hide();
-
-                            var infoWindow = new google.maps.InfoWindow();
-                            var j=data.length;
-                            for (var i=0;i<j;i++){
-                                var myLatlng = new google.maps.LatLng(data[i].LocationLatitude, data[i].LocationLongitude);
-                                var marker = new google.maps.Marker({
-                                    position: myLatlng,
-                                    title: data[i].Name,
-                                    desc: data[i].Description,
-                                    info: data[i].Address,
-                                    horario: "Pendiente",
-                                    telefono: data[i].Phone,
-                                    map: map,
-                                    entityID: data[i].EntityID,
-                                    subEntityID: data[i].SubEntityID,
-                                    icon: "./img/popmap.png"
-                                });
-                                var infowindow = new google.maps.InfoWindow({});
-                                google.maps.event.addListener(marker, 'click', (function(marker, i) {
-                                    return function() {
-                                        if (infowindow) {
-                                            infowindow.close();
-                                        }
-                                        var contentString   =  "<div class='map-info-window'>"; 
-                                        contentString       += "<div style='font-weight:bold'>" + marker.title + "</div>"; 
-                                        contentString       += "<button class='button button-clear button-positive' ng-click='InfoWindowTapped(" + marker.subEntityID + ")'>Detalle</button>";
-                                        contentString       += "</div>";
-                                        var compiled = $compile(contentString)($scope);
-
-                                        infoWindow.setContent(compiled[0]);
-                                        infoWindow.open(map, marker);
-                                    };
-                                })(marker));
-                            }
-
-                            $scope.centerOnMe();
-                        })
-                        .catch(function(err){
-                            loadingBox.hide();
-                            // console.log(err);                        
-                        });
+                    LoadStoresNearBy(lat, lon);                                      
+                    
+                })
+                .catch(function(err){
+                    // No location services are available
+                    ShowLocationMessage();
+                    LoadStores();
+                });  
         };
     }]);
 
@@ -944,7 +1081,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
     }]);
 
-    ctrl.controller('StoreDetailCtrl', ['$scope', '$timeout', '$state', '$stateParams', 'storeFactory', 'loadingBox', 'commerceFactory', 'rewardFactory', 'navigationFactory', 'deviceFactory', 'rewardDetailModal', '$cordovaAppAvailability', '$cordovaSocialSharing', function($scope, $timeout, $state, $stateParams, storeFactory, loadingBox, commerceFactory, rewardFactory, navigationFactory, deviceFactory, rewardDetailModal, $cordovaAppAvailability, $cordovaSocialSharing){
+    ctrl.controller('StoreDetailCtrl', ['$scope', '$timeout', '$state', '$stateParams', 'storeFactory', 'loadingBox', 'commerceFactory', 'rewardFactory', 'navigationFactory', 'deviceFactory', 'rewardDetailModal', '$cordovaAppAvailability', '$cordovaSocialSharing', '$cordovaInAppBrowser', 'emailService', '$cordovaActionSheet', function($scope, $timeout, $state, $stateParams, storeFactory, loadingBox, commerceFactory, rewardFactory, navigationFactory, deviceFactory, rewardDetailModal, $cordovaAppAvailability, $cordovaSocialSharing, $cordovaInAppBrowser, emailService, $cordovaActionSheet){
         
         loadingBox.show();
         $scope.viewdata = {
@@ -957,9 +1094,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 twitter: false,
                 facebook: false
             }
-        };      
-
-        console.log($scope.viewdata.store);
+        };
 
         $timeout(function(){
             loadingBox.hide();
@@ -968,20 +1103,56 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             IsFacebookInstalled();
         });
 
-        $scope.OpenMaps = function(lat, long) {
-            var url = "";
-            if (deviceFactory.device.platform == "iOS")
-            {
-                url = "maps://maps.apple.com/?q=" + lat + "," + long;
-            }
-            else
-            {
-                url = "maps://maps.google.com/?q=" + lat + "," + long;;
-            }
+        function OpenMapsActionSheet(options, lat, long) {
+            $cordovaActionSheet.show(options)
+                .then(function(btnIndex) {
+                    var index = btnIndex;
+                    
+                    switch(index)
+                    {
+                        case 1:
+                            var url = "";
+                            if (deviceFactory.device.platform == "iOS")
+                            {
+                                url = "maps://maps.apple.com/?q=" + lat + "," + long;
+                            }
+                            else
+                            {
+                                url = "maps://maps.google.com/?q=" + lat + "," + long;;
+                            }
 
-            url = "waze://?ll=" + lat + "," + long + "&navigate=yes"
-            
-            window.open(url, "_system");
+                            window.open(url, "_system");
+                            break;
+                        case 2: 
+                            url = "waze://?ll=" + lat + "," + long + "&navigate=yes";
+                            window.open(url, "_system");
+                            break;
+                    }
+                });
+        };
+
+        $scope.OpenMaps = function(lat, long) {
+
+            // Maps options
+            var options = {
+                title: '¿Cómo llegar?',
+                buttonLabels: ['Ir a mapas'],
+                addCancelButtonWithLabel: 'Cancelar',
+                androidEnableCancelButton : true,
+                winphoneEnableCancelButton : true
+            };
+
+            IsWazeInstalled()
+                .then(function(response){
+                    if (response) {
+                        options.buttonLabels.push('Usar Waze');    
+                    }
+
+                    OpenMapsActionSheet(options, lat, long);
+                })
+                .catch(function(err){
+
+                })
         };
 
         $scope.OpenCommerce = function(entityID) {
@@ -1060,12 +1231,29 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             rewardFactory.active.general(true, entityID, subEntityID)
                 .then(function(data){                
                     loadingBox.hide();
-                    console.log(data.Elements);
                     $scope.viewdata.rewards = data.Elements;
                 })
                 .catch(function(err){
                     loadingBox.hide();
                     // console.log(err);
+                });
+        };
+
+        $scope.ReloadStoreInfo = function() {
+            loadingBox.show("Actualizando la información de la tienda...");
+            commerceFactory.store.get($scope.viewdata.store.SubEntityID)
+                .then(function(response){
+                    loadingBox.hide();
+                    console.log(response);
+                    $scope.$broadcast('scroll.refreshComplete');
+                    if (response.length > 0)
+                    {
+                        $scope.viewdata.store = response[0];
+                    }                    
+                }).catch(function(err){
+                    loadingBox.hide();
+                    console.log(err);
+                    $scope.$broadcast('scroll.refreshComplete');
                 });
         };
 
@@ -1138,34 +1326,58 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             }
         };
 
-        function IsTwitterInstalled() {
-            var URI = "com.twitter.android";
-            if (deviceFactory.device.platform() == "iOS") URI = "twitter://";
-            $cordovaAppAvailability.check(URI)
-                .then(function() {
-                    // is available
-                     $scope.viewdata.socialmediaapps.twitter = true;
-                     $scope.$apply();
-                }, function () {
-                    // not available
-                    $scope.viewdata.socialmediaapps.twitter = false;
-                    $scope.$apply();
-                });
+        function IsTwitterInstalled() {            
+            if (!devEnvironment) 
+            {
+                var URI = "com.twitter.android";                
+                if (deviceFactory.device.platform() == "iOS") URI = "twitter://";
+                $cordovaAppAvailability.check(URI)
+                    .then(function() {
+                        // is available
+                         $scope.viewdata.socialmediaapps.twitter = true;
+                    }, function () {
+                        // not available
+                        $scope.viewdata.socialmediaapps.twitter = false;                    
+                    });
+            }
+        };
+
+        function IsWazeInstalled() {
+            return new Promise(function(resolve,reject){
+                if (!devEnvironment) 
+                {
+                    var URI = "waze://";                
+                    if (deviceFactory.device.platform() == "iOS") URI = "waze://";
+                    $cordovaAppAvailability.check(URI)
+                        .then(function() {
+                            // is available
+                            resolve(true);
+                        }, function () {
+                            // not available
+                            resolve(false);
+                        });
+                }
+                else
+                {
+                    resolve(false);
+                }
+            });
         };
 
         function IsFacebookInstalled() {
-            var URI = "com.facebook.katana";
-            if (deviceFactory.device.platform() == "iOS") URI = "fb://";
-            $cordovaAppAvailability.check(URI)
-                .then(function() {
-                    // is available
-                     $scope.viewdata.socialmediaapps.facebook = true;
-                     $scope.$apply();
-                }, function () {
-                    // not available
-                    $scope.viewdata.socialmediaapps.facebook = false;
-                    $scope.$apply();
-                });
+            if (!devEnvironment) 
+            {
+                var URI = "com.facebook.katana";
+                if (deviceFactory.device.platform() == "iOS") URI = "fb://";
+                $cordovaAppAvailability.check(URI)
+                    .then(function() {
+                        // is available
+                         $scope.viewdata.socialmediaapps.facebook = true;                     
+                    }, function () {
+                        // not available
+                        $scope.viewdata.socialmediaapps.facebook = false;                    
+                    });
+            }
         };
 
         $scope.ShareViaTwitter = function(store) {
@@ -1188,6 +1400,31 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 }, function(err) {
                     // An error occurred. Show a message to the user
                 });
+        };
+
+        $scope.OpenPage = function(pageUrl) {
+            var options = {
+                location: 'yes',
+                clearcache: 'yes',
+                toolbar: 'yes'
+            };
+
+            $cordovaInAppBrowser.open(pageUrl, '_blank', options)
+                .then(function(event) {
+                // success
+                })
+                .catch(function(event) {
+                // error
+                });
+        };
+
+        $scope.EmailTo = function(to) {
+            emailService.EmatilTo(to);
+        };
+
+        $scope.DoPhoneCall = function(phonenum) {
+            var call = "tel:" + phonenum;
+            document.location.href = call;
         };
     }]);
 
@@ -1327,7 +1564,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
 // My Kenuu
 
-    ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', 'navigationFactory', '$cordovaActionSheet', '$cordovaCamera', '$cordovaImagePicker', '$cordovaFile', 'imageFunctions', 'appVersionFactory', '$ionicHistory', function($scope, $timeout, loadingBox, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService, navigationFactory, $cordovaActionSheet, $cordovaCamera, $cordovaImagePicker, $cordovaFile, imageFunctions, appVersionFactory, $ionicHistory){
+    ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', 'navigationFactory', '$cordovaActionSheet', '$cordovaCamera', '$cordovaImagePicker', '$cordovaFile', 'imageFunctions', 'appVersionFactory', '$ionicHistory', '$cordovaPush', 'deviceFactory', function($scope, $timeout, loadingBox, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService, navigationFactory, $cordovaActionSheet, $cordovaCamera, $cordovaImagePicker, $cordovaFile, imageFunctions, appVersionFactory, $ionicHistory, $cordovaPush, deviceFactory){
         $scope.$on("$ionicView.enter", function(event, args){
             navigationFactory.setDefaults();
             LoadData();
@@ -1654,12 +1891,73 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             $ionicHistory.clearHistory();
             $ionicHistory.clearCache();
             $state.go("welcome");
+            $scope.CloseSetup();
         };
 
         // Required to Show the Top Bar Setup View
         $scope.ShowSetupView = function() {setupView.Show($scope);};
         $scope.CloseSetup = function() {setupView.Close($scope);};
         $scope.ContactUs = function() {emailService.ContactCustomerService();}
+
+        function RegisterDevice(email) {
+            return new Promise(function(resolve,reject){
+                var iosConfig = {
+                    "badge": true,
+                    "sound": true,
+                    "alert": true,
+                };
+                var androidConfig = {
+                    "senderID": "AIzaSyDNjV6WWsPUXWKNctSYo19MhPpSMwgZKqw",
+                };
+
+                deviceFactory.device.registeredUser.set(email);
+
+                console.log("Platform: " + deviceFactory.device.platform());
+
+                if (deviceFactory.device.platform() == "iOS")
+                {
+                    $cordovaPush.register(iosConfig)
+                        .then(
+                            function(deviceToken)
+                            {
+                                deviceFactory.device.registerdevice(deviceToken, data.Email)
+                                .then(function(response){
+                                    resolve(response);
+                                })
+                                .catch(function(err){
+                                    reject(err);
+                                });
+                            },
+                            function(err) {
+                                reject(err);
+                            }
+                        );
+                }
+
+                if (deviceFactory.device.platform() == "Android")
+                {
+                    console.log(androidConfig);
+
+                    $cordovaPush.register(androidConfig).then(function(result) {
+                            // Success
+                            resolve(result);
+                        }, function(err) {
+                            // Error
+                            reject(err);
+                        });
+                }
+            });
+        };
+
+        $scope.RegisterDevice = function() {
+            RegisterDevice("tavo.rodriguez@gmail.com")
+                .then(function(response){
+                    console.log(response);
+                })
+                .catch(function(err) {
+                    console.log(err);
+                });
+        };
     }]);
 
     ctrl.controller('ActivityCtrl', ['$scope', '$state', 'userFactory', 'socialSharing', 'loadingBox', 'commerceFactory', 'navigationFactory', function($scope, $state, userFactory, socialSharing, loadingBox, commerceFactory, navigationFactory){
@@ -1762,8 +2060,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         $scope.GetActivityPointsLabel = function(activityType) {
-            if (activityType === "V") return "Puntos Ganados:";
-            if (activityType === "R") return "Puntos Canjeados:";
+            if (activityType === "V") return "Ganados:";
+            if (activityType === "R") return "Canjeados:";
         };
 
         $scope.ShareViaFacebook = function(activity) {        
@@ -1949,7 +2247,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
         function LoadProfileData() {
             loadingBox.show($scope.viewdata.pleaseWaitMessage);
-            userFactory.info.get()
+            userFactory.info.get(true)
                 .then(function(data){
                     $scope.viewdata.user = data;
                     var userData = data;
@@ -2030,6 +2328,9 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
     }]);
 
     ctrl.controller('KenuuPwdChangeCtrl', ['$scope', '$timeout', 'userFactory', '$state', '$ionicHistory', 'msgBox', '$ionicLoading', 'loadingBox', '$cordovaKeyboard', 'referenceIDFactory', function($scope, $timeout, userFactory, $state, $ionicHistory, msgBox, $ionicLoading, loadingBox, $cordovaKeyboard, referenceIDFactory){
+        $scope.passwordCheckbox = false;
+        $scope.inputType = "password";
+
         $scope.viewdata = {
             qrcode: "Kenuu",
             counter: 1,
@@ -2069,21 +2370,36 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         function ShowModalMsg(title, message, buttontext) {
             if (!devEnvironment) $cordovaKeyboard.close();
 
-            $(".md-overlay").removeClass("md-overlay-ok");
-            $(".md-content").removeClass("md-content-ok");
-            
-            $scope.viewdata.msgbox.title = title;
-            $scope.viewdata.msgbox.message = message;
-            $scope.viewdata.msgbox.buttontext = buttontext;
+            swal(
+                {   
+                    title: title,   
+                    text: message,   
+                    type: "warning",   
+                    showConfirmButton: true,
+                    showCancelButton: false,                       
+                    confirmButtonText: buttontext,   
+                    closeOnConfirm: true 
+                }, 
+                function(){   
+                    
+                }
+            );
 
-            var modal = document.querySelector('#modal-msgbox-signup'),
-                close = modal.querySelector( '.md-close' );
-            var overlay = document.querySelector( '.md-overlay' );
-            classie.add( modal, 'md-show' );
-            close.addEventListener( 'click', function( ev ) {
-                ev.stopPropagation();
-                classie.remove( document.querySelector('#modal-msgbox-signup'), 'md-show' );
-            });
+            // $(".md-overlay").removeClass("md-overlay-ok");
+            // $(".md-content").removeClass("md-content-ok");
+            
+            // $scope.viewdata.msgbox.title = title;
+            // $scope.viewdata.msgbox.message = message;
+            // $scope.viewdata.msgbox.buttontext = buttontext;
+
+            // var modal = document.querySelector('#modal-msgbox-signup'),
+            //     close = modal.querySelector( '.md-close' );
+            // var overlay = document.querySelector( '.md-overlay' );
+            // classie.add( modal, 'md-show' );
+            // close.addEventListener( 'click', function( ev ) {
+            //     ev.stopPropagation();
+            //     classie.remove( document.querySelector('#modal-msgbox-signup'), 'md-show' );
+            // });
         };
 
         function ShowModalMsg_Ok(title, message, buttontext) {
@@ -2161,6 +2477,13 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 return false;
             });
         };
+
+        $scope.hideShowPassword = function() {
+            if ($scope.inputType == 'password')
+                $scope.inputType = 'text';
+            else
+                $scope.inputType = 'password';
+        };
     }]);
 
 // No Connection Procedure
@@ -2172,6 +2495,9 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
     ctrl.controller('LoginCtrl', ['$scope', '$cordovaKeyboard', 'loginSignUpFactory', 'userFactory', '$ionicLoading', 'referenceIDFactory', '$cordovaPush', 'deviceFactory', '$ionicHistory', '$state', '$ionicModal', 'loadingBox', function($scope, $cordovaKeyboard, loginSignUpFactory, userFactory, $ionicLoading, referenceIDFactory, $cordovaPush, deviceFactory, $ionicHistory, $state, $ionicModal, loadingBox) {
         if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(true);
+
+        $scope.passwordCheckbox = false;
+        $scope.inputType = "password";
 
         $scope.viewdata = {
             login: {
@@ -2247,18 +2573,34 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
         function ShowModalMsg(title, message, buttontext) {
             if (!devEnvironment) $cordovaKeyboard.close();
-            $scope.viewdata.msgbox.title = title;
-            $scope.viewdata.msgbox.message = message;
-            $scope.viewdata.msgbox.buttontext = buttontext;
+                
+            swal(
+                {   
+                    title: title,   
+                    text: message,   
+                    type: "warning",   
+                    showConfirmButton: true,
+                    showCancelButton: false,                       
+                    confirmButtonText: buttontext,   
+                    closeOnConfirm: true 
+                }, 
+                function(){   
+                    
+                }
+            );
 
-            var modal = document.querySelector('#modal-msgbox-login'),
-                close = modal.querySelector( '.md-close' );
-            var overlay = document.querySelector( '.md-overlay' );
-            classie.add( modal, 'md-show' );
-            close.addEventListener( 'click', function( ev ) {
-                ev.stopPropagation();
-                classie.remove( document.querySelector('#modal-msgbox-login'), 'md-show' );
-            });
+            // $scope.viewdata.msgbox.title = title;
+            // $scope.viewdata.msgbox.message = message;
+            // $scope.viewdata.msgbox.buttontext = buttontext;
+
+            // var modal = document.querySelector('#modal-msgbox-login'),
+            //     close = modal.querySelector( '.md-close' );
+            // var overlay = document.querySelector( '.md-overlay' );
+            // classie.add( modal, 'md-show' );
+            // close.addEventListener( 'click', function( ev ) {
+            //     ev.stopPropagation();
+            //     classie.remove( document.querySelector('#modal-msgbox-login'), 'md-show' );
+            // });
         };
 
         $scope.recoverPassword = function() {
@@ -2297,6 +2639,13 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
         $scope.CloseModal = function() {
             $scope.modal.hide();
+        };
+
+        $scope.hideShowPassword = function() {
+            if ($scope.inputType == 'password')
+                $scope.inputType = 'text';
+            else
+                $scope.inputType = 'password';
         };
 
         $scope.$on('$destroy', function() {
@@ -2357,23 +2706,42 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
         function ShowModalMsg(title, message, buttontext) {
             if (!devEnvironment) $cordovaKeyboard.close();
-            $scope.viewdata.msgbox.title = title;
-            $scope.viewdata.msgbox.message = message;
-            $scope.viewdata.msgbox.buttontext = buttontext;
 
-            var modal = document.querySelector('#modal-msgbox-login'),
-                close = modal.querySelector( '.md-close' );
-            var overlay = document.querySelector( '.md-overlay' );
-            classie.add( modal, 'md-show' );
-            close.addEventListener( 'click', function( ev ) {
-                ev.stopPropagation();
-                classie.remove( document.querySelector('#modal-msgbox-login'), 'md-show' );
-            });
+            swal(
+                {   
+                    title: title,   
+                    text: message,   
+                    type: "warning",   
+                    showConfirmButton: true,
+                    showCancelButton: false,                       
+                    confirmButtonText: buttontext,   
+                    closeOnConfirm: true 
+                }, 
+                function(){   
+                    
+                }
+            );
+
+            // $scope.viewdata.msgbox.title = title;
+            // $scope.viewdata.msgbox.message = message;
+            // $scope.viewdata.msgbox.buttontext = buttontext;
+
+            // var modal = document.querySelector('#modal-msgbox-login'),
+            //     close = modal.querySelector( '.md-close' );
+            // var overlay = document.querySelector( '.md-overlay' );
+            // classie.add( modal, 'md-show' );
+            // close.addEventListener( 'click', function( ev ) {
+            //     ev.stopPropagation();
+            //     classie.remove( document.querySelector('#modal-msgbox-login'), 'md-show' );
+            // });
         };
     }]);
 
     ctrl.controller('SignUpCtrl', ['$scope', '$cordovaKeyboard', 'loginSignUpFactory', 'userFactory', '$ionicLoading', 'referenceIDFactory', '$cordovaPush', 'deviceFactory', '$ionicHistory', '$state', 'loadingBox', function($scope, $cordovaKeyboard, loginSignUpFactory, userFactory, $ionicLoading, referenceIDFactory, $cordovaPush, deviceFactory, $ionicHistory, $state, loadingBox) {
         if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(true);
+
+        $scope.passwordCheckbox = false;
+        $scope.inputType = "password";
 
         $scope.viewdata = {
             signup: {
@@ -2494,32 +2862,64 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
         function ShowModalMsg(title, message, buttontext) {
             if (!devEnvironment) $cordovaKeyboard.close();
-            $(".md-overlay").removeClass("md-overlay-ok");
-            $(".md-content").removeClass("md-content-ok");
-            $scope.viewdata.msgbox.title = title;
-            $scope.viewdata.msgbox.message = message;
-            $scope.viewdata.msgbox.buttontext = buttontext;
 
-            var modal = document.querySelector('#modal-msgbox-signup'),
-                close = modal.querySelector( '.md-close' );
-            var overlay = document.querySelector( '.md-overlay' );
-            classie.add( modal, 'md-show' );
-            close.addEventListener( 'click', function( ev ) {
-                ev.stopPropagation();
-                classie.remove( document.querySelector('#modal-msgbox-signup'), 'md-show' );
-            });
+            swal(
+                {   
+                    title: title,   
+                    text: message,   
+                    type: "warning",   
+                    showConfirmButton: true,
+                    showCancelButton: false,                       
+                    confirmButtonText: buttontext,   
+                    closeOnConfirm: true 
+                }, 
+                function(){   
+                    
+                }
+            );
+
+            // $(".md-overlay").removeClass("md-overlay-ok");
+            // $(".md-content").removeClass("md-content-ok");
+            // $scope.viewdata.msgbox.title = title;
+            // $scope.viewdata.msgbox.message = message;
+            // $scope.viewdata.msgbox.buttontext = buttontext;
+
+            // var modal = document.querySelector('#modal-msgbox-signup'),
+            //     close = modal.querySelector( '.md-close' );
+            // var overlay = document.querySelector( '.md-overlay' );
+            // classie.add( modal, 'md-show' );
+            // close.addEventListener( 'click', function( ev ) {
+            //     ev.stopPropagation();
+            //     classie.remove( document.querySelector('#modal-msgbox-signup'), 'md-show' );
+            // });
         };
 
         function ShowModalMsg_Ok(title, message, buttontext) {
             if (!devEnvironment) $cordovaKeyboard.close();
-            $scope.viewdata.msgbox.title = title;
-            $scope.viewdata.msgbox.message = message;
-            $scope.viewdata.msgbox.buttontext = buttontext;
 
-            var modal = document.querySelector('#modal-msgbox-signup-ok'),
-                close = modal.querySelector( '.md-close' );
-            var overlay = document.querySelector( '.md-overlay' );
-            classie.add( modal, 'md-show' );
+            swal(
+                {   
+                    title: title,   
+                    text: message,   
+                    type: "success",   
+                    showConfirmButton: true,
+                    showCancelButton: false,                       
+                    confirmButtonText: buttontext,   
+                    closeOnConfirm: true 
+                }, 
+                function(){   
+                    
+                }
+            );
+
+            // $scope.viewdata.msgbox.title = title;
+            // $scope.viewdata.msgbox.message = message;
+            // $scope.viewdata.msgbox.buttontext = buttontext;
+
+            // var modal = document.querySelector('#modal-msgbox-signup-ok'),
+            //     close = modal.querySelector( '.md-close' );
+            // var overlay = document.querySelector( '.md-overlay' );
+            // classie.add( modal, 'md-show' );
         };
 
         function CloseModalMsg_Ok() {
@@ -2539,6 +2939,13 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     }
                 );
             }, 250);        
+        };
+
+        $scope.hideShowPassword = function() {
+            if ($scope.inputType == 'password')
+                $scope.inputType = 'text';
+            else
+                $scope.inputType = 'password';
         };
     }]);
 
@@ -2747,18 +3154,34 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
         function ShowModalMsg(title, message, buttontext) {
             if (!devEnvironment) $cordovaKeyboard.close();
-            $scope.viewdata.msgbox.title = title;
-            $scope.viewdata.msgbox.message = message;
-            $scope.viewdata.msgbox.buttontext = buttontext;
 
-            var modal = document.querySelector('#modal-welcomev-msgbox'),
-                close = modal.querySelector( '.md-close' );
-            var overlay = document.querySelector( '.md-overlay' );
-            classie.add( modal, 'md-show' );
-            close.addEventListener( 'click', function( ev ) {
-                ev.stopPropagation();
-                classie.remove( document.querySelector('#modal-welcomev-msgbox'), 'md-show' );
-            });
+            swal(
+                {   
+                    title: title,   
+                    text: message,   
+                    type: "warning",   
+                    showConfirmButton: true,
+                    showCancelButton: false,                       
+                    confirmButtonText: buttontext,   
+                    closeOnConfirm: true 
+                }, 
+                function(){   
+                    
+                }
+            );
+
+            // $scope.viewdata.msgbox.title = title;
+            // $scope.viewdata.msgbox.message = message;
+            // $scope.viewdata.msgbox.buttontext = buttontext;
+
+            // var modal = document.querySelector('#modal-welcomev-msgbox'),
+            //     close = modal.querySelector( '.md-close' );
+            // var overlay = document.querySelector( '.md-overlay' );
+            // classie.add( modal, 'md-show' );
+            // close.addEventListener( 'click', function( ev ) {
+            //     ev.stopPropagation();
+            //     classie.remove( document.querySelector('#modal-welcomev-msgbox'), 'md-show' );
+            // });
         };
 
         function CloseModalMsg_Ok() {

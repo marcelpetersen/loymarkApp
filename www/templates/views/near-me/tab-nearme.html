@@ -3,10 +3,16 @@
 		<img src="img/kenuulogo.png" alt="" class="top-bar-logo">
 	</ion-nav-title> -->
 	<ion-nav-buttons side="right">
-		<button class="button button-clear ion-map topbar-setupicon" style="font-size:25px;" ng-click="OpenMap()">
+		<button class="button button-clear ion-android-locate topbar-setupicon" style="font-size:25px;" ng-click="OpenMap()">			
 		</button>
 	</ion-nav-buttons>
 	<ion-content class="nearme-content" overflow-scroll="true">
+
+		<ion-refresher
+			pulling-text="Hale para refrescar..."
+			on-refresh="ReloadList()">
+		</ion-refresher>
+
 		<!-- <form novalidate> -->
 			<div class="item-input-inset nearme-search-item">
 				<label class="item-input-wrapper">
@@ -37,6 +43,14 @@
 			</div>
 		</div>
 		
+		<div id="locationMessage" style="display:none" class="item nearme-nolocationitem item-icon-left item-text-wrap" ng-show="!viewdata.locationSet && viewdata.showLocationMessage">
+			<i class="icon ion-android-pin"></i>
+			<p><strong>No tiene activados los servicios de ubicación, al activarlos podrá filtrar mejor las tiendas.</strong></p>
+			<div class="text-right" style="margin-top:15px;">
+				<button class="button nearme-nolocationbutton" ng-click="ClearLocationMessage()">Ok!</button>
+			</div>
+		</div>
+
 		<ion-list id="nearme-list">
         	<ion-item class="item-icon-left nearme-commerce-item" ng-repeat="item in viewdata.searchResults | orderBy:'Distance'" item="item" ng-click="OpenStore(item)">
         		<i class="icon">

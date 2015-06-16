@@ -3,31 +3,42 @@
 		<img src="img/kenuulogo.png" alt="" class="top-bar-logo">
 	</ion-nav-title> -->
 	<ion-content class="commercewr-content" overflow-scroll="true">
+
+		<ion-refresher
+			pulling-text="Hale para refrescar..."
+			on-refresh="ReloadCommerceInfo()">
+		</ion-refresher>
+
 		<div class="item text-center commercewr-header">			
 			<h2><strong>{{viewdata.commerce.Name}}</strong></h2>	
 			<div>
 				<img class="commercewr-avatar" src="{{GetAvatarImage(viewdata.commerce.Image)}}">
 			</div>
-			<div class="commercewr-gobtn" ng-click="OpenMaps(viewdata.commerce.LocationLatitude,viewdata.commerce.LocationLongitude)">
+			<!-- <div class="commercewr-gobtn" ng-click="OpenMaps(viewdata.commerce.LocationLatitude,viewdata.commerce.LocationLongitude)">
 				<p class="commercewr-gobtn-text"><i class="icon-location" style="font-size:20px;"></i></p>
 			</div>
 			<div class="commercewr-storesbtn" ng-click="OpenStores()">
 				<p class="commercewr-storesbtn-text">Tiendas</p>
-			</div>		
+			</div>	 -->	
+		</div>
+		<div class="item">
+			<div class="row">
+				<div class="col text-center" ng-click="OpenMaps(viewdata.commerce.LocationLatitude,viewdata.commerce.LocationLongitude)">
+					<p>¿Cómo llegar?</p>
+				</div>
+				<div class="col text-center item-text-wrap item-icon-right" ng-click="OpenStores()">
+					<p>Ver Tiendas</p>
+					<i class="icon ion-android-arrow-forward" style="color:#3c3c3c !important;"></i>
+				</div>
+			</div>
 		</div>
 		<div class="item commercewr-detail-pops-item" style="padding:0">
 			<div class="row">
-				<div class="col">
-					<div class="row">
-						<div class="col commercewr-detail-title text-center"><strong>Mi Balance</strong></div>
-					</div>
-					<div class="row">
-						<div class="col text-center">
-							<strong class="commercewr-detail-balance commercewr-points">
-								{{GetVal(viewdata.commerce.PointsAvailable)}}
-							</strong>
-						</div>
-					</div>
+				<div class="col text-center">
+					<div style="margin-top:20px;">
+						<i class="icon-pop-full commercewr-pop"></i>
+	                	<strong class="commercewr-detail-balance commercewr-points" style="position:relative; top:-5px; margin-left: 8px;">{{GetVal(viewdata.commerce.PointsAvailable)}}</strong> 
+                	</div>					
 				</div>
 				<div class="col">
 					<div class="row">
@@ -56,23 +67,23 @@
 		</div>
 
 		<div class="list">
-			<div class="item item-text-wrap item-icon-left">
+			<div class="item item-text-wrap item-icon-left" ng-click="OpenMaps(viewdata.commerce.LocationLatitude,viewdata.commerce.LocationLongitude)">
 				<i class="icon icon-location"></i>
 				<p>{{viewdata.commerce.Address}}</p>
 			</div>
-			<div class="item item-text-wrap item-icon-left">
+			<div class="item item-text-wrap item-icon-left" ng-click="EmailTo(viewdata.commerce.Email)">
 				<i class="icon icon-mail"></i>
 				<p>{{viewdata.commerce.Email}}</p>
 			</div>
-			<div class="item item-text-wrap item-icon-left">
+			<div class="item item-text-wrap item-icon-left" ng-click="DoPhoneCall(viewdata.commerce.Phone)">
 				<i class="icon ion-ios-telephone-outline"></i>
 				<p>{{viewdata.commerce.Phone}}</p>
 			</div>
-			<div class="item item-text-wrap item-icon-left">
+			<div class="item item-text-wrap item-icon-left" ng-click="OpenPage(viewdata.commerce.FacebookPage)">
 				<i class="icon ion-social-facebook-outline"></i>
 				<p>{{viewdata.commerce.FacebookPage}}</p>
 			</div>
-			<div class="item item-text-wrap item-icon-left">
+			<div class="item item-text-wrap item-icon-left" ng-click="OpenPage(viewdata.commerce.TwitterPage)">
 				<i class="icon ion-social-twitter-outline"></i>
 				<p>{{viewdata.commerce.TwitterPage}}</p>
 			</div>
@@ -119,7 +130,7 @@
 			    	<strong><h2 ng-bind="item.Name"></h2></strong>
 
 			    	<p ng-show="viewdata.commerce.PointsAvailable >= item.Points">		    		
-			    		¡¡Cuento con los suficientes <strong class="commercewr-popslabel">POPS</strong> para canjear!!
+			    		¡¡Cuento con los suficientes <strong class="commercewr-popslabel"><i class="icon-pop-full"></i></strong> para canjear!!
 			    	</p>		    	
 			    	<p ng-show="viewdata.commerce.PointsAvailable < item.Points">
 			    		<strong ng-bind="GetAvailablePoints(viewdata.commerce.PointsAvailable)"></strong> de <strong ng-bind="item.Points"></strong> 
