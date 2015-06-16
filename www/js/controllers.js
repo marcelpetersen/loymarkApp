@@ -630,20 +630,23 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     {
                         case 1:
                             var url = "";
-                            if (deviceFactory.device.platform == "iOS")
+                            if (deviceFactory.device.platform() == "iOS")
                             {
                                 url = "maps://maps.apple.com/?q=" + lat + "," + long;
                             }
                             else
                             {
-                                url = "maps://maps.google.com/?q=" + lat + "," + long;;
+                                url = "http://maps.google.com/?q=" + lat + "," + long;
                             }
 
                             window.open(url, "_system");
                             break;
                         case 2: 
-                            url = "waze://?ll=" + lat + "," + long + "&navigate=yes";
-                            window.open(url, "_system");
+                            if (options.buttonLabels.length > 1)
+                            {
+                                url = "waze://?ll=" + lat + "," + long + "&navigate=yes";
+                                window.open(url, "_system");
+                            }
                             break;
                     }
                 });
@@ -1044,7 +1047,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
     }]);
 
     // Stores Associated to a Commerce
-    ctrl.controller('CommerceWithRewardsStoresCtrl', ['$scope', '$state', '$ionicLoading', 'loadingBox', 'commerceFactory', 'storeFactory', 'navigationFactory', function($scope, $state, $ionicLoading, loadingBox, commerceFactory, storeFactory, navigationFactory){
+    ctrl.controller('CommerceWithRewardsStoresCtrl', ['$scope', '$state', '$ionicLoading', 'loadingBox', 'commerceFactory', 'storeFactory', 'navigationFactory', '$cordovaActionSheet', '$cordovaAppAvailability', 'deviceFactory', function($scope, $state, $ionicLoading, loadingBox, commerceFactory, storeFactory, navigationFactory, $cordovaActionSheet, $cordovaAppAvailability, deviceFactory){
         $scope.viewdata = {
             commerce: commerceFactory.selectedCommerce.get(),
             stores: [],
@@ -1064,9 +1067,83 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 // console.log(err)
             });
 
+        function OpenMapsActionSheet(options, lat, long) {
+            $cordovaActionSheet.show(options)
+                .then(function(btnIndex) {
+                    var index = btnIndex;
+                    
+                    switch(index)
+                    {
+                        case 1:
+                            var url = "";
+                            if (deviceFactory.device.platform() == "iOS")
+                            {
+                                url = "maps://maps.apple.com/?q=" + lat + "," + long;
+                            }
+                            else
+                            {
+                                url = "http://maps.google.com/?q=" + lat + "," + long;;
+                            }
+
+                            window.open(url, "_system");
+                            break;
+                        case 2: 
+                            if (options.buttonLabels.length > 1)
+                            {
+                                url = "waze://?ll=" + lat + "," + long + "&navigate=yes";
+                                window.open(url, "_system");
+                            }
+                            break;
+                    }
+                });
+        };
+
         $scope.GoToAddress = function(lat, long) {
-            url = "waze://?ll=" + lat + "," + long + "&navigate=yes";        
-            window.open(url, "_system");
+            // Maps options
+            var options = {
+                title: '¿Cómo llegar?',
+                buttonLabels: ['Ir a mapas'],
+                addCancelButtonWithLabel: 'Cancelar',
+                androidEnableCancelButton : true,
+                winphoneEnableCancelButton : true
+            };
+
+            IsWazeInstalled()
+                .then(function(response){
+                    if (response) {
+                        options.buttonLabels.push('Usar Waze');    
+                    }
+
+                    OpenMapsActionSheet(options, lat, long);
+                })
+                .catch(function(err){
+
+                });
+
+            // url = "waze://?ll=" + lat + "," + long + "&navigate=yes";        
+            // window.open(url, "_system");
+        };
+
+        function IsWazeInstalled() {
+            return new Promise(function(resolve,reject){
+                if (!devEnvironment) 
+                {
+                    var URI = "waze://";                
+                    if (deviceFactory.device.platform() == "iOS") URI = "waze://";
+                    $cordovaAppAvailability.check(URI)
+                        .then(function() {
+                            // is available
+                            resolve(true);
+                        }, function () {
+                            // not available
+                            resolve(false);
+                        });
+                }
+                else
+                {
+                    resolve(false);
+                }
+            });
         };
 
         $scope.ClearSearch = function() {
@@ -1112,20 +1189,23 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     {
                         case 1:
                             var url = "";
-                            if (deviceFactory.device.platform == "iOS")
+                            if (deviceFactory.device.platform() == "iOS")
                             {
                                 url = "maps://maps.apple.com/?q=" + lat + "," + long;
                             }
                             else
                             {
-                                url = "maps://maps.google.com/?q=" + lat + "," + long;;
+                                url = "http://maps.google.com/?q=" + lat + "," + long;;
                             }
 
                             window.open(url, "_system");
                             break;
                         case 2: 
-                            url = "waze://?ll=" + lat + "," + long + "&navigate=yes";
-                            window.open(url, "_system");
+                            if (options.buttonLabels.length > 1)
+                            {
+                                url = "waze://?ll=" + lat + "," + long + "&navigate=yes";
+                                window.open(url, "_system");
+                            }
                             break;
                     }
                 });

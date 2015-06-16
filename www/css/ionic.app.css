@@ -8658,7 +8658,8 @@ ion-nav-view[nav-view-transition="ios"] .nearme-icon {
 
 .commercewrstores-gobtn {
   background-color: white !important;
-  color: #757575 !important; }
+  color: #757575 !important;
+  font-size: 13px; }
 
 /* ******** Reward Detail ******** */
 .reward-detail-avatar {

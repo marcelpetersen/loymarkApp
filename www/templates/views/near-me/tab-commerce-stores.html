@@ -13,7 +13,7 @@
 					<i class="ion-ios-close-empty"></i>
 				</button>
 			</div>
-        	<div class="item item-text-wrap commercewrstores-store-item" ng-click="OpenStore(item)" collection-repeat="item in viewdata.stores | filter:{Name:viewdata.searchtext}">
+        	<div class="item item-text-wrap commercewrstores-store-item" collection-repeat="item in viewdata.stores | filter:{Name:viewdata.searchtext}">
         		<strong><p class="commercewrstores-store-name" ng-bind="item.Name"></p></strong>
         		<div style="margin-left:5px; margin-right:5px; margin-top:5px;">
 					<p><strong>Dirección</strong></p>		
@@ -39,7 +39,14 @@
         				<p ng-bind="item.Phone"></p>
         			</div>
         		</div>
-        		<button class="button button-block button-light commercewrstores-gobtn" ng-click="GoToAddress(item.LocationLatitude, item.LocationLongitude)">¿Cómo llegar a la tienda?</button>
+                <div class="row">
+                    <div class="col text-center">
+                        <button class="button button-block button-light commercewrstores-gobtn" ng-click="GoToAddress(item.LocationLatitude, item.LocationLongitude)">¿Cómo llegar?</button>
+                    </div>
+                    <div class="col text-center">
+                        <button class="button button-block button-light commercewrstores-gobtn" ng-click="OpenStore(item)">Ver</button>
+                    </div>
+                </div>
         		
         	</div>
         </div>
