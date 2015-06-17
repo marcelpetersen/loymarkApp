@@ -3580,7 +3580,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
     }]);
 
-    ctrl.controller('LocationSetupCtrl', ['$scope', '$ionicHistory', '$cordovaGeolocation', '$state', 'locationFactory', 'loadingBox', function($scope, $ionicHistory, $cordovaGeolocation, $state, locationFactory, loadingBox){
+    ctrl.controller('LocationSetupCtrl', ['$scope', '$ionicHistory', '$cordovaGeolocation', '$state', '$ionicLoading', 'locationFactory', 'loadingBox', function($scope, $ionicHistory, $cordovaGeolocation, $state, $ionicLoading, locationFactory, loadingBox){
         $scope.Skip = function() {
             $ionicHistory.clearHistory();
             $ionicHistory.clearCache();
@@ -3603,10 +3603,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 historyRoot: true
             });
 
-            setTimeout(function() {
-                loadingBox.hide();
-                $state.go('pushnotificationssetup');
-            }, 800);
+            loadingBox.hide();
+            $state.go('pushnotificationssetup');
         };
 
         $scope.GetLocation = function() {
@@ -3629,7 +3627,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
     }]);
 
-    ctrl.controller('PushNotificationsSetupCtrl', ['$scope', '$ionicHistory', '$cordovaGeolocation', '$state', '$cordovaPush', '$cordovaDevice', 'locationFactory', 'userFactory', 'deviceFactory', function($scope, $ionicHistory, $cordovaGeolocation, $state, $cordovaPush, $cordovaDevice, locationFactory, userFactory, deviceFactory){
+    ctrl.controller('PushNotificationsSetupCtrl', ['$scope', '$ionicHistory', '$cordovaGeolocation', '$state', '$cordovaPush', '$cordovaDevice', 'loadingBox', 'locationFactory', 'userFactory', 'deviceFactory', function($scope, $ionicHistory, $cordovaGeolocation, $state, $cordovaPush, $cordovaDevice, loadingBox, locationFactory, userFactory, deviceFactory){
         
         loadingBox.hide();
 
