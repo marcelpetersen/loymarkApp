@@ -3594,6 +3594,21 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             $state.go('pushnotificationssetup');
         };
 
+        function GoToNextPage() {
+            $ionicHistory.clearHistory();
+            $ionicHistory.clearCache();
+            $ionicHistory.nextViewOptions({
+                // disableAnimate: true,
+                disableBack: true,
+                historyRoot: true
+            });
+
+            setTimeout(function() {
+                loadingBox.hide();
+                $state.go('pushnotificationssetup');
+            }, 800);
+        };
+
         $scope.GetLocation = function() {
             // Gets the User's location                
             var posOptions = {timeout: 10000, enableHighAccuracy: false};
@@ -3606,36 +3621,18 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     var _lat  = position.coords.latitude;
                     var _long = position.coords.longitude;
                     locationFactory.location.set(_lat, _long);
-                    
-                    $ionicHistory.clearHistory();
-                    $ionicHistory.clearCache();
-                    $ionicHistory.nextViewOptions({
-                        // disableAnimate: true,
-                        disableBack: true,
-                        historyRoot: true
-                    });
-
-                    loadingBox.hide();
-                    $state.go('pushnotificationssetup');
+                    GoToNextPage();                    
                 })
-                .catch(function(err){                    
-
-                    $ionicHistory.clearHistory();
-                    $ionicHistory.clearCache();
-                    $ionicHistory.nextViewOptions({
-                        // disableAnimate: true,
-                        disableBack: true,
-                        historyRoot: true
-                    });
-
-                    loadingBox.hide();
-                    $state.go('pushnotificationssetup');  
+                .catch(function(err){
+                    GoToNextPage();
                 });
         };
     }]);
 
     ctrl.controller('PushNotificationsSetupCtrl', ['$scope', '$ionicHistory', '$cordovaGeolocation', '$state', '$cordovaPush', '$cordovaDevice', 'locationFactory', 'userFactory', 'deviceFactory', function($scope, $ionicHistory, $cordovaGeolocation, $state, $cordovaPush, $cordovaDevice, locationFactory, userFactory, deviceFactory){
         
+        loadingBox.hide();
+
         $scope.Skip = function() {
             $ionicHistory.clearHistory();
             $ionicHistory.clearCache();
