@@ -9,16 +9,14 @@
 				<img class="reward-detail-avatar" ng-src="{{GetRewardImage(viewdata.selectedreward.Image)}}">
 			</div>
 			<div class="item item-text-wrap reward-detail-baseitem item-icon-right reward-detail-header-item">
-				<strong class="reward-detail-title">Pops Requeridos</strong>
-				<!-- <div ng-show="viewdata.availablepoints >= viewdata.selectedreward.Points"><strong ng-bind="viewdata.selectedreward.Points"></strong> de <strong ng-bind="viewdata.selectedreward.Points"></strong> <i class="ion-ios-checkmark commercewr-reward-available"></i></div>
-				div ng-show="viewdata.availablepoints < viewdata.selectedreward.Points"><strong ng-bind="viewdata.availablepoints"></strong> de <strong ng-bind="viewdata.selectedreward.Points"></strong></div>-->
+				<strong class="reward-detail-title">Pops Requeridos</strong>				
 				<i class="icon reward-detail-points" style="margin-right:5px;" ng-bind="viewdata.selectedreward.Points"></i>				
 			</div>
 			<div class="item item-text-wrap reward-detail-baseitem">
 				<strong class="reward-detail-title">Descripción</strong>
 				<p ng-bind="viewdata.selectedreward.Description"></p>
 			</div>
-			<div class="item item-text-wrap reward-detail-baseitem">
+			<div class="item item-text-wrap reward-detail-baseitem" ng-show="RewardDetailDatesAvailable(viewdata.selectedreward.ValidFrom, viewdata.selectedreward.ValidUntil)">
 				<strong class="reward-detail-title">Validez</strong>
 				<p class="reward-detail-validity">
 				<strong><span ng-bind="gDate(viewdata.selectedreward.ValidFrom)"></span></strong>

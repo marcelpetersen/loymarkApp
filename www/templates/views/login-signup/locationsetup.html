@@ -1,0 +1,19 @@
+<ion-view>
+	<ion-nav-buttons side="right">
+		<button class="button button-clear locationsetup-topbar-buttontext" ng-click="Skip()">
+			Saltar
+		</button>
+	</ion-nav-buttons>	
+	<ion-content scroll="false" class="welcome-content" overflow-scroll="true">
+		<div class="item item-clear item-text-wrap">
+			<strong>Servicios de Ubicación</strong>
+			<p>Necesitamos que active los servicios para poder brindarle mejor ubicación de las tiendas que forman parte de Kenuu.</p>
+		</div>
+		<div class="item item-clear text-center">
+			<img src="./img/locationsetup.jpg" style="width:70vw; height: auto; max-width:250px;">
+		</div>
+		<div class="item item-clear">
+			<button ng-click="GetLocation()" class="button button-block button-light welcome-btn">Activar</button>
+		</div>
+	</ion-content>
+</ion-view>

@@ -103,15 +103,15 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 				            var tokenId = notification.regid;
 				            var email = deviceFactory.device.registeredUser.get();
 
-				            console.log("Android Token: " + tokenId);
-
-				            deviceFactory.device.registerdevice(tokenId, email)
-	                            .then(function(response){
-	                                // OK
-	                            })
-	                            .catch(function(err){
-	                                // Error
-	                            });
+				            if (enail == "") {
+				            	deviceFactory.device.registerdevice(tokenId, email)
+		                            .then(function(response){
+		                                // OK
+		                            })
+		                            .catch(function(err){
+		                                // Error
+		                            });	
+				            }
 				         }
 			          break;
 
@@ -217,6 +217,20 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 			templateUrl: 'templates/views/login-signup/profilepicgenderdob.html',
 			controller: 'ProfilePicGenderDoBCtrl'
 		})
+
+		// Request for the Location Services to be Activated
+		.state('locationsetup', {
+			url: '/locationsetup',
+			templateUrl: 'templates/views/login-signup/locationsetup.html',
+			controller: 'LocationSetupCtrl'
+		})
+
+		// Request for the Location Services to be Activated
+		.state('pushnotificationssetup', {
+			url: '/pushnotificationssetup',
+			templateUrl: 'templates/views/login-signup/pushnotificationssetup.html',
+			controller: 'PushNotificationsSetupCtrl'
+		})			
 
 	// **** Main Tab Section ****
 
@@ -574,12 +588,12 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	if (_apikey != undefined)
 	{
 		_url = "/tab/nearme";
-		// _url = '/profilepicgenderdob';
+		// _url = '/locationsetup';
 	}
 	else
 	{
 		_url = '/welcomecover';
-		// _url = '/profilepicgenderdob';
+		// _url = '/locationsetup';
 	}	
 
 	$urlRouterProvider.otherwise(_url);

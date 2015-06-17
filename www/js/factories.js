@@ -1338,6 +1338,9 @@ fact.factory('locationFactory', [function(){
             },
             get: function() {
                 return _location;
+            },
+            isSet: function() {
+                return _location.isSet;
             }
         }
     };

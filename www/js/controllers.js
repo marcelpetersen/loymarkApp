@@ -16,13 +16,15 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             storePage: 0,
             kilometers: 10,
             pleaseWaitMessage: "Buscando tiendas...",
-            pullFreshMemberDataFromServer: userFactory.info.pullFreshMemberDataFromServer.get()
+            pullFreshMemberDataFromServer: userFactory.info.pullFreshMemberDataFromServer.get(),
+            reloadLocation: false
         };
 
         $scope.$on("$ionicView.enter", function(event, args){
         });
 
         $scope.ReloadList = function() {
+            $scope.viewdata.reloadLocation = true;
             ViewInitialization();
         };
 
@@ -83,8 +85,6 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
                 if (deviceFactory.device.platform() == "Android")
                 {
-                    console.log(androidConfig);
-
                     $cordovaPush.register(androidConfig).then(function(result) {
                             // Success
                             resolve(result);
@@ -101,26 +101,36 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             $scope.viewdata.showLocationMessage = false;
         };
 
-        function GetLocation() {            
+        function GetLocation() {
             return new Promise(function(resolve, reject){
                 // Gets the User's location
                 $scope.viewdata.locationSet = false;
                 var posOptions = {timeout: 10000, enableHighAccuracy: false};
-                $cordovaGeolocation
-                    .getCurrentPosition(posOptions)
-                    .then(function (position) {                        
-                        $scope.viewdata.locationSet = true;
-                        $scope.ClearLocationMessage();
-                        var _lat  = position.coords.latitude;
-                        var _long = position.coords.longitude;
-                        locationFactory.location.set(_lat, _long);
-                        resolve();
-                    })
-                    .catch(function(err){   
-                        $scope.viewdata.locationSet = false;
-                        ShowLocationMessage();
-                        reject(err);
-                    });
+
+                if (locationFactory.location.isSet() && !$scope.viewdata.reloadLocation)
+                {
+                    $scope.viewdata.locationSet = true;
+                    resolve();
+                }
+                else
+                {
+                    $cordovaGeolocation
+                        .getCurrentPosition(posOptions)
+                        .then(function (position) {                        
+                            $scope.viewdata.locationSet = true;
+                            $scope.ClearLocationMessage();
+                            var _lat  = position.coords.latitude;
+                            var _long = position.coords.longitude;
+                            locationFactory.location.set(_lat, _long);
+                            $scope.viewdata.reloadLocation = false;
+                            resolve();
+                        })
+                        .catch(function(err){   
+                            $scope.viewdata.locationSet = false;
+                            ShowLocationMessage();
+                            reject(err);
+                        });
+                }
             });
         };
 
@@ -689,6 +699,16 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
         $scope.CloseRewardDetailModal = function() {
             rewardDetailModal.Close();
+        };
+
+        $scope.RewardDetailDatesAvailable = function(date1, date2) {
+            if (date1 == undefined) return false;
+            if (date1 == "") return false;
+            if (date1 == null) return false;
+            if (date2 == undefined) return false;
+            if (date2 == "") return false;
+            if (date2 == null) return false;
+            return true;
         };
 
         $scope.GetAvailablePoints = function(availablepoints) {
@@ -1376,6 +1396,16 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
         $scope.CloseRewardDetailModal = function() {
             rewardDetailModal.Close();
+        };
+
+        $scope.RewardDetailDatesAvailable = function(date1, date2) {
+            if (date1 == undefined) return false;
+            if (date1 == "") return false;
+            if (date1 == null) return false;
+            if (date2 == undefined) return false;
+            if (date2 == "") return false;
+            if (date2 == null) return false;
+            return true;
         };
 
         $scope.gDate = function(date) {
@@ -2886,20 +2916,20 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         if (!devEnvironment) cordova.plugins.Keyboard.disableScroll(false);
 
                         loadingBox.hide();
-                        $(".md-overlay").addClass("md-overlay-ok");
-                        $(".md-content").addClass("md-content-ok");
-                        ShowModalMsg_Ok("Listo!", "¡Ya quedó registrado! Empiece a disfrutar de Kenuu.", "Ok");
+                        //$(".md-overlay").addClass("md-overlay-ok");
+                        //$(".md-content").addClass("md-content-ok");
+                        //ShowModalMsg_Ok("Listo!", "¡Ya quedó registrado! Empiece a disfrutar de Kenuu.", "Ok");
 
-                        setTimeout(function(){
+                        // setTimeout(function(){
                             $ionicHistory.clearHistory();
                             $ionicHistory.clearCache();
                             $ionicHistory.nextViewOptions({
-                                disableAnimate: true,
+                                // disableAnimate: true,
                                 disableBack: true,
                                 historyRoot: true
                             });
                             $state.go('profilepicgenderdob');  
-                        }, 3000);
+                        // }, 3000);
                     }
                     else
                     {
@@ -3346,7 +3376,12 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             localStorage.removeItem('profile_gender');
             $ionicHistory.clearHistory();
             $ionicHistory.clearCache();
-            $state.go("tab.nearme");
+            $ionicHistory.nextViewOptions({
+                // disableAnimate: true,
+                disableBack: true,
+                historyRoot: true
+            });
+            $state.go("locationsetup");
         };
 
         $scope.SaveAndContinue = function() {
@@ -3387,8 +3422,13 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                                                 localStorage.setItem('profile_picture_urlfilename', response.data);
                                                 $ionicHistory.clearHistory();
                                                 $ionicHistory.clearCache();
+                                                $ionicHistory.nextViewOptions({
+                                                    // disableAnimate: true,
+                                                    disableBack: true,
+                                                    historyRoot: true
+                                                });
                                                 loadingBox.hide();
-                                                $state.go("tab.nearme");
+                                                $state.go("locationsetup");
                                             })
                                             .catch(function(err){
                                                 // console.log("ERRRRROOOOORRRR!!! 2");
@@ -3539,6 +3579,155 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             });
         };
     }]);
+
+    ctrl.controller('LocationSetupCtrl', ['$scope', '$ionicHistory', '$cordovaGeolocation', '$state', 'locationFactory', 'loadingBox', function($scope, $ionicHistory, $cordovaGeolocation, $state, locationFactory, loadingBox){
+        $scope.Skip = function() {
+            $ionicHistory.clearHistory();
+            $ionicHistory.clearCache();
+            $ionicHistory.nextViewOptions({
+                // disableAnimate: true,
+                disableBack: true,
+                historyRoot: true
+            });
+
+            loadingBox.hide();
+            $state.go('pushnotificationssetup');
+        };
+
+        $scope.GetLocation = function() {
+            // Gets the User's location                
+            var posOptions = {timeout: 10000, enableHighAccuracy: false};
+
+            loadingBox.show('Buscando su ubicación...');
+
+            $cordovaGeolocation
+                .getCurrentPosition(posOptions)
+                .then(function (position) {
+                    var _lat  = position.coords.latitude;
+                    var _long = position.coords.longitude;
+                    locationFactory.location.set(_lat, _long);
+                    
+                    $ionicHistory.clearHistory();
+                    $ionicHistory.clearCache();
+                    $ionicHistory.nextViewOptions({
+                        // disableAnimate: true,
+                        disableBack: true,
+                        historyRoot: true
+                    });
+
+                    loadingBox.hide();
+                    $state.go('pushnotificationssetup');
+                })
+                .catch(function(err){                    
+
+                    $ionicHistory.clearHistory();
+                    $ionicHistory.clearCache();
+                    $ionicHistory.nextViewOptions({
+                        // disableAnimate: true,
+                        disableBack: true,
+                        historyRoot: true
+                    });
+
+                    loadingBox.hide();
+                    $state.go('pushnotificationssetup');  
+                });
+        };
+    }]);
+
+    ctrl.controller('PushNotificationsSetupCtrl', ['$scope', '$ionicHistory', '$cordovaGeolocation', '$state', '$cordovaPush', '$cordovaDevice', 'locationFactory', 'userFactory', 'deviceFactory', function($scope, $ionicHistory, $cordovaGeolocation, $state, $cordovaPush, $cordovaDevice, locationFactory, userFactory, deviceFactory){
+        
+        $scope.Skip = function() {
+            $ionicHistory.clearHistory();
+            $ionicHistory.clearCache();
+            $ionicHistory.nextViewOptions({
+                // disableAnimate: true,
+                disableBack: true,
+                historyRoot: true
+            });
+
+            $state.go("tab.nearme");
+        };
+
+        $scope.RegisterDevice = function() {
+
+            var iosConfig = {
+                "badge": true,
+                "sound": true,
+                "alert": true,
+            };
+            var androidConfig = {
+                "senderID": "671633506930"
+            };
+
+            var platform = $cordovaDevice.getPlatform();
+
+            if (platform == "iOS")
+            {
+                $cordovaPush.register(iosConfig)
+                    .then(
+                        function(deviceToken)
+                        {
+                            swal(
+                                {   
+                                    title: "Listo!",   
+                                    text: "Comience a disfrutar Kenuu",   
+                                    type: "success",   
+                                    showConfirmButton: true,
+                                    showCancelButton: false,                       
+                                    confirmButtonText: "Continuar",   
+                                    closeOnConfirm: true 
+                                }, 
+                                function(){
+                                    $ionicHistory.clearHistory();
+                                    $ionicHistory.clearCache();
+                                    $ionicHistory.nextViewOptions({
+                                        // disableAnimate: true,
+                                        disableBack: true,
+                                        historyRoot: true
+                                    });   
+                                    $state.go("tab.nearme");      
+                                }
+                            );
+                        },
+                        function(err) {
+
+                        }
+                    );
+            }
+
+            if (platform == "Android")
+            {
+                $cordovaPush.register(androidConfig).then(
+                    function(result) {
+                        swal(
+                            {   
+                                title: "Listo!",   
+                                text: "Comience a disfrutar Kenuu",   
+                                type: "success",   
+                                showConfirmButton: true,
+                                showCancelButton: false,                       
+                                confirmButtonText: "Continuar",   
+                                closeOnConfirm: true 
+                            }, 
+                            function(){  
+                                $ionicHistory.clearHistory();
+                                $ionicHistory.clearCache();
+                                $ionicHistory.nextViewOptions({
+                                    // disableAnimate: true,
+                                    disableBack: true,
+                                    historyRoot: true
+                                }); 
+                                $state.go("tab.nearme");      
+                            }
+                        );
+                    }, 
+                    function(err) {
+
+                    }
+                );
+            }
+        };
+    }]);        
 
 // Not Currently Used
 

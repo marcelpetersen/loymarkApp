@@ -8716,3 +8716,7 @@ ion-nav-view[nav-view-transition="ios"] .nearme-icon {
 /* ******** Reward Detail ******** */
 .reward-detail-validity strong, p {
   font-size: 15px; }
+
+/* ******** Location Setup ******** */
+.locationsetup-topbar-buttontext {
+  color: #800080 !important; }
