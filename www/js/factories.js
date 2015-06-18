@@ -1188,20 +1188,60 @@ fact.factory('socialFactory', ['restFactory', function(restFactory){
     };
 }]);
 
-fact.factory('beaconsFactory', [function(){
+fact.factory('beaconFactory', ['$rootScope', function($rootScope){
+    var _beacons = [
+        {
+            identifier: "Nuestra Tienda CIS", 
+            UUID: "A77A1B68-49A7-4DBF-914C-760D07FBB87B"
+        }
+    ];
+
+    function didRangeBeaconsInRegion (pluginResult)
+    {
+        if (pluginResult.beacons.length > 0)
+        {
+            $rootScope.$broadcast('beaconFound', pluginResult.beacons[0]);
+        }
+        else
+        {
+            // The region of the beacon is out of range
+            $rootScope.$broadcast('beaconRegionEmpty', pluginResult);
+        }
+    };
+
     return {
-        beacons: {
-            get: function() {
-                return new Promise(function(resolve,reject){
-                    resolve(
-                        [
-                            {
-                                uuid: 'A77A1B68-49A7-4DBF-914C-760D07FBB87B',
-                                identifier: 'Tienda #1'
-                            }
-                        ]
-                    );
-                });
+        beaconScanner: {
+            start: function() {
+                var delegate = new cordova.plugins.locationManager.Delegate();
+                cordova.plugins.locationManager.setDelegate(delegate);
+                cordova.plugins.locationManager.requestAlwaysAuthorization();
+
+                delegate.didRangeBeaconsInRegion = function(pluginResult)
+                {
+                    didRangeBeaconsInRegion(pluginResult);
+                };
+
+                for (var i=0; i<_beacons.length; i++)
+                {
+                    var beaconRegion = new cordova.plugins.locationManager.BeaconRegion(_beacons[i].identifier, _beacons[i].UUID);
+
+                    // Start monitoring.
+                    cordova.plugins.locationManager.startMonitoringForRegion(beaconRegion)
+                        .fail(console.error)
+                        .done();
+
+                    // Start ranging.
+                    cordova.plugins.locationManager.startRangingBeaconsInRegion(beaconRegion)
+                        .fail(console.error)
+                        .done();
+                }
+            },
+            stop: function() {
+                for (var i=0; i<_beacons.length; i++)
+                {
+                    var beaconRegion = new cordova.plugins.locationManager.BeaconRegion(_beacons[i].identifier, _beacons[i].UUID);
+                    cordova.plugins.locationManager.stopRangingBeaconsInRegion(beaconRegion);
+                }
             }
         }
     };

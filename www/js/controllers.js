@@ -1178,7 +1178,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
     }]);
 
-    ctrl.controller('StoreDetailCtrl', ['$scope', '$timeout', '$state', '$stateParams', 'storeFactory', 'loadingBox', 'commerceFactory', 'rewardFactory', 'navigationFactory', 'deviceFactory', 'rewardDetailModal', '$cordovaAppAvailability', '$cordovaSocialSharing', '$cordovaInAppBrowser', 'emailService', '$cordovaActionSheet', function($scope, $timeout, $state, $stateParams, storeFactory, loadingBox, commerceFactory, rewardFactory, navigationFactory, deviceFactory, rewardDetailModal, $cordovaAppAvailability, $cordovaSocialSharing, $cordovaInAppBrowser, emailService, $cordovaActionSheet){
+    ctrl.controller('StoreDetailCtrl', ['$scope', '$timeout', '$state', '$stateParams', 'storeFactory', 'loadingBox', 'commerceFactory', 'rewardFactory', 'navigationFactory', 'deviceFactory', 'rewardDetailModal', '$cordovaAppAvailability', '$cordovaSocialSharing', '$cordovaInAppBrowser', 'emailService', '$cordovaActionSheet', 'beaconFactory', function($scope, $timeout, $state, $stateParams, storeFactory, loadingBox, commerceFactory, rewardFactory, navigationFactory, deviceFactory, rewardDetailModal, $cordovaAppAvailability, $cordovaSocialSharing, $cordovaInAppBrowser, emailService, $cordovaActionSheet, beaconFactory){
         
         loadingBox.show();
         $scope.viewdata = {
@@ -1190,7 +1190,10 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             socialmediaapps: {
                 twitter: false,
                 facebook: false
-            }
+            },
+            // Beacons variables
+            scanningBeacons: false,
+            foundBeacons: []
         };
 
         $timeout(function(){
@@ -1198,6 +1201,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             LoadData($scope.viewdata.store.EntityID, $scope.viewdata.store.SubEntityID);
             IsTwitterInstalled();
             IsFacebookInstalled();
+
+            console.log($scope.viewdata.store);
         });
 
         function OpenMapsActionSheet(options, lat, long) {
@@ -1536,11 +1541,59 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             var call = "tel:" + phonenum;
             document.location.href = call;
         };
+
+        // Beacon Methods
+        function ProcessFoundBeacon(beacon) {
+            for (var i=0; i<$scope.viewdata.foundBeacons.length; i++)
+            {
+                if (beacon.uuid==$scope.viewdata.foundBeacons[i].uuid)
+                {
+                    return;
+                }
+            }
+
+            $scope.viewdata.foundBeacons.push(beacon);
+            $scope.$apply();            
+        };
+
+        function ProcessEmptyBeaconRegion(pluginResult) {
+            for (var i=0; i<$scope.viewdata.foundBeacons.length; i++)
+            {
+                if (pluginResult.region.uuid==$scope.viewdata.foundBeacons[i].uuid)
+                {
+                    $scope.viewdata.foundBeacons.splice(i,1);
+                    $scope.$apply();
+                    return;
+                }
+            }
+        };
+
+        $scope.StartScan = function() {
+            loadingBox.show("Escaneando la tienda...");
+            $scope.viewdata.scanningBeacons = true;     
+            beaconFactory.beaconScanner.start();
+        };
+
+        $scope.StopScan = function() {
+            $scope.viewdata.scanningBeacons = false;        
+            beaconFactory.beaconScanner.stop(); 
+        };
+
+        $scope.$on('beaconFound', function(event, beacon) {     
+            ProcessFoundBeacon(beacon);
+            $scope.StopScan();
+            loadingBox.hide();
+            alert("Listo!");
+        });
+
+        $scope.$on('beaconRegionEmpty', function(event, pluginResult){
+            ProcessEmptyBeaconRegion(pluginResult);
+        });
     }]);
 
 // QR Tab
 
-    ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'userFactory', '$ionicLoading', '$ionicModal', '$cordovaPush', 'beaconsFactory', 'codeScannerFactory', 'deviceFactory', function($scope, $timeout, userFactory, $ionicLoading, $ionicModal, $cordovaPush, beaconsFactory, codeScannerFactory, deviceFactory){
+    ctrl.controller('QRCodeCtrl', ['$scope', '$timeout', 'userFactory', '$ionicLoading', '$ionicModal', '$cordovaPush', 'beaconFactory', 'codeScannerFactory', 'deviceFactory', function($scope, $timeout, userFactory, $ionicLoading, $ionicModal, $cordovaPush, beaconFactory, codeScannerFactory, deviceFactory){
         $timeout(function(){
             $("#viewcontent-QR").show();
             $("#viewcontent-QR").addClass("animated slideInUp");
@@ -1641,7 +1694,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             //     };
             // };
 
-            beaconsFactory.beacons.get()
+            beaconFactory.beacons.get()
                 .then(function(data){
                     $scope.viewdata.beaconsFound = data;
 
@@ -3279,19 +3332,6 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     
                 }
             );
-
-            // $scope.viewdata.msgbox.title = title;
-            // $scope.viewdata.msgbox.message = message;
-            // $scope.viewdata.msgbox.buttontext = buttontext;
-
-            // var modal = document.querySelector('#modal-welcomev-msgbox'),
-            //     close = modal.querySelector( '.md-close' );
-            // var overlay = document.querySelector( '.md-overlay' );
-            // classie.add( modal, 'md-show' );
-            // close.addEventListener( 'click', function( ev ) {
-            //     ev.stopPropagation();
-            //     classie.remove( document.querySelector('#modal-welcomev-msgbox'), 'md-show' );
-            // });
         };
 
         function CloseModalMsg_Ok() {
@@ -3316,9 +3356,10 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         $timeout(function(){
-            $("#welcome-content").addClass("animated slideInUp");
-            setTimeout(function(){
-                $("#welcomeimg1").addClass("animated zoomIn");
+            $("#welcome-content").addClass("animated slideInUp");            
+            setTimeout(function(){                
+                // $("#welcomeimg1").addClass("animated zoomIn");
+                // $("#welcomeimg1").show();
                 loadingBox.hide();
             }, 1100);        
         });

@@ -103,7 +103,7 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 				            var tokenId = notification.regid;
 				            var email = deviceFactory.device.registeredUser.get();
 
-				            if (enail == "") {
+				            if (email == "") {
 				            	deviceFactory.device.registerdevice(tokenId, email)
 		                            .then(function(response){
 		                                // OK
