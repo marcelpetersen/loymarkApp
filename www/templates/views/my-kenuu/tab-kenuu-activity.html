@@ -34,7 +34,7 @@
         		<p><strong>Mi Actividad</strong></p>
         	</div>
 
-        	<div class="item item-avatar item-text-wrap item-icon-right activity-activityitem" ng-repeat="activity in viewdata.user.activity | filter:search" ng-click="OpenCommerce(activity.EntityID)">
+        	<div class="item item-avatar item-text-wrap item-icon-right activity-activityitem" ng-repeat="activity in viewdata.user.activity | filter:search" ng-click="OpenStore(activity.SubEntityID)">
         		<img ng-src="{{GetCommerceImage(activity.Image)}}">
                 <p><strong>{{gDate(activity.ActivityDate)}}</strong></p>
         		<p><strong class="activity-commerce-name">{{activity.SubEntityName}}</strong></p>

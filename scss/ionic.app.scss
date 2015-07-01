@@ -20,6 +20,8 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
+@import 'www/css/progresschart/mixins',
+        'www/css/progresschart/about-light';
 
 * {
     box-shadow: none !important;
@@ -295,6 +297,10 @@ ion-nav-view[nav-view-transition="ios"] {
 		color: $kenuu-purple !important;
 	}
 
+	.kenuu-link {
+		color: $kenuu-purple;
+	}
+
 /* ******* Modal MsgBox ******** */
 
 	.md-overlay-ok {
@@ -359,11 +365,17 @@ ion-nav-view[nav-view-transition="ios"] {
 		font-weight: bold;
 	}
 
+	.profile-avatar-container {
+		-webkit-box-shadow: 0 0 0 3px #fff, 0 0 0 4px #999, 0 2px 5px 4px rgba(0,0,0,.2) !important;
+	    -moz-box-shadow: 0 0 0 3px #fff, 0 0 0 4px #999, 0 2px 5px 4px rgba(0,0,0,.2) !important;
+	    box-shadow: 0 0 0 3px #fff, 0 0 0 4px #999, 0 2px 5px 4px rgba(0,0,0,.2) !important;
+	}
+
 	.profile-avatar {
+		-webkit-border-radius: 50%;
+		-webkit-clip-path: circle(45px at center);
 		height: 100px !important;
 		width: 100px !important;
-		border-radius: 50%;
-		border: 1px solid $profile-avatar-border-color;
 	}
 
 	.profile-label {
@@ -1307,6 +1319,12 @@ ion-nav-view[nav-view-transition="ios"] {
 		color: #757575 !important;
 		font-size: 13px;
 	}
+	.store-open {
+		color: $kenuu-purple;
+	}
+	.store-closed {
+		color: red;
+	}
 
 /* ******** Reward Detail ******** */
 
@@ -1385,5 +1403,106 @@ ion-nav-view[nav-view-transition="ios"] {
 
 	.locationsetup-topbar-buttontext {
 		color: $kenuu-purple !important;
+	}
+
+/* ******** Chart Progress ******** */
+
+	.chart-container {
+		margin: 10px auto;
+		// width: 100vw;
+		text-align: center;
+
+		.progress {
+			margin: 0 auto;
+			// width: 400px;
+		}
+	}
+
+	.progress {
+		padding: 4px;
+		background: rgba(black, .25);
+		border-radius: 6px;
+		@include box-shadow(inset 0 1px 2px rgba(black, .25),
+	              0 1px rgba(white, .08));
+	}
+
+	.progress-bar {
+		position: relative;
+		height: 16px;
+		border-radius: 4px;
+		@include transition(.4s linear);
+		@include transition-property(width, background-color);
+		@include box-shadow(0 0 1px 1px rgba(black, .25),
+		              inset 0 1px rgba(white, .1));
+
+		&:before, &:after {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		}
+
+		&:before {
+		bottom: 0;
+		background: url('/img/stripes.png') 0 0 repeat;
+		border-radius: 4px 4px 0 0;
+		}
+
+		&:after {
+		z-index: 2;
+		bottom: 45%;
+		border-radius: 4px;
+		@include linear-gradient(top, rgba(white, .3), rgba(white, .05));
+		}
+	}
+
+	/*
+	* Note: using adjacent or general sibling selectors combined with
+	*       pseudo classes doesn't work in Safari 5.0 and Chrome 12.
+	*       See this article for more info and a potential fix:
+	*       http://css-tricks.com/webkit-sibling-bug/
+	*/
+
+	#five:checked ~ .progress > .progress-bar,  {
+	width: 5%;
+	background-color: #f63a0f;
+	}
+
+	#twentyfive:checked ~ .progress > .progress-bar {
+	width: 25%;
+	background-color: #f27011;
+	}
+
+	#fifty:checked ~ .progress > .progress-bar {
+	width: 50%;
+	background-color: #f2b01e;
+	}
+
+	#seventyfive:checked ~ .progress > .progress-bar {
+	width: 75%;
+	background-color: #f2d31b;
+	}
+
+	#onehundred:checked ~ .progress > .progress-bar {
+	width: 100%;
+	background-color: #86e01e;
+	}
+
+	.radio { display: none; }
+
+	.chart-label {
+	display: inline-block;
+	margin: 0 5px 20px;
+	padding: 3px 8px;
+	color: #aaa;
+	text-shadow: 0 1px black;
+	border-radius: 3px;
+	cursor: pointer;
+
+	.radio:checked + & {
+	color: white;
+	background: rgba(black, .25);
+	}
 	}
 

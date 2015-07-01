@@ -20,8 +20,13 @@
 				<strong class="reward-detail-title">Validez</strong>
 				<p class="reward-detail-validity">
 				<strong><span ng-bind="gDate(viewdata.selectedreward.ValidFrom)"></span></strong>
-				<span> hasta </span>
+				<span> - </span>
 				<strong><span ng-bind="gDate(viewdata.selectedreward.ValidUntil)"></span></strong>
+				</p>
+
+				<strong class="reward-detail-title">Horario</strong>
+				<p class="reward-detail-validity">
+				<strong><span ng-bind="gTime(viewdata.selectedreward.InitialHour, viewdata.selectedreward.EndingHour)"></span></strong>				
 				</p>
 			</div>
 			<div class="item item-text-wrap reward-detail-baseitem">

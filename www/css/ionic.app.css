@@ -7675,6 +7675,50 @@ a.button {
   -webkit-transition-duration: 0s;
   transition-duration: 0s; }
 
+.about {
+  margin: 70px auto 40px;
+  padding: 8px;
+  width: 260px;
+  font: 10px/18px 'Lucida Grande', Arial, sans-serif;
+  color: #666;
+  text-align: center;
+  text-shadow: 0 1px rgba(255, 255, 255, 0.25);
+  background: #eee;
+  background: rgba(250, 250, 250, 0.8);
+  border-radius: 4px;
+  background-image: -webkit-linear-gradient(top, transparent, rgba(0, 0, 0, 0.1));
+  background-image: -moz-linear-gradient(top, transparent, rgba(0, 0, 0, 0.1));
+  background-image: -o-linear-gradient(top, transparent, rgba(0, 0, 0, 0.1));
+  background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1));
+  -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 0 6px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 0 6px rgba(0, 0, 0, 0.2); }
+  .about a {
+    color: #333;
+    text-decoration: none;
+    border-radius: 2px;
+    -webkit-transition: background .1s;
+    -moz-transition: background .1s;
+    -o-transition: background .1s;
+    transition: background .1s; }
+    .about a:hover {
+      text-decoration: none;
+      background: #fafafa;
+      background: rgba(255, 255, 255, 0.7); }
+
+.about-links {
+  height: 30px; }
+  .about-links > a {
+    float: left;
+    width: 50%;
+    line-height: 30px;
+    font-size: 12px; }
+
+.about-author {
+  margin-top: 5px; }
+  .about-author > a {
+    padding: 1px 3px;
+    margin: 0 -1px; }
+
 * {
   box-shadow: none !important; }
 
@@ -7832,6 +7876,9 @@ a[href^="http://maps.google.com/maps"] {
 .refresher-text {
   color: #800080 !important; }
 
+.kenuu-link {
+  color: #800080; }
+
 /* ******* Modal MsgBox ******** */
 .md-overlay-ok {
   background: #489A0F !important; }
@@ -7880,11 +7927,16 @@ a[href^="http://maps.google.com/maps"] {
   font-size: 14px;
   font-weight: bold; }
 
+.profile-avatar-container {
+  -webkit-box-shadow: 0 0 0 3px #fff, 0 0 0 4px #999, 0 2px 5px 4px rgba(0, 0, 0, 0.2) !important;
+  -moz-box-shadow: 0 0 0 3px #fff, 0 0 0 4px #999, 0 2px 5px 4px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 4px #999, 0 2px 5px 4px rgba(0, 0, 0, 0.2) !important; }
+
 .profile-avatar {
+  -webkit-border-radius: 50%;
+  -webkit-clip-path: circle(45px at center);
   height: 100px !important;
-  width: 100px !important;
-  border-radius: 50%;
-  border: 1px solid #eeeeee; }
+  width: 100px !important; }
 
 .profile-label {
   padding-left: 20px;
@@ -8661,6 +8713,12 @@ ion-nav-view[nav-view-transition="ios"] .nearme-icon {
   color: #757575 !important;
   font-size: 13px; }
 
+.store-open {
+  color: #800080; }
+
+.store-closed {
+  color: red; }
+
 /* ******** Reward Detail ******** */
 .reward-detail-avatar {
   height: 110px;
@@ -8720,3 +8778,91 @@ ion-nav-view[nav-view-transition="ios"] .nearme-icon {
 /* ******** Location Setup ******** */
 .locationsetup-topbar-buttontext {
   color: #800080 !important; }
+
+/* ******** Chart Progress ******** */
+.chart-container {
+  margin: 10px auto;
+  text-align: center; }
+  .chart-container .progress {
+    margin: 0 auto; }
+
+.progress {
+  padding: 4px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25), 0 1px rgba(255, 255, 255, 0.08); }
+
+.progress-bar {
+  position: relative;
+  height: 16px;
+  border-radius: 4px;
+  -webkit-transition: .4s linear;
+  -moz-transition: .4s linear;
+  -o-transition: .4s linear;
+  transition: .4s linear;
+  -webkit-transition-property: width, background-color;
+  -moz-transition-property: width, background-color;
+  -o-transition-property: width, background-color;
+  transition-property: width, background-color;
+  -webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.25), inset 0 1px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.25), inset 0 1px rgba(255, 255, 255, 0.1); }
+  .progress-bar:before, .progress-bar:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0; }
+  .progress-bar:before {
+    bottom: 0;
+    background: url('/img/stripes.png') 0 0 repeat;
+    border-radius: 4px 4px 0 0; }
+  .progress-bar:after {
+    z-index: 2;
+    bottom: 45%;
+    border-radius: 4px;
+    background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+    background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+    background-image: -o-linear-gradient(top, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05)); }
+
+/*
+	* Note: using adjacent or general sibling selectors combined with
+	*       pseudo classes doesn't work in Safari 5.0 and Chrome 12.
+	*       See this article for more info and a potential fix:
+	*       http://css-tricks.com/webkit-sibling-bug/
+	*/
+#five:checked ~ .progress > .progress-bar {
+  width: 5%;
+  background-color: #f63a0f; }
+
+#twentyfive:checked ~ .progress > .progress-bar {
+  width: 25%;
+  background-color: #f27011; }
+
+#fifty:checked ~ .progress > .progress-bar {
+  width: 50%;
+  background-color: #f2b01e; }
+
+#seventyfive:checked ~ .progress > .progress-bar {
+  width: 75%;
+  background-color: #f2d31b; }
+
+#onehundred:checked ~ .progress > .progress-bar {
+  width: 100%;
+  background-color: #86e01e; }
+
+.radio {
+  display: none; }
+
+.chart-label {
+  display: inline-block;
+  margin: 0 5px 20px;
+  padding: 3px 8px;
+  color: #aaa;
+  text-shadow: 0 1px black;
+  border-radius: 3px;
+  cursor: pointer; }
+  .radio:checked + .chart-label {
+    color: white;
+    background: rgba(0, 0, 0, 0.25); }

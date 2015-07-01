@@ -1,7 +1,4 @@
 <ion-view id="viewKenuu" style="display:none">	
-	<!-- <ion-nav-title>
-        <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
-    </ion-nav-title> -->
 	<ion-nav-buttons side="right">
 		<button class="button button-clear ion-grid topbar-setupicon" ng-click="ShowSetupView()">
 		</button>
@@ -13,26 +10,45 @@
 		</ion-refresher> 		
 		<div class="row profile-avatar-container">
 			<div class="col-20 text-center profile-avatar-div">
-				<img ng-src="{{viewdata.user.AvatarMobile}}" class="profile-avatar" ng-click="ChangeProfilePic()">
+				
+				<img id="avatarImg" ng-src="{{viewdata.user.AvatarMobile}}" class="profile-avatar" ng-click="ChangeProfilePic()">
+				
 			</div>
 			<div class="col-70">
 				<h4>{{viewdata.user.FirstName}} {{viewdata.user.LastName}}</h4>					
 				<p ng-bind="viewdata.user.Email"></p>
-				<!-- <p>Avatar -> "{{viewdata.user.Avatar}}"</p>
-				<p>Genero -> "{{viewdata.gender}}"</p> -->
 				<button class="button button-small button-calm profile-btn" ng-click="GoToProfile()">Mi Info</button>					
 			</div>
 		</div>
 
-		<!-- <div class="item welcome-item">			
-			<button ng-click="DoLogout()" class="button button-block button-light welcome-btn profileedit-button">Cambiar de Usuario</button>		
-		</div> -->
+		<div class="item text-center">
+
+			<section class="chart-container">
+				<input type="radio" class="radio" name="progress" value="five" id="five">
+				<label for="five" class="chart-label">5%</label>
+
+				<input type="radio" class="radio" name="progress" value="twentyfive" id="twentyfive" checked>
+				<label for="twentyfive" class="chart-label">25%</label>
+
+				<input type="radio" class="radio" name="progress" value="fifty" id="fifty">
+				<label for="fifty" class="chart-label">50%</label>
+
+				<input type="radio" class="radio" name="progress" value="seventyfive" id="seventyfive">
+				<label for="seventyfive" class="chart-label">75%</label>
+
+				<input type="radio" class="radio" name="progress" value="onehundred" id="onehundred">
+				<label for="onehundred" class="chart-label">100%</label>
+
+				<div class="progress">
+					<div class="progress-bar"></div>
+				</div>
+			</section>
+		</div>		
 
 		<a class="item item-icon-left item-icon-right item-text-wrap" href="#/tab/kenuu/activity">
 			<i class="icon icon-history profile-item-icon"></i>
 			<div class="profile-item-title">Mi Actividad Reciente</div>
-			<div>Consultar mis últimos movimientos</div>
-			<!-- <i class="icon ion-android-arrow-forward back-btn"></i> -->
+			<div>Consultar mis últimos movimientos</div>			
 			<i class="icon ion-android-more-horizontal back-btn"></i>			
 		</a>
 
@@ -57,27 +73,6 @@
                 	</div>
                 </div>
 
-                <!-- <i class="icon ion-android-more-horizontal activity-checkin"></i> -->
-                <!-- <div class="row">
-                	<div class="col">
-                		<h3 class="favcommerce-lastvisit-label" style="margin-left:-10px;">
-                			<small class="textgrey-text">visitas:</small>
-                    		<strong class="favcommerce-visits">{{commerce.TotalVisits}}</strong> 
-                    	</h3>
-                	</div>
-                	<div class="col">
-                		<div class="row">
-                			<div class="col text-right">
-                				<small class="textgrey-text"><i class="icon-pop-full favcommerce-pop"></i></small>		
-                			</div>
-                			<div class="col text-left">
-                				<h3 class="favcommerce-lastvisit-label" style="margin-left:-10px; margin-top:10px;">                			
-		                    		<strong class="favcommerce-visits">{{commerce.PointsAvailable}}</strong> 
-		                    	</h3>	
-                			</div>
-                		</div>
-                	</div>
-                </div> -->
             </div>            
         </div>
 		<div class="bottomspacer"></div>
@@ -89,8 +84,7 @@
 		<img src="img/kenuulogo.png" alt="" class="top-bar-logo">
 	</ion-nav-title>	
 	<ion-content class="search-content" scroll=false>
-		<div class="item item-wrap-text item-clear text-center" style="background-color:transparent;">
-			<!-- <img class="icon" src="./img/empty.png"> -->
+		<div class="item item-wrap-text item-clear text-center" style="background-color:transparent;">			
 			<p style="margin-left:10px;">Oops, no se puede traer su información...</p>	
 		</div>
 		<div class="item item-clear text-center" style="background-color:transparent;" ng-click="ReloadData()">

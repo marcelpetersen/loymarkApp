@@ -455,19 +455,27 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                 });
             },
             stores: {
-                get: function(entityID, searchText){
+                get: function(entityID, searchText, subEntityID){
                     var url = serverURL + '/commerce/stores';
                     return new Promise(function(resolve,reject){
+
+                        var params = {
+                            entityID: entityID,
+                            subEntityID: 0, // Default value
+                            valueFilter: searchText
+                        }
+
+                        if (subEntityID) {
+                            params["subEntityID"] = subEntityID;
+                        }
+
                         $http({
                             headers: {
                                 'authorization': 'Basic ' + referenceIDFactory.getReferenceID()
                             },
                             method: 'GET',
                             url: url,
-                            params: {
-                                entityID: entityID,
-                                valueFilter: searchText
-                            }
+                            params: params
                         })
                             .success(function(data,status,headers,config){
                                 if(data.status===true){
@@ -520,7 +528,7 @@ fact.factory('restFactory', ['$http', 'ApiEndpoint', 'referenceIDFactory', funct
                 var params = {};
 
                 if (subEntityID != undefined) {
-                    params["subEntityID"] = subEntityID;
+                    params["SubEntityID"] = subEntityID;
                 }
 
                 return new Promise(function(resolve,reject){
@@ -1016,9 +1024,9 @@ fact.factory('commerceFactory', ['restFactory', function(restFactory){
             });
         },
         stores: {
-            general: function(entityID, searchText){
+            general: function(entityID, searchText, subEntityID){
                 return new Promise(function(resolve,reject){
-                    restFactory.commerce.stores.get(entityID, searchText)
+                    restFactory.commerce.stores.get(entityID, searchText, subEntityID)
                         .then(function(response){
                             resolve(response);
                         })

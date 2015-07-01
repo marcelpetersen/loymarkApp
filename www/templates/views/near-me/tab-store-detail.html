@@ -15,9 +15,9 @@
 				<img class="commercewr-avatar" src="{{GetAvatarImage(viewdata.store.Image)}}">
 			</div>	
 		</div>
-		<div class="item">
+		<!-- <div class="item">
 			<button class="button button-block button-light welcome-btn" ng-click="StartScan()">Chequéese</button>
-		</div>
+		</div> -->
 		<div class="item">
 			<div class="row">
 				<div class="col text-center" ng-click="OpenMaps(viewdata.store.LocationLatitude,viewdata.store.LocationLongitude)">
@@ -67,6 +67,19 @@
 			<div class="item item-text-wrap item-icon-left" ng-click="OpenMaps(viewdata.store.LocationLatitude,viewdata.store.LocationLongitude)">
 				<i class="icon icon-location"></i>
 				<p>{{viewdata.store.Address}}</p>
+			</div>			
+			<div class="item item-text-wrap item-icon-left">
+				<i class="icon ion-clock"></i>
+				<p>{{gTime(viewdata.store.OpeningHours, viewdata.store.ClosingHours)}} 
+					<span ng-switch on="isOpenForBusiness(viewdata.store.OpeningHours, viewdata.store.ClosingHours)" style="margin-left:20px;">
+					    <span ng-switch-when="Abierto" class="store-open">
+					    	Abierto 
+					    </span>
+					    <span ng-switch-default class="store-closed">
+					        Cerrado
+					    </span>
+					</span>					
+				</p>
 			</div>
 			<div class="item item-text-wrap item-icon-left" ng-click="EmailTo(viewdata.store.Email)">
 				<i class="icon icon-mail"></i>
