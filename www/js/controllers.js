@@ -714,10 +714,15 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                             window.open(url, "_system");
                             break;
                         case 2: 
-                            if (options.buttonLabels.length > 1)
+                            if (deviceFactory.device.platform() == "iOS")
                             {
                                 url = "waze://?ll=" + lat + "," + long + "&navigate=yes";
                                 window.open(url, "_system");
+                            }
+                            else
+                            {
+                                url = "waze://?ll=" + lat + "," + long + "&navigate=yes";
+                                WazeLink.open( url );
                             }
                             break;
                     }
@@ -814,6 +819,11 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             return new Promise(function(resolve,reject){
                 if (!devEnvironment) 
                 {
+                    if (deviceFactory.device.platform() == "Android") {
+                        resolve(true);
+                        return;
+                    }
+
                     var URI = "waze://";                
                     if (deviceFactory.device.platform() == "iOS") URI = "waze://";
                     $cordovaAppAvailability.check(URI)
@@ -1289,8 +1299,16 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         case 2: 
                             if (options.buttonLabels.length > 1)
                             {
-                                url = "waze://?ll=" + lat + "," + long + "&navigate=yes";
-                                window.open(url, "_system");
+                                if (deviceFactory.device.platform() == "iOS")
+                                {
+                                    url = "waze://?ll=" + lat + "," + long + "&navigate=yes";
+                                    window.open(url, "_system");
+                                }
+                                else
+                                {
+                                    url = "waze://?ll=" + lat + "," + long + "&navigate=yes";
+                                    WazeLink.open( url );
+                                }
                             }
                             break;
                     }
@@ -1577,8 +1595,15 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             return new Promise(function(resolve,reject){
                 if (!devEnvironment) 
                 {
-                    var URI = "waze://";                
+                    if (deviceFactory.device.platform() == "Android")
+                    {
+                        resolve(true);
+                        return;
+                    }
+
+                    var URI = "http://waze.to";
                     if (deviceFactory.device.platform() == "iOS") URI = "waze://";
+
                     $cordovaAppAvailability.check(URI)
                         .then(function() {
                             // is available
@@ -2420,18 +2445,24 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
         $scope.OpenStore = function(subEntityID) {
             loadingBox.show($scope.viewdata.openingStoreMessage);
-            commerceFactory.store.get(subEntityID)
-                .then(function(response){                
-                    storeFactory.selectedStore.set(response[0]);
-                    navigationFactory.store.setTab("tab.kenuu-storedetail");
-                    navigationFactory.stores.setTab("tab.kenuu-commercestores");
-                    navigationFactory.commerce.setTab("tab.kenuu-commerce");
+
+            commerceFactory.stores.general(0, "", subEntityID)
+                .then(function(response){
+                    if (response.length > 0)
+                    {                        
+                        storeFactory.selectedStore.set(response[0]);
+                        navigationFactory.store.setTab("tab.kenuu-storedetail");
+                        navigationFactory.stores.setTab("tab.kenuu-commercestores");
+                        navigationFactory.commerce.setTab("tab.kenuu-commerce");
+                        loadingBox.hide();
+                        $state.go(navigationFactory.store.get());
+                    }
+                    else {
+                        loadingBox.hide();
+                    }                    
+                }).catch(function(err){
                     loadingBox.hide();
-                    $state.go(navigationFactory.store.get());
-                })
-                .catch(function(response){
-                    loadingBox.hide();
-                });    
+                });   
         };
 
         $scope.search = function(item) {
