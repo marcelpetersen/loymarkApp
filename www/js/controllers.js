@@ -587,11 +587,12 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         $scope.gDate = function(date) {
-            var _y = date.substr(0,4);
-            var _m = date.substr(5,2);
-            var _d = date.substr(8,2);
+            // var _y = date.substr(0,4);
+            // var _m = date.substr(5,2);
+            // var _d = date.substr(8,2);
+            // var _dateFormated = new Date(_y, _m, _d);
 
-            var _dateFormated = new Date(_y, _m, _d);
+            var _dateFormated = new Date(date);
 
             return _dateFormated.getDate() + " " + (GetMonthName(_dateFormated.getMonth()+1)) + " " + _dateFormated.getFullYear();
         };
@@ -1252,7 +1253,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
     ctrl.controller('StoreDetailCtrl', ['$scope', '$timeout', '$state', '$stateParams', 'storeFactory', 'loadingBox', 'commerceFactory', 'rewardFactory', 'navigationFactory', 'deviceFactory', 'rewardDetailModal', '$cordovaAppAvailability', '$cordovaSocialSharing', '$cordovaInAppBrowser', 'emailService', '$cordovaActionSheet', 'beaconFactory', function($scope, $timeout, $state, $stateParams, storeFactory, loadingBox, commerceFactory, rewardFactory, navigationFactory, deviceFactory, rewardDetailModal, $cordovaAppAvailability, $cordovaSocialSharing, $cordovaInAppBrowser, emailService, $cordovaActionSheet, beaconFactory){
         
-        loadingBox.show();
+        //loadingBox.show();
         $scope.viewdata = {
             store: storeFactory.selectedStore.get(),
             rewards: [],
@@ -1264,14 +1265,15 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 facebook: false
             },
             // Beacons variables
-            scanningBeacons: false,
-            foundBeacons: []
+            foundBeacons: [],
+            storeBeaconFound: false,
+            deviceInfo: deviceFactory.device.device()
         };
 
-        $timeout(function(){
+        $scope.$on("$ionicView.enter", function(event, args){
             loadingBox.hide();
-            $scope.ReloadStoreInfo();
-            LoadData($scope.viewdata.store.EntityID, $scope.viewdata.store.SubEntityID);
+            $scope.viewdata.store = storeFactory.selectedStore.get();            
+            $scope.ReloadStoreInfo();            
             IsTwitterInstalled();
             IsFacebookInstalled();
         });
@@ -1416,6 +1418,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 .then(function(data){                
                     loadingBox.hide();                    
                     $scope.viewdata.rewards = data.Elements;
+                    console.log($scope.viewdata.rewards);
                 })
                 .catch(function(err){
                     loadingBox.hide();
@@ -1435,7 +1438,6 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     if (response.length > 0)
                     {
                         $scope.viewdata.store = response[0];
-                        console.log($scope.viewdata.store);
                         LoadData($scope.viewdata.store.EntityID, $scope.viewdata.store.SubEntityID);
                     }
                     else {
@@ -1478,8 +1480,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             return {"width":progress + "%"};
         };
 
-        $scope.OpenRewardDetail = function(reward) {
-            // console.log(reward);
+        $scope.OpenRewardDetail = function(reward) {            
             $scope.viewdata["availablepoints"] = $scope.viewdata.store.PointsAvailable;
             $scope.viewdata.selectedreward = reward;
             rewardDetailModal.Show($scope);
@@ -1511,11 +1512,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         $scope.gDate = function(date) {
-            var _y = date.substr(0,4);
-            var _m = date.substr(5,2);
-            var _d = date.substr(8,2);
-
-            var _dateFormated = new Date(_y, _m, _d);
+            var _dateFormated = new Date(date);
 
             return _dateFormated.getDate() + " " + (GetMonthName(_dateFormated.getMonth()+1)) + " " + _dateFormated.getFullYear();
         };
@@ -1709,22 +1706,60 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             }
         };
 
+        function bgTimer() {
+            return new Promise(function(resolve,reject){
+                setTimeout(function() {
+                    if (!$scope.viewdata.storeBeaconFound) {
+                        loadingBox.hide();
+                        beaconFactory.beaconScanner.stop($scope.viewdata.store.EntityID, $scope.viewdata.store.SubEntityID);
+
+                        swal(
+                            {   
+                                title: "Oops!",   
+                                text: "Parece que la tienda no está cerca.",   
+                                type: "warning",   
+                                showConfirmButton: true,
+                                showCancelButton: false,                       
+                                confirmButtonText: "Ok",   
+                                closeOnConfirm: true 
+                            }
+                        );
+                    }
+                }, 10000);
+            });
+        };
+
         $scope.StartScan = function() {
-            loadingBox.show("Escaneando la tienda...");
-            $scope.viewdata.scanningBeacons = true;     
-            beaconFactory.beaconScanner.start();
+            $scope.viewdata.storeBeaconFound = false;
+            loadingBox.show("Escaneando la tienda...");              
+            beaconFactory.beaconScanner.start($scope.viewdata.store.EntityID, $scope.viewdata.store.SubEntityID);
+            bgTimer();
         };
 
         $scope.StopScan = function() {
-            $scope.viewdata.scanningBeacons = false;        
-            beaconFactory.beaconScanner.stop(); 
+                 
+            beaconFactory.beaconScanner.stop($scope.viewdata.store.EntityID, $scope.viewdata.store.SubEntityID); 
         };
 
-        $scope.$on('beaconFound', function(event, beacon) {     
-            ProcessFoundBeacon(beacon);
-            $scope.StopScan();
-            loadingBox.hide();
-            alert("Listo!");
+        $scope.$on('beaconFound', function(event, beacon) {
+            if (!$scope.viewdata.storeBeaconFound)
+            {
+                $scope.viewdata.storeBeaconFound = true;
+                ProcessFoundBeacon(beacon);                
+                loadingBox.hide();
+                beaconFactory.beaconScanner.stop($scope.viewdata.store.EntityID, $scope.viewdata.store.SubEntityID); 
+                swal(
+                    {   
+                        title: "Listo!",   
+                        text: "Se chequeó en la tienda.",   
+                        type: "success",   
+                        showConfirmButton: true,
+                        showCancelButton: false,                       
+                        confirmButtonText: "Ok",   
+                        closeOnConfirm: true 
+                    }
+                );
+            }            
         });
 
         $scope.$on('beaconRegionEmpty', function(event, pluginResult){
@@ -2574,7 +2609,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             user: {
                 name: '',
                 lastname: '',
-                activity: ''
+                activity: '',
+                MobilePhone: ''
             },
             pleaseWaitMessage: 'Buscando su información...',
             sainvgInfoMessage: 'Se está guardando su información...',
@@ -2590,6 +2626,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             loadingBox.show($scope.viewdata.pleaseWaitMessage);
             userFactory.info.get(true)
                 .then(function(data){
+                    console.log(data);
                     $scope.viewdata.user = data;
                     var userData = data;
                     $scope.viewdata.user.name = userData.FirstName;

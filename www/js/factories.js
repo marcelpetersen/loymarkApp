@@ -85,7 +85,9 @@ fact.factory('deviceFactory', ['$cordovaDevice', 'restFactory', '$cordovaPush', 
                 // model: "iPhone7,2"
                 // manufacturer: "Apple"
                 // ------------------------
-                _device = $cordovaDevice.getDevice();                
+                if (!devEnvironment) {
+                    _device = $cordovaDevice.getDevice();                    
+                }                
                 return _device;
             },
             uuid: function() {
@@ -1204,6 +1206,9 @@ fact.factory('beaconFactory', ['$rootScope', function($rootScope){
         }
     ];
 
+    var _beaconIdentifier = "";
+    var _beaconUUID = "";
+
     function didRangeBeaconsInRegion (pluginResult)
     {
         if (pluginResult.beacons.length > 0)
@@ -1217,9 +1222,14 @@ fact.factory('beaconFactory', ['$rootScope', function($rootScope){
         }
     };
 
+    function zeroPad(num, places) {
+        var zero = places - num.toString().length + 1;
+        return Array(+(zero > 0 && zero)).join("0") + num;
+    };
+
     return {
         beaconScanner: {
-            start: function() {
+            start: function(entityID, subEntityID) {
                 var delegate = new cordova.plugins.locationManager.Delegate();
                 cordova.plugins.locationManager.setDelegate(delegate);
                 cordova.plugins.locationManager.requestAlwaysAuthorization();
@@ -1229,9 +1239,12 @@ fact.factory('beaconFactory', ['$rootScope', function($rootScope){
                     didRangeBeaconsInRegion(pluginResult);
                 };
 
-                for (var i=0; i<_beacons.length; i++)
-                {
-                    var beaconRegion = new cordova.plugins.locationManager.BeaconRegion(_beacons[i].identifier, _beacons[i].UUID);
+                _beaconIdentifier = "CIS";
+                _beaconUUID = "A77A1B68-" + zeroPad(entityID, 4) + "-" + zeroPad(subEntityID, 4) + "-914C-760D07FBB87B";
+
+                // for (var i=0; i<_beacons.length; i++)
+                // {
+                    var beaconRegion = new cordova.plugins.locationManager.BeaconRegion(_beaconIdentifier, _beaconUUID);
 
                     // Start monitoring.
                     cordova.plugins.locationManager.startMonitoringForRegion(beaconRegion)
@@ -1242,14 +1255,17 @@ fact.factory('beaconFactory', ['$rootScope', function($rootScope){
                     cordova.plugins.locationManager.startRangingBeaconsInRegion(beaconRegion)
                         .fail(console.error)
                         .done();
-                }
+                // }
             },
-            stop: function() {
-                for (var i=0; i<_beacons.length; i++)
-                {
-                    var beaconRegion = new cordova.plugins.locationManager.BeaconRegion(_beacons[i].identifier, _beacons[i].UUID);
+            stop: function(entityID, subEntityID) {
+                // for (var i=0; i<_beacons.length; i++)
+                // {
+                    _beaconIdentifier = "CIS";
+                    _beaconUUID = "A77A1B68-" + zeroPad(entityID, 4) + "-" + zeroPad(subEntityID, 4) + "-914C-760D07FBB87B";
+
+                    var beaconRegion = new cordova.plugins.locationManager.BeaconRegion(_beaconIdentifier, _beaconUUID);
                     cordova.plugins.locationManager.stopRangingBeaconsInRegion(beaconRegion);
-                }
+                // }
             }
         }
     };

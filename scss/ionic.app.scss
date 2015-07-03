@@ -301,6 +301,14 @@ ion-nav-view[nav-view-transition="ios"] {
 		color: $kenuu-purple;
 	}
 
+	.formError {
+		color: red !important;
+	}
+
+	.profileForm-input {
+		border-bottom: 1px solid #333333 !important;
+	}
+
 /* ******* Modal MsgBox ******** */
 
 	.md-overlay-ok {
