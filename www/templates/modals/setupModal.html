@@ -10,7 +10,15 @@
 				<p><strong>Kenuu</strong></p>
 				<p>Version: <strong>{{viewdata.appVersion}}</strong></p>
 			</div>
-			<div class="item item-icon-left item-icon-right item-text-wrap item-clear" ng-click="ContactUs()">
+
+			<!-- <ion-toggle class="item item-toggle item-text-wrap" ng-model="viewdata.registerForNotifications" ng-change="PushNotificationsToggle()">
+				<span>
+					<strong>Recibir Notificaciones</strong>
+					<p>Para poder recibir mensajes PUSH en su dispositivo.</p>
+				</span>
+			</ion-toggle> -->
+
+			<div class="item item-icon-left item-icon-right item-text-wrap item-clear" style="border-top:1px solid #ddd !important" ng-click="ContactUs()">
 				<i class="icon icon-mail setupview-icon"></i>
 				<p>¿Necesita ayuda?</p>
 				<strong>Contactar por correo electrónico</strong>

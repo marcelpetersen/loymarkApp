@@ -4,7 +4,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
 // Near Me Tab
 
-    ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', '$cordovaPush', '$cordovaGeolocation', '$cordovaKeyboard', 'loadingBox', 'searchFactory', 'commerceFactory', 'navigationFactory', 'deviceFactory', 'userFactory', 'navigationFactory', 'locationFactory', 'storeFactory', '$cordovaInAppBrowser', function($scope, $state, $ionicLoading, $timeout, $cordovaPush, $cordovaGeolocation, $cordovaKeyboard, loadingBox, searchFactory, commerceFactory, navigationFactory, deviceFactory, userFactory, navigationFactory, locationFactory, storeFactory, $cordovaInAppBrowser){
+    ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', '$cordovaPush', '$cordovaGeolocation', '$cordovaKeyboard', 'loadingBox', 'searchFactory', 'commerceFactory', 'navigationFactory', 'deviceFactory', 'userFactory', 'navigationFactory', 'locationFactory', 'storeFactory', '$cordovaInAppBrowser', 'signupSetupFactory', function($scope, $state, $ionicLoading, $timeout, $cordovaPush, $cordovaGeolocation, $cordovaKeyboard, loadingBox, searchFactory, commerceFactory, navigationFactory, deviceFactory, userFactory, navigationFactory, locationFactory, storeFactory, $cordovaInAppBrowser, signupSetupFactory){
         
         $scope.viewdata = {
             locationSet: true,
@@ -35,6 +35,9 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
         function GetMemberData() {
             return new Promise(function(resolve,reject){
+
+                userFactory.info.email.set("");
+
                 // Pulls the member information
                 userFactory.info.get($scope.viewdata.pullFreshMemberDataFromServer)
                     .then(function(data){
@@ -42,6 +45,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         $scope.viewdata.pullFreshMemberDataFromServer = false;
                         $scope.viewdata.user = data;
                         $scope.viewdata.CardNumber = data.CardNumber;
+                        userFactory.info.email.set(data.Email);
+                        userFactory.info.cardNumber.set(data.CardNumber);
                         resolve(data);
                     })
                     .catch(function(err) {                    
@@ -212,18 +217,24 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 .then(function(response){                    
                     if (!devEnvironment)
                     {
-                        RegisterDevice(response.Email)
-                            .then(function(response){
-                                console.log("RegisterDevice Ok!");
-                                
-                            })
-                            .catch(function(err){
-                                console.log("RegisterDevice:");
-                                console.log(err);                                
-                                loadingBox.hide();
-                            });
+                        // Verifies if the user authorized Kenuu to register for PUSH Notifications
+                        if (signupSetupFactory.pushNotifications.get())
+                        {
+                            RegisterDevice(response.Email)
+                                .then(function(response){
+                                    console.log("RegisterDevice Ok!");
+                                    
+                                })
+                                .catch(function(err){
+                                    console.log("RegisterDevice:");
+                                    console.log(err);                                
+                                    loadingBox.hide();
+                                });    
+                        }                        
 
-                        GetLocation()
+                        if (signupSetupFactory.location.get())
+                        {
+                            GetLocation()
                             .then(function(response){
                                 GetNearbyStores()
                                     .then(function(response){
@@ -244,8 +255,21 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                                         console.log("GetAllStores:");
                                         console.log(err);
                                         loadingBox.hide();
-                                    })
-                            })
+                                    });
+                            });
+                        }
+                        else
+                        {
+                            GetAllStores()
+                                .then(function(response){
+
+                                })
+                                .catch(function(err){
+                                    console.log("GetAllStores:");
+                                    console.log(err);
+                                    loadingBox.hide();
+                                });
+                        }                        
                     }
                     else
                     {
@@ -1901,11 +1925,11 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
 // My Kenuu
 
-    ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', 'navigationFactory', '$cordovaActionSheet', '$cordovaCamera', '$cordovaImagePicker', '$cordovaFile', 'imageFunctions', 'appVersionFactory', '$ionicHistory', '$cordovaPush', 'deviceFactory', '$cordovaInAppBrowser', function($scope, $timeout, loadingBox, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService, navigationFactory, $cordovaActionSheet, $cordovaCamera, $cordovaImagePicker, $cordovaFile, imageFunctions, appVersionFactory, $ionicHistory, $cordovaPush, deviceFactory, $cordovaInAppBrowser){
+    ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', 'navigationFactory', '$cordovaActionSheet', '$cordovaCamera', '$cordovaImagePicker', '$cordovaFile', 'imageFunctions', 'appVersionFactory', '$ionicHistory', '$cordovaPush', 'deviceFactory', '$cordovaInAppBrowser', 'signupSetupFactory', function($scope, $timeout, loadingBox, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService, navigationFactory, $cordovaActionSheet, $cordovaCamera, $cordovaImagePicker, $cordovaFile, imageFunctions, appVersionFactory, $ionicHistory, $cordovaPush, deviceFactory, $cordovaInAppBrowser, signupSetupFactory){
         $scope.$on("$ionicView.enter", function(event, args){            
             navigationFactory.setDefaults();
             LoadData();
-            LoadCommerceData();
+            LoadCommerceData();            
         });
 
         $scope.viewdata = {
@@ -1920,7 +1944,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             defaultAvatarImg_female: 'img/default_female.png',
             appVersion: '',
             pleaseWaitMessage: 'Buscando su información...',
-            pullMemberFromServer: true
+            pullMemberFromServer: true,
+            registerForNotifications: signupSetupFactory.pushNotifications.get() // used on the setup modal
         };
 
         $scope.gDate = function(date) {
@@ -2252,6 +2277,31 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         $scope.CloseSetup = function() {setupView.Close($scope);};
         $scope.ContactUs = function() {emailService.ContactCustomerService();}
 
+        $scope.PushNotificationsToggle = function() {
+            if ($scope.viewdata.registerForNotifications)
+            {
+                // Do Registration
+                var email = userFactory.info.email.get();
+                signupSetupFactory.pushNotifications.set(true);
+
+                if (email != '') {
+                    RegisterDevice()
+                    .then(function(response){
+                        // Not required...        
+                    })
+                    .catch(function(err){
+                        $scope.viewdata.registerForNotifications = false;
+                        signupSetupFactory.pushNotifications.set(false);
+                    });    
+                }                
+            }
+            else
+            {
+                // De-register
+                signupSetupFactory.pushNotifications.set(false);
+            }
+        };
+
         function RegisterDevice(email) {
             return new Promise(function(resolve,reject){
                 var iosConfig = {
@@ -2260,12 +2310,10 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     "alert": true,
                 };
                 var androidConfig = {
-                    "senderID": "AIzaSyDNjV6WWsPUXWKNctSYo19MhPpSMwgZKqw",
+                    "senderID": "671633506930"
                 };
 
                 deviceFactory.device.registeredUser.set(email);
-
-                console.log("Platform: " + deviceFactory.device.platform());
 
                 if (deviceFactory.device.platform() == "iOS")
                 {
@@ -2273,13 +2321,13 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         .then(
                             function(deviceToken)
                             {
-                                deviceFactory.device.registerdevice(deviceToken, data.Email)
-                                .then(function(response){
-                                    resolve(response);
-                                })
-                                .catch(function(err){
-                                    reject(err);
-                                });
+                                deviceFactory.device.registerdevice(deviceToken, email)
+                                    .then(function(response){                             
+                                        resolve(response);
+                                    })
+                                    .catch(function(err){                                        
+                                        reject(err);
+                                    });
                             },
                             function(err) {
                                 reject(err);
@@ -2289,8 +2337,6 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
                 if (deviceFactory.device.platform() == "Android")
                 {
-                    console.log(androidConfig);
-
                     $cordovaPush.register(androidConfig).then(function(result) {
                             // Success
                             resolve(result);
@@ -2300,16 +2346,6 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         });
                 }
             });
-        };
-
-        $scope.RegisterDevice = function() {
-            RegisterDevice("tavo.rodriguez@gmail.com")
-                .then(function(response){
-                    console.log(response);
-                })
-                .catch(function(err) {
-                    console.log(err);
-                });
         };
     }]);
 
@@ -2358,6 +2394,9 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     setTimeout(function() {
                         $scope.viewdata.user.activity = data.Elements;
                         $scope.$apply();
+
+                        console.log("Activity:");
+                        console.log(JSON.stringify(data.Elements));
 
                         loadingBox.hide();
                         $scope.$broadcast('scroll.refreshComplete');
@@ -2625,12 +2664,12 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         function LoadProfileData() {
             loadingBox.show($scope.viewdata.pleaseWaitMessage);
             userFactory.info.get(true)
-                .then(function(data){
-                    console.log(data);
+                .then(function(data){                    
                     $scope.viewdata.user = data;
                     var userData = data;
                     $scope.viewdata.user.name = userData.FirstName;
                     $scope.viewdata.user.lastname = userData.LastName;
+                    $scope.viewdata.user.MobilePhone = Number(userData.MobilePhone);
                     $scope.$apply();
                     loadingBox.hide();
                     $scope.$broadcast('scroll.refreshComplete');
@@ -2648,9 +2687,12 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         $scope.SaveProfile = function() {
             loadingBox.show($scope.viewdata.sainvgInfoMessage);
 
+            if ($scope.viewdata.user.MobilePhone == null) $scope.viewdata.user.MobilePhone = "";
+
             userFactory.info.update({
                 FirstName: $scope.viewdata.user.name,
                 LastName: $scope.viewdata.user.lastname,
+                MobilePhone: $scope.viewdata.user.MobilePhone,
                 UpdatePassword: false,
                 Password: ""
             })
@@ -2672,6 +2714,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             })
             .catch(function(err){
                 loadingBox.hide();
+                console.log(err)
             });
         };
 
@@ -2703,6 +2746,15 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 $scope.viewdata.profileimage =  $scope.viewdata.defaultAvatarImg_male;
             }
         });
+
+        $scope.ValMaxLength = function() {
+            if ($scope.viewdata.user.MobilePhone != null)
+            {
+                if ($scope.viewdata.user.MobilePhone.toString().length > 15) {
+                    $scope.viewdata.user.MobilePhone = Number($scope.viewdata.user.MobilePhone.toString().substring(0,15));
+                }
+            }            
+        };
     }]);
 
     ctrl.controller('KenuuPwdChangeCtrl', ['$scope', '$timeout', 'userFactory', '$state', '$ionicHistory', 'msgBox', '$ionicLoading', 'loadingBox', '$cordovaKeyboard', 'referenceIDFactory', function($scope, $timeout, userFactory, $state, $ionicHistory, msgBox, $ionicLoading, loadingBox, $cordovaKeyboard, referenceIDFactory){
@@ -2866,7 +2918,14 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
 // No Connection Procedure
 
-    ctrl.controller('NoConnectionCtrl', ['$scope', '$state', function($scope, $state){
+    ctrl.controller('NoConnectionCtrl', ['$scope', '$state', 'userFactory', function($scope, $state, userFactory){
+        $scope.viewdata = {
+            cardNumber: userFactory.info.cardNumber.get()
+        };
+
+        $scope.$on("$ionicView.enter", function(event, args){
+            $scope.viewdata.cardNumber = userFactory.info.cardNumber.get();
+        });
     }]);
 
 // Login Procedure
@@ -3828,7 +3887,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
     }]);
 
-    ctrl.controller('LocationSetupCtrl', ['$scope', '$ionicHistory', '$cordovaGeolocation', '$state', '$ionicLoading', 'locationFactory', 'loadingBox', '$cordovaKeyboard', 'deviceFactory', function($scope, $ionicHistory, $cordovaGeolocation, $state, $ionicLoading, locationFactory, loadingBox, $cordovaKeyboard, deviceFactory){
+    ctrl.controller('LocationSetupCtrl', ['$scope', '$ionicHistory', '$cordovaGeolocation', '$state', '$ionicLoading', 'locationFactory', 'loadingBox', '$cordovaKeyboard', 'deviceFactory', 'signupSetupFactory', function($scope, $ionicHistory, $cordovaGeolocation, $state, $ionicLoading, locationFactory, loadingBox, $cordovaKeyboard, deviceFactory, signupSetupFactory){
         $scope.Skip = function() {
             $ionicHistory.clearHistory();
             $ionicHistory.clearCache();
@@ -3837,6 +3896,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 disableBack: true,
                 historyRoot: true
             });
+
+            signupSetupFactory.location.set(false);
 
             loadingBox.hide();
             $state.go('pushnotificationssetup');
@@ -3852,7 +3913,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             });
 
             loadingBox.hide();
-
+            signupSetupFactory.location.set(true);
             $state.go('pushnotificationssetup');        
         };
 
@@ -3926,7 +3987,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
     }]);
 
-    ctrl.controller('PushNotificationsSetupCtrl', ['$scope', '$ionicHistory', '$cordovaGeolocation', '$state', '$cordovaPush', '$cordovaDevice', 'loadingBox', 'locationFactory', 'userFactory', 'deviceFactory', function($scope, $ionicHistory, $cordovaGeolocation, $state, $cordovaPush, $cordovaDevice, loadingBox, locationFactory, userFactory, deviceFactory){
+    ctrl.controller('PushNotificationsSetupCtrl', ['$scope', '$ionicHistory', '$cordovaGeolocation', '$state', '$cordovaPush', '$cordovaDevice', 'loadingBox', 'locationFactory', 'userFactory', 'deviceFactory', 'signupSetupFactory', function($scope, $ionicHistory, $cordovaGeolocation, $state, $cordovaPush, $cordovaDevice, loadingBox, locationFactory, userFactory, deviceFactory, signupSetupFactory){
         
         loadingBox.hide();
 
@@ -3938,6 +3999,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 disableBack: true,
                 historyRoot: true
             });
+
+            signupSetupFactory.pushNotifications.set(false);
 
             $state.go("tab.nearme");
         };
@@ -3952,6 +4015,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             var androidConfig = {
                 "senderID": "671633506930"
             };
+
+            signupSetupFactory.pushNotifications.set(true);
 
             var platform = $cordovaDevice.getPlatform();
 
@@ -3978,13 +4043,35 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                                         // disableAnimate: true,
                                         disableBack: true,
                                         historyRoot: true
-                                    });   
+                                    });
+                                    
                                     $state.go("tab.nearme");      
                                 }
                             );
                         },
                         function(err) {
-
+                            swal(
+                                {   
+                                    title: "Ooops!",   
+                                    text: "No se pudo registrar su dispositivo.",   
+                                    type: "warning",   
+                                    showConfirmButton: true,
+                                    showCancelButton: false,                       
+                                    confirmButtonText: "Continuar",   
+                                    closeOnConfirm: true 
+                                }, 
+                                function(){
+                                    $ionicHistory.clearHistory();
+                                    $ionicHistory.clearCache();
+                                    $ionicHistory.nextViewOptions({
+                                        // disableAnimate: true,
+                                        disableBack: true,
+                                        historyRoot: true
+                                    });
+                                    
+                                    $state.go("tab.nearme");      
+                                }
+                            );
                         }
                     );
             }

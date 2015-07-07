@@ -7885,6 +7885,9 @@ a[href^="http://maps.google.com/maps"] {
 .profileForm-input {
   border-bottom: 1px solid #333333 !important; }
 
+.toggle .handle {
+  background-color: #eeeeee !important; }
+
 /* ******* Modal MsgBox ******** */
 .md-overlay-ok {
   background: #489A0F !important; }
@@ -8351,7 +8354,7 @@ ion-nav-view[nav-view-transition="ios"] .stores-bottomseparator {
 
 .profileedit-input {
   color: #333333;
-  border-bottom: 1px solid #eeeeee !important;
+  border-bottom: 1px solid #aaaaaa !important;
   background-color: transparent !important; }
 
 .profileedit-label {

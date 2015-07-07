@@ -3,8 +3,22 @@
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
     </ion-nav-title> -->	
   	<ion-content scroll=false class="noconnection-content">
-        <div class="item item-text-wrap text-center item-clear">
-            Oops, no hay conexión!
+        <div class="item item-text-wrap text-center item-wrap-text item-clear">
+            <strong>Oops, no hay conexión!</strong>
+            <p>Mientras no se tenga conexión a internet, acá está su número de tarjeta para que pueda seguir visitando sus comercios favoritos. </p>
         </div>
+
+        <div class="list card" style="width:80vw; margin:auto !important; top:20px; border-radius:10px;">
+            <div class="item text-left item-text-wrap" style="background-color: #eeeeee; color: white !important;">
+                <h2 class="qrcode-qrtitle"><strong>Mi Identificación</strong></h2>  
+                <p>Mi código para ganar <strong>pops!</strong></p>
+            </div>
+            <div class="item item-image" style="background-color:transparent">
+                <div style="height:20px;"></div>
+                <qr text="viewdata.cardNumber" size="200"></qr>
+                <div style="height:20px;"></div>
+            </div>
+        </div>
+
   	</ion-content>
 </ion-view>

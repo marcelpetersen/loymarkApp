@@ -24,11 +24,11 @@
 					</span>
 					<input 
 						name="mobilePhone"
-						class="profileedit-input profileForm-input" 
+						class="profileedit-input" 
 						ng-model="viewdata.user.MobilePhone" 
-						type="number" 
+						type="tel" 
 						placeholder="Número de Teléfono"
-       					maxLength="15"
+       					ng-change="ValMaxLength()"
        					onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
 				</label>
 				<div role="alert">

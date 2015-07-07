@@ -309,6 +309,10 @@ ion-nav-view[nav-view-transition="ios"] {
 		border-bottom: 1px solid #333333 !important;
 	}
 
+	.toggle .handle {
+		background-color: #eeeeee !important;
+	}
+
 /* ******* Modal MsgBox ******** */
 
 	.md-overlay-ok {
@@ -894,7 +898,7 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 	.profileedit-input {
 		color: $input-profile-font-color;
-		border-bottom: 1px solid #eeeeee !important;
+		border-bottom: 1px solid #aaaaaa !important;
 		background-color: transparent !important; 
 	}
 	.profileedit-label {

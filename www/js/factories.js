@@ -767,6 +767,8 @@ fact.factory('userFactory',['restFactory', function(restFactory){
 	var _data ={};
     var _signupstatus = 0; // 1= Already signed up, 0= New Sign Up, -1= Email exists, but no user created (sign up via plastic card)
     var _pullFreshMemberDataFromServer = true;
+    var _currentUserEmail = "";
+    var _currentCardNumber = "";
 	return {
         info: {
             pullFreshMemberDataFromServer: {
@@ -832,6 +834,30 @@ fact.factory('userFactory',['restFactory', function(restFactory){
                 },
                 get: function() {
                     return _signupstatus;
+                }
+            },
+            email: {
+                set: function(email) {
+                    _currentUserEmail = email;
+                },
+                get: function() {
+                    return _currentUserEmail;
+                }
+            },
+            cardNumber: {
+                set: function(cardNumber) {
+                    _currentCardNumber = cardNumber;
+                    localStorage.setItem('currentUsers-cardNumber', cardNumber);
+                },
+                get: function() {
+                    var cn = localStorage.getItem('currentUsers-cardNumber');
+                    if (cn != undefined) {
+                        _currentCardNumber = cn;                        
+                        return _currentCardNumber;
+                    }
+                    else {
+                        return "";
+                    }                    
                 }
             }
         },
@@ -1496,6 +1522,69 @@ fact.factory('referenceIDFactory', ['SQLiteFactory', function(SQLiteFactory){
         },
         getReferenceID: function() {
             return GetRefID();
+        }
+    }
+}]);
+
+fact.factory('signupSetupFactory', [function(){
+
+    var _registerForPush = false;
+    var _registerForLocation = false;
+
+    function setRegisterForPush(userChoise) {
+        localStorage.setItem('signup-registerforpush', userChoise);
+        _registerForPush = userChoise;
+    };
+
+    function getRegisterForPush() {
+        _registerForPush = localStorage.getItem('signup-registerforpush'); 
+        
+        if (_registerForPush != undefined)
+        {
+            _registerForPush = JSON.parse(_registerForPush);
+            return _registerForPush;
+        }
+        else
+        {
+            return false;
+        }
+    };
+
+    function setRegisterForLocation(userChoise) {
+        localStorage.setItem('signup-registerforlocation', userChoise);
+        _registerForLocation = userChoise;
+    };
+
+    function getRegisterForLocation() {
+        _registerForLocation = localStorage.getItem('signup-registerforlocation');  
+        
+        if (_registerForLocation != undefined)
+        {
+            _registerForLocation = JSON.parse(_registerForLocation);
+            return _registerForLocation;
+        }
+        else
+        {
+            return false;
+        }
+    };
+    
+    return {
+        pushNotifications: {            
+            get: function() {
+                return getRegisterForPush();
+            },
+            set: function(userChoise) {
+                setRegisterForPush(userChoise);
+            }
+        },
+        location: {
+            get: function() {
+                return getRegisterForLocation();
+            },
+            set: function(userChoise) {
+                setRegisterForLocation(userChoise);
+            }
         }
     }
 }]);
