@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.cis.kenuu" version="2.0.17" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.cis.kenuupops" version="2.0.19" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>Kenuu</name>
   <description>
   </description>
-  <author email="hi@ionicframework" href="http://ionicframework.com/">
-    CIS
+  <author email="developer@cis-solutions.com" href="http://www.cis-solutions.com/">
+    CIS Tecnología S.A.
   </author>
   <content src="index.html"/>
   <access origin="*"/>

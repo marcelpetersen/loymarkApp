@@ -232,7 +232,20 @@ angular.module('kenuu.services', [])
             },
             callbackfx
         );
-	}
+	};
+
+	this.showWarning = function(title, msg){
+        swal(
+            {   
+                title: title,   
+                text: msg,  
+                type: "warning",
+                confirmButtonText: "Ok",
+                customClass: "modal-bg",
+                confirmButtonColor: "#8f04a9"
+            }
+        );
+	};
 }])
 
 .service('loadingBox', ['$ionicLoading', function($ionicLoading){

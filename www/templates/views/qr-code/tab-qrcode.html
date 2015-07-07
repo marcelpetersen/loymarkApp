@@ -10,9 +10,10 @@
                 <p>Mi código para ganar <strong>pops!</strong></p>
             </div>            
             <div class="item item-image" style="background-color:transparent">
-                <!-- <img src="https://chart.googleapis.com/chart?chs=210x210&cht=qr&chl={{viewdata.CardNumber}}&choe=UTF-8"> -->                
+                <!-- <img src="https://chart.googleapis.com/chart?chs=210x210&cht=qr&chl={{viewdata.CardNumber}}&choe=UTF-8">                 -->
                 <div style="height:20px;"></div>
-                <qr text="viewdata.CardNumber" size="200"></qr>
+                <!-- <qr text="viewdata.CardNumber" size="200"></qr> -->
+                <qr text="SetupQRCode(viewdata.CardNumber)" size="200" type-number="0" correction-level="H" input-mode="ALPHA_NUM" image="true"></qr>
                 <div style="height:20px;"></div>
             </div>
         </div>

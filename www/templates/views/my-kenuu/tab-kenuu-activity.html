@@ -19,22 +19,22 @@
         </ion-refresher> 
 
         <div id="activityListDiv" class="list" style="display:none">
-            <form>
-            <div class="item item-input-inset commercewrstores-search-item">                                    
-                <label class="item-input-wrapper">
-                    <i class="icon ion-ios-search placeholder-icon"></i>
-                    <input id="searchTextActivity" type="search" ng-blur="SearchBlur()" ng-click="SearchFocus()" ng-model="viewdata.searchtext" placeholder="Buscar">
-                </label>
-                <button id="btnClearSearchActivity" class="button button-clear" style="font-size:25px; width:40px; min-width:40px !important; display:none;" ng-click="ClearSearch()">
-                    <i class="ion-ios-close-empty"></i>
-                </button>                
-            </div>
-            </form>
+            <!-- <form ng-submit="ApplySearchFilter()"> -->
+                <div class="item item-input-inset commercewrstores-search-item">                                    
+                    <label class="item-input-wrapper">
+                        <i class="icon ion-ios-search placeholder-icon"></i>
+                        <input id="searchTextActivity" ng-enter="ApplySearchFilter()" type="text" ng-blur="SearchBlur()" ng-click="SearchFocus()" ng-model="viewdata.searchtextfield" placeholder="Buscar">
+                    </label>
+                    <button id="btnClearSearchActivity" class="button button-clear" style="font-size:25px; width:40px; min-width:40px !important; display:none;" ng-click="ClearSearch()">
+                        <i class="ion-ios-close-empty"></i>
+                    </button>                
+                </div>
+            <!-- </form> -->
         	<div class="item item-divider">
         		<p><strong>Mi Actividad</strong></p>
         	</div>
 
-        	<div class="item item-avatar item-text-wrap item-icon-right activity-activityitem" ng-repeat="activity in viewdata.user.activity | filter:search" ng-click="OpenStore(activity.SubEntityID)">
+        	<div class="item item-avatar item-text-wrap item-icon-right activity-activityitem" ng-repeat="activity in viewdata.user.activity | filter:viewdata.searchtext" ng-click="OpenStore(activity.SubEntityID)">
         		<img ng-src="{{GetCommerceImage(activity.Image)}}">
                 <p><strong>{{gDate(activity.ActivityDate)}}</strong></p>
         		<p><strong class="activity-commerce-name">{{activity.SubEntityName}}</strong></p>
