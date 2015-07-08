@@ -507,7 +507,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
     }]);
 
     // Commerce Detail
-    ctrl.controller('CommerceWithRewardsCtrl', ['$scope', '$state', '$stateParams', '$ionicLoading', '$timeout', 'loadingBox', 'commerceFactory', 'rewardFactory', 'deviceFactory', 'rewardDetailModal', 'navigationFactory', '$cordovaSocialSharing', '$cordovaKeyboard', '$cordovaAppAvailability', '$cordovaInAppBrowser', 'emailService', '$cordovaActionSheet', function($scope, $state, $stateParams, $ionicLoading, $timeout, loadingBox, commerceFactory, rewardFactory, deviceFactory, rewardDetailModal, navigationFactory, $cordovaSocialSharing, $cordovaKeyboard, $cordovaAppAvailability, $cordovaInAppBrowser, emailService, $cordovaActionSheet){
+    ctrl.controller('CommerceWithRewardsCtrl', ['$scope', '$state', '$stateParams', '$ionicLoading', '$timeout', 'loadingBox', 'commerceFactory', 'rewardFactory', 'deviceFactory', 'rewardDetailModal', 'navigationFactory', '$cordovaSocialSharing', '$cordovaKeyboard', '$cordovaAppAvailability', '$cordovaInAppBrowser', 'emailService', '$cordovaActionSheet', 'formatServices', function($scope, $state, $stateParams, $ionicLoading, $timeout, loadingBox, commerceFactory, rewardFactory, deviceFactory, rewardDetailModal, navigationFactory, $cordovaSocialSharing, $cordovaKeyboard, $cordovaAppAvailability, $cordovaInAppBrowser, emailService, $cordovaActionSheet, formatServices){
         $scope.viewdata = {
             commerce: commerceFactory.selectedCommerce.get(),
             rewards: [],
@@ -518,8 +518,6 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 facebook: false
             }
         };
-
-        console.log($scope.viewdata.commerce);
 
         $timeout(function(){
             loadingBox.hide();
@@ -611,14 +609,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         $scope.gDate = function(date) {
-            // var _y = date.substr(0,4);
-            // var _m = date.substr(5,2);
-            // var _d = date.substr(8,2);
-            // var _dateFormated = new Date(_y, _m, _d);
-
-            var _dateFormated = new Date(date);
-
-            return _dateFormated.getDate() + " " + (GetMonthName(_dateFormated.getMonth()+1)) + " " + _dateFormated.getFullYear();
+            // the date is received with a format "dd/mm/yyyyThh:mm:ss"
+            return formatServices.FormatDateWithT(date);
         };
 
         $scope.gTime = function(startTime, endTime) {
@@ -670,15 +662,13 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         $scope.GetLastVisitDate = function(commerce) {
             if (commerce.LastVisit != undefined) 
             {
-                var _date = commerce.LastVisit.substr(0,10);
-                var _dateFormated = new Date(_date.substr(0,10));
-                return _dateFormated.getDate() + " " + (GetMonthName(_dateFormated.getMonth()+1)) + " " + _dateFormated.getFullYear();
+                var _date = formatServices.FormatDateWithT(commerce.LastVisit);                
+                return _date;
             }
             if (commerce.LastVisitDateEntity != undefined) 
             {
-                var _date = commerce.LastVisitDateEntity.substr(0,10);
-                var _dateFormated = new Date(_date.substr(0,10));
-                return _dateFormated.getDate() + " " + (GetMonthName(_dateFormated.getMonth()+1)) + " " + _dateFormated.getFullYear();
+                var _date = formatServices.FormatDateWithT(commerce.LastVisitDateEntity);                               
+                return _date;
             }
             return "N/A";
         };
@@ -785,7 +775,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         $scope.OpenRewardDetail = function(reward) {
             // console.log(reward);
             $scope.viewdata["availablepoints"] = $scope.viewdata.commerce.PointsAvailable;
-            $scope.viewdata.selectedreward = reward;            
+            $scope.viewdata.selectedreward = reward;  
+            console.log(reward)           
             rewardDetailModal.Show($scope);
         };
 
@@ -1269,13 +1260,12 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
         $scope.OpenStore = function(store) {
             storeFactory.selectedStore.set(store);            
-            var _state = navigationFactory.store.get();
-            console.log(_state);
+            var _state = navigationFactory.store.get();            
             $state.go(_state);
         };
     }]);
 
-    ctrl.controller('StoreDetailCtrl', ['$scope', '$timeout', '$state', '$stateParams', 'storeFactory', 'loadingBox', 'commerceFactory', 'rewardFactory', 'navigationFactory', 'deviceFactory', 'rewardDetailModal', '$cordovaAppAvailability', '$cordovaSocialSharing', '$cordovaInAppBrowser', 'emailService', '$cordovaActionSheet', 'beaconFactory', function($scope, $timeout, $state, $stateParams, storeFactory, loadingBox, commerceFactory, rewardFactory, navigationFactory, deviceFactory, rewardDetailModal, $cordovaAppAvailability, $cordovaSocialSharing, $cordovaInAppBrowser, emailService, $cordovaActionSheet, beaconFactory){
+    ctrl.controller('StoreDetailCtrl', ['$scope', '$timeout', '$state', '$stateParams', 'storeFactory', 'loadingBox', 'commerceFactory', 'rewardFactory', 'navigationFactory', 'deviceFactory', 'rewardDetailModal', '$cordovaAppAvailability', '$cordovaSocialSharing', '$cordovaInAppBrowser', 'emailService', '$cordovaActionSheet', 'beaconFactory', 'formatServices', function($scope, $timeout, $state, $stateParams, storeFactory, loadingBox, commerceFactory, rewardFactory, navigationFactory, deviceFactory, rewardDetailModal, $cordovaAppAvailability, $cordovaSocialSharing, $cordovaInAppBrowser, emailService, $cordovaActionSheet, beaconFactory, formatServices){
         
         //loadingBox.show();
         $scope.viewdata = {
@@ -1423,17 +1413,13 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         $scope.GetLastVisitDate = function(commerce) {
             if (commerce.LastVisit != undefined) 
             {
-                // var _date = commerce.LastVisit.substr(0,10);
-                // var _dateFormated = new Date(_date.substr(0,10));
-                var _dateFormated = new Date(commerce.LastVisit);
-                return _dateFormated.getDate() + " " + (GetMonthName(_dateFormated.getMonth()+1)) + " " + _dateFormated.getFullYear();
+                var _date = formatServices.FormatDateWithT(commerce.LastVisit);                
+                return _date;
             }
             if (commerce.LastVisitDateEntity != undefined) 
             {
-                // var _date = commerce.LastVisitDateEntity.substr(0,10);
-                // var _dateFormated = new Date(_date.substr(0,10));
-                var _dateFormated = new Date(commerce.LastVisitDateEntity);
-                return _dateFormated.getDate() + " " + (GetMonthName(_dateFormated.getMonth()+1)) + " " + _dateFormated.getFullYear();
+                var _date = formatServices.FormatDateWithT(commerce.LastVisitDateEntity);                               
+                return _date;
             }
             return "N/A";
         };
@@ -1463,7 +1449,6 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     if (response.length > 0)
                     {
                         $scope.viewdata.store = response[0];
-                        console.log($scope.viewdata.store);
                         LoadData($scope.viewdata.store.EntityID, $scope.viewdata.store.SubEntityID);
                     }
                     else {
@@ -1506,9 +1491,10 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             return {"width":progress + "%"};
         };
 
-        $scope.OpenRewardDetail = function(reward) {            
+        $scope.OpenRewardDetail = function(reward) {
             $scope.viewdata["availablepoints"] = $scope.viewdata.store.PointsAvailable;
-            $scope.viewdata.selectedreward = reward;
+            $scope.viewdata.selectedreward = reward;   
+
             rewardDetailModal.Show($scope);
         };
 
@@ -1538,9 +1524,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         $scope.gDate = function(date) {
-            var _dateFormated = new Date(date);
-
-            return _dateFormated.getDate() + " " + (GetMonthName(_dateFormated.getMonth()+1)) + " " + _dateFormated.getFullYear();
+            // the date is received with a format "dd/mm/yyyyThh:mm:ss"
+            return formatServices.FormatDateWithT(date);
         };
 
         $scope.isOpenForBusiness = function(startTime, endTime) {
@@ -2356,21 +2341,73 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
     }]);
 
-    ctrl.controller('ActivityCtrl', ['$scope', '$state', 'userFactory', 'socialSharing', 'loadingBox', 'commerceFactory', 'navigationFactory', 'storeFactory', '$cordovaKeyboard', function($scope, $state, userFactory, socialSharing, loadingBox, commerceFactory, navigationFactory, storeFactory, $cordovaKeyboard){
+    ctrl.controller('ActivityCtrl', ['$scope', '$rootScope', '$state', 'userFactory', 'socialSharing', 'loadingBox', 'commerceFactory', 'navigationFactory', 'storeFactory', '$cordovaKeyboard', 'formatServices', function($scope, $rootScope, $state, userFactory, socialSharing, loadingBox, commerceFactory, navigationFactory, storeFactory, $cordovaKeyboard, formatServices){
         
         $scope.viewdata = {
             user: {
+                activityfulllist: [],
+                activityVisits: [],
+                activityRedemptions: [],
                 activity: []            
             },
+            currentActivityPage: 0,
+            pageSize: 5,
             commerces: [],
+            showLoadMoreButton: true,
+            LoadingMore: false,
+            loadMoreButtonMessage: 'Ver Más...',
             searchtext: '',
+            searchtextfield: '',
+            filterOptionSelected: 'V',
             pleaseWaitMessage: 'Buscando su actividad...',
             openingCommerceMessage: 'Buscando el comercio...',
             openingStoreMessage: 'Buscando la tienda...'
         };
 
+        $scope.$on("$ionicView.enter", function(event, args){
+            $scope.viewdata.searchtextfield = "";
+            $scope.viewdata.currentActivityPage = 0;
+            $scope.viewdata.user.activity = [];
+            $scope.viewdata.user.activityfulllist = [];
+            $scope.viewdata.showLoadMoreButton = true;
+            LoadData();
+        });
+
+        $scope.$on("$ionicView.leave", function(event, args){  
+            $scope.viewdata.searchtextfield = "";          
+            $scope.viewdata.currentActivityPage = 0;
+            $scope.viewdata.user.activityfulllist = []; 
+            $scope.viewdata.user.activity = [];
+            $scope.viewdata.showLoadMoreButton = true;
+        });
+
+        $scope.selectedButtonClass = function(type) {
+            if ($scope.viewdata.filterOptionSelected == type) {
+                return "activity-selectedFilterOption";
+            }
+            else {
+                return "";
+            }
+        };
+
+        $scope.SetActivityFilter = function(type) {
+            $scope.viewdata.filterOptionSelected = type;
+            $scope.ApplySearchFilter();
+        };
+
         $scope.ApplySearchFilter = function() {
-            $scope.viewdata.searchtext = $scope.viewdata.searchtextfield;
+            var array = GetActivityOfType($scope.viewdata.user.activityfulllist, $scope.viewdata.filterOptionSelected, $scope.viewdata.searchtextfield);
+            if ($scope.viewdata.filterOptionSelected == 'V') {
+                $scope.viewdata.user.activityVisits = array;                
+            }
+            if ($scope.viewdata.filterOptionSelected == 'R') {
+                $scope.viewdata.user.activityRedemptions = array;
+            }
+
+            $scope.viewdata.user.activity = [];
+            $scope.viewdata.currentActivityPage = 0;
+            $scope.SetActivityPageToShow(); 
+
             if (!devEnvironment) $cordovaKeyboard.close(); 
         };
 
@@ -2399,16 +2436,47 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             return imageserverurl + image;
         };
 
+        function strEval(value, defaultVal) {
+            if (value == undefined) return defaultVal;
+            if (value == null) return defaultVal;
+            return value;
+        };
+
+        function GetActivityOfType(array, type, searchText) {
+            var j = array.length;
+            var result = [];
+            for (var i=0; i<j; i++) {
+                if ((searchText != undefined)&&(searchText != "")) {
+                    if (
+                        (strEval(array[i].SubEntityName, "").toUpperCase().indexOf(searchText.toUpperCase()) >= 0)||
+                        (strEval(array[i].RewardName, "").toUpperCase().indexOf(searchText.toUpperCase()) >= 0)||
+                        (strEval(array[i].RewardDescription, "").toUpperCase().indexOf(searchText.toUpperCase()) >= 0)
+                    ) {
+                        if (array[i].ActivityType == type) result.push(array[i]);
+                    }
+                }
+                else {
+                    if (array[i].ActivityType == type) result.push(array[i]);
+                }                
+            }
+            return result;
+        }
+
         function LoadData_Activity(userID) {
+            $scope.viewdata.currentActivityPage = 0;
             loadingBox.show($scope.viewdata.pleaseWaitMessage);
             userFactory.activity.all(userID)
                 .then(function(data){   
                     setTimeout(function() {
-                        $scope.viewdata.user.activity = data.Elements;
-                        $scope.$apply();
+                        $scope.viewdata.user.activity = [];
+                        $scope.viewdata.user.activityfulllist = data.Elements;
+                        $scope.viewdata.user.activityVisits = GetActivityOfType(data.Elements, 'V');
+                        $scope.viewdata.user.activityRedemptions = GetActivityOfType(data.Elements, 'R');
 
-                        // console.log("Activity:");
-                        // console.log(JSON.stringify(data.Elements));
+                        // console.log(data.Elements[0]);
+
+                        $scope.SetActivityPageToShow();
+                        $scope.$apply();
 
                         loadingBox.hide();
                         $scope.$broadcast('scroll.refreshComplete');
@@ -2422,11 +2490,71 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 });
         };
 
+        $scope.SetActivityPageToShow = function() {
+            var activityArray = [];
+            $scope.viewdata.showLoadMoreButton = true;
+
+            if ($scope.viewdata.filterOptionSelected == 'V') {
+                activityArray = $scope.viewdata.user.activityVisits;                
+            }
+            if ($scope.viewdata.filterOptionSelected == 'R') {
+                activityArray = $scope.viewdata.user.activityRedemptions;
+            }
+
+            if (activityArray == undefined) {
+                $scope.viewdata.loadMoreButtonMessage = "No tiene ninguna actividad.";
+                return;
+            }
+            if (activityArray.length == 0) {
+                $scope.viewdata.loadMoreButtonMessage = "No tiene ninguna actividad.";
+                return;            
+            }
+
+            $scope.viewdata.loadMoreButtonMessage = "Ver más...";
+
+            var pages = Math.round(activityArray.length / $scope.viewdata.pageSize);
+            var startIndex = $scope.viewdata.currentActivityPage * $scope.viewdata.pageSize;
+            var endIndex = startIndex + $scope.viewdata.pageSize;
+
+            console.log("Loading data into the list...");
+            console.log($scope.viewdata.currentActivityPage)
+            console.log($scope.viewdata.pageSize)
+            console.log(pages)
+
+            if (
+                ($scope.viewdata.currentActivityPage == (pages-1))
+                &&
+                (pages > 1)
+            ) {
+                // Last Page Reached
+                $scope.viewdata.showLoadMoreButton = false;
+                return;
+            }
+
+            if ((pages == 0) && (activityArray.length > 0)) {
+                $scope.viewdata.showLoadMoreButton = false;
+            }
+
+            for (var i=startIndex; i<endIndex; i++)
+            {
+                if (activityArray[i] != undefined) {
+                    if ($scope.viewdata.filterOptionSelected == activityArray[i].ActivityType) {
+                        $scope.viewdata.user.activity.push(activityArray[i]);
+                    }                    
+                }                
+            }
+
+            $scope.viewdata.currentActivityPage++;
+
+            setTimeout(function() {                
+                $scope.$broadcast('scroll.infiniteScrollComplete');                
+            }, 1000);            
+        };
+
         $scope.Reload = function() {
             $("#errorWhenLoadingDiv").addClass("animated slideOutUp");
             setTimeout(function(){
-                // $("#pleaseWaitSpinner").removeClass("slideOutUp");
-                // $("#pleaseWaitSpinner").addClass("animated slideInDown");
+                $scope.viewdata.searchtextfield = "";
                 LoadData();
             }, 200);        
         };
@@ -2450,13 +2578,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         $scope.gDate = function(date) {
-            var _y = date.substr(0,4);
-            var _m = date.substr(5,2);
-            var _d = date.substr(8,2);
-
-            var _dateFormated = new Date(_y, _m, _d);
-
-            return _dateFormated.getDate() + " " + (GetMonthName(_dateFormated.getMonth())) + " " + _dateFormated.getFullYear() + " " + date.substr(11,5);;
+            var _dateFormated = formatServices.FormatDateWithTAndTime(date);
+            return _dateFormated;
         };
 
         $scope.GetActivityIcon = function(activityType) {
@@ -2570,13 +2693,12 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             $("#searchTextActivity").blur();
             $scope.viewdata.searchtextfield = ""; 
             $scope.viewdata.searchtext = "";
+            $scope.ApplySearchFilter();
         };
 
         $scope.doRefresh = function() {
             LoadData();
         };
-
-        LoadData();
     }]);
 
     ctrl.controller('KenuuFavCommercesCtrl', ['$scope', '$state', 'userFactory', 'commerceFactory', 'dateFxService', 'loadingBox', function($scope,$state,userFactory,commerceFactory,dateFxService,loadingBox){
@@ -2662,7 +2784,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             },
             pleaseWaitMessage: 'Buscando su información...',
             sainvgInfoMessage: 'Se está guardando su información...',
-            profilegender: 'H'
+            profilegender: 'H',
+            hasMobilePhone: false // When the user loads, if the phone is present, it is required to be entered into the form.
         };
 
         $scope.viewdata.profilegender = localStorage.getItem('profile_gender');
@@ -2676,11 +2799,18 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 .then(function(data){                    
                     $scope.viewdata.user = data;
                     var userData = data;
+                    
                     $scope.viewdata.user.name = userData.FirstName;
                     $scope.viewdata.user.lastname = userData.LastName;
                     $scope.viewdata.user.MobilePhone = Number(userData.MobilePhone);
 
-                    if ($scope.viewdata.user.MobilePhone == 0) $scope.viewdata.user.MobilePhone = "";
+                    if ($scope.viewdata.user.MobilePhone == 0) {
+                        $scope.viewdata.hasMobilePhone = false;
+                        $scope.viewdata.user.MobilePhone = "";
+                    }
+                    else {
+                        $scope.viewdata.hasMobilePhone = true;
+                    }
 
                     $scope.$apply();
                     loadingBox.hide();
@@ -2714,6 +2844,13 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             if ($scope.viewdata.user.MobilePhone != "") {
                 if ($scope.viewdata.user.MobilePhone.length < 4) {
                     loadingBox.hide();
+                    msgBox.showWarning("Oops!", "El número de teléfono debe tener al menos 4 dígitos.");
+                    return;
+                }
+            }
+
+            if ($scope.viewdata.hasMobilePhone) {
+                if (($scope.viewdata.user.MobilePhone == null)||($scope.viewdata.user.MobilePhone == "0")||($scope.viewdata.user.MobilePhone == "")) {
                     msgBox.showWarning("Oops!", "El número de teléfono debe tener al menos 4 dígitos.");
                     return;
                 }

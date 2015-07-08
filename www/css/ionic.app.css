@@ -7912,7 +7912,9 @@ a[href^="http://maps.google.com/maps"] {
 .profile-avatar-container {
   padding: 40px 0 40px 0;
   border-bottom: 1px solid #eeeeee;
-  background-image: url('../img/food.png'); }
+  background-image: url('../img/food.png');
+  padding-top: 15px;
+  padding-bottom: 15px; }
 
 .profile-avatar-div {
   min-width: 135px; }
@@ -8416,6 +8418,10 @@ on-nav-view[nav-view-transition="android"] .activity-bottomspacer {
 
 ion-nav-view[nav-view-transition="ios"] .activity-bottomspacer {
   height: 93px; }
+
+.activity-selectedFilterOption {
+  background-color: #800080 !important;
+  color: white !important; }
 
 /* ******** Map ******** */
 .map-centeronme-button {

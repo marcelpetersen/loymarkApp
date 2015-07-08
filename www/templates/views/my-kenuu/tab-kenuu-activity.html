@@ -18,41 +18,54 @@
             on-refresh="doRefresh()">
         </ion-refresher> 
 
-        <div id="activityListDiv" class="list" style="display:none">
-            <!-- <form ng-submit="ApplySearchFilter()"> -->
-                <div class="item item-input-inset commercewrstores-search-item">                                    
-                    <label class="item-input-wrapper">
-                        <i class="icon ion-ios-search placeholder-icon"></i>
-                        <input id="searchTextActivity" ng-enter="ApplySearchFilter()" type="text" ng-blur="SearchBlur()" ng-click="SearchFocus()" ng-model="viewdata.searchtextfield" placeholder="Buscar">
-                    </label>
-                    <button id="btnClearSearchActivity" class="button button-clear" style="font-size:25px; width:40px; min-width:40px !important; display:none;" ng-click="ClearSearch()">
-                        <i class="ion-ios-close-empty"></i>
-                    </button>                
-                </div>
-            <!-- </form> -->
-        	<div class="item item-divider">
+        <div id="activityListDiv" class="list" style="display:none">            
+            <div class="item item-input-inset commercewrstores-search-item">                                    
+                <label class="item-input-wrapper">
+                    <i class="icon ion-ios-search placeholder-icon"></i>
+                    <input id="searchTextActivity" ng-enter="ApplySearchFilter()" type="text" ng-blur="SearchBlur()" ng-click="SearchFocus()" ng-model="viewdata.searchtextfield" placeholder="Buscar">
+                </label>
+                <button id="btnClearSearchActivity" class="button button-clear" style="font-size:25px; width:40px; min-width:40px !important; display:none;" ng-click="ClearSearch()">
+                    <i class="ion-ios-close-empty"></i>
+                </button>                
+            </div>
+
+            <!-- <div class="item item-divider">
         		<p><strong>Mi Actividad</strong></p>
-        	</div>
+        	</div> -->
 
-        	<div class="item item-avatar item-text-wrap item-icon-right activity-activityitem" ng-repeat="activity in viewdata.user.activity | filter:viewdata.searchtext" ng-click="OpenStore(activity.SubEntityID)">
-        		<img ng-src="{{GetCommerceImage(activity.Image)}}">
-                <p><strong>{{gDate(activity.ActivityDate)}}</strong></p>
-        		<p><strong class="activity-commerce-name">{{activity.SubEntityName}}</strong></p>
-        		<i class="icon icon-gift activity-redemption" ng-show="activity.ActivityType == 'R'"></i>
-        		<i class="icon icon-location activity-checkin" ng-show="activity.ActivityType == 'V'"></i>
+            <div class="item">
+                <div class="button-bar">
+                    <a class="button button-light" ng-class="selectedButtonClass('V')" ng-click="SetActivityFilter('V')">Visitas</a>
+                    <a class="button button-light" ng-class="selectedButtonClass('R')" ng-click="SetActivityFilter('R')">Canjes</a>
+                </div>          
+            </div>
 
-        		<div class="" ng-show="activity.ActivityType == 'R'">					
-					<p><strong>{{activity.RewardName}}</strong></p>
-				</div>
-				<div class="">
-					<p>
-                        <i class="icon-pop-full favcommerce-pop"></i>
-                        <span style="position:relative; top:-5px;">
-                            <strong>{{GetActivityPointsLabel(activity.ActivityType)}}</strong> <span class="activity-points-label">{{activity.Points}}</span>
-                        </span>
-                    </p>
-				</div>
-        	</div>
+            <ion-list>
+            	<ion-item class="item item-avatar item-text-wrap item-icon-right activity-activityitem" ng-repeat="activity in viewdata.user.activity | filter:viewdata.searchtext track by $index" ng-click="OpenStore(activity.SubEntityID)">
+            		<img ng-src="{{GetCommerceImage(activity.Image)}}">
+                    <p><strong ng-bind="gDate(activity.ActivityDate)"></strong></p>                
+            		<p><strong class="activity-commerce-name" ng-bind="activity.SubEntityName"></strong></p>
+            		<i class="icon icon-gift activity-redemption" ng-show="activity.ActivityType == 'R'"></i>
+            		<i class="icon icon-location activity-checkin" ng-show="activity.ActivityType == 'V'"></i>
+
+            		<div class="" ng-show="activity.ActivityType == 'R'">					
+    					<p><strong ng-bind="activity.RewardName"></strong></p>
+    				</div>
+    				<div class="">
+    					<p>
+                            <i class="icon-pop-full favcommerce-pop"></i>
+                            <span style="position:relative; top:-5px;">
+                                <strong ng-bind="GetActivityPointsLabel(activity.ActivityType)"></strong> <span class="activity-points-label" ng-bind="activity.Points"></span>
+                            </span>
+                        </p>
+    				</div>
+            	</ion-item>
+                <ion-item class="item text-center" ng-show="viewdata.showLoadMoreButton" ng-click="SetActivityPageToShow()">
+                    <span ng-bind="viewdata.loadMoreButtonMessage"></span>                    
+                </ion-item>
+            </ion-list>
+            <!-- <ion-infinite-scroll immediate-check="false" spinner="android" icon="ion-loading-c" on-infinite="SetActivityPageToShow()" distance="20%">
+            </ion-infinite-scroll> -->
         </div>
         <div class="activity-bottomspacer"></div>
     </ion-content>

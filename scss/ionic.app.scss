@@ -347,6 +347,8 @@ ion-nav-view[nav-view-transition="ios"] {
 		padding: 40px 0 40px 0;
 		border-bottom: 1px solid $profile-border-color;
 		background-image: url('../img/food.png');
+		padding-top: 15px;
+		padding-bottom: 15px;
 	}
 
 	.profile-avatar-div {
@@ -972,6 +974,11 @@ ion-nav-view[nav-view-transition="ios"] {
 		.activity-bottomspacer {
 			height: 93px;
 		}
+	}
+
+	.activity-selectedFilterOption {
+		background-color: $kenuu-purple !important;
+		color: white !important; 
 	}
 
 /* ******** Map ******** */

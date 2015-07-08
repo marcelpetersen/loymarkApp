@@ -288,4 +288,88 @@ angular.module('kenuu.services', [])
 	    };
     	img.src = url;
     };
+}])
+
+.service('formatServices', [function(){
+
+	function GetMonthName(month) {
+        switch(month)
+        {
+            case 1: return "Enero";
+            case 2: return "Febrero";
+            case 3: return "Marzo";
+            case 4: return "Abril";
+            case 5: return "Mayo";
+            case 6: return "Junio";
+            case 7: return "Julio";
+            case 8: return "Agosto";
+            case 9: return "Setiembre";
+            case 10: return "Octubre";
+            case 11: return "Noviembre";
+            case 12: return "Diciembre";
+        }
+    }
+
+    function convertUTCDateToLocalDate(date) {
+    	date = new Date(date);
+	    var newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
+
+	    var ampm = "AM";
+	    var hour = newDate.getHours();
+	    var minutes = newDate.getMinutes();
+	    if (newDate.getHours() > 12) ampm = "PM";
+
+	    var offset = date.getTimezoneOffset() / 60;
+	    var hours = date.getHours();
+
+	    newDate.setHours(hours - offset);
+	    return {
+	    	date: newDate,
+	    	ampm: ampm,
+	    	hour: hour,
+	    	minutes: minutes
+	    }   
+	}
+
+	function addZero(i) {
+	    if (i < 10) {
+	        i = "0" + i;
+	    }
+	    return i;
+	}
+
+	this.FormatDateWithT = function(date, defaultValue) {
+		if (defaultValue == undefined) defaultValue = "";
+
+		if (date == null) return defaultValue;
+		if (date == undefined) return defaultValue;
+		if (date == "") return defaultValue;
+		
+		if (date.indexOf("T") > 0) {
+			var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+			var _date = new Date(date);			
+        	return _date.toLocaleDateString('es', options);
+		}
+		else {
+			return date;
+		}
+	};
+
+	this.FormatDateWithTAndTime = function(date, defaultValue) {
+		if (defaultValue == undefined) defaultValue = "";
+
+		if (date == null) return defaultValue;
+		if (date == undefined) return defaultValue;
+		if (date == "") return defaultValue;
+		
+		if (date.indexOf("T") > 0) {
+			var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+			var _date = new Date(date);
+			var _time = new Date(_date.getTime() + _date.getTimezoneOffset()*60*1000)
+        	return _date.toLocaleDateString('es', options) + " " + _time.getHours() + ":" + addZero(_time.getMinutes());
+		}
+		else {
+			return date;
+		}
+	};
 }]);
