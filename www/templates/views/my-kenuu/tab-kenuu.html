@@ -1,4 +1,7 @@
-<ion-view id="viewKenuu" style="display:none">	
+<ion-view id="viewKenuu" style="display:none">
+	<!-- <ion-nav-title>
+        <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
+    </ion-nav-title> -->	
 	<ion-nav-buttons side="right">
 		<button class="button button-clear ion-grid topbar-setupicon" ng-click="ShowSetupView()">
 		</button>
@@ -53,8 +56,9 @@
 		</a>
 
 		<div id="favcommerces-list" class="list">
-            <div class="item item-divider">
+            <div class="item item-divider item-text-wrap">
                 <p><strong>Mis Comercios:</strong></p>
+                <p>Los comercios que ha visitado y los pops que tiene disponibles.</p>
             </div>
             <div class="item item-avatar item-text-wrap activity-activityitem" ng-repeat="commerce in viewdata.commerces | orderBy:'TotalVisits'" ng-click="GoToCommerce(commerce)">                
                 <img ng-src="{{GetCommerceImage(commerce.Image)}}">

@@ -7788,6 +7788,12 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
   -webkit-animation-iteration-count: 1; }
 
 /* ******* General ******* */
+.default-title {
+  color: #ccc !important; }
+
+.view-bar-title {
+  color: #333333 !important; }
+
 .item-divider {
   background-color: white; }
 
@@ -8375,7 +8381,7 @@ ion-nav-view[nav-view-transition="ios"] .stores-bottomseparator {
   background-image: url('../img/food.png'); }
 
 .activity-activityitem {
-  border: 1px solid #f8f8f8 !important; }
+  border: 1px solid #efefef !important; }
 
 .activity-icon {
   color: #800080; }
