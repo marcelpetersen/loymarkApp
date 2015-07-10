@@ -2,8 +2,7 @@
 	<!-- <ion-nav-title>
 		<img src="img/kenuulogo.png" alt="" class="top-bar-logo">
 	</ion-nav-title> -->
-	<ion-content class="commercewr-content" overflow-scroll="true">
-
+	<ion-content id="commercewr-content" class="commercewr-content" overflow-scroll="true">
 		<ion-refresher
 			pulling-text="Hale para refrescar..."
 			on-refresh="ReloadCommerceInfo()">
@@ -117,7 +116,7 @@
 			<li class="item" ng-show="viewdata.rewards.length == 0">
 				No hay premios disponibles
 			</li>
-		    <li ng-show="viewdata.rewards.length > 0" class="item item-avatar item-icon-right item-text-wrap commercewr-detail-item" collection-repeat="item in viewdata.rewards | orderBy:'Points'" ng-click="OpenRewardDetail(item)">		    	
+		    <li ng-show="viewdata.rewards.length > 0" class="item item-avatar item-icon-right item-text-wrap commercewr-detail-item" ng-repeat="item in viewdata.rewards | orderBy:'Points'" ng-click="OpenRewardDetail(item)">		    	
 		    	<img ng-src="{{GetRewardImage(item.Image)}}">
 
 		    	<div>
@@ -140,7 +139,5 @@
 		    	<i class="icon" ng-class="GetPointsClass(viewdata.commerce.PointsAvailable, item.Points)" style="margin-right:5px;" ng-bind="item.Points"></i>		    	
 		    </li>
 		</ul>
-
-		
 	</ion-content>		
 </ion-view>

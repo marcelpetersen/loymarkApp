@@ -6,7 +6,7 @@
 		<button class="button button-clear ion-grid topbar-setupicon" ng-click="ShowSetupView()">
 		</button>
 	</ion-nav-buttons>	
-	<ion-content scroll=true> 
+	<ion-content id="mykenuu-content" scroll=true> 
 		<ion-refresher
 			pulling-text="Hale para refrescar..."
 			on-refresh="doRefresh()">
@@ -76,8 +76,7 @@
                 		<strong class="favcommerce-visits" style="position:relative; top:-5px; margin-left: 8px;">{{commerce.PointsAvailable}}</strong> 
                 	</div>
                 </div>
-
-            </div>            
+            </div>
         </div>
 		<div class="bottomspacer"></div>
 	</ion-content>

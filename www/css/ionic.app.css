@@ -7782,6 +7782,11 @@ ion-nav-view[nav-view-transition="android"] .scroll-content {
   -webkit-animation-delay: 0;
   -webkit-animation-iteration-count: 1; }
 
+#welcome-login-content, #commercewr-content, #storedetail-content, #nearme-content, #welcome-content, #welcomeemail-content, #signup-password, #locationsetup-content, #pushnotification-content {
+  -webkit-animation-duration: 0.5s;
+  -webkit-animation-delay: 0;
+  -webkit-animation-iteration-count: 1; }
+
 #errorWhenLoadingDiv {
   -webkit-animation-duration: 0.5s;
   -webkit-animation-delay: 0;
@@ -7893,6 +7898,12 @@ a[href^="http://maps.google.com/maps"] {
 
 .toggle .handle {
   background-color: #eeeeee !important; }
+
+.error-label {
+  -webkit-transition: all 0.1s ease-in-out !important;
+  -moz-transition: all 0.1s ease-in-out !important;
+  -o-transition: all 0.1s ease-in-out !important;
+  transition: all 0.1s ease-in-out !important; }
 
 /* ******* Modal MsgBox ******** */
 .md-overlay-ok {

@@ -1092,14 +1092,24 @@ fact.factory('commerceFactory', ['restFactory', function(restFactory){
 }]);
 
 fact.factory('storeFactory', [function(){
+    var _storeStack = [];
     var _selectedStore = {};
     return {
         selectedStore: {
-            set: function(store) {
-                _selectedStore = store;
+            reset: function() {
+                _storeStack = [];
+                _selectedStore = {};
             },
-            get: function() {
+            set: function(store) {
+                _storeStack.push(store);
+                _selectedStore = store; // Sets the latest selected store.
+            },
+            get: function() {                
+                _selectedStore = _storeStack[_storeStack.length-1]; // Pulls the last element of the stack
                 return _selectedStore;
+            },
+            pop: function() {
+                _storeStack.pop();
             },
             clearSelection: function() {
                 _selectedStore = {};

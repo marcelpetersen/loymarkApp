@@ -176,6 +176,20 @@ ion-nav-view[nav-view-transition="ios"] {
 		-webkit-animation-iteration-count: 1;		
 	}
 
+	#welcome-login-content, 
+	#commercewr-content,
+	#storedetail-content,
+	#nearme-content,
+	#welcome-content,
+	#welcomeemail-content,
+	#signup-password,
+	#locationsetup-content,
+	#pushnotification-content {
+		-webkit-animation-duration: 0.5s;
+		-webkit-animation-delay: 0;
+		-webkit-animation-iteration-count: 1;	
+	}
+
 .kenuu-code-tab {
 	// background: $kenuu-green;
 	// /* padding-top: 0px !important; */
@@ -318,6 +332,13 @@ ion-nav-view[nav-view-transition="ios"] {
 
 	.toggle .handle {
 		background-color: #eeeeee !important;
+	}
+
+	.error-label {
+		-webkit-transition: all 0.1s ease-in-out !important;
+		-moz-transition: all 0.1s ease-in-out !important;
+		-o-transition: all 0.1s ease-in-out !important;
+		transition: all 0.1s ease-in-out !important;
 	}
 
 /* ******* Modal MsgBox ******** */

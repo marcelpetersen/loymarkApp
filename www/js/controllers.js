@@ -21,6 +21,18 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         $scope.$on("$ionicView.enter", function(event, args){
+            // Everytime the app enters into the Near Me view, the selected store is reset so the stack is cleared.
+            storeFactory.selectedStore.reset();
+        });
+
+        $scope.$on('$ionicView.beforeEnter', function(event, args){            
+            $("#nearme-content").hide();
+            $("#nearme-content").removeClass('animated fadeIn');
+        });
+
+        $scope.$on('$ionicView.afterEnter', function(event, args){ 
+            $("#nearme-content").addClass('animated fadeIn');
+            $("#nearme-content").show();
         });
 
         $scope.ReloadList = function() {
@@ -518,6 +530,20 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 facebook: false
             }
         };
+
+        $scope.$on('$ionicView.beforeEnter', function(event, args){            
+            $("#commercewr-content").hide();
+            $("#commercewr-content").removeClass('animated fadeIn');
+        });
+
+        $scope.$on('$ionicView.afterEnter', function(event, args){ 
+            $("#commercewr-content").addClass('animated fadeIn');
+            $("#commercewr-content").show();
+        });
+
+        $scope.$on("$ionicView.enter", function(event, args){
+            $scope.viewdata.commerce = commerceFactory.selectedCommerce.get();
+        });
 
         $timeout(function(){
             loadingBox.hide();
@@ -1281,15 +1307,32 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             // Beacons variables
             foundBeacons: [],
             storeBeaconFound: false,
-            deviceInfo: deviceFactory.device.device()
+            deviceInfo: deviceFactory.device.device(),
+            popSelectedStore: true // Everytime the user leaves the view, the selected store must be popped, the only case where it shouldn't is when going to the commerce detail
         };
 
-        $scope.$on("$ionicView.enter", function(event, args){            
+        $scope.$on("$ionicView.enter", function(event, args){
+            $scope.viewdata.popSelectedStore = true;
             loadingBox.hide();
             $scope.viewdata.store = storeFactory.selectedStore.get();            
             $scope.ReloadStoreInfo();            
             IsTwitterInstalled();
             IsFacebookInstalled();
+        });
+
+        $scope.$on('$ionicView.beforeEnter', function(event, args){            
+            $("#storedetail-content").hide();
+            $("#storedetail-content").removeClass('animated fadeIn');
+        });
+
+        $scope.$on('$ionicView.afterEnter', function(event, args){ 
+            $("#storedetail-content").addClass('animated fadeIn');
+            $("#storedetail-content").show();
+        });
+
+        $scope.$on("$ionicView.leave", function(event, args){
+            // When the user leaves the view, the selected store is removed from the stack
+            if ($scope.viewdata.popSelectedStore) storeFactory.selectedStore.pop();
         });
 
         function OpenMapsActionSheet(options, lat, long) {
@@ -1362,6 +1405,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     commerceFactory.selectedCommerce.set(response[0]);
                     var _state = navigationFactory.commerce.get();
                     loadingBox.hide();
+                    $scope.viewdata.popSelectedStore = false;
                     $state.go(_state);
                 })
                 .catch(function(response){
@@ -1804,6 +1848,18 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             $scope.$apply();
         });
 
+        
+
+        $scope.$on('$ionicView.beforeEnter', function(event, args){            
+            $("#qrcode-content").hide();
+            $("#qrcode-content").removeClass('animated fadeIn');
+        });
+
+        $scope.$on('$ionicView.afterEnter', function(event, args){ 
+            $("#qrcode-content").addClass('animated fadeIn');
+            $("#qrcode-content").show();
+        });
+
         $scope.viewdata = {
             user: {},
             CardNumber: "",
@@ -1917,8 +1973,9 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
 // My Kenuu
 
-    ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', 'navigationFactory', '$cordovaActionSheet', '$cordovaCamera', '$cordovaImagePicker', '$cordovaFile', 'imageFunctions', 'appVersionFactory', '$ionicHistory', '$cordovaPush', 'deviceFactory', '$cordovaInAppBrowser', 'signupSetupFactory', function($scope, $timeout, loadingBox, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService, navigationFactory, $cordovaActionSheet, $cordovaCamera, $cordovaImagePicker, $cordovaFile, imageFunctions, appVersionFactory, $ionicHistory, $cordovaPush, deviceFactory, $cordovaInAppBrowser, signupSetupFactory){
-        $scope.$on("$ionicView.enter", function(event, args){            
+    ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', 'navigationFactory', '$cordovaActionSheet', '$cordovaCamera', '$cordovaImagePicker', '$cordovaFile', 'imageFunctions', 'appVersionFactory', '$ionicHistory', '$cordovaPush', 'deviceFactory', '$cordovaInAppBrowser', 'signupSetupFactory', 'storeFactory', function($scope, $timeout, loadingBox, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService, navigationFactory, $cordovaActionSheet, $cordovaCamera, $cordovaImagePicker, $cordovaFile, imageFunctions, appVersionFactory, $ionicHistory, $cordovaPush, deviceFactory, $cordovaInAppBrowser, signupSetupFactory, storeFactory){
+        $scope.$on("$ionicView.enter", function(event, args){
+            storeFactory.selectedStore.reset();
             navigationFactory.setDefaults();
             LoadData();
             LoadCommerceData();            
@@ -1940,6 +1997,16 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             registerForNotifications: signupSetupFactory.pushNotifications.get() // used on the setup modal
         };
 
+        $scope.$on('$ionicView.beforeEnter', function(event, args){            
+            $("#mykenuu-content").hide();
+            $("#mykenuu-content").removeClass('animated fadeIn');
+        });
+
+        $scope.$on('$ionicView.afterEnter', function(event, args){ 
+            $("#mykenuu-content").addClass('animated fadeIn');
+            $("#mykenuu-content").show();
+        });
+
         $scope.gDate = function(date) {
             var _date = new Date(parseInt(date.substr(6)));
             // console.log(_date);
@@ -1960,9 +2027,9 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             { 
                 localStorage.setItem('animationShown', true); 
                 $("#viewKenuu").show();
-                $("#viewKenuu").addClass("animated slideInUp");
+                $("#viewKenuu").addClass("animated fadeIn");
                 setTimeout(function(){
-                    $("#viewKenuu").removeClass("animated slideInUp");
+                    $("#viewKenuu").removeClass("animated fadeIn");
                 }, 800);
             }        
         };
@@ -2366,6 +2433,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         $scope.$on("$ionicView.enter", function(event, args){
+            storeFactory.selectedStore.reset();
             $scope.viewdata.searchtextfield = "";
             $scope.viewdata.currentActivityPage = 0;
             $scope.viewdata.user.activity = [];
@@ -2518,11 +2586,11 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             var startIndex = $scope.viewdata.currentActivityPage * $scope.viewdata.pageSize;
             var endIndex = startIndex + $scope.viewdata.pageSize;
 
-            console.log("Loading data into the list...");
-            console.log("Current Page: " + $scope.viewdata.currentActivityPage)
-            console.log("Page Size: " + $scope.viewdata.pageSize)
-            console.log("Páginas: " + pages)
-            console.log("Total: " + activityArray.length);
+            // console.log("Loading data into the list...");
+            // console.log("Current Page: " + $scope.viewdata.currentActivityPage)
+            // console.log("Page Size: " + $scope.viewdata.pageSize)
+            // console.log("Páginas: " + pages)
+            // console.log("Total: " + activityArray.length);
 
             if ($scope.viewdata.currentActivityPage == (pages-1))                
             {
@@ -3128,6 +3196,16 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             }
         };
 
+        $scope.$on('$ionicView.beforeEnter', function(event, args){            
+            $("#welcome-login-content").hide();
+            $("#welcome-login-content").removeClass('animated fadeIn');
+        });
+
+        $scope.$on('$ionicView.afterEnter', function(event, args){ 
+            $("#welcome-login-content").addClass('animated fadeIn');
+            $("#welcome-login-content").show();
+        });
+
         $scope.DoLogin = function() {
             if (!devEnvironment) $cordovaKeyboard.close();
             if (($scope.viewdata.login.password === undefined)||($scope.viewdata.login.password === ""))
@@ -3382,6 +3460,16 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             }
         };
 
+        $scope.$on('$ionicView.beforeEnter', function(event, args){              
+            $("#signup-password").hide();
+            $("#signup-password").removeClass('animated fadeIn');
+        });
+
+        $scope.$on('$ionicView.afterEnter', function(event, args){ 
+            $("#signup-password").addClass('animated fadeIn');
+            $("#signup-password").show();
+        });
+
         $scope.DoSignUp = function() {
             if (!devEnvironment) $cordovaKeyboard.close();
 
@@ -3576,7 +3664,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         $timeout(function(){
-            $("#welcome-content").addClass("animated slideInUp");
+            $("#welcome-content").addClass("animated fadeIn");
             setTimeout(function(){
                 $("#welcomeimg1").addClass("animated zoomIn");
                 loadingBox.hide();
@@ -3610,6 +3698,16 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 buttontext: ""
             }
         };
+
+        $scope.$on('$ionicView.beforeEnter', function(event, args){            
+            $("#welcomeemail-content").hide();
+            $("#welcomeemail-content").removeClass('animated fadeIn');
+        });
+
+        $scope.$on('$ionicView.afterEnter', function(event, args){ 
+            $("#welcomeemail-content").addClass('animated fadeIn');
+            $("#welcomeemail-content").show();
+        });
 
         var _currentSlideIndex = 0;
 
@@ -3812,12 +3910,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         $timeout(function(){
-            // $("#welcome-content").addClass("animated slideInUp");            
-            setTimeout(function(){                
-                // $("#welcomeimg1").addClass("animated zoomIn");
-                // $("#welcomeimg1").show();
-                loadingBox.hide();
-            }, 1100);        
+            loadingBox.hide();
         });
     }]);
 
@@ -4079,6 +4172,16 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
     }]);
 
     ctrl.controller('LocationSetupCtrl', ['$scope', '$ionicHistory', '$cordovaGeolocation', '$state', '$ionicLoading', 'locationFactory', 'loadingBox', '$cordovaKeyboard', 'deviceFactory', 'signupSetupFactory', function($scope, $ionicHistory, $cordovaGeolocation, $state, $ionicLoading, locationFactory, loadingBox, $cordovaKeyboard, deviceFactory, signupSetupFactory){
+        $scope.$on('$ionicView.beforeEnter', function(event, args){              
+            $("#locationsetup-content").hide();
+            $("#locationsetup-content").removeClass('animated fadeIn');
+        });
+
+        $scope.$on('$ionicView.afterEnter', function(event, args){ 
+            $("#locationsetup-content").addClass('animated fadeIn');
+            $("#locationsetup-content").show();
+        });
+
         $scope.Skip = function() {
             $ionicHistory.clearHistory();
             $ionicHistory.clearCache();
@@ -4181,6 +4284,16 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
     ctrl.controller('PushNotificationsSetupCtrl', ['$scope', '$ionicHistory', '$cordovaGeolocation', '$state', '$cordovaPush', '$cordovaDevice', 'loadingBox', 'locationFactory', 'userFactory', 'deviceFactory', 'signupSetupFactory', function($scope, $ionicHistory, $cordovaGeolocation, $state, $cordovaPush, $cordovaDevice, loadingBox, locationFactory, userFactory, deviceFactory, signupSetupFactory){
         
         loadingBox.hide();
+
+        $scope.$on('$ionicView.beforeEnter', function(event, args){              
+            $("#pushnotification-content").hide();
+            $("#pushnotification-content").removeClass('animated fadeIn');
+        });
+
+        $scope.$on('$ionicView.afterEnter', function(event, args){ 
+            $("#pushnotification-content").addClass('animated fadeIn');
+            $("#pushnotification-content").show();
+        });
 
         $scope.Skip = function() {
             $ionicHistory.clearHistory();
