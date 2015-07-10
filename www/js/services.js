@@ -338,6 +338,19 @@ angular.module('kenuu.services', [])
 	    return i;
 	}
 
+	var monthAbbreviations = [
+		"", "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"
+	];
+
+	var monthNames = [
+		"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+		"Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+	];
+
+	var dayNames = [
+		"Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"
+	];
+
 	this.FormatDateWithT = function(date, defaultValue) {
 		if (defaultValue == undefined) defaultValue = "";
 
@@ -346,9 +359,17 @@ angular.module('kenuu.services', [])
 		if (date == "") return defaultValue;
 		
 		if (date.indexOf("T") > 0) {
-			var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-			var _date = new Date(date);			
-        	return _date.toLocaleDateString('es', options);
+        	var day = date.substring(8,10);
+        	var _monthAbbr = monthAbbreviations[Number(date.substring(5,7))];
+        	var year = date.substring(0,4);
+
+        	var _date = new Date(day + "-" + _monthAbbr + "-" + year);        	
+        	var _day = _date.getDate();
+        	var _month = monthNames[_date.getMonth()];
+        	var _year = _date.getFullYear();
+        	var _wday = dayNames[_date.getDay()];
+
+        	return _wday + ", " + _day + " de " + _month + " de " + _year;
 		}
 		else {
 			return date;
@@ -371,5 +392,9 @@ angular.module('kenuu.services', [])
 		else {
 			return date;
 		}
+	};
+
+	this.SimpleFormat = function(dateString) {
+		return new Date(dateString).toString();
 	};
 }]);

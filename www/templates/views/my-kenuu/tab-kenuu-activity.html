@@ -29,15 +29,15 @@
                 </button>                
             </div>
 
-            <!-- <div class="item item-divider">
-        		<p><strong>Mi Actividad</strong></p>
-        	</div> -->
-
             <div class="item">
                 <div class="button-bar">
                     <a class="button button-light" ng-class="selectedButtonClass('V')" ng-click="SetActivityFilter('V')">Visitas</a>
                     <a class="button button-light" ng-class="selectedButtonClass('R')" ng-click="SetActivityFilter('R')">Canjes</a>
                 </div>          
+            </div>
+
+            <div class="item item-divider">
+                <p>Total: <strong ng-bind="viewdata.activityCounterLabel"></strong></p>
             </div>
 
             <ion-list>

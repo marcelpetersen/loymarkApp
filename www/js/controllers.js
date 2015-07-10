@@ -1284,7 +1284,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             deviceInfo: deviceFactory.device.device()
         };
 
-        $scope.$on("$ionicView.enter", function(event, args){
+        $scope.$on("$ionicView.enter", function(event, args){            
             loadingBox.hide();
             $scope.viewdata.store = storeFactory.selectedStore.get();            
             $scope.ReloadStoreInfo();            
@@ -1493,8 +1493,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
         $scope.OpenRewardDetail = function(reward) {
             $scope.viewdata["availablepoints"] = $scope.viewdata.store.PointsAvailable;
-            $scope.viewdata.selectedreward = reward;   
-
+            $scope.viewdata.selectedreward = reward; 
+            console.log(reward)
             rewardDetailModal.Show($scope);
         };
 
@@ -1524,7 +1524,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         $scope.gDate = function(date) {
-            // the date is received with a format "dd/mm/yyyyThh:mm:ss"
+            // the date is received with a format "dd/mm/yyyyThh:mm:ss"            
             return formatServices.FormatDateWithT(date);
         };
 
@@ -1583,7 +1583,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             }
         };
 
-        function IsTwitterInstalled() {            
+        function IsTwitterInstalled() {
             if (!devEnvironment) 
             {
                 var URI = "com.twitter.android";                
@@ -2361,7 +2361,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             filterOptionSelected: 'V',
             pleaseWaitMessage: 'Buscando su actividad...',
             openingCommerceMessage: 'Buscando el comercio...',
-            openingStoreMessage: 'Buscando la tienda...'
+            openingStoreMessage: 'Buscando la tienda...',
+            activityCounterLabel: ""
         };
 
         $scope.$on("$ionicView.enter", function(event, args){
@@ -2379,6 +2380,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             $scope.viewdata.user.activityfulllist = []; 
             $scope.viewdata.user.activity = [];
             $scope.viewdata.showLoadMoreButton = true;
+            $scope.viewdata.activityCounterLabel = 0;
+            $scope.viewdata.filterOptionSelected = 'V';
         });
 
         $scope.selectedButtonClass = function(type) {
@@ -2473,8 +2476,6 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         $scope.viewdata.user.activityVisits = GetActivityOfType(data.Elements, 'V');
                         $scope.viewdata.user.activityRedemptions = GetActivityOfType(data.Elements, 'R');
 
-                        // console.log(data.Elements[0]);
-
                         $scope.SetActivityPageToShow();
                         $scope.$apply();
 
@@ -2492,6 +2493,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
         $scope.SetActivityPageToShow = function() {
             var activityArray = [];
+            $scope.viewdata.activityCounterLabel = 0;
             $scope.viewdata.showLoadMoreButton = true;
 
             if ($scope.viewdata.filterOptionSelected == 'V') {
@@ -2512,43 +2514,45 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
             $scope.viewdata.loadMoreButtonMessage = "Ver más...";
 
-            var pages = Math.round(activityArray.length / $scope.viewdata.pageSize);
+            var pages = Math.ceil(activityArray.length / $scope.viewdata.pageSize);
             var startIndex = $scope.viewdata.currentActivityPage * $scope.viewdata.pageSize;
             var endIndex = startIndex + $scope.viewdata.pageSize;
 
             console.log("Loading data into the list...");
-            console.log($scope.viewdata.currentActivityPage)
-            console.log($scope.viewdata.pageSize)
-            console.log(pages)
+            console.log("Current Page: " + $scope.viewdata.currentActivityPage)
+            console.log("Page Size: " + $scope.viewdata.pageSize)
+            console.log("Páginas: " + pages)
+            console.log("Total: " + activityArray.length);
 
-            if (
-                ($scope.viewdata.currentActivityPage == (pages-1))
-                &&
-                (pages > 1)
-            ) {
+            if ($scope.viewdata.currentActivityPage == (pages-1))                
+            {
                 // Last Page Reached
-                $scope.viewdata.showLoadMoreButton = false;
-                return;
+                $scope.viewdata.showLoadMoreButton = false;                
             }
 
             if ((pages == 0) && (activityArray.length > 0)) {
                 $scope.viewdata.showLoadMoreButton = false;
             }
 
+            var _currentPageCount = 0;
+
             for (var i=startIndex; i<endIndex; i++)
             {
                 if (activityArray[i] != undefined) {
                     if ($scope.viewdata.filterOptionSelected == activityArray[i].ActivityType) {
                         $scope.viewdata.user.activity.push(activityArray[i]);
+                        _currentPageCount++;
                     }                    
                 }                
             }
 
+            $scope.viewdata.activityCounterLabel = activityArray.length;
+
             $scope.viewdata.currentActivityPage++;
 
-            setTimeout(function() {                
-                $scope.$broadcast('scroll.infiniteScrollComplete');                
-            }, 1000);            
+            // setTimeout(function() {                
+            //     $scope.$broadcast('scroll.infiniteScrollComplete');                
+            // }, 1000);            
         };
 
         $scope.Reload = function() {
