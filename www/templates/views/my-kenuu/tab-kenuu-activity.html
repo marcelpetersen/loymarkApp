@@ -4,15 +4,6 @@
     </ion-nav-title> -->
     <!--  overflow-scroll="true" // No se puede usar cuando se quiere implementar pull to refresh -->
     <ion-content class="activity-content">
-        
-        <!-- <div id="errorWhenLoadingDiv" class="pleaseWaitSpinner" style="display:none">
-            <div class="item item-clear item-icon-right" ng-click="Reload()">
-                <p><strong>Oops, no hay actividad!</strong></p>
-                <p>Haga tap aquí para recargar</p>
-                <i class="icon ion-ios-refresh-empty"></i>
-            </div>                
-        </div> -->
-
         <ion-refresher
             pulling-text="Hale para refrescar..."
             on-refresh="doRefresh()">
@@ -28,13 +19,11 @@
                     <i class="ion-ios-close-empty"></i>
                 </button>                
             </div>
-
-            <!-- <div class="item"> -->
-                <div class="button-bar activity-topbtn-container">
-                    <a class="button activity-topbtn" ng-class="selectedButtonClass('V')" ng-click="SetActivityFilter('V')">Visitas</a>
-                    <a class="button activity-topbtn" ng-class="selectedButtonClass('R')" ng-click="SetActivityFilter('R')">Canjes</a>
-                </div>          
-            <!-- </div> -->
+            
+            <div class="button-bar activity-topbtn-container">
+                <a class="button activity-topbtn" ng-class="selectedButtonClass('V')" ng-click="SetActivityFilter('V')">Visitas</a>
+                <a class="button activity-topbtn" ng-class="selectedButtonClass('R')" ng-click="SetActivityFilter('R')">Canjes</a>
+            </div>
 
             <div class="item item-divider">
                 <p>Total: <strong ng-bind="viewdata.activityCounterLabel"></strong></p>
@@ -51,30 +40,11 @@
                     <i class="icon mykenuu-commerceavatar-container">
                         <img class="mykenuu-commerceavatar" ng-src="{{GetCommerceImage(activity.Image)}}">  
                     </i>
-                    <!-- <img ng-src="{{GetCommerceImage(activity.Image)}}">
-                    <p><strong ng-bind="gDate(activity.ActivityDate)"></strong></p>                
-            		<p><strong class="activity-commerce-name" ng-bind="activity.SubEntityName"></strong></p>
-            		<i class="icon icon-gift activity-redemption" ng-show="activity.ActivityType == 'R'"></i>
-            		<i class="icon icon-location activity-checkin" ng-show="activity.ActivityType == 'V'"></i>
-
-            		<div class="" ng-show="activity.ActivityType == 'R'">					
-    					<p><strong ng-bind="activity.RewardName"></strong></p>
-    				</div>
-    				<div class="">
-    					<p>
-                            <i class="icon-pop-full favcommerce-pop"></i>
-                            <span style="position:relative; top:-5px;">
-                                <strong ng-bind="GetActivityPointsLabel(activity.ActivityType)"></strong> <span class="activity-points-label" ng-bind="activity.Points"></span>
-                            </span>
-                        </p>
-    				</div> -->
             	</ion-item>
                 <ion-item class="item text-center" ng-show="viewdata.showLoadMoreButton" ng-click="SetActivityPageToShow()">
                     <span ng-bind="viewdata.loadMoreButtonMessage"></span>                    
                 </ion-item>
             </ion-list>
-            <!-- <ion-infinite-scroll immediate-check="false" spinner="android" icon="ion-loading-c" on-infinite="SetActivityPageToShow()" distance="20%">
-            </ion-infinite-scroll> -->
         </div>
         <div class="activity-bottomspacer"></div>
     </ion-content>

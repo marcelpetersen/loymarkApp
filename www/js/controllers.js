@@ -23,9 +23,10 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         $scope.$on("$ionicView.enter", function(event, args){
             // Everytime the app enters into the Near Me view, the selected store is reset so the stack is cleared.
             storeFactory.selectedStore.reset();
+            SetButtonActiveEffectForAndroid();
         });
 
-        $scope.$on('$ionicView.beforeEnter', function(event, args){            
+        $scope.$on('$ionicView.beforeEnter', function(event, args){
             $("#nearme-content").hide();
             $("#nearme-content").removeClass('animated fadeIn');
         });
@@ -34,6 +35,18 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             $("#nearme-content").addClass('animated fadeIn');
             $("#nearme-content").show();
         });
+
+        function SetButtonActiveEffectForAndroid() {
+            if (navigator.userAgent.toLowerCase().indexOf("android") > -1) {
+                $(".nearme-search-item-btn")
+                    .bind("touchstart", function () {
+                        $(this).addClass("activity-topbtn-fake-active");
+                    })
+                    .bind("touchend", function() {
+                        $(this).removeClass("activity-topbtn-fake-active");
+                    });
+            }
+        };
 
         $scope.ReloadList = function() {
             $scope.viewdata.reloadLocation = true;
@@ -2014,6 +2027,14 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             // return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
         };
 
+        $scope.getMenuIcon = function() {
+            if (!devEnvironment) {
+                if (deviceFactory.device.device().platform == "iOS") return "icon ion-navicon";
+                else return "icon ion-android-more-vertical";    
+            }
+            else return "icon ion-android-more-vertical";
+        };
+
         loadingBox.show($scope.viewdata.pleaseWaitMessage);
 
         function ShowView() {
@@ -2443,7 +2464,21 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             $scope.viewdata.user.activityfulllist = [];
             $scope.viewdata.showLoadMoreButton = true;
             LoadData();
+
+            SetButtonActiveEffectForAndroid();
         });
+
+        function SetButtonActiveEffectForAndroid() {
+            if (navigator.userAgent.toLowerCase().indexOf("android") > -1) {
+                $(".activity-topbtn")
+                    .bind("touchstart", function () {
+                        $(this).addClass("activity-topbtn-fake-active");
+                    })
+                    .bind("touchend", function() {
+                        $(this).removeClass("activity-topbtn-fake-active");
+                    });
+            }
+        };
 
         $scope.$on("$ionicView.leave", function(event, args){  
             $scope.viewdata.searchtextfield = "";          

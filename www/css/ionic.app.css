@@ -8443,12 +8443,13 @@ ion-nav-view[nav-view-transition="ios"] .activity-bottomspacer {
 
 .activity-topbtn {
   border-left: none;
+  border-right: none;
   background-color: #800080;
   color: white !important;
   font-size: 17px;
   font-weight: bold; }
 
-.activity-topbtn:active {
+.activity-topbtn:active, .activity-topbtn-fake-active, .nearme-search-item-btn:active {
   background-color: #A5559E !important; }
 
 .activity-listitem-points {
@@ -8629,6 +8630,9 @@ ion-nav-view[nav-view-transition="ios"] .nearme-icon {
 
 .newarme-locationdistance {
   font-size: 17px; }
+
+.nearme-search-item-btn {
+  width: 100%; }
 
 /* ******** Commerce With Rewards ******* */
 .commercewr-content {
