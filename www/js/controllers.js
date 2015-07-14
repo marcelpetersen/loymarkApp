@@ -1320,7 +1320,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             IsFacebookInstalled();
         });
 
-        $scope.$on('$ionicView.beforeEnter', function(event, args){            
+        $scope.$on('$ionicView.beforeEnter', function(event, args){
             $("#storedetail-content").hide();
             $("#storedetail-content").removeClass('animated fadeIn');
         });
@@ -1973,7 +1973,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
 // My Kenuu
 
-    ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', 'navigationFactory', '$cordovaActionSheet', '$cordovaCamera', '$cordovaImagePicker', '$cordovaFile', 'imageFunctions', 'appVersionFactory', '$ionicHistory', '$cordovaPush', 'deviceFactory', '$cordovaInAppBrowser', 'signupSetupFactory', 'storeFactory', function($scope, $timeout, loadingBox, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService, navigationFactory, $cordovaActionSheet, $cordovaCamera, $cordovaImagePicker, $cordovaFile, imageFunctions, appVersionFactory, $ionicHistory, $cordovaPush, deviceFactory, $cordovaInAppBrowser, signupSetupFactory, storeFactory){
+    ctrl.controller('KenuuCtrl', ['$scope', '$timeout', 'loadingBox', 'userFactory', 'commerceFactory', '$state', '$ionicLoading', 'setupView', 'emailService', 'navigationFactory', '$cordovaActionSheet', '$cordovaCamera', '$cordovaImagePicker', '$cordovaFile', 'imageFunctions', 'appVersionFactory', '$ionicHistory', '$cordovaPush', 'deviceFactory', '$cordovaInAppBrowser', 'signupSetupFactory', 'storeFactory', 'formatServices', function($scope, $timeout, loadingBox, userFactory, commerceFactory, $state, $ionicLoading, setupView, emailService, navigationFactory, $cordovaActionSheet, $cordovaCamera, $cordovaImagePicker, $cordovaFile, imageFunctions, appVersionFactory, $ionicHistory, $cordovaPush, deviceFactory, $cordovaInAppBrowser, signupSetupFactory, storeFactory, formatServices){
         $scope.$on("$ionicView.enter", function(event, args){
             storeFactory.selectedStore.reset();
             navigationFactory.setDefaults();
@@ -1997,7 +1997,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             registerForNotifications: signupSetupFactory.pushNotifications.get() // used on the setup modal
         };
 
-        $scope.$on('$ionicView.beforeEnter', function(event, args){            
+        $scope.$on('$ionicView.beforeEnter', function(event, args){
             $("#mykenuu-content").hide();
             $("#mykenuu-content").removeClass('animated fadeIn');
         });
@@ -2008,9 +2008,10 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         });
 
         $scope.gDate = function(date) {
-            var _date = new Date(parseInt(date.substr(6)));
+            return formatServices.FormatDateWithT(date);
+            // var _date = new Date(parseInt(date.substr(6)));
             // console.log(_date);
-            return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
+            // return _date.getDate() + "/" + (_date.getMonth()+1) + "/" + _date.getFullYear();
         };
 
         loadingBox.show($scope.viewdata.pleaseWaitMessage);
@@ -2056,6 +2057,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     $scope.viewdata.pullMemberFromServer = false;
                     loadingBox.hide();              
                     $scope.viewdata.user = data;
+
+                    console.log(data)
 
                     // TODO: pending to implement the pull image from the profile that comes from the service
                     // $scope.profileimage = localStorage.getItem('profile_picture');
@@ -2660,8 +2663,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         $scope.GetActivityPointsLabel = function(activityType) {
-            if (activityType === "V") return "Ganados:";
-            if (activityType === "R") return "Canjeados:";
+            if (activityType === "V") return "+";
+            if (activityType === "R") return "-";
         };
 
         $scope.ShareViaFacebook = function(activity) {        

@@ -57,6 +57,7 @@ body, h1, h2, h3, h4, h5, p, div, span, input, button, strong  {
 	$kenuu-light-purple:			 #D6C8FF;
 	$kenuu-light-blue:				 #00D9A3;
 	$kenuu-dark-green: 				 #8FB130;
+	$kenuu-lightpurple-btn:			 #A5559E;
 
 	$modal-bg: 					     $kenuu-darker-purple;
 
@@ -1007,7 +1008,24 @@ ion-nav-view[nav-view-transition="ios"] {
 	.activity-selectedFilterOption {
 		background-color: $kenuu-purple !important;
 		color: white !important; 
+		border-bottom: 6px solid $kenuu-lightpurple-btn !important;
 	}
+	.activity-topbtn-container {		
+	}
+	.activity-topbtn {
+		border-left: none;		
+		background-color: $kenuu-purple;
+		color: white !important;
+		font-size: 17px;
+		font-weight: bold;
+	}
+	.activity-topbtn:active {
+		background-color: $kenuu-lightpurple-btn !important; 
+	}
+	.activity-listitem-points {
+		color: $kenuu-purple !important;
+	}
+
 
 /* ******** Map ******** */
 	.map-centeronme-button {
@@ -1120,7 +1138,9 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 
 /* ******** Near Me ******** */
-
+	.borderKilometer {
+		border-bottom: 3px solid $kenuu-lightpurple-btn !important;
+	}
 	.nearme-commerce-name {
 		font-size: 20px !important;
 		color: #555555 !important;
@@ -1136,7 +1156,9 @@ ion-nav-view[nav-view-transition="ios"] {
 		border: none;
 		height: 50px;
 	}
-
+	.button-clear .button-clear {
+		color: white !important;
+	}
 	.nearme-commerce-avatar {
 		border-radius: 50% !important;
 		height: 45px !important;
@@ -1210,13 +1232,21 @@ ion-nav-view[nav-view-transition="ios"] {
 	.nearme-nolocationbutton:hover {
 		background-color:  #eeeeee;
 	}
+	.newarme-locationicon {
+		color: $kenuu-purple !important;
+		font-weight: bold;
+		font-size: 17px;
+	}
+	.newarme-locationdistance {		
+		font-size: 17px;	
+	}
 
 /* ******** Commerce With Rewards ******* */
 	.commercewr-content {
 		border: none !important;
 	}
 	.commercewr-header {
-		background-image: url('../img/food.png');		
+
 	}
 	.commercewr-header h2 {
 		font-size: 20px !important;
@@ -1239,19 +1269,18 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 	.commercewr-avatar {
 		border-radius: 50% !important;
-		height: 85px !important;
-		width: 85px !important;
+		height: 110px !important;
+		width: 110px !important;
 		background-color: #eeeeee !important;
 		margin: auto;
 		border: 1px #eeeeee;
 	}
 	.commercewr-detail-header-item {
-		background-color: white; // #222222;
+		background-color: white;
 		color: black;
 		border: none;
 	}
 	.commercewr-detail-pops-item {
-		background-color: #eeeeee;
 		border: none;
 	}
 	.commercewr-detail-title {
@@ -1353,6 +1382,8 @@ ion-nav-view[nav-view-transition="ios"] {
 
 	.commercewrstores-search-item {
 		height: 50px;
+		background-color: $kenuu-purple;
+		border: none;
 	}
 	.commercewrstores-store-item {
 		border: 1px solid #F8F8F8 !important;	
@@ -1367,7 +1398,7 @@ ion-nav-view[nav-view-transition="ios"] {
 		font-size: 13px;
 	}
 	.store-open {
-		color: $kenuu-purple;
+		color: white !important;
 	}
 	.store-closed {
 		color: red;
@@ -1375,9 +1406,8 @@ ion-nav-view[nav-view-transition="ios"] {
 
 /* ******** Reward Detail ******** */
 
-	.reward-detail-content {
-		// background-image: url('../img/food.png');
-	}
+	.reward-detail-content {		
+	}	
 	.reward-detail-avatar {				
 		height: 110px;
 		width: auto;
@@ -1397,11 +1427,9 @@ ion-nav-view[nav-view-transition="ios"] {
 		color: $kenuu-purple;
 	}
 	.reward-detail-header-item {
-		// background-color: #222222 !important;
-		// color: #cccccc !important;
 		border: none;
-		border-top: 1px solid #eeeeee;
-		border-bottom: 1px solid #eeeeee;
+		background-color: $kenuu-purple !important;
+		height: 50px;
 	}
 	.reward-detail-title {
 		font-size: 17px;
@@ -1409,6 +1437,10 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 	.commercewr-detail-subtitle {
 		font-size: 15px;
+	}
+	.reward-detail-baseitem p {
+		font-size: 14px !important;
+		font-weight: normal !important;
 	}
 
 /* ******** Sign Up and Gernder And DOB ******** */
@@ -1444,6 +1476,94 @@ ion-nav-view[nav-view-transition="ios"] {
 	
 	.reward-detail-validity strong, p {
 		font-size: 15px;
+	}
+
+	.reward-detail-image-container {
+		padding: 0 !important;background-color: #aaa;
+	}
+
+	.reward-detail-image-wrapper {
+		width: 100%;
+		height: 200px;
+		overflow: hidden;
+	}
+
+	.reward-detail-image {
+		width: 100%;
+		position: relative;
+    	bottom: 20%;
+    	opacity: 0.7;
+	}
+
+	.reward-detail-overlay {
+		position:absolute; 
+		top:0px; 
+		width:100vw; 
+		height:240px;
+		opacity:0.5;
+		background-image: linear-gradient(to bottom right,#002f4b,#dc4225);
+	}
+
+	.reward-detail-span1 {		
+	}
+
+	.reward-detail-row {
+		width: 100vw;
+	}
+
+	.reward-detail-span2 {	
+		position: relative;
+		top: 8px;	
+	}
+
+	.reward-detail-points-bubble {
+		width: 60px;
+		height: 60px;
+		border-radius: 50%;
+		background: $kenuu-purple;
+		color: white !important;
+		text-align: center;
+		font-size: 20px;
+	}
+
+	.reward-detail-points-bubble strong {
+		position: relative;
+		top: 20px; 
+	}
+
+	.reward-detail-label-container {
+		position: absolute;
+		bottom: 4px;
+		text-align: left;
+	}
+
+	.reward-detail-label-container p {		
+		color: white;
+		font-size: 20px;
+		font-weight: bold;
+	}
+
+	.reward-detail-label {
+		font-size: 20px !important;
+	}
+
+	.reward-detail-sublabel {
+		border-bottom: 2px solid white !important;
+		word-wrap: break-word;
+		max-width: 80%;
+		font-size: 16px !important;
+	}
+
+	.reward-detail-close-btn {
+		position: absolute;
+		top: 20px;
+		right: 20px;
+	}
+
+	.reward-detail-close-btn i {
+		color: white;
+		font-size: 25px;
+		font-weight: bold;
 	}
 
 /* ******** Location Setup ******** */
@@ -1553,3 +1673,175 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 	}
 
+/* ******** Store Detail ******** */
+	.storedetail-header {
+		padding: 0 !important;
+		border: none;
+	}
+	.storedetail-header-image-wrapper {
+		width: 100%;
+		height: 160px;
+		overflow: hidden;
+	}
+	.storedetail-header-image {
+		width: 100%;
+		position: relative;    	
+		bottom: 20%;
+	}
+	.storedetail-nameavatar-container {
+		position: absolute;
+		top: 14px;
+		text-align: left;
+	}
+	.storedetail-nameavatar-container .row {
+		width: 100vw;
+	}
+	.storedetail-nameavatar-namescontainer {
+		position: relative;
+		top: 10px;
+		margin-left: 10px;
+	}
+	.storedetail-nameavatar-container h2 {		
+		color: white !important;
+		font-size: 16px;
+		font-weight: bold;
+	}
+	.storedetail-nameavatar-container p {
+		color: white !important;
+		font-size: 12px;
+		font-weight: bold;
+	}
+
+	.storedetail-contactinfo-row {
+		width: 100vw;
+		padding: 0;
+	}
+	.storedetail-contactinfo-cell {
+		text-align: center;
+		border: 1px solid #eeeeee !important;
+		height: 50px;
+	}
+	.storedetail-contactinfo-cell i {
+		position: relative;
+		top: 5px;
+		font-size: 30px;
+		color: #aaa !important;
+	}
+	.storedetail-locationicon {
+		color: $kenuu-purple !important;
+	}
+	.storedetail-top-btn {
+		background-color: #A5559E !important;		
+	}
+	.storedetail-topbtn-row {
+		width: 100vw;
+		padding: 0;
+		height: 50px;
+	}
+	.storedetail-top-btn1 {
+		padding-right: 3px !important;
+	}
+	.storedetail-top-btn .row {
+		width: 100%;		
+	}
+	.storedetail-top-btn .col {
+		padding: 0;
+	}
+	.storedetail-top-btn p {		
+		color: white !important;
+		position: relative;
+		top: 5px;
+		font-weight: bold;
+	}
+	.storedetail-top-btn i {
+		color: white !important;
+		font-size: 20px !important;		
+		position: relative;
+		top: 5px;	
+	}
+	.storedetail-list-title {
+		background-color: $kenuu-purple;
+		color: white !important;
+		height: 50px;
+	}
+	.storedetail-list-title p {
+		position: relative;
+		top: 6px;
+		color: white !important;
+		font-weight: bold;
+		font-size: 17px;
+	}
+	.storedetail-reward-item {
+		padding: 0 !important;
+		border: none !important;		
+	}
+	.storedetail-reward-item .row {
+		height: 70px !important;
+	}
+	.storedetail-rewardimage-container {
+		overflow: hidden;
+		width: 100%;
+		height: 100%;
+		padding: 0 !important; 
+	}
+	.storedetail-rewardimage-container img {		
+		width: 100%;
+		height: auto;		
+	}
+	.storedetail-rewarditem-row {
+		padding: 0 !important;
+	}
+	.storedetail-rewarditem-row h2 {
+		font-size: 15px;
+	}
+	.storedetail-rewarditem-row p {
+		font-size: 12px;
+	}
+	.storedetail-rewardpoints h2 {
+		color: $kenuu-purple; 
+		font-weight: bold;
+	}
+	.storedetail-rewardpoints p {
+		color: $kenuu-purple; 		
+	}
+	.storedetail-address {
+		border: 1px solid #eeeeee !important;
+	}
+	.storedetail-reward-names {
+		position: relative;
+		top: 4px;
+		left: 5px;
+	}
+	.storedetail-reward-pointscontainer {
+		position: relative;
+		top: 10px;
+	}
+
+/* ******** My Kenuu ********* */
+
+	.mykenuu-membersince h2 {
+		color: $kenuu-purple !important;
+		font-weight: bold;
+	}
+	.mykenuu-commercetitle {
+		background-color: $kenuu-purple;
+		height: 50px;		
+	}
+	.mykenuu-commercetitle p {
+		position: relative;
+		top: 6px;
+		color: white !important;
+		font-weight: bold;
+		font-size: 17px;
+	}
+	.mykenuu-commerceavatar-container {
+		height: 60px;
+		width: 60px;
+		overflow: hidden;		
+	}
+	.mykenuu-commerceavatar {
+		height: 50px;
+		width: auto;		
+		-webkit-clip-path: circle(25px at 50% 25px) !important;
+	}
+	

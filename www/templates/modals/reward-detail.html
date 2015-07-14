@@ -1,33 +1,56 @@
 <ion-modal-view>
-	<ion-header-bar class="bar bar-light">
+	<!-- <ion-header-bar class="bar bar-light">
 		<h1 class="title" ng-bind="viewdata.selectedreward.Name"></h1>
 		<button class="button button-clear setupview-closebtn" ng-click="CloseRewardDetailModal()"><i class="ion-ios-close-outline"></i></button>	
-	</ion-header-bar>
+	</ion-header-bar> -->
 	<ion-content class="reward-detail-content">
 		<div class="list">
-			<div class="item text-center reward-detail-avatar-item">
-				<img class="reward-detail-avatar" ng-src="{{GetRewardImage(viewdata.selectedreward.Image)}}">
+
+			<div class="item reward-detail-image-container text-center item-text-wrap">
+				<div class="reward-detail-image-wrapper">
+					<img class="reward-detail-image" ng-src="{{GetRewardImage(viewdata.selectedreward.Image)}}">
+				</div>
+							
+				<div class="reward-detail-overlay"> 
+				</div>
+
+				<div class="reward-detail-label-container">
+					<div class="row reward-detail-row">
+						<div class="col col-20 reward-detail-span1 text-center">
+							<div class="reward-detail-points-bubble">
+								<strong ng-bind="viewdata.selectedreward.Points"></strong>
+							</div>	
+						</div>
+						<div class="col col-80 reward-detail-span2">
+							<p class="reward-detail-label" ng-bind="viewdata.selectedreward.Name.toUpperCase()"></p>
+							<p class="reward-detail-sublabel" ng-bind="viewdata.selectedreward.Description"></p>
+						</div>
+					</div>
+				</div>
+
+				<div class="reward-detail-close-btn" ng-click="CloseRewardDetailModal()">
+					<i class="icon ion-close-round"></i>
+				</div>
 			</div>
 			<div class="item item-text-wrap reward-detail-baseitem item-icon-right reward-detail-header-item">
-				<strong class="reward-detail-title">Pops Requeridos</strong>				
-				<i class="icon reward-detail-points" style="margin-right:5px;" ng-bind="viewdata.selectedreward.Points"></i>				
+			</div>
+			
+			<div class="item item-text-wrap reward-detail-baseitem" ng-show="RewardDetailDatesAvailable(viewdata.selectedreward.ValidFrom, viewdata.selectedreward.ValidUntil)">
+				<strong class="reward-detail-title">Vigencia</strong>
+				<p class="reward-detail-validity">
+				<span ng-bind="gDate(viewdata.selectedreward.ValidFrom)"></span>
+				<span> - </span>
+				<span ng-bind="gDate(viewdata.selectedreward.ValidUntil)"></span>
+				</p>
+				<br>
+				<strong class="reward-detail-title">Horario</strong>
+				<p class="reward-detail-validity">
+				<span ng-bind="gTime(viewdata.selectedreward.InitialHour, viewdata.selectedreward.EndingHour)"></span>
+				</p>
 			</div>
 			<div class="item item-text-wrap reward-detail-baseitem">
 				<strong class="reward-detail-title">Descripción</strong>
 				<p ng-bind="viewdata.selectedreward.Description"></p>
-			</div>
-			<div class="item item-text-wrap reward-detail-baseitem" ng-show="RewardDetailDatesAvailable(viewdata.selectedreward.ValidFrom, viewdata.selectedreward.ValidUntil)">
-				<strong class="reward-detail-title">Validez</strong>
-				<p class="reward-detail-validity">
-				<strong><span ng-bind="gDate(viewdata.selectedreward.ValidFrom)"></span></strong>
-				<span> - </span>
-				<strong><span ng-bind="gDate(viewdata.selectedreward.ValidUntil)"></span></strong>
-				</p>
-
-				<strong class="reward-detail-title">Horario</strong>
-				<p class="reward-detail-validity">
-				<strong><span ng-bind="gTime(viewdata.selectedreward.InitialHour, viewdata.selectedreward.EndingHour)"></span></strong>				
-				</p>
 			</div>
 			<div class="item item-text-wrap reward-detail-baseitem">
 				<strong class="reward-detail-title">Instrucciones</strong>

@@ -10,8 +10,44 @@
 		<ion-refresher
 			pulling-text="Hale para refrescar..."
 			on-refresh="doRefresh()">
-		</ion-refresher> 		
-		<div class="row profile-avatar-container">
+		</ion-refresher> 	
+
+		<div class="item item-text-wrap text-center storedetail-header">
+			<div class="storedetail-header-image-wrapper">
+				<img class="storedetail-header-image" src="./img/fondociudad.png">
+			</div>		
+			<div class="storedetail-nameavatar-container">
+				<div class="row">
+					<div class="col col-70">
+						<div class="storedetail-nameavatar-namescontainer">
+							<h2>{{viewdata.user.FirstName}} {{viewdata.user.LastName}}</h2>
+							<p ng-bind="viewdata.user.Email"></p>							
+						</div>						
+					</div>
+					<div class="col col-30 text-right">
+						<img class="commercewr-avatar" src="{{viewdata.user.AvatarMobile}}" ng-click="ChangeProfilePic()">	
+					</div>
+				</div>
+			</div>					
+		</div>
+
+		<div class="row storedetail-topbtn-row">
+			<div class="col text-center storedetail-top-btn storedetail-top-btn1" ng-click="GoToProfile()">
+				<div class="row">
+					<div class="col col-80 storedetail-top-btn-label"><p>Editar Perfil</p></div>
+					<div class="col col-20 storedetail-top-btn-icon"><i class="ion-edit"></i></div>
+				</div>
+			</div>
+			<div style="width:7px; background-color:#92318A"></div>
+			<a class="col text-center storedetail-top-btn storedetail-top-btn2" href="#/tab/kenuu/activity">
+				<div class="row">
+					<div class="col col-80 storedetail-top-btn-label"><p>Historial</p></div>
+					<div class="col col-20 storedetail-top-btn-icon"><i class="icon-history"></i></div>
+				</div>
+			</a>
+		</div>
+
+		<!-- <div class="row profile-avatar-container">
 			<div class="col-20 text-center profile-avatar-div">
 				
 				<img id="avatarImg" ng-src="{{viewdata.user.AvatarMobile}}" class="profile-avatar" ng-click="ChangeProfilePic()">
@@ -22,7 +58,7 @@
 				<p ng-bind="viewdata.user.Email"></p>
 				<button class="button button-small button-calm profile-btn" ng-click="GoToProfile()">Mi Info</button>					
 			</div>
-		</div>
+		</div> -->
 
 		<!-- <div class="item text-center">
 
@@ -48,34 +84,41 @@
 			</section>
 		</div>		 -->
 
-		<a class="item item-icon-left item-icon-right item-text-wrap" href="#/tab/kenuu/activity">
+		<!-- <a class="item item-icon-left item-icon-right item-text-wrap" href="#/tab/kenuu/activity">
 			<i class="icon icon-history profile-item-icon"></i>
 			<div class="profile-item-title">Mi Actividad Reciente</div>
 			<div>Consultar mis últimos movimientos</div>			
 			<i class="icon ion-android-more-horizontal back-btn"></i>			
-		</a>
+		</a> -->
+
+		<div class="item text-center mykenuu-membersince">
+			<p>MIEMBRO DESDE:</p>
+			<h2 ng-bind="gDate(viewdata.user.CreateDate)"></h2>
+		</div>
 
 		<div id="favcommerces-list" class="list">
-            <div class="item item-divider item-text-wrap">
-                <p><strong>Mis Comercios:</strong></p>
-                <p>Los comercios que ha visitado y los pops que tiene disponibles.</p>
+            <div class="item item-divider item-text-wrap mykenuu-commercetitle">
+                <p>Mis Comercios</p>
             </div>
-            <div class="item item-avatar item-text-wrap activity-activityitem" ng-repeat="commerce in viewdata.commerces | orderBy:'TotalVisits'" ng-click="GoToCommerce(commerce)">                
-                <img ng-src="{{GetCommerceImage(commerce.Image)}}">
-                <p><strong class="activity-commerce-name">{{commerce.Name}}</strong></p>  
+            <div class="item item-icon-right item-text-wrap" ng-repeat="commerce in viewdata.commerces | orderBy:'TotalVisits'" ng-click="GoToCommerce(commerce)">                                
+                <div>
+	                <p><strong class="activity-commerce-name">{{commerce.Name}}</strong></p>  
 
-                <div class="row favcommerce-balancerow">
-                	<div class="col favcommerce-balancecell">
-                		<h3 class="favcommerce-lastvisit-label" style="margin-left:-10px; margin-top:5px;">
-                			<small class="textgrey-text">visitas:</small>
-                    		<strong class="favcommerce-visits">{{commerce.TotalVisits}}</strong> 
-                    	</h3>
-                	</div>
-                	<div class="col favcommerce-balancecell">
-                		<i class="icon-pop-full favcommerce-pop"></i>
-                		<strong class="favcommerce-visits" style="position:relative; top:-5px; margin-left: 8px;">{{commerce.PointsAvailable}}</strong> 
-                	</div>
+	                <div class="row favcommerce-balancerow">
+	                	<div class="col favcommerce-balancecell">                		
+	                		<small class="textgrey-text">Visitas:</small>
+	                    	<strong class="favcommerce-visits">{{commerce.TotalVisits}}</strong>                     	
+	                	</div>
+	                	<div class="col favcommerce-balancecell">
+	                		<small class="textgrey-text">Pops:</small>
+	                		<strong class="favcommerce-visits">{{commerce.PointsAvailable}}</strong> 
+	                	</div>
+	                </div>
                 </div>
+
+                <i class="icon mykenuu-commerceavatar-container">
+                	<img class="mykenuu-commerceavatar" ng-src="{{GetCommerceImage(commerce.Image)}}">	
+                </i>
             </div>
         </div>
 		<div class="bottomspacer"></div>

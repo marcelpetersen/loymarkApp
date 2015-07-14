@@ -29,20 +29,29 @@
                 </button>                
             </div>
 
-            <div class="item">
-                <div class="button-bar">
-                    <a class="button button-light" ng-class="selectedButtonClass('V')" ng-click="SetActivityFilter('V')">Visitas</a>
-                    <a class="button button-light" ng-class="selectedButtonClass('R')" ng-click="SetActivityFilter('R')">Canjes</a>
+            <!-- <div class="item"> -->
+                <div class="button-bar activity-topbtn-container">
+                    <a class="button activity-topbtn" ng-class="selectedButtonClass('V')" ng-click="SetActivityFilter('V')">Visitas</a>
+                    <a class="button activity-topbtn" ng-class="selectedButtonClass('R')" ng-click="SetActivityFilter('R')">Canjes</a>
                 </div>          
-            </div>
+            <!-- </div> -->
 
             <div class="item item-divider">
                 <p>Total: <strong ng-bind="viewdata.activityCounterLabel"></strong></p>
             </div>
 
             <ion-list>
-            	<ion-item class="item item-avatar item-text-wrap item-icon-right activity-activityitem" ng-repeat="activity in viewdata.user.activity | filter:viewdata.searchtext track by $index" ng-click="OpenStore(activity.SubEntityID)">
-            		<img ng-src="{{GetCommerceImage(activity.Image)}}">
+            	<ion-item class="item item-text-wrap item-icon-right activity-activityitem" ng-repeat="activity in viewdata.user.activity | filter:viewdata.searchtext track by $index" ng-click="OpenStore(activity.SubEntityID)">
+            		<div>
+                        <p><strong class="activity-commerce-name" ng-bind="activity.SubEntityName"></strong></p>  
+                        <p><strong ng-bind="gDate(activity.ActivityDate)"></strong></p>
+                        <p class="activity-listitem-points" ng-bind="GetActivityPointsLabel(activity.ActivityType) + ' ' + activity.Points + ' pops'"></p>
+                    </div>
+
+                    <i class="icon mykenuu-commerceavatar-container">
+                        <img class="mykenuu-commerceavatar" ng-src="{{GetCommerceImage(activity.Image)}}">  
+                    </i>
+                    <!-- <img ng-src="{{GetCommerceImage(activity.Image)}}">
                     <p><strong ng-bind="gDate(activity.ActivityDate)"></strong></p>                
             		<p><strong class="activity-commerce-name" ng-bind="activity.SubEntityName"></strong></p>
             		<i class="icon icon-gift activity-redemption" ng-show="activity.ActivityType == 'R'"></i>
@@ -58,7 +67,7 @@
                                 <strong ng-bind="GetActivityPointsLabel(activity.ActivityType)"></strong> <span class="activity-points-label" ng-bind="activity.Points"></span>
                             </span>
                         </p>
-    				</div>
+    				</div> -->
             	</ion-item>
                 <ion-item class="item text-center" ng-show="viewdata.showLoadMoreButton" ng-click="SetActivityPageToShow()">
                     <span ng-bind="viewdata.loadMoreButtonMessage"></span>                    

@@ -1,10 +1,11 @@
+
 @font-face {
 	font-family: 'icomoon';
-	src:url('../fonts/icomoon.eot?-dmwnfi');
-	src:url('../fonts/icomoon.eot?#iefix-dmwnfi') format('embedded-opentype'),
-		url('../fonts/icomoon.woff?-dmwnfi') format('woff'),
-		url('../fonts/icomoon.ttf?-dmwnfi') format('truetype'),
-		url('../fonts/icomoon.svg?-dmwnfi#icomoon') format('svg');
+	src:url('../fonts/icomoon.eot?-bm8ke2');
+	src:url('../fonts/icomoon.eot?#iefix-bm8ke2') format('embedded-opentype'),
+		url('../fonts/icomoon.ttf?-bm8ke2') format('truetype'),
+		url('../fonts/icomoon.woff?-bm8ke2') format('woff'),
+		url('../fonts/icomoon.svg?-bm8ke2#icomoon') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -23,103 +24,87 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.icon-share:before {
+	content: "\e081";
+}
+.icon-lollipop:before {
+	content: "\e60f";
+}
 .icon-Sticker-Morado:before {
 	content: "\e600";
 }
-
 .icon-barcode:before {
 	content: "\e937";
 }
-
 .icon-qrcode:before {
 	content: "\e938";
 }
-
 .icon-history:before {
 	content: "\e94d";
 }
-
 .icon-user:before {
 	content: "\e971";
 }
-
 .icon-gift:before {
 	content: "\e99f";
 }
-
 .icon-happy:before {
 	content: "\e9df";
 }
-
 .icon-smile:before {
 	content: "\e9e1";
 }
-
 .icon-sad:before {
 	content: "\e9e5";
 }
-
 .icon-neutral:before {
 	content: "\e9f7";
 }
-
 .icon-wondering:before {
 	content: "\e9fb";
 }
-
 .icon-heart:before {
 	content: "\e601";
 }
-
 .icon-cloud:before {
 	content: "\e602";
 }
-
 .icon-star:before {
 	content: "\e603";
 }
-
 .icon-user2:before {
 	content: "\e60d";
 }
-
 .icon-search:before {
 	content: "\e60e";
 }
-
 .icon-settings:before {
 	content: "\e604";
 }
-
 .icon-tag:before {
 	content: "\e605";
 }
-
 .icon-lock:before {
 	content: "\e606";
 }
-
 .icon-bulb:before {
 	content: "\e607";
 }
-
 .icon-location:before {
 	content: "\e608";
 }
-
 .icon-phone:before {
 	content: "\e609";
 }
-
 .icon-mail:before {
 	content: "\e60a";
 }
-
 .icon-like:before {
 	content: "\e60b";
 }
-
 .icon-params:before {
 	content: "\e60c";
 }
-
+.icon-shop:before {
+	content: "\e610";
+}

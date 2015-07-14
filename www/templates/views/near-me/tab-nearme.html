@@ -26,20 +26,15 @@
 			</div>
 		<!-- </form> -->
 		<div class="item-input-inset nearme-search-item" ng-show="viewdata.locationSet">
-			<div class="row">
-				<style type="text/css" media="screen">
-					.borderKilometer {
-						border-bottom: 2px solid #FFFFFF !important;
-					}
-				</style>
+			<div class="row">				
 				<div class="col-33 text-center">
-					<button class="button button-clear" ng-click="ChangeKilometers(5)" ng-class="{borderKilometer:viewdata.kilometers==5}">5Km</button>
+					<button class="button button-clear nearme-search-item-btn" style="color: white !important;" ng-click="ChangeKilometers(5)" ng-class="{borderKilometer:viewdata.kilometers==5}">5Km</button>
 				</div>
 				<div class="col-33 text-center">
-					<button class="button button-clear" ng-click="ChangeKilometers(10)" ng-class="{borderKilometer:viewdata.kilometers==10}">10Km</button>
+					<button class="button button-clear nearme-search-item-btn" style="color: white !important;" ng-click="ChangeKilometers(10)" ng-class="{borderKilometer:viewdata.kilometers==10}">10Km</button>
 				</div>
 				<div class="col-33 text-center">
-					<button class="button button-clear" ng-click="ChangeKilometers(25)"  ng-class="{borderKilometer:viewdata.kilometers==25}">25Km</button>
+					<button class="button button-clear nearme-search-item-btn" style="color: white !important;" ng-click="ChangeKilometers(25)"  ng-class="{borderKilometer:viewdata.kilometers==25}">25Km</button>
 				</div>
 			</div>
 		</div>
@@ -53,8 +48,20 @@
 		</div>
 
 		<ion-list id="nearme-list">
-        	<ion-item class="item-icon-left nearme-commerce-item" ng-repeat="item in viewdata.searchResults | orderBy:'Distance'" item="item" ng-click="OpenStore(item)">
-        		<i class="icon">
+        	<ion-item class="item-icon-right nearme-commerce-item" ng-repeat="item in viewdata.searchResults | orderBy:'Distance'" item="item" ng-click="OpenStore(item)">
+        		<div>
+                    <p><strong class="activity-commerce-name" ng-bind="item.Name"></strong></p>  
+                    <div class="row" ng-show="viewdata.locationSet">
+                    	<div class="col text-left nearme-commerce-sublabel">
+                    		<i class="icon-location newarme-locationicon"></i> 
+                    		<span class="newarme-locationdistance" ng-bind="formatDistance(item.Distance)"></span>	 Km                    		
+                    	</div>
+                    </div>
+                </div>
+        		<i class="icon mykenuu-commerceavatar-container">
+                    <img class="mykenuu-commerceavatar" ng-src="{{GetAvatarImage(item.Image)}}">  
+                </i>
+        		<!-- <i class="icon">
 		    		<img class="nearme-commerce-avatar" src="{{GetAvatarImage(item.Image)}}">
 		    	</i>
           		<div class="row">
@@ -65,7 +72,7 @@
 		    	</div>		
 		    	<div class="row" ng-show="viewdata.locationSet">
 		    		<div class="col text-left nearme-commerce-sublabel"><i class="icon-location"></i> <span ng-bind="formatDistance(item.Distance)"></span>	 Km</div>
-		    	</div>    	
+		    	</div> -->    	
         	</ion-item>        	
       	</ion-list>      	
       	
