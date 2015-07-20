@@ -55,11 +55,12 @@ body, h1, h2, h3, h4, h5, p, div, span, input, button, strong  {
 	$kenuu-dark-purple: 			 #6E1780;
 	$kenuu-darker-purple: 		     #4E0F5B;
 	$kenuu-light-purple:			 #D6C8FF;
+	$kenuu-light-purple2:		     #6D126F;
 	$kenuu-light-blue:				 #00D9A3;
 	$kenuu-dark-green: 				 #8FB130;
 	$kenuu-lightpurple-btn:			 #A5559E;
 
-	$modal-bg: 					     $kenuu-darker-purple;
+	$modal-bg: 					     white;
 
 	$social-facebook-color:			 #2D5C98;
 	$social-twitter-color: 		     #2FAEEE;
@@ -340,6 +341,14 @@ ion-nav-view[nav-view-transition="ios"] {
 		-moz-transition: all 0.1s ease-in-out !important;
 		-o-transition: all 0.1s ease-in-out !important;
 		transition: all 0.1s ease-in-out !important;
+	}
+
+	.checkbox-balanced input:before, .checkbox-balanced .checkbox-icon:before {
+		border-color: $kenuu-green !important;
+	}
+
+	.checkbox-balanced input:checked:before, .checkbox-balanced input:checked + .checkbox-icon:before {
+		background-color: $kenuu-green !important;
 	}
 
 /* ******* Modal MsgBox ******** */
@@ -686,9 +695,20 @@ ion-nav-view[nav-view-transition="ios"] {
 	.qrcode-view {
 
 	}
+	.qrcode-qrelement-container {
+		width: 100vw;
+		padding: 20px;		
+	}
+	.qrcode-qrelement-div {
+		padding: 20px;
+		width: 250px;
+		background-color: white;
+		position: relative;
+		margin: auto;
+	}
 	.qrcode-content {
 		//background-color: $qrcode-bg-color;
-		background-image: url('../img/food.png');		
+		background-image: url('../img/fondo.png');		
 	}
 	.qrcode-item {
 		// background-color: $qrcode-bg-color;
@@ -711,10 +731,10 @@ ion-nav-view[nav-view-transition="ios"] {
 		border-radius: 12px;
 	}
 	.qrcode-qrtitle {
-		color: $qrcode-label !important;
+		color: white !important;
 	}
 	.qrcode-qrlabel {
-		color: $qrcode-label !important;
+		color: white !important;
 	}
 
 	.qrcode-btn {
@@ -925,7 +945,7 @@ ion-nav-view[nav-view-transition="ios"] {
 	.profileedit-content {		
 		height: 100vh;
 		// background-color: $reward-content-bgcolor !important;
-		background-image: url('../img/food.png');
+		// background-image: url('../img/food.png');
 	}
 	.profileedit-input {
 		color: $input-profile-font-color;
@@ -939,7 +959,6 @@ ion-nav-view[nav-view-transition="ios"] {
 	.profileedit-button {
 		background-color: $action-btn-color !important;
 	}
-
 	.pwdchange-login-pwdmessage {
 		color: black;
 	}
@@ -949,7 +968,7 @@ ion-nav-view[nav-view-transition="ios"] {
 	.activity-content {		
 		height: 100vh;
 		// background-color: $reward-content-bgcolor !important;
-		background-image: url('../img/food.png');
+		// background-image: url('../img/food.png');
 	}
 	.activity-activityitem {
 		border: 1px solid #efefef !important;
@@ -1026,7 +1045,30 @@ ion-nav-view[nav-view-transition="ios"] {
 	.activity-listitem-points {
 		color: $kenuu-purple !important;
 	}
-
+	.activity-storename {
+		color: $kenuu-purple !important;
+	}
+	.activity-rewardname {
+		font-weight: bold;
+		font-size: 20px !important;
+	}
+	.activity-row {
+		padding: 0 !important; 
+	}
+	.activity-col {
+		padding: 0 !important; 	
+	}
+	.activity-redemption-points {
+		color: $kenuu-purple !important;
+		font-weight: bold;
+		font-size: 27px !important;
+	}
+	.activity-redemption-pops {
+		color: $kenuu-purple !important;
+	}
+	.activity-redemption-points-col {
+		width: 90px !important;
+	}
 
 /* ******** Map ******** */
 	.map-centeronme-button {
@@ -1089,7 +1131,7 @@ ion-nav-view[nav-view-transition="ios"] {
 
 	.setupview-content {
 		background-color: white;
-		background-image: url('../img/food.png');
+		background-image: url('../img/fondo.png');
 	}
 	.setupview-closebtn {
 		color: $kenuu-purple !important;font-size: 20px !important;
@@ -1139,6 +1181,15 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 
 /* ******** Near Me ******** */
+	.spinner svg {
+		width: 28px;
+		height: 28px;
+		stroke: $kenuu-purple;
+		fill: $kenuu-purple;
+	}
+	.searching-location-spinner {
+		// background-color: #ddd;		
+	}
 	.borderKilometer {
 		border-bottom: 3px solid $kenuu-lightpurple-btn !important;
 	}
@@ -1148,7 +1199,7 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 
 	.nearme-content {
-		background-image: url('../img/food.png');
+		background-image: url('../img/fondo.png');
 	}
 
 	.nearme-search-item {
@@ -1219,7 +1270,7 @@ ion-nav-view[nav-view-transition="ios"] {
 	}
 
 	.nearme-nolocationitem {
-		background-color: $kenuu-green;
+		background-color: $kenuu-light-purple2;
 		
 	}
 	.nearme-nolocationitem p {
@@ -1405,7 +1456,7 @@ ion-nav-view[nav-view-transition="ios"] {
 		color: white !important;
 	}
 	.store-closed {
-		color: red;
+		color: white;
 	}
 
 /* ******** Reward Detail ******** */
@@ -1823,6 +1874,13 @@ ion-nav-view[nav-view-transition="ios"] {
 
 /* ******** My Kenuu ********* */
 
+	.mykenuu-tryagainbtn {
+		position:relative; 
+		top:10px; 
+		color: white !important; 
+		font-size:18px !important;
+	}
+
 	.mykenuu-membersince h2 {
 		color: $kenuu-purple !important;
 		font-weight: bold;
@@ -1849,3 +1907,76 @@ ion-nav-view[nav-view-transition="ios"] {
 		-webkit-clip-path: circle(25px at 50% 25px) !important;
 	}
 	
+
+/* ******** Slider ******** */
+	.slider-skipbtn-container {
+		border:none; 
+		background-color:transparent; 
+		height:30px;
+		padding: 0 !important;
+		padding-right: 10px !important; 
+	}
+	.slider-skipbtn {
+		width: 180px;
+		height: 40px !important;
+		color: white !important;
+	}
+	.slider-skipbtn-title {
+		position: relative;
+		top: -3px;		
+	}
+	.slider-skipbtn i {		
+		font-size: 25px !important;
+		font-weight: bold;		
+	}
+	.slide-box {
+		height: 90vh;
+	}
+	.slider-pager {
+		position: fixed; 
+		bottom:  10px;
+	}
+	.slider-pager .slider-pager-page {
+		color: white!important;
+	}
+	.slider-view {
+		background-color: $kenuu-purple;
+		background-image: url('../img/map.jpg');
+	}
+	.slider-view-2 {
+		background-color: $kenuu-purple;
+		background-image: url('../img/pattern-1.png');	
+	}
+	.slider-content {
+		
+	}
+	.slider-main-img-div {
+		width: 100vw;
+	}
+	.slider-main-img {
+		position: relative;
+		margin: auto;
+		width:95vw;		
+	}
+	.slider-title-div {		
+		width: 100vw;
+	}
+	.slider-title-div h1 {
+		color: white !important;
+		 font-size: 19px !important;
+		font-weight: bold;
+	}
+	.slider-title-div p {
+		color: white !important;
+		font-size: 16px !important;
+		margin-top: -10px;
+	}
+	.slider-subtitle-div p {
+		color: white !important;		
+		font-size: 16px !important;
+	}
+
+
+
+
+

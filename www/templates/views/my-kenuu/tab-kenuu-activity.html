@@ -5,7 +5,7 @@
     <!--  overflow-scroll="true" // No se puede usar cuando se quiere implementar pull to refresh -->
     <ion-content class="activity-content">
         <ion-refresher
-            pulling-text="Hale para refrescar..."
+            pulling-text="Deslice para refrescar..."
             on-refresh="doRefresh()">
         </ion-refresher> 
 
@@ -31,15 +31,30 @@
 
             <ion-list>
             	<ion-item class="item item-text-wrap item-icon-right activity-activityitem" ng-repeat="activity in viewdata.user.activity | filter:viewdata.searchtext track by $index" ng-click="OpenStore(activity.SubEntityID)">
-            		<div>
-                        <p><strong class="activity-commerce-name" ng-bind="activity.SubEntityName"></strong></p>  
-                        <p><strong ng-bind="gDate(activity.ActivityDate)"></strong></p>
-                        <p class="activity-listitem-points" ng-bind="GetActivityPointsLabel(activity.ActivityType) + ' ' + activity.Points + ' pops'"></p>
-                    </div>
+            		<div ng-show='activity.ActivityType == "V"'>
+                        <div>                            
+                            <p><strong class="activity-commerce-name" ng-bind="activity.SubEntityName"></strong></p>  
+                            <p><strong ng-bind="gDate(activity.ActivityDate)"></strong></p>
+                            <p class="activity-listitem-points" ng-bind="GetActivityPointsLabel(activity.ActivityType) + ' ' + activity.Points + ' pops'"></p>
+                        </div>
 
-                    <i class="icon mykenuu-commerceavatar-container">
-                        <img class="mykenuu-commerceavatar" ng-src="{{GetCommerceImage(activity.Image)}}">  
-                    </i>
+                        <i class="icon mykenuu-commerceavatar-container">
+                            <img class="mykenuu-commerceavatar" ng-src="{{GetCommerceImage(activity.Image)}}">  
+                        </i>
+                    </div>
+                    <div class="row activity-row" ng-show='activity.ActivityType == "R"'>
+                        <div class="col col-90 activity-col">
+                            <p class="activity-rewardname" ng-bind="activity.RewardName"></p>
+                            <p>
+                                <span>Tienda: </span><span class="activity-storename" ng-bind="activity.SubEntityName"></span>
+                            </p>
+                            <p ng-bind="gDate(activity.ActivityDate)"></p>
+                        </div>
+                        <div class="col col-20 text-center activity-redemption-points-col">
+                            <p class="activity-redemption-points" ng-bind="activity.Points"></p>
+                            <p class="activity-redemption-pops">POPS</p>
+                        </div>
+                    </div>
             	</ion-item>
                 <ion-item class="item text-center" ng-show="viewdata.showLoadMoreButton" ng-click="SetActivityPageToShow()">
                     <span ng-bind="viewdata.loadMoreButtonMessage"></span>                    

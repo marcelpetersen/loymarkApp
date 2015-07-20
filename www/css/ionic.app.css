@@ -7905,6 +7905,12 @@ a[href^="http://maps.google.com/maps"] {
   -o-transition: all 0.1s ease-in-out !important;
   transition: all 0.1s ease-in-out !important; }
 
+.checkbox-balanced input:before, .checkbox-balanced .checkbox-icon:before {
+  border-color: #A5CD38 !important; }
+
+.checkbox-balanced input:checked:before, .checkbox-balanced input:checked + .checkbox-icon:before {
+  background-color: #A5CD38 !important; }
+
 /* ******* Modal MsgBox ******** */
 .md-overlay-ok {
   background: #489A0F !important; }
@@ -7920,7 +7926,7 @@ a[href^="http://maps.google.com/maps"] {
 
 /* ******* Modal ******* */
 .modal-bg {
-  background-color: #4E0F5B !important; }
+  background-color: white !important; }
 
 /* ******** Profile ******** */
 .profile_content {
@@ -8183,8 +8189,19 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
   color: #800080; }
 
 /* ******** QR Code ********* */
+.qrcode-qrelement-container {
+  width: 100vw;
+  padding: 20px; }
+
+.qrcode-qrelement-div {
+  padding: 20px;
+  width: 250px;
+  background-color: white;
+  position: relative;
+  margin: auto; }
+
 .qrcode-content {
-  background-image: url('../img/food.png'); }
+  background-image: url('../img/fondo.png'); }
 
 .qrcode-item {
   border: none !important;
@@ -8203,10 +8220,10 @@ ion-nav-view[nav-view-transition="ios"] .reward-sidemenu {
   border-radius: 12px; }
 
 .qrcode-qrtitle {
-  color: #800080 !important; }
+  color: white !important; }
 
 .qrcode-qrlabel {
-  color: #800080 !important; }
+  color: white !important; }
 
 .qrcode-btn {
   background-color: white !important;
@@ -8368,8 +8385,7 @@ ion-nav-view[nav-view-transition="ios"] .stores-bottomseparator {
 
 /* ******** Profile Edit ********* */
 .profileedit-content {
-  height: 100vh;
-  background-image: url('../img/food.png'); }
+  height: 100vh; }
 
 .profileedit-input {
   color: #333333;
@@ -8388,8 +8404,7 @@ ion-nav-view[nav-view-transition="ios"] .stores-bottomseparator {
 
 /* ******** Activity ******** */
 .activity-content {
-  height: 100vh;
-  background-image: url('../img/food.png'); }
+  height: 100vh; }
 
 .activity-activityitem {
   border: 1px solid #efefef !important; }
@@ -8455,6 +8470,30 @@ ion-nav-view[nav-view-transition="ios"] .activity-bottomspacer {
 .activity-listitem-points {
   color: #800080 !important; }
 
+.activity-storename {
+  color: #800080 !important; }
+
+.activity-rewardname {
+  font-weight: bold;
+  font-size: 20px !important; }
+
+.activity-row {
+  padding: 0 !important; }
+
+.activity-col {
+  padding: 0 !important; }
+
+.activity-redemption-points {
+  color: #800080 !important;
+  font-weight: bold;
+  font-size: 27px !important; }
+
+.activity-redemption-pops {
+  color: #800080 !important; }
+
+.activity-redemption-points-col {
+  width: 90px !important; }
+
 /* ******** Map ******** */
 .map-centeronme-button {
   height: 80px;
@@ -8502,7 +8541,7 @@ on-nav-view[nav-view-transition="ios"] .map-centeronme-button {
 /* ******** Setup View ******** */
 .setupview-content {
   background-color: white;
-  background-image: url('../img/food.png'); }
+  background-image: url('../img/fondo.png'); }
 
 .setupview-closebtn {
   color: #800080 !important;
@@ -8543,6 +8582,12 @@ on-nav-view[nav-view-transition="ios"] .map-centeronme-button {
   background-image: url('../img/food.png'); }
 
 /* ******** Near Me ******** */
+.spinner svg {
+  width: 28px;
+  height: 28px;
+  stroke: #800080;
+  fill: #800080; }
+
 .borderKilometer {
   border-bottom: 3px solid #A5559E !important; }
 
@@ -8551,7 +8596,7 @@ on-nav-view[nav-view-transition="ios"] .map-centeronme-button {
   color: #555555 !important; }
 
 .nearme-content {
-  background-image: url('../img/food.png'); }
+  background-image: url('../img/fondo.png'); }
 
 .nearme-search-item {
   background-color: #800080;
@@ -8610,7 +8655,7 @@ ion-nav-view[nav-view-transition="ios"] .nearme-icon {
   top: 15px; }
 
 .nearme-nolocationitem {
-  background-color: #A5CD38; }
+  background-color: #6D126F; }
 
 .nearme-nolocationitem p {
   color: white !important; }
@@ -8779,7 +8824,7 @@ ion-nav-view[nav-view-transition="ios"] .nearme-icon {
   color: white !important; }
 
 .store-closed {
-  color: red; }
+  color: white; }
 
 /* ******** Reward Detail ******** */
 .reward-detail-avatar {
@@ -9148,6 +9193,12 @@ ion-nav-view[nav-view-transition="ios"] .nearme-icon {
   top: 10px; }
 
 /* ******** My Kenuu ********* */
+.mykenuu-tryagainbtn {
+  position: relative;
+  top: 10px;
+  color: white !important;
+  font-size: 18px !important; }
+
 .mykenuu-membersince h2 {
   color: #800080 !important;
   font-weight: bold; }
@@ -9172,3 +9223,67 @@ ion-nav-view[nav-view-transition="ios"] .nearme-icon {
   height: 50px;
   width: auto;
   -webkit-clip-path: circle(25px at 50% 25px) !important; }
+
+/* ******** Slider ******** */
+.slider-skipbtn-container {
+  border: none;
+  background-color: transparent;
+  height: 30px;
+  padding: 0 !important;
+  padding-right: 10px !important; }
+
+.slider-skipbtn {
+  width: 180px;
+  height: 40px !important;
+  color: white !important; }
+
+.slider-skipbtn-title {
+  position: relative;
+  top: -3px; }
+
+.slider-skipbtn i {
+  font-size: 25px !important;
+  font-weight: bold; }
+
+.slide-box {
+  height: 90vh; }
+
+.slider-pager {
+  position: fixed;
+  bottom: 10px; }
+
+.slider-pager .slider-pager-page {
+  color: white !important; }
+
+.slider-view {
+  background-color: #800080;
+  background-image: url('../img/map.jpg'); }
+
+.slider-view-2 {
+  background-color: #800080;
+  background-image: url('../img/pattern-1.png'); }
+
+.slider-main-img-div {
+  width: 100vw; }
+
+.slider-main-img {
+  position: relative;
+  margin: auto;
+  width: 95vw; }
+
+.slider-title-div {
+  width: 100vw; }
+
+.slider-title-div h1 {
+  color: white !important;
+  font-size: 19px !important;
+  font-weight: bold; }
+
+.slider-title-div p {
+  color: white !important;
+  font-size: 16px !important;
+  margin-top: -10px; }
+
+.slider-subtitle-div p {
+  color: white !important;
+  font-size: 16px !important; }

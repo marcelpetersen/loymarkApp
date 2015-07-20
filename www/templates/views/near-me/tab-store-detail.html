@@ -5,7 +5,7 @@
 	<ion-content id="storedetail-content" class="commercewr-content" overflow-scroll="true">
 
 		<ion-refresher
-			pulling-text="Hale para refrescar..."
+			pulling-text="Deslice para refrescar..."
 			on-refresh="ReloadStoreInfo()">
 		</ion-refresher> 
 
@@ -105,55 +105,6 @@
 			<div class="col storedetail-contactinfo-cell"><i class="icon ion-android-share-alt"></i></div>
 		</div>
 
-		<!-- <div class="list">
-						
-			<div class="item item-text-wrap item-icon-left">
-				<i class="icon ion-clock"></i>
-				<p>{{gTime(viewdata.store.OpeningHours, viewdata.store.ClosingHours)}} 
-					<span ng-switch on="isOpenForBusiness(viewdata.store.OpeningHours, viewdata.store.ClosingHours)" style="margin-left:20px;">
-					    <span ng-switch-when="Abierto" class="store-open">
-					    	Abierto 
-					    </span>
-					    <span ng-switch-default class="store-closed">
-					        Cerrado
-					    </span>
-					</span>					
-				</p>
-			</div>
-			<div class="item item-text-wrap item-icon-left" ng-click="EmailTo(viewdata.store.Email)">
-				<i class="icon icon-mail"></i>
-				<p>{{viewdata.store.Email}}</p>
-			</div>
-			<div class="item item-text-wrap item-icon-left" ng-click="DoPhoneCall(viewdata.store.Phone)">
-				<i class="icon ion-ios-telephone-outline"></i>
-				<p>{{viewdata.store.Phone}}</p>
-			</div>
-			<div class="item item-text-wrap item-icon-left" ng-click="OpenPage(viewdata.store.FacebookPage)">
-				<i class="icon ion-social-facebook-outline"></i>
-				<p>{{viewdata.store.FacebookPage}}</p>
-			</div>
-			<div class="item item-text-wrap item-icon-left" ng-click="OpenPage(viewdata.store.TwitterPage)">
-				<i class="icon ion-social-twitter-outline"></i>
-				<p>{{viewdata.store.TwitterPage}}</p>
-			</div>
-		</div> -->
-		
-		<!-- <ul class="list" style="background-color:#eeeeee !important;" ng-show="viewdata.socialmediaapps.facebook || viewdata.socialmediaapps.twitter">
-		    <div class="item item-divider commercewr-detail-title">
-				<strong style="margin-left:5px">Compartir:</strong>
-			</div>		
-			<div class="item">
-				<div class="row">
-					<div ng-show="viewdata.socialmediaapps.facebook" class="col text-center commerce-social-fb-font" ng-click="ShareViaFacebook(viewdata.store)">
-						<i class="ion-social-facebook"></i> facebook
-					</div>
-					<div ng-show="viewdata.socialmediaapps.twitter" class="col text-center commerce-social-twitter-font" ng-click="ShareViaTwitter(viewdata.store)">
-						<i class="ion-social-twitter"></i> twitter
-					</div>
-				</div>
-			</div>
-		</ul> -->
-
 		<ul class="list" style="background-color:#eeeeee !important; margin-top:17px;">
 		    <div class="item item-divider storedetail-list-title">
 				<p style="margin-left:5px">Premios</p>
@@ -161,7 +112,7 @@
 			<li class="item" ng-show="viewdata.rewards.length == 0">
 				No hay premios disponibles
 			</li>
-			<li ng-show="viewdata.rewards.length > 0" class="item storedetail-reward-item" collection-repeat="item in viewdata.rewards | orderBy:'Points'" ng-click="OpenRewardDetail(item)">
+			<li ng-show="viewdata.rewards.length > 0" class="item storedetail-reward-item" ng-repeat="item in viewdata.rewards | orderBy:'Points'" ng-click="OpenRewardDetail(item)">
 				<div class="row storedetail-rewarditem-row">
 					<div class="col col-50">
 						<div class="storedetail-reward-names">
@@ -180,27 +131,6 @@
 					</div>
 				</div>
 			</li>
-		    <!-- <li ng-show="viewdata.rewards.length > 0" class="item item-avatar item-icon-right item-text-wrap commercewr-detail-item" collection-repeat="item in viewdata.rewards | orderBy:'Points'" ng-click="OpenRewardDetail(item)">		    	
-		    	<img ng-src="{{GetRewardImage(item.Image)}}">
-		    	<div>
-			    	<strong><h2 ng-bind="item.Name"></h2></strong>
-
-			    	<p ng-show="GetAvailablePoints(viewdata.store) >= item.Points">		    		
-			    		¡¡Cuento con los suficientes <strong class="commercewr-popslabel"><i class="icon-pop-full"></i></strong> para canjear!!
-			    	</p>		    	
-			    	<p ng-show="GetAvailablePoints(viewdata.store) < item.Points">
-			    		<strong ng-bind="GetAvailablePoints(viewdata.store)"></strong> de <strong ng-bind="item.Points"></strong> 
-			    	</p>
-			    	<p ng-show="!item.AvailableAllStores">
-			    		Exclusivo para: <strong ng-bind="item.SubEntityName" class="commercewr-store-label"></strong>
-			    	</p>
-			    	<p>&nbsp;</p>
-			    	
-			    	<div ng-class="GetRewardsProgressClass(GetAvailablePoints(viewdata.store), item.Points)" ng-style="GetRewardProcessStyle(GetAvailablePoints(viewdata.store), item.Points)"></div>
-		    	</div>
-
-		    	<i class="icon" ng-class="GetPointsClass(GetAvailablePoints(viewdata.store), item.Points)" style="margin-right:5px;" ng-bind="item.Points"></i>		    	
-		    </li> -->
 		</ul>
 	</ion-content>		
 </ion-view>

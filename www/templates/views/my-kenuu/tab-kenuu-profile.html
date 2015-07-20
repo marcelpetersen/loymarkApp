@@ -4,18 +4,22 @@
     </ion-nav-title>-->
   	<ion-content class="profile-content profileedit-content" id="viewcontent-QR">
   		<ion-refresher
-			pulling-text="Hale para refrescar..."
+			pulling-text="Deslice para refrescar..."
 			on-refresh="doRefresh()">
 		</ion-refresher> 
   		<form name="kenuuProfileForm" ng-submit="SaveProfile()">
+  			<div class="text-center" style="margin-top:25px;">
+  				<h3>EDITAR PERFIL</h3>	
+  				<p>Modifique su información</p>
+  			</div>
 	  		<div class="text-left" style="padding-left:30px; padding-right:30px;">					
 				<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
 					<span class="input-label profileedit-label">Nombre</span>
-					<input class="profileedit-input profileForm-input" ng-model="viewdata.user.name" type="text" placeholder="Nombre">
+					<input class="profileedit-input profileForm-input" ng-model="viewdata.user.name" ng-change="ValMaxLengthField('name',50)" type="text" placeholder="Nombre">
 				</label>
 				<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
 					<span class="input-label profileedit-label">Apellido</span>
-					<input class="profileedit-input profileForm-input" ng-model="viewdata.user.lastname" type="text" placeholder="Apellido">
+					<input class="profileedit-input profileForm-input" ng-model="viewdata.user.lastname" ng-change="ValMaxLengthField('lastname',50)" type="text" placeholder="Apellido">
 				</label>
 				<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
 					<span class="input-label profileedit-label">
@@ -28,7 +32,7 @@
 						ng-model="viewdata.user.MobilePhone" 
 						type="tel" 
 						placeholder="Número de Teléfono"
-       					ng-change="ValMaxLength()"
+       					ng-change="ValMaxLength(15)"
        					onkeypress='return event.charCode >= 48 && event.charCode <= 57'>
 				</label>
 				<div role="alert">
@@ -41,6 +45,40 @@
 					<span class="input-label profileedit-label">Correo Electrónico</span>
 					<p>{{viewdata.user.Email}}</p>
 				</label>
+			</div>
+			
+			<li class="item item-checkbox checkbox-balanced" style="border:none; margin-left:30px; margin-top:10px;">
+				<label class="checkbox">
+					<input type="checkbox" ng-click="hideShowChangePassword()" scroll-bottom="btnApply">
+				</label>
+				Editar Contraseña
+			</li>						
+			
+			<div id="changePasswordDiv" ng-show="showChangePwd" class="text-left" style="padding-left:30px; padding-right:30px;">					
+				<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
+					<span class="input-label profileedit-label">Contraseña Actual</span>
+					<input class="profileedit-input profileForm-input" ng-model="viewdata.user.currentpassword" type="{{inputType}}" placeholder="">
+				</label>
+				<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
+					<span class="input-label profileedit-label">Nueva Contraseña</span>
+					<input class="profileedit-input profileForm-input" ng-model="viewdata.user.password" type="{{inputType}}" placeholder="">
+				</label>
+				<label class="item clear-item item-input item-stacked-label" style="width:80vw;">
+					<span class="input-label profileedit-label">Confirmar Nueva Contraseña</span>
+					<input class="profileedit-input profileForm-input" ng-model="viewdata.user.passwordconfirmation" type="{{inputType}}" placeholder="">
+				</label>
+
+				<li class="item item-checkbox checkbox-balanced item-clear" style="background-color:transparent; margin-top:8px;">
+					<label class="checkbox">
+					<input ng-model="passwordCheckbox" ng-click="hideShowPassword()" type="checkbox">
+					</label>
+					<label class="profile-showhidepassword-label" for="checkbox" ng-if="passwordCheckbox">Ocultar Contraseña</label>
+					<label class="profile-showhidepassword-label" for="checkbox" ng-if="!passwordCheckbox">Mostrar Contraseña</label> 
+				</li>
+
+				<p class="pwdchange-login-pwdmessage text-left" style="margin-top:10px; margin-left:15px; width:90%;">
+					* Debe contener como mínimo 8 caracteres y no se permiten espacios en blanco. Ejm: abcdefgh
+				</p>
 			</div>
 
 			<!--
@@ -58,20 +96,12 @@
 				</div>
 			</div> -->
 
-			<div class="item welcome-item" style="top:20px;">
-				<button type="submit" class="button button-block button-light welcome-btn profileedit-button">¡Guardar!</button>
+			<div id="btnApply" class="item welcome-item" style="top:20px;">
+				<button type="submit" class="button button-block button-light welcome-btn profileedit-button">Actualizar Información</button>
 			</div>
 
-			<div class="item welcome-item" style="top:10px;">
+			<!-- <div class="item welcome-item" style="top:10px;">
 				<button type="button" class="button button-block button-light welcome-btn profileedit-button" ng-click="GoToChangePwd()">Cambiar Contraseña</button>
-			</div>
-
-			<!-- <div class="item item-clear item-text-wrap" style="background-color:transparent">
-				<p class="profile-label">O bien... si desea usar otra cuenta diferente, haga tap en este botón...</p>
-			</div>
-
-			<div class="item welcome-item">
-				<button ng-click="DoLogout()" class="button button-block button-light welcome-btn profileedit-button">Cambiar de Usuario</button>
 			</div> -->
 		</form>
 		<div class="profile-bottomspacer"></div>

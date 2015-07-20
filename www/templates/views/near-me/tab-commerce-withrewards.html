@@ -3,51 +3,61 @@
 		<img src="img/kenuulogo.png" alt="" class="top-bar-logo">
 	</ion-nav-title> -->
 	<ion-content id="commercewr-content" class="commercewr-content" overflow-scroll="true">
+		
 		<ion-refresher
-			pulling-text="Hale para refrescar..."
+			pulling-text="Deslice para refrescar..."
 			on-refresh="ReloadCommerceInfo()">
 		</ion-refresher>
 
-		<div class="item text-center commercewr-header">			
-			<h2><strong>{{viewdata.commerce.Name}}</strong></h2>	
-			<div>
-				<img class="commercewr-avatar" src="{{GetAvatarImage(viewdata.commerce.Image)}}">
+		<div class="item item-text-wrap text-center storedetail-header">
+			<div class="storedetail-header-image-wrapper">
+				<img class="storedetail-header-image" src="./img/fondociudad.png">
+			</div>		
+			<div class="storedetail-nameavatar-container">
+				<div class="row">
+					<div class="col col-70">
+						<div class="storedetail-nameavatar-namescontainer">
+							<h2>{{viewdata.commerce.Name}}</h2>
+						</div>						
+					</div>
+					<div class="col col-30 text-right">
+						<img class="commercewr-avatar" src="{{GetAvatarImage(viewdata.commerce.Image)}}">	
+					</div>
+				</div>
+			</div>					
+		</div>
+
+		<div class="row storedetail-topbtn-row">
+			<div class="col text-center storedetail-top-btn storedetail-top-btn1" ng-click="OpenMaps(viewdata.commerce.LocationLatitude,viewdata.commerce.LocationLongitude)">
+				<div class="row">
+					<div class="col col-80 storedetail-top-btn-label"><p>¿Cómo llegar?</p></div>
+					<div class="col col-20 storedetail-top-btn-icon"><i class="ion-map"></i></div>
+				</div>
+			</div>
+			<div style="width:7px; background-color:#92318A"></div>
+			<div class="col text-center storedetail-top-btn storedetail-top-btn2" ng-click="OpenStores()">
+				<div class="row">
+					<div class="col col-80 storedetail-top-btn-label"><p>Ver Tiendas</p></div>
+					<div class="col col-20 storedetail-top-btn-icon"><i class="icon-shop"></i></div>
+				</div>
 			</div>
 		</div>
-		<div class="item">
-			<div class="row">
-				<div class="col text-center" ng-click="OpenMaps(viewdata.commerce.LocationLatitude,viewdata.commerce.LocationLongitude)">
-					<p>¿Cómo llegar?</p>
-				</div>
-				<div class="col text-center item-text-wrap item-icon-right" ng-click="OpenStores()">
-					<p>Ver Tiendas</p>
-					<i class="icon ion-android-arrow-forward" style="color:#3c3c3c !important;"></i>
-				</div>
-			</div>
-		</div>
+
 		<div class="item commercewr-detail-pops-item" style="padding:0">
-			<div class="row">
-				<div class="col text-center">
-					<div style="margin-top:20px;">
-						<i class="icon-pop-full commercewr-pop"></i>
-	                	<strong class="commercewr-detail-balance commercewr-points" style="position:relative; top:-5px; margin-left: 8px;">{{GetVal(viewdata.commerce.PointsAvailable)}}</strong> 
-                	</div>					
-				</div>
+			<div class="row">				
 				<div class="col">
 					<div class="row">
-						<div class="col commercewr-detail-title text-center"><strong>Visitas</strong></div>
+						<div class="col commercewr-detail-title text-center"><strong>POPS</strong></div>
 					</div>
 					<div class="row">
 						<div class="col text-center">
-							<strong class="commercewr-detail-balance commercewr-points">
-								{{GetVisitCount(viewdata.commerce)}}
-							</strong>
+							<strong class="commercewr-detail-balance commercewr-points">{{GetVal(viewdata.commerce.PointsAvailable)}}</strong> 
 						</div>
 					</div>
 				</div>
 				<div class="col">
 					<div class="row">
-						<div class="col commercewr-detail-title text-center"><strong>Última Visita</strong></div>
+						<div class="col commercewr-detail-title text-center"><strong>ÚLTIMA VISITA</strong></div>
 					</div>
 					<div class="row">
 						<div class="col text-center">
@@ -56,47 +66,31 @@
 						</div>
 					</div>
 				</div>
+				<div class="col">
+					<div class="row">
+						<div class="col commercewr-detail-title text-center"><strong>VISITAS</strong></div>
+					</div>
+					<div class="row">
+						<div class="col text-center">
+							<strong class="commercewr-detail-balance commercewr-points">
+								{{GetVisitCount(viewdata.commerce)}}
+							</strong>
+						</div>
+					</div>
+				</div>				
 			</div>			
 		</div>
-
-		<div class="list">
-			<div class="item item-text-wrap item-icon-left" ng-click="OpenMaps(viewdata.commerce.LocationLatitude,viewdata.commerce.LocationLongitude)">
-				<i class="icon icon-location"></i>
-				<p>{{viewdata.commerce.Address}}</p>
-			</div>
-			<div class="item item-text-wrap item-icon-left" ng-click="EmailTo(viewdata.commerce.Email)">
-				<i class="icon icon-mail"></i>
-				<p>{{viewdata.commerce.Email}}</p>
-			</div>
-			<div class="item item-text-wrap item-icon-left" ng-click="DoPhoneCall(viewdata.commerce.Phone)">
-				<i class="icon ion-ios-telephone-outline"></i>
-				<p>{{viewdata.commerce.Phone}}</p>
-			</div>
-			<div class="item item-text-wrap item-icon-left" ng-click="OpenPage(viewdata.commerce.FacebookPage)">
-				<i class="icon ion-social-facebook-outline"></i>
-				<p>{{viewdata.commerce.FacebookPage}}</p>
-			</div>
-			<div class="item item-text-wrap item-icon-left" ng-click="OpenPage(viewdata.commerce.TwitterPage)">
-				<i class="icon ion-social-twitter-outline"></i>
-				<p>{{viewdata.commerce.TwitterPage}}</p>
-			</div>
+		<div class="item item-text-wrap item-icon-left storedetail-address" ng-click="OpenMaps(viewdata.commerce.LocationLatitude,viewdata.commerce.LocationLongitude)">
+			<i class="icon icon-location storedetail-locationicon"></i>
+			<p>{{viewdata.commerce.Address}}</p>
 		</div>
-
-		<ul class="list" style="margin-top:-21px; background-color:#eeeeee !important;" ng-show="viewdata.socialmediaapps.facebook || viewdata.socialmediaapps.twitter">
-		    <div class="item item-divider commercewr-detail-title">
-				<strong style="margin-left:5px">Compartir:</strong>
-			</div>		
-			<div class="item">
-				<div class="row">
-					<div ng-show="viewdata.socialmediaapps.facebook" class="col text-center commerce-social-fb-font" ng-click="ShareViaFacebook(viewdata.commerce)">
-						<i class="ion-social-facebook"></i> facebook
-					</div>
-					<div ng-show="viewdata.socialmediaapps.twitter" class="col text-center commerce-social-twitter-font" ng-click="ShareViaTwitter(viewdata.commerce)">
-						<i class="ion-social-twitter"></i> twitter
-					</div>
-				</div>
-			</div>
-		</ul>
+		<div class="row storedetail-contactinfo-row">
+			<div class="col storedetail-contactinfo-cell" ng-click="DoPhoneCall(viewdata.commerce.Phone)"><i class="icon ion-ios-telephone-outline"></i></div>
+			<div class="col storedetail-contactinfo-cell" ng-click="EmailTo(viewdata.commerce.Email)"><i class="icon ion-ios-email-outline"></i></div>
+			<div class="col storedetail-contactinfo-cell" ng-click="OpenPage(viewdata.commerce.FacebookPage)"><i class="icon ion-social-facebook-outline"></i></div>
+			<div class="col storedetail-contactinfo-cell" ng-click="OpenPage(viewdata.commerce.TwitterPage)"><i class="icon ion-social-twitter-outline"></i></div>
+			<div class="col storedetail-contactinfo-cell"><i class="icon ion-android-share-alt"></i></div>
+		</div>
 
 		<div class="md-modal md-effect-7" id="modal-msgbox-login">
 			<div class="md-content">
@@ -109,35 +103,32 @@
 		</div>
 		<div class="md-overlay"></div><!-- the overlay element -->
 
-		<ul class="list" style="margin-top:-21px; background-color:#eeeeee !important;">
-		    <div class="item item-divider commercewr-detail-title">
-				<strong style="margin-left:5px">Premios</strong>
+		<ul class="list" style="background-color:#eeeeee !important; margin-top:17px;">
+		    <div class="item item-divider storedetail-list-title">
+				<p style="margin-left:5px">Premios</p>
 			</div>
 			<li class="item" ng-show="viewdata.rewards.length == 0">
 				No hay premios disponibles
 			</li>
-		    <li ng-show="viewdata.rewards.length > 0" class="item item-avatar item-icon-right item-text-wrap commercewr-detail-item" ng-repeat="item in viewdata.rewards | orderBy:'Points'" ng-click="OpenRewardDetail(item)">		    	
-		    	<img ng-src="{{GetRewardImage(item.Image)}}">
-
-		    	<div>
-			    	<strong><h2 ng-bind="item.Name"></h2></strong>
-
-			    	<p ng-show="viewdata.commerce.PointsAvailable >= item.Points">		    		
-			    		¡¡Cuento con los suficientes <strong class="commercewr-popslabel"><i class="icon-pop-full"></i></strong> para canjear!!
-			    	</p>		    	
-			    	<p ng-show="viewdata.commerce.PointsAvailable < item.Points">
-			    		<strong ng-bind="GetAvailablePoints(viewdata.commerce.PointsAvailable)"></strong> de <strong ng-bind="item.Points"></strong> 
-			    	</p>
-			    	<p ng-show="!item.AvailableAllStores">
-			    		Exclusivo para: <strong ng-bind="item.SubEntityName" class="commercewr-store-label"></strong>
-			    	</p>
-			    	<p>&nbsp;</p>
-			    	
-			    	<div ng-class="GetRewardsProgressClass(viewdata.commerce.PointsAvailable, item.Points)" ng-style="GetRewardProcessStyle(viewdata.commerce.PointsAvailable, item.Points)"></div>
-		    	</div>
-
-		    	<i class="icon" ng-class="GetPointsClass(viewdata.commerce.PointsAvailable, item.Points)" style="margin-right:5px;" ng-bind="item.Points"></i>		    	
-		    </li>
+			<li ng-show="viewdata.rewards.length > 0" class="item storedetail-reward-item" collection-repeat="item in viewdata.rewards | orderBy:'Points'" ng-click="OpenRewardDetail(item)">
+				<div class="row storedetail-rewarditem-row">
+					<div class="col col-50">
+						<div class="storedetail-reward-names">
+							<h2 ng-bind="item.Name"></h2>
+							<p ng-bind="item.Description"></p>
+						</div>
+					</div>
+					<div class="col col-20 text-center storedetail-rewardpoints">
+						<div class="storedetail-reward-pointscontainer">
+							<h2 ng-bind="item.Points"></h2>
+							<p>pops</p>	
+						</div>
+					</div>
+					<div class="col col-30 storedetail-rewardimage-container">
+						<img ng-src="{{GetRewardImage(item.Image)}}">
+					</div>
+				</div>
+			</li>
 		</ul>
 	</ion-content>		
 </ion-view>

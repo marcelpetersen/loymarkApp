@@ -5,19 +5,28 @@
     </ion-nav-title>     -->
     <ion-content id="qrcode-content" scroll=true class="qrcode-content text-center" id="viewcontent-QR">
         
-        <div class="list card" style="width:80vw; margin:auto !important; top:20px; border-radius:10px; border: 1px solid #ddd !important;">
+        <div style="height:10px;"></div>
+        <h2 class="qrcode-qrtitle"><strong>Mi Identificación</strong></h2>  
+        <p class="qrcode-qrlabel">Mi código para ganar <strong>pops!</strong></p>
+        
+        <div style="height:10px;"></div>
+        <div class="qrcode-qrelement-container">
+            <div class="qrcode-qrelement-div">
+                <qr text="SetupQRCode(viewdata.CardNumber)" size="200" type-number="0" correction-level="H" input-mode="ALPHA_NUM" image="true"></qr>
+            </div>
+        </div>        
+
+        <!-- <div class="list card" style="width:80vw; margin:auto !important; top:20px; border-radius:10px; border: 1px solid #ddd !important;">
             <div class="item text-left item-text-wrap" style="background-color: #eeeeee; color: white !important;">
                 <h2 class="qrcode-qrtitle"><strong>Mi Identificación</strong></h2>  
                 <p>Mi código para ganar <strong>pops!</strong></p>
             </div>            
-            <div class="item item-image" style="background-color:transparent">
-                <!-- <img src="https://chart.googleapis.com/chart?chs=210x210&cht=qr&chl={{viewdata.CardNumber}}&choe=UTF-8">                 -->
-                <div style="height:20px;"></div>
-                <!-- <qr text="viewdata.CardNumber" size="200"></qr> -->
+            <div class="item item-image" style="background-color:transparent">                
+                <div style="height:20px;"></div>                
                 <qr text="SetupQRCode(viewdata.CardNumber)" size="200" type-number="0" correction-level="H" input-mode="ALPHA_NUM" image="true"></qr>
                 <div style="height:20px;"></div>
             </div>
-        </div>
+        </div> -->
 
         <!-- <div class="item item-clear" style="background-color:transparent; top: 20px;">
             <button class="button button-block button-light qrcode-btn" ng-click="ShowBeaconsModal()" style="font-size:20px;">

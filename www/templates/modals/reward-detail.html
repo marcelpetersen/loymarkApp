@@ -8,7 +8,7 @@
 
 			<div class="item reward-detail-image-container text-center item-text-wrap">
 				<div class="reward-detail-image-wrapper">
-					<img class="reward-detail-image" ng-src="{{GetRewardImage(viewdata.selectedreward.Image)}}">
+					<img class="reward-detail-image" ng-src="{{GetRewardImage(viewdata.selectedreward.Image)}}" err-src="./img/default-1.jpg">
 				</div>
 							
 				<div class="reward-detail-overlay"> 
@@ -23,7 +23,7 @@
 						</div>
 						<div class="col col-80 reward-detail-span2">
 							<p class="reward-detail-label" ng-bind="viewdata.selectedreward.Name.toUpperCase()"></p>
-							<p class="reward-detail-sublabel" ng-bind="viewdata.selectedreward.Description"></p>
+							<p class="reward-detail-sublabel">POPS REQUERIDOS</p>
 						</div>
 					</div>
 				</div>

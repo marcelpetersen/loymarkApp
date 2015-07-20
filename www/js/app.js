@@ -13,7 +13,7 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 .constant('ApiEndpoint', {
 	url: 'http://192.168.71.98:8100/api' // CIS Network Development (Tavo)
 	// url: 'http://192.168.71.91:8100/api' // CIS Network Development (Alex)
-	// url: 'http://192.168.1.8:8100/api' // Home Development Environment
+	// url: 'http://192.168.1.11:8100/api' // Home Development Environment
 })
 
 .run(function($rootScope, $state, $ionicPlatform, networkFactory, $cordovaNetwork, deviceFactory, $cordovaPush, $ionicTabsDelegate, navigationFactory, commerceFactory, $ionicHistory, loadingBox, $cordovaGeolocation, locationFactory, appVersionFactory) {
@@ -175,6 +175,12 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	})
 
 	// **** Welcome and Login ****
+
+		.state('slider', {
+			url: '/slider',
+			templateUrl: 'templates/views/login-signup/slider.html',
+			controller: 'SliderCtrl'
+		})
 
 		// Welcome cover
 		.state('welcomecover', {
@@ -413,15 +419,27 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	// Verifies the App has already shown the welcome screen	
 	var _apikey = localStorage.getItem('userReferenceID');
 	localStorage.setItem('animationShown', false);
+	
+	var _sliderShown = localStorage.getItem('sliderShownForFirstTime');
+	if (_sliderShown == undefined) _sliderShown = false;
+	else _sliderShown = JSON.parse(_sliderShown);
+
 	var _url = "";
 	if (_apikey != undefined)
 	{
-		_url = "/tab/nearme";
-		// _url = '/locationsetup';
+		if (!_sliderShown) {
+			localStorage.setItem('sliderShownForFirstTime', true);
+			_url = '/slider';					
+			$urlRouterProvider.otherwise(_url);
+		}
+		else {
+			_url = "/tab/qrcode";
+			// _url = '/locationsetup';	
+		}
 	}
 	else
 	{
-		_url = '/welcomecover';
+		_url = '/slider';
 		// _url = '/locationsetup';
 	}	
 
@@ -462,22 +480,21 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 })
 
 .directive('onFinishRender', function () {
-		return {
-			restrict: "A",
-			link: function(scope, element, attr) {
-				if (scope.$last === true) 
-	            {
-	            	element.ready(
-	                	function () 
-	                	{
-	                    	scope.$emit(attr.onFinishRender);
-	                	}
-	                );
-	            }
-			}
+	return {
+		restrict: "A",
+		link: function(scope, element, attr) {
+			if (scope.$last === true) 
+            {
+            	element.ready(
+                	function () 
+                	{
+                    	scope.$emit(attr.onFinishRender);
+                	}
+                );
+            }
 		}
 	}
-)
+})
 
 .directive('validateEmail', function() {
   var EMAIL_REGEXP = /^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
@@ -510,4 +527,15 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	        }
 	    });
 	}
+})
+
+.directive("scrollBottom", function(){
+    return {
+        link: function(scope, element, attr){
+            var $id= $("#" + attr.scrollBottom);
+            $(element).on("click", function(){
+                $id.scrollTop($id[0].scrollHeight);
+            });
+        }
+    }
 });

@@ -213,10 +213,11 @@ angular.module('kenuu.services', [])
         swal(
             {   
                 title: title,   
-                text: msg,                       
+                text: msg,           
+                type: "success",            
                 confirmButtonText: "Ok",
                 customClass: "modal-bg",
-                confirmButtonColor: "#8f04a9"
+                confirmButtonColor: "#A5CD37"
             }
         );
 	};
@@ -228,7 +229,7 @@ angular.module('kenuu.services', [])
                 text: msg,                       
                 confirmButtonText: "Ok",
                 customClass: "modal-bg",
-                confirmButtonColor: "#8f04a9"
+                confirmButtonColor: "#A5CD37"
             },
             callbackfx
         );
@@ -242,21 +243,28 @@ angular.module('kenuu.services', [])
                 type: "warning",
                 confirmButtonText: "Ok",
                 customClass: "modal-bg",
-                confirmButtonColor: "#8f04a9"
+                confirmButtonColor: "#A5CD37"
             }
         );
 	};
 }])
 
-.service('loadingBox', ['$ionicLoading', function($ionicLoading){
+.service('loadingBox', ['$ionicLoading', 'deviceFactory', function($ionicLoading, deviceFactory){
 	this.show = function(message) {
+
+		var spinner = "android"; // Default
+
+		if (deviceFactory.device.device().platform == "iOS") {
+			spinner = "ios";
+		}
+
 		if (message == undefined)
 		{
-			$ionicLoading.show({template: '<ion-spinner icon="android" class="spinner"></ion-spinner>'});
+			$ionicLoading.show({template: '<ion-spinner icon="' + spinner + '" class="spinner"></ion-spinner>'});
 		}
 		else
 		{
-			$ionicLoading.show({template: '<p>' + message + '</p><ion-spinner icon="android" class="spinner"></ion-spinner>'});
+			$ionicLoading.show({template: '<p>' + message + '</p><ion-spinner icon="' + spinner + '" class="spinner"></ion-spinner>'});
 		}		
 	};
 

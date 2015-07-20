@@ -1,0 +1,60 @@
+<ion-view id="viewSlider" class="slider-view">
+	<ion-nav-title>
+        <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
+    </ion-nav-title>
+	<ion-content id="slider-content" scroll="false" class="slider-content" overflow-scroll="true">
+		
+		<div class="item text-right slider-skipbtn-container">
+			<div ng-click="GoToLogin()">
+				<span class="slider-skipbtn slider-skipbtn-title" ng-bind="skipTitle"></span>
+				<span class="slider-skipbtn"><i class="icon ion-android-arrow-forward"></i></span>
+			</div>
+		</div>
+
+		<ion-slide-box class="slide-box" on-slide-changed="slideHasChanged($index)">
+			<ion-slide>
+				<div class="slider-title-div text-center">
+					<h1>TITULO</h1>
+					<p>Sub título</p>
+				</div>
+
+				<div class="slider-main-img-div text-center">
+					<img class="slider-main-img" src="./img/ilus-1.png">
+				</div>
+
+				<div class="slider-subtitle-div text-center">		
+					<p>Sub título</p>
+				</div>
+			</ion-slide>
+			<ion-slide>
+				<div class="slider-title-div text-center">
+					<h1>TITULO</h1>
+					<p>Sub título</p>
+				</div>
+
+				<div class="slider-main-img-div text-center">
+					<img class="slider-main-img" src="./img/ilus-3.png">
+				</div>
+
+				<div class="slider-subtitle-div text-center">		
+					<p>Sub título</p>
+				</div>
+			</ion-slide>
+			<ion-slide>
+				<div class="slider-title-div text-center">
+					<h1>TITULO</h1>
+					<p>Sub título</p>
+				</div>
+
+				<div class="slider-main-img-div text-center">
+					<img class="slider-main-img" src="./img/visite.png">
+				</div>
+
+				<div class="slider-subtitle-div text-center">		
+					<p>Sub título</p>
+				</div>
+			</ion-slide>
+		</ion-slide-box>
+		
+	</ion-content>
+</ion-view>

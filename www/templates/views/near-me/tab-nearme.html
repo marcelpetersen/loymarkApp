@@ -10,48 +10,47 @@
 	<ion-content id="nearme-content" class="nearme-content" overflow-scroll="true">
 
 		<ion-refresher
-			pulling-text="Hale para refrescar..."
-			on-refresh="ReloadList()">
+			pulling-text="Deslice para refrescar..."
+			on-refresh="ReloadList()"
+			style="color:white !important;">
 		</ion-refresher>
-
-		<!-- <form novalidate> -->
-			<div class="item-input-inset nearme-search-item">
-				<label class="item-input-wrapper">
-					<i class="icon ion-ios-search placeholder-icon"></i>
-					<input id="searchText" ng-enter="SearchFieldEnterPressed()" type="search" ng-blur="SearchBlur()" ng-model="viewdata.searchText" placeholder="Buscar">
-				</label>
-				<button id="btnClearSearch" class="button button-clear" ng-click="ClearSearch()" style="font-size:25px; width:40px; min-width:40px !important; display:none">
-					<i class="icon ion-ios-close-empty"></i>
-				</button>
-			</div>
-		<!-- </form> -->
-		<div class="item-input-inset nearme-search-item" ng-show="viewdata.locationSet">
+		
+		<div class="item-input-inset nearme-search-item">
+			<label class="item-input-wrapper">
+				<i class="icon ion-ios-search placeholder-icon"></i>
+				<input id="searchText" ng-enter="SearchFieldEnterPressed()" type="search" ng-blur="SearchBlur()" ng-model="viewdata.searchText" placeholder="Buscar">
+			</label>
+			<button id="btnClearSearch" class="button button-clear" ng-click="ClearSearch()" style="font-size:25px; width:40px; min-width:40px !important; display:none">
+				<i class="icon ion-ios-close-empty"></i>
+			</button>
+		</div>
+		
+		<!--  ng-show="viewdata.locationSet" -->
+		<div class="item-input-inset nearme-search-item">
 			<div class="row">				
-				<div class="col-33 text-center">
-					<button class="button button-clear nearme-search-item-btn" style="color: white !important;" ng-click="ChangeKilometers(5)" ng-class="{borderKilometer:viewdata.kilometers==5}">5Km</button>
-				</div>
-				<div class="col-33 text-center">
-					<button class="button button-clear nearme-search-item-btn" style="color: white !important;" ng-click="ChangeKilometers(10)" ng-class="{borderKilometer:viewdata.kilometers==10}">10Km</button>
-				</div>
-				<div class="col-33 text-center">
-					<button class="button button-clear nearme-search-item-btn" style="color: white !important;" ng-click="ChangeKilometers(25)"  ng-class="{borderKilometer:viewdata.kilometers==25}">25Km</button>
+				<div class="col-50 text-center">
+					<button class="button button-clear nearme-search-item-btn" style="color: white !important;" ng-click="ChangeKilometers(0)" ng-class="{borderKilometer:viewdata.kilometers==0}">Todos</button>
+				</div>				
+				<div class="col-50 text-center">
+					<button class="button button-clear nearme-search-item-btn" style="color: white !important;" ng-click="ChangeKilometers(25)"  ng-class="{borderKilometer:viewdata.kilometers==25}">Al rededor</button>
 				</div>
 			</div>
 		</div>
 		
-		<div id="locationMessage" style="display:none" class="item nearme-nolocationitem item-icon-left item-text-wrap" ng-show="!viewdata.locationSet && viewdata.showLocationMessage">
-			<i class="icon ion-android-pin"></i>
-			<p><strong>No tiene activados los servicios de ubicación, al activarlos podrá filtrar mejor las tiendas.</strong></p>
-			<div class="text-right" style="margin-top:15px;">
-				<button class="button nearme-nolocationbutton" ng-click="ClearLocationMessage()">Ok!</button>
-			</div>
+		<div id="locationMessage" style="display:none; border: none;" ng-click="ClearLocationMessage()" class="item nearme-nolocationitem item-icon-right item-text-wrap" ng-show="!viewdata.locationSet && viewdata.showLocationMessage">
+			<img class="icon" src="./img/placeholder.png" style="height:60px; width:auto; top:5px;">
+			<p><strong>Conecte los servicios de ubicación para filtrar mejor las tiendas.</strong></p>
+		</div>
+
+		<div class="item text-center searching-location-spinner" ng-show="viewdata.showGettingLocationSpinner">
+			<ion-spinner class="spinner-energized" icon="{{getSpinnerByPlatform()}}"></ion-spinner><p>Buscando su ubicación </p>
 		</div>
 
 		<ion-list id="nearme-list">
-        	<ion-item class="item-icon-right nearme-commerce-item" ng-repeat="item in viewdata.searchResults | orderBy:'Distance'" item="item" ng-click="OpenStore(item)">
+        	<ion-item class="item-icon-right nearme-commerce-item" ng-repeat="item in viewdata.searchResults | orderBy:viewdata.orderList track by $index" item="item" ng-click="OpenStore(item)">
         		<div>
                     <p><strong class="activity-commerce-name" ng-bind="item.Name"></strong></p>  
-                    <div class="row" ng-show="viewdata.locationSet">
+                    <div class="row" ng-show="viewdata.showLocationInfoLabel">
                     	<div class="col text-left nearme-commerce-sublabel">
                     		<i class="icon-location newarme-locationicon"></i> 
                     		<span class="newarme-locationdistance" ng-bind="formatDistance(item.Distance)"></span>	 Km                    		
@@ -61,11 +60,14 @@
         		<i class="icon mykenuu-commerceavatar-container">
                     <img class="mykenuu-commerceavatar" ng-src="{{GetAvatarImage(item.Image)}}">  
                 </i>   	
-        	</ion-item>        	
+        	</ion-item>
+        	<ion-item class="item text-center" ng-show="viewdata.showLoadMoreButton" ng-click="SetActivityPageToShow()">
+                <span ng-bind="viewdata.loadMoreButtonMessage"></span>                    
+            </ion-item>
       	</ion-list>      	
       	
-      	<ion-infinite-scroll immediate-check="false" on-infinite="GetMoreStores()" distance="20%">
-      	</ion-infinite-scroll>
+      	<!-- <ion-infinite-scroll immediate-check="false" on-infinite="GetMoreStores()" distance="20%">
+      	</ion-infinite-scroll> -->
 	</ion-content>
 	<a class="nearme-button roundButton text-center" style="display:none" ng-click="DoSearch()">
 		<i class="ion-android-sync nearme-icon"></i>
