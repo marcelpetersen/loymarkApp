@@ -47,50 +47,6 @@
 			</a>
 		</div>
 
-		<!-- <div class="row profile-avatar-container">
-			<div class="col-20 text-center profile-avatar-div">
-				
-				<img id="avatarImg" ng-src="{{viewdata.user.AvatarMobile}}" class="profile-avatar" ng-click="ChangeProfilePic()">
-				
-			</div>
-			<div class="col-70 text-wrap">
-				<h4>{{viewdata.user.FirstName}} {{viewdata.user.LastName}}</h4>					
-				<p ng-bind="viewdata.user.Email"></p>
-				<button class="button button-small button-calm profile-btn" ng-click="GoToProfile()">Mi Info</button>					
-			</div>
-		</div> -->
-
-		<!-- <div class="item text-center">
-
-			<section class="chart-container">
-				<input type="radio" class="radio" name="progress" value="five" id="five">
-				<label for="five" class="chart-label">5%</label>
-
-				<input type="radio" class="radio" name="progress" value="twentyfive" id="twentyfive" checked>
-				<label for="twentyfive" class="chart-label">25%</label>
-
-				<input type="radio" class="radio" name="progress" value="fifty" id="fifty">
-				<label for="fifty" class="chart-label">50%</label>
-
-				<input type="radio" class="radio" name="progress" value="seventyfive" id="seventyfive">
-				<label for="seventyfive" class="chart-label">75%</label>
-
-				<input type="radio" class="radio" name="progress" value="onehundred" id="onehundred">
-				<label for="onehundred" class="chart-label">100%</label>
-
-				<div class="progress">
-					<div class="progress-bar"></div>
-				</div>
-			</section>
-		</div>		 -->
-
-		<!-- <a class="item item-icon-left item-icon-right item-text-wrap" href="#/tab/kenuu/activity">
-			<i class="icon icon-history profile-item-icon"></i>
-			<div class="profile-item-title">Mi Actividad Reciente</div>
-			<div>Consultar mis últimos movimientos</div>			
-			<i class="icon ion-android-more-horizontal back-btn"></i>			
-		</a> -->
-
 		<div class="item text-center mykenuu-membersince">
 			<p>MIEMBRO DESDE:</p>
 			<h2 ng-bind="gDate(viewdata.user.CreateDate)"></h2>
@@ -99,6 +55,9 @@
 		<div id="favcommerces-list" class="list">
             <div class="item item-divider item-text-wrap mykenuu-commercetitle">
                 <p>Mis Comercios</p>
+            </div>
+            <div class="item text-center favcommerces-nocommerce-item" ng-show="viewdata.commerces == undefined">
+            	No ha visitado ningún comercio todavía
             </div>
             <div class="item item-icon-right item-text-wrap" ng-repeat="commerce in viewdata.commerces | orderBy:'TotalVisits'" ng-click="GoToCommerce(commerce)">                                
                 <div>

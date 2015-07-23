@@ -108,7 +108,7 @@
             for (var col = 0; col < modules; col++) {
               var w = (Math.ceil((col + 1) * tile) - Math.floor(col * tile)),
                   h = (Math.ceil((row + 1) * tile) - Math.floor(row * tile));
-              context.fillStyle = qr.isDark(row, col) ? '#747474' : '#fff';
+              context.fillStyle = qr.isDark(row, col) ? '#333' : '#fff';
               context.fillRect(Math.round(col * tile), Math.round(row * tile), w, h);
             }
           }

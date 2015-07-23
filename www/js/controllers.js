@@ -66,7 +66,6 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
         $scope.getSpinnerByPlatform = function() {
             var spinner = "android";
-            console.log(deviceFactory.device.device().platform)
             if (deviceFactory.device.device().platform == "iOS") {
                 spinner = "ios-small";
             }
@@ -914,8 +913,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         $scope.OpenRewardDetail = function(reward) {
             // console.log(reward);
             $scope.viewdata["availablepoints"] = $scope.viewdata.commerce.PointsAvailable;
-            $scope.viewdata.selectedreward = reward;  
-            console.log(reward)           
+            $scope.viewdata.selectedreward = reward;                        
             rewardDetailModal.Show($scope);
         };
 
@@ -1960,8 +1958,6 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             $scope.$apply();
         });
 
-        
-
         $scope.$on('$ionicView.beforeEnter', function(event, args){            
             $("#qrcode-content").hide();
             $("#qrcode-content").removeClass('animated fadeIn');
@@ -2674,7 +2670,9 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             loadingBox.show($scope.viewdata.pleaseWaitMessage);
             userFactory.activity.all(userID)
                 .then(function(data){   
-                    setTimeout(function() {
+                    // setTimeout(function() {
+
+                        console.log(data)
 
                         $scope.viewdata.user.activity = [];
                         $scope.viewdata.user.activityfulllist = data.Elements;
@@ -2688,7 +2686,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         $scope.$broadcast('scroll.refreshComplete');
                         $("#activityListDiv").show();
                         $("#activityListDiv").addClass("animated fadeIn");
-                    }, 150);            
+                    // }, 150);            
                 })
                 .catch(function(err){                     
                     loadingBox.hide();
@@ -3024,11 +3022,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         function LoadProfileData() {
             loadingBox.show($scope.viewdata.pleaseWaitMessage);
             userFactory.info.get(true)
-                .then(function(data){  
-
-                    // console.log("LoadProfileData Result:");
-                    // console.log(data);
-
+                .then(function(data){
                     $scope.viewdata.user = data;
                     var userData = data;
                     
@@ -3050,14 +3044,11 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     }
 
                     $scope.$apply();
+
                     loadingBox.hide();
                     $scope.$broadcast('scroll.refreshComplete');
                 })
                 .catch(function(err){
-                    
-                    // console.log("LoadProfileData Error Result:");
-                    // console.log(err);
-
                     loadingBox.hide();
                     $scope.$broadcast('scroll.refreshComplete');
                 });
@@ -3119,7 +3110,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 loadingBox.hide();
                 if ((response.status=="true")||(response.status==true))
                 {
-                    referenceIDFactory.setReferenceID(response.data.referenceID);
+                    // referenceIDFactory.setReferenceID(response.data.referenceID);
 
                     localStorage.setItem('profile_gender', $scope.viewdata.profilegender);
                     

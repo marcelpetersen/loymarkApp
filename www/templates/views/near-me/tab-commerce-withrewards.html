@@ -110,7 +110,7 @@
 			<li class="item" ng-show="viewdata.rewards.length == 0">
 				No hay premios disponibles
 			</li>
-			<li ng-show="viewdata.rewards.length > 0" class="item storedetail-reward-item" collection-repeat="item in viewdata.rewards | orderBy:'Points'" ng-click="OpenRewardDetail(item)">
+			<li ng-show="viewdata.rewards.length > 0" item-height="70px" item-width="" class="item storedetail-reward-item" collection-repeat="item in viewdata.rewards | orderBy:'Points'" ng-click="OpenRewardDetail(item)">
 				<div class="row storedetail-rewarditem-row">
 					<div class="col col-50">
 						<div class="storedetail-reward-names">
