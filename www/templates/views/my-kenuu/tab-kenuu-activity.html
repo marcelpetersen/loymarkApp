@@ -30,7 +30,7 @@
             </div>
 
             <ion-list>
-            	<ion-item class="item item-text-wrap item-icon-right activity-activityitem" ng-repeat="activity in viewdata.user.activity | filter:viewdata.searchtext track by $index" ng-click="OpenStore(activity.SubEntityID)">
+            	<ion-item class="item item-text-wrap item-icon-right activity-activityitem" ng-repeat="activity in viewdata.user.activity | filter:viewdata.searchtext track by $index" ng-click="OpenStore(activity.SubEntityID, activity.SubEntityStatus)">
             		<div ng-show='activity.ActivityType == "V"'>
                         <div>                            
                             <p><strong class="activity-commerce-name" ng-bind="activity.SubEntityName"></strong></p>  

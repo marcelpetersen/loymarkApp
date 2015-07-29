@@ -222,6 +222,18 @@ angular.module('kenuu.services', [])
         );
 	};
 
+	this.showSimpleMessage = function(title, msg) {
+		swal(
+			{
+				title: title,
+				text: msg,
+				closeOnConfirm: true,
+				confirmButtonText: "Ok",
+				confirmButtonColor: "#A5CD37"
+			}
+		);
+	};
+
 	this.showOkWithAction = function(title, msg, callbackfx) {
 		swal(
             {   
@@ -405,4 +417,8 @@ angular.module('kenuu.services', [])
 	this.SimpleFormat = function(dateString) {
 		return new Date(dateString).toString();
 	};
+}])
+
+.service('shareLinkMessageService', [function(){
+	
 }]);

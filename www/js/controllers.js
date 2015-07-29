@@ -995,6 +995,37 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             });
         };
 
+        $scope.OpenShareMenu = function() {
+
+            // Maps options
+            var options = {
+                title: 'Compártalo usando...',
+                buttonLabels: ['Facebook', 'Twitter'],
+                addCancelButtonWithLabel: 'Cancelar',
+                androidEnableCancelButton : true,
+                winphoneEnableCancelButton : true
+            };
+
+            OpenShareActionSheet(options);
+        };
+
+        function OpenShareActionSheet(options) {
+            $cordovaActionSheet.show(options)
+                .then(function(btnIndex) {
+                    var index = btnIndex;
+                    
+                    switch(index)
+                    {
+                        case 1:
+                            $scope.ShareViaFacebook($scope.viewdata.commerce);
+                            break;
+                        case 2: 
+                            $scope.ShareViaTwitter($scope.viewdata.commerce);
+                            break;
+                    }
+                });
+        };
+
         $scope.ShareViaTwitter = function(commerce) {
             var message = commerce.Name;
             $cordovaSocialSharing
@@ -1292,7 +1323,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
     }]);
 
     // Stores Associated to a Commerce
-    ctrl.controller('CommerceWithRewardsStoresCtrl', ['$scope', '$state', '$ionicLoading', 'loadingBox', 'commerceFactory', 'storeFactory', 'navigationFactory', '$cordovaActionSheet', '$cordovaAppAvailability', 'deviceFactory', function($scope, $state, $ionicLoading, loadingBox, commerceFactory, storeFactory, navigationFactory, $cordovaActionSheet, $cordovaAppAvailability, deviceFactory){
+    ctrl.controller('CommerceWithRewardsStoresCtrl', ['$scope', '$state', '$ionicLoading', 'loadingBox', 'commerceFactory', 'storeFactory', 'navigationFactory', '$cordovaActionSheet', '$cordovaAppAvailability', 'deviceFactory', '$cordovaSocialSharing', function($scope, $state, $ionicLoading, loadingBox, commerceFactory, storeFactory, navigationFactory, $cordovaActionSheet, $cordovaAppAvailability, deviceFactory, $cordovaSocialSharing){
         $scope.viewdata = {
             commerce: commerceFactory.selectedCommerce.get(),
             stores: [],
@@ -1338,6 +1369,23 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                                 url = "waze://?ll=" + lat + "," + long + "&navigate=yes";
                                 window.open(url, "_system");
                             }
+                            break;
+                    }
+                });
+        };
+
+        function OpenShareActionSheet(options) {
+            $cordovaActionSheet.show(options)
+                .then(function(btnIndex) {
+                    var index = btnIndex;
+                    
+                    switch(index)
+                    {
+                        case 1:
+                            $scope.ShareViaFacebook($scope.viewdata.commerce);
+                            break;
+                        case 2: 
+                            $scope.ShareViaTwitter($scope.viewdata.commerce);
                             break;
                     }
                 });
@@ -1399,6 +1447,42 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             storeFactory.selectedStore.set(store);            
             var _state = navigationFactory.store.get();            
             $state.go(_state);
+        };
+
+        $scope.OpenShareMenu = function() {
+
+            // Maps options
+            var options = {
+                title: 'Compártalo usando...',
+                buttonLabels: ['Facebook', 'Twitter'],
+                addCancelButtonWithLabel: 'Cancelar',
+                androidEnableCancelButton : true,
+                winphoneEnableCancelButton : true
+            };
+
+            OpenShareActionSheet(options);
+        };
+
+        $scope.ShareViaTwitter = function(store) {
+            var message = store.Name;
+            $cordovaSocialSharing
+                .shareViaTwitter(message)
+                .then(function(result) {
+                    // Success!
+                }, function(err) {
+                    // An error occurred. Show a message to the user                    
+                });
+        };
+
+        $scope.ShareViaFacebook = function(store) {
+            var message = store.Name;
+            $cordovaSocialSharing
+                .shareViaFacebook(message)
+                .then(function(result) {
+                    // Success!
+                }, function(err) {
+                    // An error occurred. Show a message to the user
+                });
         };
     }]);
 
@@ -1485,6 +1569,23 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 });
         };
 
+        function OpenShareActionSheet(options) {
+            $cordovaActionSheet.show(options)
+                .then(function(btnIndex) {
+                    var index = btnIndex;
+                    
+                    switch(index)
+                    {
+                        case 1:
+                            $scope.ShareViaFacebook($scope.viewdata.store);
+                            break;
+                        case 2: 
+                            $scope.ShareViaTwitter($scope.viewdata.store);
+                            break;
+                    }
+                });
+        };
+
         $scope.OpenMaps = function(lat, long) {
 
             // Maps options
@@ -1507,6 +1608,20 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 .catch(function(err){
 
                 })
+        };
+
+        $scope.OpenShareMenu = function() {
+
+            // Maps options
+            var options = {
+                title: 'Compártalo usando...',
+                buttonLabels: ['Facebook', 'Twitter'],
+                addCancelButtonWithLabel: 'Cancelar',
+                androidEnableCancelButton : true,
+                winphoneEnableCancelButton : true
+            };
+
+            OpenShareActionSheet(options);
         };
 
         $scope.OpenCommerce = function(entityID) {
@@ -2526,7 +2641,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
     }]);
 
-    ctrl.controller('ActivityCtrl', ['$scope', '$rootScope', '$state', 'userFactory', 'socialSharing', 'loadingBox', 'commerceFactory', 'navigationFactory', 'storeFactory', '$cordovaKeyboard', 'formatServices', function($scope, $rootScope, $state, userFactory, socialSharing, loadingBox, commerceFactory, navigationFactory, storeFactory, $cordovaKeyboard, formatServices){
+    ctrl.controller('ActivityCtrl', ['$scope', '$rootScope', '$state', 'userFactory', 'socialSharing', 'loadingBox', 'commerceFactory', 'navigationFactory', 'storeFactory', '$cordovaKeyboard', 'formatServices', 'msgBox', function($scope, $rootScope, $state, userFactory, socialSharing, loadingBox, commerceFactory, navigationFactory, storeFactory, $cordovaKeyboard, formatServices, msgBox){
         
         $scope.viewdata = {
             user: {
@@ -2672,7 +2787,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 .then(function(data){   
                     // setTimeout(function() {
 
-                        console.log(data)
+                        // console.log(data)
 
                         $scope.viewdata.user.activity = [];
                         $scope.viewdata.user.activityfulllist = data.Elements;
@@ -2859,7 +2974,13 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 });        
         };
 
-        $scope.OpenStore = function(subEntityID) {
+        $scope.OpenStore = function(subEntityID, storeStatus) {
+
+            if (storeStatus == "IN") {
+                msgBox.showSimpleMessage("!!!", "Esta tienda ya no forma parte de Kenuu. Es posible que ya no exista.");
+                return;
+            }
+
             loadingBox.show($scope.viewdata.openingStoreMessage);
 
             commerceFactory.stores.general(0, "", subEntityID)
