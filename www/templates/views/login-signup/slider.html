@@ -1,17 +1,23 @@
 <ion-view id="viewSlider" class="slider-view">
 	<ion-nav-title>
         <img src="img/kenuulogo.png" alt="" class="top-bar-logo">
+
     </ion-nav-title>
+    <ion-nav-buttons side="right">
+			<button class="button button-clear locationsetup-topbar-buttontext" ng-click="GoToLogin()">
+				<span style="font-size:17px !important;" ng-bind="skipTitle"></span>
+			</button>
+		</ion-nav-buttons>
 	<ion-content id="slider-content" scroll="false" class="slider-content" overflow-scroll="true">
 		
-		<div class="item text-right slider-skipbtn-container">
+		<!-- <div class="item text-right slider-skipbtn-container">
 			<div ng-click="GoToLogin()">
 				<span class="slider-skipbtn slider-skipbtn-title" ng-bind="skipTitle"></span>
 				<span class="slider-skipbtn"><i class="icon ion-android-arrow-forward"></i></span>
 			</div>
-		</div>
+		</div> -->
 
-		<ion-slide-box class="slide-box" on-slide-changed="slideHasChanged($index)">
+		<ion-slide-box style="margin-top:10px;" class="slide-box" on-slide-changed="slideHasChanged($index)">
 			<ion-slide>
 				<div class="slider-title-div text-center">
 					<h1>Bienvenido a Kenuu</h1>

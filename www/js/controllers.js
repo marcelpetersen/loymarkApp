@@ -4,7 +4,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
 // Near Me Tab
 
-    ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', '$cordovaPush', '$cordovaGeolocation', '$cordovaKeyboard', 'loadingBox', 'searchFactory', 'commerceFactory', 'navigationFactory', 'deviceFactory', 'userFactory', 'navigationFactory', 'locationFactory', 'storeFactory', '$cordovaInAppBrowser', 'signupSetupFactory', function($scope, $state, $ionicLoading, $timeout, $cordovaPush, $cordovaGeolocation, $cordovaKeyboard, loadingBox, searchFactory, commerceFactory, navigationFactory, deviceFactory, userFactory, navigationFactory, locationFactory, storeFactory, $cordovaInAppBrowser, signupSetupFactory){
+    ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', '$cordovaPush', '$cordovaGeolocation', '$cordovaKeyboard', 'loadingBox', 'searchFactory', 'commerceFactory', 'navigationFactory', 'deviceFactory', 'userFactory', 'navigationFactory', 'locationFactory', 'storeFactory', '$cordovaInAppBrowser', 'signupSetupFactory', 'msgBox', function($scope, $state, $ionicLoading, $timeout, $cordovaPush, $cordovaGeolocation, $cordovaKeyboard, loadingBox, searchFactory, commerceFactory, navigationFactory, deviceFactory, userFactory, navigationFactory, locationFactory, storeFactory, $cordovaInAppBrowser, signupSetupFactory, msgBox){
         
         $scope.viewdata = {
             locationSet: true,
@@ -520,7 +520,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             {
                 // iOS
                 if (notification.alert) {
-                    swal(notification.message);
+                    msgBox.showSimpleMessage('', notification.message);
                 }
 
                 if (notification.sound) {
@@ -563,7 +563,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     case 'message':
                       // this is the actual push notification. its format depends on the data model from the push server
                       // alert('message = ' + notification.message + ' msgCount = ' + notification.msgcnt);
-                      swal(notification.message);
+                      msgBox.showSimpleMessage('', notification.message);
                       break;
 
                     case 'error':
@@ -2278,8 +2278,9 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 .then(function(data){
                     $scope.viewdata.pullMemberFromServer = false;
                     loadingBox.hide();              
-                    $scope.viewdata.user = data;
+                    $scope.viewdata.user = data;                    
                     $scope.$broadcast('scroll.refreshComplete');
+                    LoadCommerceData();
                 });
         };
 
@@ -3633,7 +3634,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
         $scope.slideHasChanged = function(index) {
             if (index == 2) {
-                $scope.skipTitle = "CONTINUAR";
+                $scope.skipTitle = "OK";
                 $("#viewSlider").removeClass("slider-view-2");
                 $("#viewSlider").addClass("slider-view");                
             }
@@ -4843,28 +4844,40 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                             );
                         },
                         function(err) {
-                            swal(
-                                {   
-                                    title: "Ooops!",   
-                                    text: "No se pudo registrar su dispositivo.",   
-                                    type: "warning",   
-                                    showConfirmButton: true,
-                                    showCancelButton: false,                       
-                                    confirmButtonText: "Continuar",   
-                                    closeOnConfirm: true 
-                                }, 
-                                function(){
-                                    $ionicHistory.clearHistory();
-                                    $ionicHistory.clearCache();
-                                    $ionicHistory.nextViewOptions({
-                                        // disableAnimate: true,
-                                        disableBack: true,
-                                        historyRoot: true
-                                    });
+
+                            $ionicHistory.clearHistory();
+                            $ionicHistory.clearCache();
+                            $ionicHistory.nextViewOptions({
+                                // disableAnimate: true,
+                                disableBack: true,
+                                historyRoot: true
+                            });
+                            
+                            $state.go("tab.nearme");  
+
+                            // swal(
+                            //     {   
+                            //         title: "Ooops!",   
+                            //         text: "No se pudo registrar su dispositivo.",   
+                            //         type: "warning",   
+                            //         showConfirmButton: true,
+                            //         showCancelButton: false,                       
+                            //         confirmButtonText: "Continuar",   
+                            //         closeOnConfirm: true,
+                            //         confirmButtonColor: "#A5CD37"
+                            //     }, 
+                            //     function(){
+                            //         $ionicHistory.clearHistory();
+                            //         $ionicHistory.clearCache();
+                            //         $ionicHistory.nextViewOptions({
+                            //             // disableAnimate: true,
+                            //             disableBack: true,
+                            //             historyRoot: true
+                            //         });
                                     
-                                    $state.go("tab.nearme");      
-                                }
-                            );
+                            //         $state.go("tab.nearme");      
+                            //     }
+                            // );
                         }
                     );
             }

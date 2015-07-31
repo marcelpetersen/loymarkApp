@@ -16,7 +16,7 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	// url: 'http://192.168.1.11:8100/api' // Home Development Environment
 })
 
-.run(function($rootScope, $state, $ionicPlatform, networkFactory, $cordovaNetwork, deviceFactory, $cordovaPush, $ionicTabsDelegate, navigationFactory, commerceFactory, $ionicHistory, loadingBox, $cordovaGeolocation, locationFactory, appVersionFactory) {
+.run(function($rootScope, $state, $ionicPlatform, networkFactory, $cordovaNetwork, deviceFactory, $cordovaPush, $ionicTabsDelegate, navigationFactory, commerceFactory, $ionicHistory, loadingBox, $cordovaGeolocation, locationFactory, appVersionFactory, msgBox) {
   	$ionicPlatform.ready(function() {
 
 	    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -73,8 +73,8 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 			if (deviceFactory.device.platform() == 'iOS')
 			{
 				// iOS
-				if (notification.alert) {
-					swal(notification.message);
+				if (notification.alert) {					
+					msgBox.showSimpleMessage('', notification.message);					
 				}
 
 				if (notification.sound) {
@@ -118,8 +118,8 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 			        case 'message':
 			          // this is the actual push notification. its format depends on the data model from the push server
 			          // alert('message = ' + notification.message + ' msgCount = ' + notification.msgcnt);
-			          //swal(notification.message);
-			          swal(notification.message);
+			          //swal(notification.message);			          
+			          msgBox.showSimpleMessage('', notification.message);
 			          break;
 
 			        case 'error':
