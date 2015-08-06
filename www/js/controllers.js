@@ -2372,6 +2372,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             userFactory.activity.visits.commerce()
                 .then(function(data){
                     setTimeout(function() {
+                        console.log(data.VisitedCommerces);
                         $scope.viewdata.commerces = data.VisitedCommerces;
                         $scope.$apply();
                         loadingBox.hide();                
@@ -2765,18 +2766,20 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             var j = array.length;
             var result = [];
             for (var i=0; i<j; i++) {
-                if ((searchText != undefined)&&(searchText != "")) {
-                    if (
-                        (strEval(array[i].SubEntityName, "").toUpperCase().indexOf(searchText.toUpperCase()) >= 0)||
-                        (strEval(array[i].RewardName, "").toUpperCase().indexOf(searchText.toUpperCase()) >= 0)||
-                        (strEval(array[i].RewardDescription, "").toUpperCase().indexOf(searchText.toUpperCase()) >= 0)
-                    ) {
+                if ((array[i].EntityStatus != 'IN')&&(array[i].SubEntityStatus != 'IN')) {
+                    if ((searchText != undefined)&&(searchText != "")) {
+                        if (
+                            (strEval(array[i].SubEntityName, "").toUpperCase().indexOf(searchText.toUpperCase()) >= 0)||
+                            (strEval(array[i].RewardName, "").toUpperCase().indexOf(searchText.toUpperCase()) >= 0)||
+                            (strEval(array[i].RewardDescription, "").toUpperCase().indexOf(searchText.toUpperCase()) >= 0)
+                        ) {
+                            if (array[i].ActivityType == type) result.push(array[i]);
+                        }
+                    }
+                    else {
                         if (array[i].ActivityType == type) result.push(array[i]);
                     }
                 }
-                else {
-                    if (array[i].ActivityType == type) result.push(array[i]);
-                }                
             }
             return result;
         }
@@ -2788,7 +2791,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 .then(function(data){   
                     // setTimeout(function() {
 
-                        // console.log(data)
+                        console.log(data)
 
                         $scope.viewdata.user.activity = [];
                         $scope.viewdata.user.activityfulllist = data.Elements;
@@ -2975,9 +2978,9 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 });        
         };
 
-        $scope.OpenStore = function(subEntityID, storeStatus) {
+        $scope.OpenStore = function(subEntityID, commerceStatus, storeStatus) {
 
-            if (storeStatus == "IN") {
+            if ((commerceStatus == "IN")||(storeStatus == "IN")) {
                 msgBox.showSimpleMessage("!!!", "Esta tienda ya no forma parte de Kenuu. Es posible que ya no exista.");
                 return;
             }
@@ -4710,6 +4713,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             $cordovaGeolocation
                 .getCurrentPosition(posOptions)
                 .then(function (position) {
+                    loadingBox.hide();
+
                     var _lat  = position.coords.latitude;
                     var _long = position.coords.longitude;
                     locationFactory.location.set(_lat, _long);
@@ -4720,11 +4725,36 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         });
                 })
                 .catch(function(err){
+                    // alert(JSON.stringify(err));
+
                     loadingBox.hide();
-                    ShowModalMsg("", "No tiene activados los servicios de ubicación. Si los activa Kenuu podrá ofrecerle mejor contenido.", "Ok")
-                        .then(function(){                            
-                            GoToNextPage();
-                        });                    
+
+                    if (err.code != undefined) {
+                        if (err.code == 3) {
+                            // Timeout
+                            ShowModalMsg("", "Pasó mucho tiempo esperando a que respondiera si desea compartir su ubicación, por favor haga tap en 'VERIFICAR' otra vez.", "Ok")
+                                .then(function(){
+                                    //GoToNextPage();
+                                });
+                        }
+                        else {
+                            if (err.code == 1) {
+                                // Location unavailable
+                                ShowModalMsg("", "La ubicación no está disponible.", "Ok")
+                                    .then(function(){
+                                        loadingBox.hide();
+                                        GoToNextPage();
+                                    });
+                            }
+                            else {
+                                // General error
+                                ShowModalMsg("", "Ocurrió un problema, por favor inténtelo de nuevo.", "Ok")
+                                    .then(function(){
+                                        //GoToNextPage();
+                                    });
+                            }
+                        }                        
+                    }
                 });
         };
 
@@ -4740,7 +4770,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         showConfirmButton: true,
                         showCancelButton: false,                       
                         confirmButtonText: buttontext,   
-                        closeOnConfirm: true 
+                        closeOnConfirm: true,
+                        confirmButtonColor: "#A5CD37"
                     }, 
                     function(){   
                         resolve();      
@@ -4761,7 +4792,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         showConfirmButton: true,
                         showCancelButton: false,                       
                         confirmButtonText: buttontext,   
-                        closeOnConfirm: true 
+                        closeOnConfirm: true,
+                        confirmButtonColor: "#A5CD37" 
                     }, 
                     function(){   
                         resolve();      
