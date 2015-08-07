@@ -7911,6 +7911,10 @@ a[href^="http://maps.google.com/maps"] {
 .checkbox-balanced input:checked:before, .checkbox-balanced input:checked + .checkbox-icon:before {
   background-color: #A5CD38 !important; }
 
+.view-bottom-spacer {
+  height: 100px;
+  border: none !important; }
+
 /* ******* Modal MsgBox ******** */
 .md-overlay-ok {
   background: #489A0F !important; }
@@ -9289,3 +9293,30 @@ ion-nav-view[nav-view-transition="ios"] .nearme-icon {
   font-size: 16px !important;
   width: 80%;
   margin: auto; }
+
+@-webkit-keyframes slide {
+  0% {
+    left: 45px;
+    opacity: 0; }
+
+  25% {
+    opacity: 1; }
+
+  50% {
+    opacity: 1; }
+
+  75% {
+    opacity: 1; }
+
+  100% {
+    left: -50px;
+    opacity: 0; } }
+
+.slider-animation {
+  position: relative;
+  -webkit-animation: slide 2s linear infinite; }
+
+.slider-ok-btn {
+  font-size: 20px;
+  color: white !important;
+  font-weight: bold; }

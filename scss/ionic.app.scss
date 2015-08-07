@@ -351,6 +351,11 @@ ion-nav-view[nav-view-transition="ios"] {
 		background-color: $kenuu-green !important;
 	}
 
+	.view-bottom-spacer {
+		height: 100px;
+		border: none !important;
+	}
+
 /* ******* Modal MsgBox ******** */
 
 	.md-overlay-ok {
@@ -1980,7 +1985,23 @@ ion-nav-view[nav-view-transition="ios"] {
 		width: 80%;
 		margin: auto;
 	}
-
+	@-webkit-keyframes slide {
+		0%   {left: 45px; opacity: 0;}
+	    25%  {opacity: 1;}
+	    50%  {opacity: 1;}
+	    75%  {opacity: 1;}
+	    100% {left: -50px; opacity: 0;}
+	    
+	}
+	.slider-animation {		
+		position: relative;		
+		-webkit-animation: slide 2s linear infinite;
+	}
+	.slider-ok-btn {
+		font-size: 20px;
+		color: white !important;
+		font-weight: bold;
+	}
 
 
 
