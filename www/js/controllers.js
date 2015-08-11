@@ -1509,7 +1509,13 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         $scope.$on("$ionicView.enter", function(event, args){
             $scope.viewdata.popSelectedStore = true;
             loadingBox.hide();
-            $scope.viewdata.store = storeFactory.selectedStore.get();            
+            $scope.viewdata.store = storeFactory.selectedStore.get();  
+
+            if ($scope.viewdata.store == undefined) {
+                $state.go("tab.nearme");
+                return;
+            }
+
             $scope.ReloadStoreInfo();            
             IsTwitterInstalled();
             IsFacebookInstalled();
@@ -3638,14 +3644,14 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         $scope.slideHasChanged = function(index) {
             if (index == 2) {
                 $scope.skipTitle = "OK";
-                $("#viewSlider").removeClass("slider-view-2");
-                $("#viewSlider").addClass("slider-view");                
+                $("#viewSlider").removeClass("slider-view");
+                $("#viewSlider").addClass("slider-view-2");                
             }
 
             if (index == 1) {
                 $scope.skipTitle = "SALTAR";   
-                $("#viewSlider").removeClass("slider-view");
-                $("#viewSlider").addClass("slider-view-2");
+                $("#viewSlider").removeClass("slider-view-2");
+                $("#viewSlider").addClass("slider-view");
             }
             
             if (index == 0) {
