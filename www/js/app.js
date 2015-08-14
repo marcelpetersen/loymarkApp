@@ -11,12 +11,12 @@ var devEnvironment = false; // To use the app through "ionic serve --lab"
 angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.factory', 'ngCordova'])
 
 .constant('ApiEndpoint', {
-	url: 'http://192.168.71.98:8100/api' // CIS Network Development (Tavo)
+	// url: 'http://192.168.71.98:8100/api' // CIS Network Development (Tavo)
 	// url: 'http://192.168.71.91:8100/api' // CIS Network Development (Alex)
-	// url: 'http://192.168.1.11:8100/api' // Home Development Environment
+	url: 'http://192.168.1.7:8100/api' // Home Development Environment
 })
 
-.run(function($rootScope, $state, $ionicPlatform, networkFactory, $cordovaNetwork, deviceFactory, $cordovaPush, $ionicTabsDelegate, navigationFactory, commerceFactory, $ionicHistory, loadingBox, $cordovaGeolocation, locationFactory, appVersionFactory, msgBox) {
+.run(function($rootScope, $state, $ionicPlatform, networkFactory, $cordovaNetwork, deviceFactory, $cordovaPush, $ionicTabsDelegate, navigationFactory, commerceFactory, $ionicHistory, loadingBox, $cordovaGeolocation, locationFactory, appVersionFactory, msgBox, mapFactory) {
   	$ionicPlatform.ready(function() {
 
 	    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -146,6 +146,8 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 			navigationFactory.setDefaults();
 			$state.go("tab.nearme");
 		};
+
+		mapFactory.map.Initialize();
 	});
 })
 
@@ -454,6 +456,9 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
         },
         link: function ($scope, $element, $attr) {
             function initialize() {
+
+            	console.log("Initializing Map...")
+
                 var mapOptions = {
                     // center: new google.maps.LatLng(9.9423209, -84.0750173),
                     // zoom: 16,

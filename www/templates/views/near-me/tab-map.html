@@ -18,8 +18,15 @@
 			<img class="icon" src="./img/placeholder.png" style="height:60px; width:auto; top:5px;">
 			<p><strong>Estamos buscando su ubicación...</strong></p>
 		</div>
-		<map id="googlemap" on-create="mapCreated(map)" data-tap-disabled="true" style="width: 100%; height: 100%; position: absolute;">
-		</map>		
+		
+		<div id="mapcontainer" style="width: 100vw; height: 100vh; position: absolute;">
+			
+		</div>
+		<!-- <map id="googlemap" on-create="mapCreated(map)" data-tap-disabled="true" style="width: 100%; height: 100%; position: absolute;">
+		</map> -->		
+		
+
+
 		<!-- <a class="roundButton red1" href="#/kenuu/tab/map/places" style="right: 73px;text-decoration: none;"><i class="icon ion-ios7-pricetags"></i></a> -->
 		<a class="map-centeronme-button roundButton text-center" ng-click="centerOnMe()">
 			<i class="ion-android-locate map-centeronme-icon"></i>

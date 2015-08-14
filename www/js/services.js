@@ -419,6 +419,53 @@ angular.module('kenuu.services', [])
 	};
 }])
 
-.service('shareLinkMessageService', [function(){
-	
+.service('shareLinkMessageService', [function(){	
+}])
+
+.service('mapFactory', [function(){
+	var _map = {};
+	var _element = {};
+
+	function initialize() {
+
+    	console.log("Initializing Map...")
+
+        var mapOptions = {
+            mapTypeControl: false,
+            backgroundColor: '#535353',
+            center: { lat: 19.505581, lng: -94.105582 },
+            maxZoom: 17,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            styles: [{ "featureType": "all", "elementType": "labels.text", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "administrative", "elementType": "labels.text", "stylers": [{ "visibility": "on" }] }, { "featureType": "administrative", "elementType": "labels.text.fill", "stylers": [{ "color": "#444444" }] }, { "featureType": "administrative.country", "elementType": "all", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "administrative.country", "elementType": "labels", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "administrative.country", "elementType": "labels.text", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "administrative.neighborhood", "elementType": "all", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "administrative.neighborhood", "elementType": "geometry", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "administrative.neighborhood", "elementType": "geometry.fill", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "landscape", "elementType": "all", "stylers": [{ "color": "#f2f2f2" }, { "visibility": "simplified" }] }, { "featureType": "poi", "elementType": "all", "stylers": [{ "visibility": "off" }] }, { "featureType": "road", "elementType": "all", "stylers": [{ "saturation": -100 }, { "lightness": 45 }, { "visibility": "on" }] }, { "featureType": "road.highway", "elementType": "all", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "road.arterial", "elementType": "labels.icon", "stylers": [{ "visibility": "on" }] }, { "featureType": "road.local", "elementType": "all", "stylers": [{ "visibility": "on" }] }, { "featureType": "transit", "elementType": "all", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "water", "elementType": "all", "stylers": [{ "color": "#55c9ea" }, { "visibility": "simplified" }] }],
+            zoom: 4
+        };
+        
+        _element = document.createElement("map");
+        _element.setAttribute("data-tap-disabled", true);
+        _element.className = "map-container";
+        console.log(_element);
+        _map = new google.maps.Map(_element, mapOptions);
+
+        // Stop the side bar from dragging when mousedown/tapdown on the map
+        google.maps.event.addDomListener(_element, 'mousedown', function (e) {
+            e.preventDefault();
+            return false;
+        });
+    }
+
+    return {
+    	map: {
+    		Initialize: function() {
+    			initialize();		
+    		},
+    		get: function() {
+    			return _map;
+    		}
+    	},
+    	element: {
+    		get: function() {
+    			return _element;
+    		}
+    	}
+    }
 }]);

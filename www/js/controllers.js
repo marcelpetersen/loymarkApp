@@ -1100,12 +1100,21 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         }
     }]);
 
-    ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cordovaGeolocation', '$stateParams', '$compile', 'loadingBox', 'locationFactory', 'storeFactory', 'navigationFactory', '$state', function($scope, commerceFactory, $ionicLoading, $cordovaGeolocation, $stateParams, $compile, loadingBox, locationFactory, storeFactory, navigationFactory, $state){
+    ctrl.controller('MapCtrl', ['$scope', 'commerceFactory', '$ionicLoading', '$cordovaGeolocation', '$stateParams', '$compile', 'loadingBox', 'locationFactory', 'storeFactory', 'navigationFactory', '$state', 'mapFactory', function($scope, commerceFactory, $ionicLoading, $cordovaGeolocation, $stateParams, $compile, loadingBox, locationFactory, storeFactory, navigationFactory, $state, mapFactory){
         $scope.settings = {
             enableFriends: true
         };
 
-        $scope.$on("$ionicView.enter", function(event, args){        
+        var _map = false;
+        var _element = {};
+
+        $scope.$on("$ionicView.enter", function(event, args){ 
+            _map = mapFactory.map.get();
+            _element = mapFactory.element.get();
+            var container = document.getElementById("mapcontainer");
+            console.log(container);
+            container.appendChild(_element);
+            LoadStores();
         });
 
         // Map Constants
@@ -1189,8 +1198,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 infoBoxClearance: {}
             }
         };
-
-        var _map = false;
+        
         var _locationMarkerCreated = false;
         var longitude = '';
         var latitude = '';
@@ -1299,6 +1307,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     $scope.viewdata.stores = data;
 
                     var j=data.length;
+
                     for (var i=0;i<j;i++){
                         var myLatlng = new google.maps.LatLng(data[i].LocationLatitude, data[i].LocationLongitude);
                         var marker = new google.maps.Marker({
@@ -1315,17 +1324,14 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                             icon: "./img/popmap.png",
                             image: data[i].Image
                         });
+                        
                         var infowindow = new google.maps.InfoWindow({});
+
                         google.maps.event.addListener(marker, 'click', (function(marker, i) {
                             return function() {
                                 if (infowindow) {
                                     infowindow.close();
                                 }
-                                // var contentString   =  "<div class='map-info-window'>"; 
-                                // contentString       += "<div style='font-weight:bold'>" + marker.title + "</div>"; 
-                                // contentString       += "<button class='button button-clear button-positive' ng-click='InfoWindowTapped(" + marker.subEntityID + ")'>Detalle</button>";
-                                // contentString       += "</div>";
-                                // var compiled = $compile(contentString)($scope);
 
                                 var _oh = "";
                                 var _ch = "";
@@ -1378,6 +1384,9 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                             };
                         })(marker));
                     }
+
+                    // Refreshes the map
+                    google.maps.event.trigger(_map, 'resize');
 
                     if ($scope.viewdata.locationSet)
                     {
