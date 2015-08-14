@@ -455,10 +455,17 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
         link: function ($scope, $element, $attr) {
             function initialize() {
                 var mapOptions = {
-                    center: new google.maps.LatLng(9.9423209, -84.0750173),
-                    zoom: 16,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP,
-                    disableDefaultUI: true
+                    // center: new google.maps.LatLng(9.9423209, -84.0750173),
+                    // zoom: 16,
+                    // mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    // disableDefaultUI: true
+                    mapTypeControl: false,
+	                backgroundColor: '#535353',
+	                center: { lat: 19.505581, lng: -94.105582 },
+	                maxZoom: 17,
+	                mapTypeId: google.maps.MapTypeId.ROADMAP,
+	                styles: [{ "featureType": "all", "elementType": "labels.text", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "administrative", "elementType": "labels.text", "stylers": [{ "visibility": "on" }] }, { "featureType": "administrative", "elementType": "labels.text.fill", "stylers": [{ "color": "#444444" }] }, { "featureType": "administrative.country", "elementType": "all", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "administrative.country", "elementType": "labels", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "administrative.country", "elementType": "labels.text", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "administrative.neighborhood", "elementType": "all", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "administrative.neighborhood", "elementType": "geometry", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "administrative.neighborhood", "elementType": "geometry.fill", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "landscape", "elementType": "all", "stylers": [{ "color": "#f2f2f2" }, { "visibility": "simplified" }] }, { "featureType": "poi", "elementType": "all", "stylers": [{ "visibility": "off" }] }, { "featureType": "road", "elementType": "all", "stylers": [{ "saturation": -100 }, { "lightness": 45 }, { "visibility": "on" }] }, { "featureType": "road.highway", "elementType": "all", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "road.arterial", "elementType": "labels.icon", "stylers": [{ "visibility": "on" }] }, { "featureType": "road.local", "elementType": "all", "stylers": [{ "visibility": "on" }] }, { "featureType": "transit", "elementType": "all", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "water", "elementType": "all", "stylers": [{ "color": "#55c9ea" }, { "visibility": "simplified" }] }],
+	                zoom: 4
                 };
                 var map = new google.maps.Map($element[0], mapOptions);
                 $scope.onCreate({map: map});

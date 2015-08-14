@@ -19,7 +19,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             pullFreshMemberDataFromServer: userFactory.info.pullFreshMemberDataFromServer.get(),
             reloadLocation: false,
             allStoresList: [],
-            pageSize: 5,
+            pageSize: 15,
             currentPage: 0,
             loadMoreButtonMessage: "Ver más...",
             showLoadMoreButton: false,
@@ -1108,10 +1108,86 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         $scope.$on("$ionicView.enter", function(event, args){        
         });
 
+        // Map Constants
+        var BASE_URL = "/img/maps/";
+        var CLUSTER_IMGS_ROOTURL = "";
+        var CLUSTER_IMGS_URL = "";
+        var CLOSE_URL = "";
+
         $scope.viewdata = {
             stores: [],
             locationSet: false,
             showLocationMessage: true
+        };
+
+        var gmap = {
+            clusterOptions: {
+                maxZoom: 16,
+                imageExtension: "png",
+                imagePath: BASE_URL + CLUSTER_IMGS_ROOTURL,
+                styles: [{
+                    url: BASE_URL + CLUSTER_IMGS_URL,
+                    textColor: 'white',
+                    width: 80,
+                    height: 80,
+                    anchorText: [-5, 0]
+                },
+                {
+                    url: BASE_URL + CLUSTER_IMGS_URL,
+                    textColor: 'white',
+                    width: 80,
+                    height: 80,
+                    anchorText: [-5, 0]
+                },
+                {
+                    url: BASE_URL + CLUSTER_IMGS_URL,
+                    textColor: 'white',
+                    width: 80,
+                    height: 80,
+                    anchorText: [-5, 0]
+                },
+                {
+                    url: BASE_URL + CLUSTER_IMGS_URL,
+                    textColor: 'white',
+                    width: 80,
+                    height: 80,
+                    anchorText: [-5, 0]
+                },
+                {
+                    url: BASE_URL + CLUSTER_IMGS_URL,
+                    textColor: 'white',
+                    width: 80,
+                    height: 80,
+                    anchorText: [-5, 0]
+                }]
+            },            
+            markerOptions: {
+                icon: '',
+                id: 0,
+                position: { lat: 19.505581, lng: -94.105582 },
+                name: '',
+                description: '',
+                address: '',
+                phone: '',
+                schedule: '',
+                img: '',
+                map: {}
+            },
+            infoBoxOptions: {
+                content: '',
+                disableAutoPan: false,
+                maxWidth: 150,
+                pixelOffset: {},
+                zIndex: null,
+                boxStyle: {
+                    background: "url('http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobox/examples/tipbox.gif') no-repeat",
+                    opacity: 0.75,
+                    width: "280px"
+                },
+                closeBoxMargin: "12px 4px 2px 2px",
+                closeBoxURL: BASE_URL + CLOSE_URL,
+                infoBoxClearance: {}
+            }
         };
 
         var _map = false;
@@ -1121,6 +1197,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
         $scope.ClearLocationMessage = function() {
             $("#locationMessageMap").hide();
+            $("lookingForLocation").hide();
             $scope.viewdata.showLocationMessage = false;
         };
 
@@ -1133,15 +1210,28 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         $scope.GoToCommerce = function() {        
         };
 
-        $scope.centerOnMe = function() {            
+        function KenuuMap() {
+            // Spiderfly
+            $scope.viewdata.oms = new OverlappingMarkerSpiderfier($scope.viewdata.map, { circleSpiralSwitchover: Infinity, legWeight: 3, circleFootSeparation: 35, keepSpiderfied: true });
+            $scope.viewdata.oms.legColors.usual[mti.ROADMAP] = '#A5CD38';
+            $scope.viewdata.oms.legColors.highlighted[mti.ROADMAP] = '#800080';
+
+            // InfoWindow HTML
+            var html = '<div class="map-store-contain" id="infobox"><h2><div class="logo"><img height="40" width="40" src="imgs/{{viewdata.currentMarker.img}}"></img></div>{{viewdata.currentMarker.name}}</h2><div class="infoWindowContent"><p>Horario: <span>{{viewdata.currentMarker.schedule}}</span></p><p>Teléfono: <span>{{viewdata.currentMarker.phone}}</span></p></div></div>';
+        }
+
+        $scope.centerOnMe = function() {
             if (!_map) return;
             var posOptions = {timeout: 100000, enableHighAccuracy: false};
-            // loadingBox.show('Buscando tiendas cerca suyo...');
+            
+            $("#lookingForLocation").show();
+
             $cordovaGeolocation
                 .getCurrentPosition(posOptions)
                 .then(
                     function (position) 
                     {
+                        $("#lookingForLocation").hide();
                         $scope.viewdata.locationSet = true;
                         $scope.viewdata.showLocationMessage = false;
 
@@ -1161,6 +1251,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         // LoadStores();
                     }, function(err) {
                         // error
+                        $("#lookingForLocation").hide();
                         ShowLocationMessage();
                         $scope.viewdata.locationSet = false;
                         $scope.viewdata.showLocationMessage = true;
@@ -1204,6 +1295,9 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     loadingBox.hide();
 
                     var infoWindow = new google.maps.InfoWindow();
+
+                    $scope.viewdata.stores = data;
+
                     var j=data.length;
                     for (var i=0;i<j;i++){
                         var myLatlng = new google.maps.LatLng(data[i].LocationLatitude, data[i].LocationLongitude);
@@ -1212,12 +1306,14 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                             title: data[i].Name,
                             desc: data[i].Description,
                             info: data[i].Address,
-                            horario: "Pendiente",
+                            horario_abierto: data[i].OpeningHours,
+                            horario_cerrado: data[i].ClosingHours,
                             telefono: data[i].Phone,
                             map: _map,
                             entityID: data[i].EntityID,
-                            subEntityID: data[i].SubEntityID,
-                            icon: "./img/popmap.png"
+                            subEntityID: data[i].SubEntityID,                                    
+                            icon: "./img/popmap.png",
+                            image: data[i].Image
                         });
                         var infowindow = new google.maps.InfoWindow({});
                         google.maps.event.addListener(marker, 'click', (function(marker, i) {
@@ -1225,12 +1321,58 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                                 if (infowindow) {
                                     infowindow.close();
                                 }
-                                var contentString   =  "<div class='map-info-window'>"; 
-                                contentString       += "<div style='font-weight:bold'>" + marker.title + "</div>"; 
-                                contentString       += "<button class='button button-clear button-positive' ng-click='InfoWindowTapped(" + marker.subEntityID + ")'>Detalle</button>";
-                                contentString       += "</div>";
-                                var compiled = $compile(contentString)($scope);
+                                // var contentString   =  "<div class='map-info-window'>"; 
+                                // contentString       += "<div style='font-weight:bold'>" + marker.title + "</div>"; 
+                                // contentString       += "<button class='button button-clear button-positive' ng-click='InfoWindowTapped(" + marker.subEntityID + ")'>Detalle</button>";
+                                // contentString       += "</div>";
+                                // var compiled = $compile(contentString)($scope);
 
+                                var _oh = "";
+                                var _ch = "";
+
+                                if ((marker.horario_abierto == "")||(marker.horario_abierto == null)||(marker.horario_abierto == undefined)) {
+                                    marker.horario_abierto = "";
+                                    _oh = "";
+                                }
+                                else {
+                                    var openingHours = new Date('1/1/1900 ' + marker.horario_abierto);
+                                    var ohh = String(openingHours.getHours());
+                                    var ohm = String(openingHours.getMinutes());
+
+                                    if (ohh.length < 2) ohh = "0" + ohh;
+                                    if (ohm.length < 2) ohm = "0" + ohm;
+
+                                    _oh = ohh + ":" + ohm;
+                                }   
+
+                                
+                                if ((marker.horario_cerrado == "")||(marker.horario_cerrado == null)||(marker.horario_cerrado == undefined)) {
+                                    marker.horario_cerrado = "";
+                                    _ch = "";
+                                }
+                                else {
+                                    var closingHours = new Date('1/1/1900 ' + marker.horario_cerrado.substring(0, 5));
+                                    var chh = String(closingHours.getHours());
+                                    var chm = String(closingHours.getMinutes());
+                                    if (chh.length < 2) chh = "0" + chh;                                
+                                    if (chm.length < 2) chm = "0" + chm;
+
+                                    _ch = chh + ":" + chm;    
+                                }
+
+                                var businessHours = "No disponible";
+                                if ((_oh != '')&&(_ch != '')) businessHours = _oh + ' - ' + _ch;
+                                if ((_oh != '')&&(_ch == '')) businessHours = _oh + ' - ' + 'No disponible';
+                                if ((_oh == '')&&(_ch != '')) businessHours = 'No disponible - ' + _ch;
+
+                                var contentString =     '<div class="map-store-contain" id="infobox"><h3><div class="logo">';
+                                contentString +=        '<img height="40" width="40" src="' + imageserverurl + marker.image + '"></img>';
+                                contentString +=        '</div>' + marker.title + '</h3><div class="infoWindowContent">';
+                                contentString +=        '<p>Horario: <span>' + businessHours + '</span></p>';
+                                contentString +=        '<p>Teléfono: <span>' + marker.telefono + '</span></p></div>';
+                                contentString +=        '<button class="button button-clear button-positive" ng-click="InfoWindowTapped(' + marker.subEntityID + ')">Detalle</button></div>';
+
+                                var compiled = $compile(contentString)($scope);
                                 infoWindow.setContent(compiled[0]);
                                 infoWindow.open(_map, marker);
                             };
@@ -1248,41 +1390,93 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 });
         };
 
+        // #2
         function LoadStoresNearBy(lat, lon) {
             commerceFactory.stores.nearby(0,lon,lat,0)
                 .then(function(data){
                     loadingBox.hide();
 
                     var infoWindow = new google.maps.InfoWindow();
+
+                    infoWindow.pixelOffset = new google.maps.Size(-140, 0);
+                    infoWindow.infoBoxClearance = new google.maps.Size(1, 1);
+                    $scope.viewdata.infoWindow = new InfoBox(gmap.infoBoxOptions);
+
                     var j=data.length;
                     
                     $scope.viewdata.stores = data;
 
                     for (var i=0;i<j;i++){
+                        console.log(data[i]);
                         var myLatlng = new google.maps.LatLng(data[i].LocationLatitude, data[i].LocationLongitude);
                         var marker = new google.maps.Marker({
                             position: myLatlng,
                             title: data[i].Name,
                             desc: data[i].Description,
                             info: data[i].Address,
-                            horario: "Pendiente",
+                            horario_abierto: data[i].OpeningHours,
+                            horario_cerrado: data[i].ClosingHours,
                             telefono: data[i].Phone,
                             map: _map,
                             entityID: data[i].EntityID,
                             subEntityID: data[i].SubEntityID,                                    
-                            icon: "./img/popmap.png"
+                            icon: "./img/popmap.png",
+                            image: data[i].Image
                         });
+
                         var infowindow = new google.maps.InfoWindow({});
                         google.maps.event.addListener(marker, 'click', (function(marker, i) {
                             return function() {
                                 if (infowindow) {
                                     infowindow.close();
                                 }
+
+                                var _oh = "";
+                                var _ch = "";
+
+                                if ((marker.horario_abierto == "")||(marker.horario_abierto == null)||(marker.horario_abierto == undefined)) {
+                                    marker.horario_abierto = "";
+                                    _oh = "";
+                                }
+                                else {
+                                    var openingHours = new Date('1/1/1900 ' + marker.horario_abierto);
+                                    var ohh = String(openingHours.getHours());
+                                    var ohm = String(openingHours.getMinutes());
+
+                                    if (ohh.length < 2) ohh = "0" + ohh;
+                                    if (ohm.length < 2) ohm = "0" + ohm;
+
+                                    _oh = ohh + ":" + ohm;
+                                }   
+
                                 
-                                var contentString   =  "<div class='map-info-window'>"; 
-                                contentString       += "<div style='font-weight:bold'>" + marker.title + "</div>"; 
-                                contentString       += "<button class='button button-clear button-positive' ng-click='InfoWindowTapped(" + marker.subEntityID + ")'>Detalle</button>";
-                                contentString       += "</div>";
+                                if ((marker.horario_cerrado == "")||(marker.horario_cerrado == null)||(marker.horario_cerrado == undefined)) {
+                                    marker.horario_cerrado = "";
+                                    _ch = "";
+                                }
+                                else {
+                                    var closingHours = new Date('1/1/1900 ' + marker.horario_cerrado.substring(0, 5));
+                                    var chh = String(closingHours.getHours());
+                                    var chm = String(closingHours.getMinutes());
+                                    if (chh.length < 2) chh = "0" + chh;                                
+                                    if (chm.length < 2) chm = "0" + chm;
+
+                                    _ch = chh + ":" + chm;    
+                                }
+
+                                var businessHours = "No disponible";
+                                if ((_oh != '')&&(_ch != '')) businessHours = _oh + ' - ' + _ch;
+                                if ((_oh != '')&&(_ch == '')) businessHours = _oh + ' - ' + 'No disponible';
+                                if ((_oh == '')&&(_ch != '')) businessHours = 'No disponible - ' + _ch;
+
+                                var contentString =     '<div class="map-store-contain" id="infobox"><h3><div class="logo">';
+                                contentString +=        '<img height="40" width="40" src="' + imageserverurl + marker.image + '"></img>';
+                                contentString +=        '</div>' + marker.title + '</h3><div class="infoWindowContent">';
+                                contentString +=        '<p>Horario: <span>' + businessHours + '</span></p>';
+                                contentString +=        '<p>Teléfono: <span>' + marker.telefono + '</span></p></div>';
+                                contentString +=        '<button class="button button-clear button-positive" ng-click="InfoWindowTapped(' + marker.subEntityID + ')">Detalle</button></div>';
+
+
                                 var compiled = $compile(contentString)($scope);
 
                                 infoWindow.setContent(compiled[0]);
@@ -1295,6 +1489,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 });
         };
 
+        // #1 First Method Called from the HTML Template to complete the map creation
         $scope.mapCreated = function(map) {
             loadingBox.show('Buscando tiendas cercanas...');
 
@@ -1663,6 +1858,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         $scope.GetVisitCount = function(commerce) {
+            if (commerce == undefined) return 0;
             if (commerce.TotalVisits != undefined) return $scope.GetVal(commerce.TotalVisits);
             if (commerce.TotalVisitsEntity != undefined) return $scope.GetVal(commerce.TotalVisitsEntity);
             return 0;
@@ -1687,6 +1883,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         $scope.GetLastVisitDate = function(commerce) {
+            if (commerce == undefined) return "N/A";
             if (commerce.LastVisit != undefined) 
             {
                 var _date = formatServices.FormatDateWithT(commerce.LastVisit);                
@@ -2079,7 +2276,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             $scope.$apply();
         });
 
-        $scope.$on('$ionicView.beforeEnter', function(event, args){            
+        $scope.$on('$ionicView.beforeEnter', function(event, args){
             $("#qrcode-content").hide();
             $("#qrcode-content").removeClass('animated fadeIn');
         });
