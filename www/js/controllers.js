@@ -19,7 +19,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             pullFreshMemberDataFromServer: userFactory.info.pullFreshMemberDataFromServer.get(),
             reloadLocation: false,
             allStoresList: [],
-            pageSize: 15,
+            pageSize: 200,
             currentPage: 0,
             loadMoreButtonMessage: "Ver más...",
             showLoadMoreButton: false,
@@ -1128,8 +1128,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         $scope.$on("$ionicView.enter", function(event, args){ 
             _map = mapFactory.map.get();
             _element = mapFactory.element.get();
-            var container = document.getElementById("mapcontainer");
-            console.log(container);
+            var container = document.getElementById("mapcontainer");            
             container.appendChild(_element);
             LoadStores();
         });
@@ -1704,6 +1703,24 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 }, function(err) {
                     // An error occurred. Show a message to the user
                 });
+        };
+
+        $scope.TimeToAMPM = function(time) {
+            var hours = time.substring(0,2);
+            var minutes = time.substring(3,5);
+
+            var newHours = 0;
+            var ampm = "am";
+
+            if (Number(hours) > 12) {
+                newHours = Number(hours) - 12
+                ampm = "pm";
+            }
+            else {
+                newHours = Number(hours)   
+            }
+
+            return newHours + ":" + minutes + " " + ampm;
         };
     }]);
 
@@ -2600,8 +2617,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             loadingBox.show($scope.viewdata.pleaseWaitMessage);        
             userFactory.activity.visits.commerce()
                 .then(function(data){
-                    setTimeout(function() {
-                        console.log(data.VisitedCommerces);
+                    setTimeout(function() {                        
                         $scope.viewdata.commerces = data.VisitedCommerces;
                         $scope.$apply();
                         loadingBox.hide();                

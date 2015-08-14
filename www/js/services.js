@@ -427,9 +427,6 @@ angular.module('kenuu.services', [])
 	var _element = {};
 
 	function initialize() {
-
-    	console.log("Initializing Map...")
-
         var mapOptions = {
             mapTypeControl: false,
             backgroundColor: '#535353',
@@ -443,7 +440,7 @@ angular.module('kenuu.services', [])
         _element = document.createElement("map");
         _element.setAttribute("data-tap-disabled", true);
         _element.className = "map-container";
-        console.log(_element);
+        
         _map = new google.maps.Map(_element, mapOptions);
 
         // Stop the side bar from dragging when mousedown/tapdown on the map

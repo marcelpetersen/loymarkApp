@@ -32,7 +32,7 @@
         		<div class="row">
         			<div class="col-50">
         				<p>
-        					<span ng-bind="item.OpeningHours.substr(0,5)"></span> a <span ng-bind="item.ClosingHours.substr(0,5)"></span>
+        					<span ng-bind="TimeToAMPM(item.OpeningHours.substr(0,5))"></span> a <span ng-bind="TimeToAMPM(item.ClosingHours.substr(0,5))"></span>
         				</p>
         			</div>
         			<div class="col-50">
