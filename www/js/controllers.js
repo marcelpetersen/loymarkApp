@@ -4,7 +4,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
 // Near Me Tab
 
-    ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', '$cordovaPush', '$cordovaGeolocation', '$cordovaKeyboard', 'loadingBox', 'searchFactory', 'commerceFactory', 'navigationFactory', 'deviceFactory', 'userFactory', 'navigationFactory', 'locationFactory', 'storeFactory', '$cordovaInAppBrowser', 'signupSetupFactory', 'msgBox', function($scope, $state, $ionicLoading, $timeout, $cordovaPush, $cordovaGeolocation, $cordovaKeyboard, loadingBox, searchFactory, commerceFactory, navigationFactory, deviceFactory, userFactory, navigationFactory, locationFactory, storeFactory, $cordovaInAppBrowser, signupSetupFactory, msgBox){
+    ctrl.controller('NearMeCtrl', ['$scope', '$state', '$ionicLoading', '$timeout', '$cordovaPush', '$cordovaGeolocation', '$cordovaKeyboard', 'loadingBox', 'searchFactory', 'commerceFactory', 'navigationFactory', 'deviceFactory', 'userFactory', 'navigationFactory', 'locationFactory', 'storeFactory', '$cordovaInAppBrowser', 'signupSetupFactory', 'msgBox', '$ionicScrollDelegate', function($scope, $state, $ionicLoading, $timeout, $cordovaPush, $cordovaGeolocation, $cordovaKeyboard, loadingBox, searchFactory, commerceFactory, navigationFactory, deviceFactory, userFactory, navigationFactory, locationFactory, storeFactory, $cordovaInAppBrowser, signupSetupFactory, msgBox, $ionicScrollDelegate){
         
         $scope.viewdata = {
             locationSet: true,
@@ -30,9 +30,11 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
         $scope.$on("$ionicView.enter", function(event, args){
             // Everytime the app enters into the Near Me view, the selected store is reset so the stack is cleared.
+            // $scope.viewdata.currentPage = commerceFactory.stores.recent.currentpage.get();
             storeFactory.selectedStore.reset();
             SetButtonActiveEffectForAndroid();
             ViewInitialization();
+            $ionicScrollDelegate.scrollTop();
         });
 
         $scope.$on('$ionicView.beforeEnter', function(event, args){
@@ -76,7 +78,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             $scope.viewdata.currentPage = 0;
             $scope.viewdata.reloadLocation = true;
             $scope.viewdata.searchResults = [];
-            $scope.viewdata.allStoresList = [];            
+            $scope.viewdata.allStoresList = [];
+            $scope.viewdata.pullFreshMemberDataFromServer = true;            
             ViewInitialization();
         };
 
@@ -247,13 +250,19 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             return new Promise(function(resolve, reject){
                 $scope.viewdata.orderList = "Name";
                 $scope.viewdata.showLocationInfoLabel = false;
-                loadingBox.show($scope.viewdata.pleaseWaitMessage);
-                commerceFactory.stores.general(0, '')
+
+                var stores = commerceFactory.stores.recent.get(); 
+                
+                if (($scope.viewdata.pullFreshMemberDataFromServer)||(stores.length == 0)) {
+                    loadingBox.show($scope.viewdata.pleaseWaitMessage);
+
+                    commerceFactory.stores.general(0, '')
                     .then(function(data){                        
                         loadingBox.hide();
                         $scope.$broadcast('scroll.refreshComplete');
                         data = sortByKey(data, "Name");
                         $scope.viewdata.allStoresList = data;
+                        commerceFactory.stores.recent.set(data);
                         resolve(data);
                     })
                     .catch(function(err){
@@ -262,7 +271,13 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         $scope.$broadcast('scroll.refreshComplete');
                         loadingBox.hide();
                         reject(err);
-                    });
+                    });    
+                }
+                else {
+                    $scope.$broadcast('scroll.refreshComplete');
+                    $scope.viewdata.allStoresList = stores;
+                    resolve(stores);
+                }
             });
         };
 
@@ -291,6 +306,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         function SetStoresIntoList(stores) {
+            // $scope.viewdata.currentPage = commerceFactory.stores.recent.currentpage.get(); 
             var count = stores.length;
             var currentPage = $scope.viewdata.currentPage;
             var pageSize = $scope.viewdata.pageSize;
@@ -323,6 +339,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         $scope.SetActivityPageToShow = function() {
             var stores = $scope.viewdata.allStoresList;
             $scope.viewdata.currentPage++;
+            // commerceFactory.stores.recent.currentpage.set($scope.viewdata.currentPage);
             SetStoresIntoList(stores);
         };
 

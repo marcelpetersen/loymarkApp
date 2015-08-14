@@ -993,6 +993,8 @@ fact.factory('userFactory',['restFactory', function(restFactory){
 fact.factory('commerceFactory', ['restFactory', function(restFactory){
     var _selectedCommerce = {};
     var _thereIsACommerceSelected = false;
+    var _storesRecentlyPulledFromServer = [];
+    var _currentStorePage = 0;
 
     function storeInLocalStorage(varName, value) {
         localStorage.setItem(varName, JSON.stringify(value));
@@ -1073,6 +1075,22 @@ fact.factory('commerceFactory', ['restFactory', function(restFactory){
                             reject(err);
                         });
                 });
+            },
+            recent: {
+                get: function() {
+                    return _storesRecentlyPulledFromServer;    
+                },
+                set: function(stores) {
+                    _storesRecentlyPulledFromServer = stores;
+                },
+                currentpage: {
+                    set: function(page) {
+                        _currentStorePage = page;
+                    },
+                    get: function() {
+                        return _currentStorePage;
+                    }
+                }
             }
         },
         store: {
