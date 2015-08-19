@@ -59,6 +59,8 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 
 	    // listen for Offline event
 	    $rootScope.$on('$cordovaNetwork:offline', function(event, networkState){
+	    	var _apikey = localStorage.getItem('userReferenceID');
+
 	    	$ionicHistory.clearHistory();
             $ionicHistory.clearCache();
             $ionicHistory.nextViewOptions({
@@ -66,7 +68,14 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
                 disableBack: true,
                 historyRoot: true
             });
-	    	$state.go("noconnection");
+
+			if (_apikey != undefined)
+			{				
+		    	$state.go("noconnection");
+			}
+			else {				
+				$state.go("noconnection-notlogged");
+			}	    	
 	    });
 
 		$rootScope.$on('$cordovaPush:notificationReceived', function(event, notification) {
@@ -136,6 +145,9 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 		navigationFactory.setDefaults();
 
 		$rootScope.MyKenuuTabClicked = function() {
+			$ionicHistory.nextViewOptions({
+                disableBack: true
+            });
 			navigationFactory.store.setTab("tab.kenuu-storedetail");
 			navigationFactory.stores.setTab("tab.kenuu-commercestores");
 			navigationFactory.commerce.setTab("tab.kenuu-commerce");
@@ -143,11 +155,45 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 		};
 
 		$rootScope.NearMeTabClicked = function() {
+			$ionicHistory.nextViewOptions({
+                disableBack: true
+            });
 			navigationFactory.setDefaults();
 			$state.go("tab.nearme");
 		};
 
 		mapFactory.map.Initialize();
+
+		if (!devEnvironment) {
+			var isOffline = $cordovaNetwork.isOffline();
+
+			if (isOffline) {
+				var _apikey = localStorage.getItem('userReferenceID');
+
+				if (_apikey != undefined)
+				{
+					$ionicHistory.clearHistory();
+		            $ionicHistory.clearCache();
+		            $ionicHistory.nextViewOptions({
+		                disableAnimate: true,
+		                disableBack: true,
+		                historyRoot: true
+		            });
+			    	$state.go("noconnection");
+				}
+				else {
+					$ionicHistory.clearHistory();
+		            $ionicHistory.clearCache();
+		            $ionicHistory.nextViewOptions({
+		                disableAnimate: true,
+		                disableBack: true,
+		                historyRoot: true
+		            });
+					$state.go("noconnection-notlogged");
+				}
+				
+			}
+		}
 	});
 })
 
@@ -170,11 +216,17 @@ angular.module('kenuu', ['ionic', 'kenuu.controllers', 'kenuu.services', 'kenuu.
 	$stateProvider
 
 	// No Connection
-	.state('noconnection', {
-		url: '/noconnection',
-		templateUrl: 'templates/views/no-connection/noconnection.html',
-		controller: 'NoConnectionCtrl'
-	})
+		.state('noconnection', {
+			url: '/noconnection',
+			templateUrl: 'templates/views/no-connection/noconnection.html',
+			controller: 'NoConnectionCtrl'
+		})
+
+		.state('noconnection-notlogged', {
+			url: '/noconnection-notlogged',
+			templateUrl: 'templates/views/no-connection/noconnection-notlogged.html',
+			controller: 'NoConnectionNotLoggedCtrl'
+		})
 
 	// **** Welcome and Login ****
 

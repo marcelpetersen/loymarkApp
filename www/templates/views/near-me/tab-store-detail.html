@@ -17,9 +17,9 @@
 				<div class="row">
 					<div class="col col-70">
 						<div class="storedetail-nameavatar-namescontainer">
-							<h2>{{viewdata.store.Name}}</h2>
+							<h2 ng-bind="viewdata.store.Name"></h2>
 							<p ng-bind="gTime(viewdata.store.OpeningHours, viewdata.store.ClosingHours)"></p>
-							<p ng-switch on="isOpenForBusiness(viewdata.store.OpeningHours, viewdata.store.ClosingHours)">								
+							<p ng-switch on="viewdata.isOpenForBusiness">								
 							    <span ng-switch-when="Abierto" class="store-open">
 							    	Abierto 
 							    </span>
@@ -45,6 +45,11 @@
 				<div class="row">
 					<div class="col col-80 storedetail-top-btn-label"><p>¿Cómo llegar?</p></div>
 					<div class="col col-20 storedetail-top-btn-icon"><i class="ion-map"></i></div>
+					<!-- <div class="col">
+						<p style="position:relative; top:2px;">
+							<span>¿Cómo llegar?</span> <span style="position:relative; top:-3px; left: 5px"><i class="ion-map"></i></span>
+						</p>
+					</div> -->
 				</div>
 			</div>
 			<div style="width:7px; background-color:#92318A"></div>
@@ -112,6 +117,8 @@
 			<li class="item" ng-show="viewdata.rewards.length == 0">
 				No hay premios disponibles
 			</li>
+			<li class="item view-bottom-spacer" ng-show="viewdata.rewards.length == 0">				
+			</li>
 			<li ng-show="viewdata.rewards.length > 0" class="item storedetail-reward-item" ng-repeat="item in viewdata.rewards | orderBy:'Points'" ng-click="OpenRewardDetail(item)">
 				<div class="row storedetail-rewarditem-row">
 					<div class="col col-50">
@@ -132,6 +139,24 @@
 				</div>
 			</li>
 		</ul>
+
+		<!-- <ul class="list" style="background-color:#eeeeee !important; margin-top:17px;">
+		    <div class="item item-divider storedetail-list-title">
+				<p style="margin-left:5px">Otras Tiendas</p>
+			</div>
+			<li class="item" ng-show="viewdata.stores.length == 0">
+				No hay otras tiendas disponibles
+			</li>
+			<li ng-show="viewdata.stores.length > 0" class="item item-text-wrap storedetail-reward-item" ng-repeat="store in viewdata.stores | orderBy: 'Name'" ng-click="ReloadOtherStore(store)">
+				<div class="row storedetail-rewarditem-row">
+					<div class="col" style="margin:auto; margin-left:10px;">
+						<div><h3><strong ng-bind="store.Name"></strong></h3></div>
+						<div><p><strong>Dirección:</strong> <span ng-bind="store.Address"></span></p></div>
+						<div><p><strong>Horario:</strong> <span ng-bind="gTime(store.OpeningHours, store.ClosingHours)"></span></p></div>
+					</div>
+				</div>
+			</li>
+		</ul> -->
 		<div class="view-bottom-spacer"></div>
 	</ion-content>		
 </ion-view>

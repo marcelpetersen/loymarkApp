@@ -422,7 +422,7 @@ angular.module('kenuu.services', [])
 .service('shareLinkMessageService', [function(){	
 }])
 
-.service('mapFactory', [function(){
+.factory('mapFactory', [function(){
 	var _map = {};
 	var _element = {};
 
@@ -430,11 +430,12 @@ angular.module('kenuu.services', [])
         var mapOptions = {
             mapTypeControl: false,
             backgroundColor: '#535353',
-            center: { lat: 19.505581, lng: -94.105582 },
+            // center: { lat: 19.505581, lng: -94.105582 }, // Around Mexico
+            center: { lat:12.9423137, lng:-86.0752254 }, // San Jose Costa Rica
             maxZoom: 17,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
             styles: [{ "featureType": "all", "elementType": "labels.text", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "administrative", "elementType": "labels.text", "stylers": [{ "visibility": "on" }] }, { "featureType": "administrative", "elementType": "labels.text.fill", "stylers": [{ "color": "#444444" }] }, { "featureType": "administrative.country", "elementType": "all", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "administrative.country", "elementType": "labels", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "administrative.country", "elementType": "labels.text", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "administrative.neighborhood", "elementType": "all", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "administrative.neighborhood", "elementType": "geometry", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "administrative.neighborhood", "elementType": "geometry.fill", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "landscape", "elementType": "all", "stylers": [{ "color": "#f2f2f2" }, { "visibility": "simplified" }] }, { "featureType": "poi", "elementType": "all", "stylers": [{ "visibility": "off" }] }, { "featureType": "road", "elementType": "all", "stylers": [{ "saturation": -100 }, { "lightness": 45 }, { "visibility": "on" }] }, { "featureType": "road.highway", "elementType": "all", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "road.arterial", "elementType": "labels.icon", "stylers": [{ "visibility": "on" }] }, { "featureType": "road.local", "elementType": "all", "stylers": [{ "visibility": "on" }] }, { "featureType": "transit", "elementType": "all", "stylers": [{ "visibility": "simplified" }] }, { "featureType": "water", "elementType": "all", "stylers": [{ "color": "#55c9ea" }, { "visibility": "simplified" }] }],
-            zoom: 4
+            zoom: 7
         };
         
         _element = document.createElement("map");

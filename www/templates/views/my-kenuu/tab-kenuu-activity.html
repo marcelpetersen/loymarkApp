@@ -56,7 +56,7 @@
                         </div>
                     </div>
             	</ion-item>
-                <ion-item class="item text-center" ng-show="viewdata.showLoadMoreButton" ng-click="SetActivityPageToShow()">
+                <ion-item id="loadMoreButton" class="item text-center" style="display:none" ng-show="viewdata.showLoadMoreButton" ng-click="SetActivityPageToShow()">
                     <span ng-bind="viewdata.loadMoreButtonMessage"></span>                    
                 </ion-item>
             </ion-list>

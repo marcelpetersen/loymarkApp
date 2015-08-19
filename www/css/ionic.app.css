@@ -8910,13 +8910,12 @@ ion-nav-view[nav-view-transition="ios"] .nearme-icon {
 
 .reward-detail-image-wrapper {
   width: 100%;
-  height: 200px;
+  height: 190px;
   overflow: hidden; }
 
 .reward-detail-image {
   width: 100%;
   position: relative;
-  bottom: 20%;
   opacity: 0.7; }
 
 .reward-detail-overlay {
@@ -8949,7 +8948,7 @@ ion-nav-view[nav-view-transition="ios"] .nearme-icon {
 
 .reward-detail-label-container {
   position: absolute;
-  bottom: 4px;
+  bottom: 10px;
   text-align: left; }
 
 .reward-detail-label-container p {
