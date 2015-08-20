@@ -41,6 +41,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         $scope.$on('$ionicView.beforeEnter', function(event, args){
             $scope.viewdata.searchResults = [];
             $scope.viewdata.allStoresList = [];
+            $scope.viewdata.searchText = "";
             $("#nearme-content").hide();
             $("#nearme-content").removeClass('animated fadeIn');
         });
@@ -1056,7 +1057,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     {
                         case 1:
                             if ($scope.viewdata.socialmediaapps.facebook) {
-                                $scope.ShareViaFacebook($scope.viewdata.store);
+                                $scope.ShareViaFacebook($scope.viewdata.commerce);
                             }
                             else {
                                 var URI = "";
@@ -1072,7 +1073,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                             break;
                         case 2: 
                             if ($scope.viewdata.socialmediaapps.twitter) {
-                                $scope.ShareViaTwitter($scope.viewdata.store);
+                                $scope.ShareViaTwitter($scope.viewdata.commerce);
                             }
                             else {
                                 var URI = "";
@@ -1604,6 +1605,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
         $scope.$on("$ionicView.beforeEnter", function(event, args){ 
             $scope.viewdata.stores = [];
+            $scope.viewata.searchtext = "";
         });
 
         $scope.$on("$ionicView.enter", function(event, args){
@@ -1618,6 +1620,10 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     loadingBox.hide();
                     // console.log(err)
                 });
+        });
+
+        $scope.$on("$ionicView.beforeLeave", function(event, args){
+            $scope.viewdata.searchtext = "";
         });
 
         function OpenMapsActionSheet(options, lat, long) {
