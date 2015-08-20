@@ -782,6 +782,9 @@ fact.factory('userFactory',['restFactory', function(restFactory){
             get: function(newData,userID){
                 return new Promise(function(resolve,reject){
                     if(newData===true){
+
+                        var userID = localStorage.getItem('currentUsers-cardNumber');                        
+
                         restFactory.user.info.get(userID)
                             .then(function(response){
                                 _user = response;

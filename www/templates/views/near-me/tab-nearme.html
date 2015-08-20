@@ -47,6 +47,9 @@
 		</div>
 
 		<ion-list id="nearme-list">
+			<ion-item ng-show="viewdata.searchResults.length == 0">
+				No hay resultados
+			</ion-item>
         	<ion-item class="item-icon-right nearme-commerce-item" ng-repeat="item in viewdata.searchResults | orderBy:viewdata.orderList track by $index" item="item" ng-click="OpenStore(item)">
         		<div>
                     <p><strong class="activity-commerce-name" ng-bind="item.Name"></strong></p>  

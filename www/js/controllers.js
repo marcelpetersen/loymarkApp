@@ -1,6 +1,6 @@
 var ctrl = angular.module('kenuu.controllers', ['ja.qr']);
 
-var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
+var imageserverurl = "http://www.kenuupops.com/personas/imgs/";
 
 // Near Me Tab
 
@@ -79,6 +79,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         $scope.ReloadList = function() {
+            $scope.ClearSearch();
             $scope.viewdata.currentPage = 0;
             $scope.viewdata.reloadLocation = true;
             $scope.viewdata.searchResults = [];
@@ -1605,7 +1606,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
         $scope.$on("$ionicView.beforeEnter", function(event, args){ 
             $scope.viewdata.stores = [];
-            $scope.viewata.searchtext = "";
+            $scope.viewdata.searchtext = "";
         });
 
         $scope.$on("$ionicView.enter", function(event, args){
@@ -1873,8 +1874,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             commerceFactory.stores.general($scope.viewdata.store.EntityID)
                 .then(function(response){                    
                     loadingBox.hide();
-                    $scope.viewdata.stores = response;
-                    console.log(response)
+                    $scope.viewdata.stores = response;                    
                 })
                 .catch(function(err){
                     loadingBox.hide();
@@ -2396,6 +2396,23 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 toolbar: 'yes'
             };
 
+            if ((pageUrl == "")||(pageUrl == "http://www.twitter.com")) {
+                swal(
+                    {   
+                        title: "Oops!",   
+                        text: "Esa página no está disponible.",   
+                        type: "warning",   
+                        showConfirmButton: true,
+                        showCancelButton: false,                       
+                        confirmButtonText: "Ok",   
+                        closeOnConfirm: true,
+                        confirmButtonColor: "#A5CD37"  
+                    }
+                );
+                return;
+            }
+
+
             $cordovaInAppBrowser.open(pageUrl, '_blank', options)
                 .then(function(event) {
                 // success
@@ -2455,7 +2472,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                                 showConfirmButton: true,
                                 showCancelButton: false,                       
                                 confirmButtonText: "Ok",   
-                                closeOnConfirm: true 
+                                closeOnConfirm: true,
+                                confirmButtonColor: "#A5CD37"  
                             }
                         );
                     }
@@ -2501,7 +2519,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                         showConfirmButton: true,
                         showCancelButton: false,                       
                         confirmButtonText: "Ok",   
-                        closeOnConfirm: true 
+                        closeOnConfirm: true,
+                        confirmButtonColor: "#A5CD37"  
                     }
                 );
             }            
@@ -2750,7 +2769,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
         };
 
         function LoadData() {
-            userFactory.info.get($scope.viewdata.pullMemberFromServer)
+            //$scope.viewdata.pullMemberFromServer
+            userFactory.info.get(true) // Always pull from server
                 .then(function(data){
                     $scope.viewdata.pullMemberFromServer = false;
                     loadingBox.hide();              
@@ -2787,7 +2807,7 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                 })
                 .catch(function(err){
                     loadingBox.hide();
-                    ShowErrorView();
+                    // ShowErrorView();
                 });
         };
 
@@ -3656,20 +3676,21 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
             userFactory.session.login(
                 {
                     email: $scope.viewdata.user.email,
-                    password: $scope.viewdata.user.currentpassword
+                    password: $scope.viewdata.user.password
                 }
             )
             .then(function(data){  
-
+                $scope.viewdata.user.password = '';
                 console.log("Login Result:");
                 console.log(data);
 
                 referenceIDFactory.setReferenceID(data.ReferenceID);
+                msgBox.showOk("Listo!", "Su perfil se guardó con éxito.");
 
-                SaveProfile();
+                // SaveProfile();
             })
             .catch(function(error){
-
+                $scope.viewdata.user.password = '';
                 // console.log("Login Error Result:");
                 // console.log(error);
 
@@ -3708,13 +3729,12 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
 
                     localStorage.setItem('profile_gender', $scope.viewdata.profilegender);
                     
-                    $scope.viewdata.user.currentpassword = '';
-                    $scope.viewdata.user.password = '';
+                    $scope.viewdata.user.currentpassword = '';                    
                     $scope.viewdata.user.passwordconfirmation = '';
 
                     // referenceIDFactory.setReferenceID(response.data.referenceID);
 
-                    msgBox.showOk("Listo!", "Su perfil se guardó con éxito.");
+                    DoLogin();
 
                     // LoadProfileData();
 
@@ -3806,12 +3826,9 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     msgBox.showWarning("Oops!", "La confirmación de su contraseña tiene que tener al menos 8 dígitos.", "Ok");
                     return false;
                 }
-
-                DoLogin();
             }
-            else {
-                SaveProfile();
-            }
+            
+            SaveProfile();            
         };
 
         $scope.ChangePassword = function() {  
@@ -3979,7 +3996,8 @@ var imageserverurl = "http://dev.cis-solutions.com/kenuu/imgs/";
                     showConfirmButton: true,
                     showCancelButton: false,                       
                     confirmButtonText: buttontext,   
-                    closeOnConfirm: true 
+                    closeOnConfirm: true,
+                    confirmButtonColor: "#A5CD37" 
                 }, 
                 function(){   
                     

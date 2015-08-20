@@ -12,7 +12,7 @@
   "proxies": [
     {
       "path": "/api",
-      "proxyUrl": "http://201.201.150.159"
+      "proxyUrl": "http://201.201.150.159"      
     }
   ],
   "browsers": [
